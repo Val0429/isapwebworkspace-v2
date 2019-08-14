@@ -59,7 +59,7 @@
 
         <!--Site Form (Add and Edit and View)-->
         <div v-show="pageStep === ePageStep.add || pageStep === ePageStep.edit || pageStep === ePageStep.view">
-            <iv-auto-card :label="pageStep == ePageStep.add ? _('w_Permission_PermissionAdd') : pageStep == ePageStep.edit ? _('w_Permission_PermissionEdit') :  _('w_Permission_PermissionView')">
+            <iv-card :label="pageStep == ePageStep.add ? _('w_Permission_PermissionAdd') : pageStep == ePageStep.edit ? _('w_Permission_PermissionEdit') :  _('w_Permission_PermissionView')">
 
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
@@ -69,7 +69,8 @@
                     ref="subForm"
                     :interface="IForm()"
                     :value="inputFormData"
-                    @submit="doSave($event)"
+                    @mounted="doMounted"
+                    @submit="doSubmit($event)"
                     @update:deviceType="selectedDeviceType($event)"
                     @update:*="updateInputData($event)"
                 >
@@ -229,7 +230,7 @@
                         </b-button>
                     </template>
                 </iv-form>
-
+                
                 <!-- Sub  Table -->
                 <template
                     #toolbox
@@ -263,17 +264,21 @@
                     </tbody>
                 </table>
 
-                <template #footer-before>
-                    <b-button
+                
+                <template v-if="isMounted" >            
+                    <div class="float-right">
+                        <b-button
                         variant="secondary"
                         size="lg"
                         @click="pageToList()"
                     >{{ _('w_Back') }}
                     </b-button>
+                        <b-button class="btn-filter" size="lg" :disabled="busy" v-bind="$refs.subForm.submitBindings.$attrs" v-on="$refs.subForm.submitBindings.$listeners" >{{ _("wb_Submit") }}</b-button>
+                                   
+                    </div>
                 </template>
-
-            </iv-auto-card>
-
+            </iv-card>
+            
         </div>
 
     </div>
@@ -327,12 +332,17 @@ export default class PermissionTable extends Vue {
         this.canEdit = this.$user.permissions.find(x=>x.access.U === true && x.of.identifier == this.permissionName) != undefined;
         this.canDelete = this.$user.permissions.find(x=>x.access.D === true && x.of.identifier == this.permissionName) != undefined;        
     }
+    isMounted:boolean=false;
+    doMounted(){
+        this.isMounted=true;        
+        
+    }
     canAdd:boolean;
     canEdit:boolean;
     canDelete:boolean;
     permissionName:string;
 
-
+    busy:boolean=false;
     ePageStep = EPageStep;
     pageStep: EPageStep = EPageStep.none;
     eDeviceType = EDeviceType;
@@ -749,6 +759,17 @@ private async getFloorGroup() {
         );
     }
     savedAccessLevels: any[];
+    async doSubmit($event){
+        try{
+            this.busy=true;
+            let duplicate = await this.checkDuplication({objectId: this.inputFormData.id, tablename:this.inputFormData.permissionName})
+            if(!duplicate) await this.doSave();
+        }catch(err){
+            console.error("doSubmit", err)
+        }finally{
+            this.busy=false;
+        }
+    }
     async doSave() {
         this.savedAccessLevels=[];
         let premissionParam: any = {
@@ -868,7 +889,16 @@ private async getFloorGroup() {
 
 
     }
-
+private async checkDuplication(permtable:any):Promise<boolean>{
+    let resp:any = await this.$server.R("/acs/permissiontable",{tablename:permtable.tablename, system:0});
+      if(resp.results.length>0){        
+        let isDuplicate = permtable.objectId ? resp.results[0].objectId!=permtable.objectId : true;
+        if(isDuplicate)alert(this._("w_Error_DuplicatePermissionTable"));
+        return isDuplicate;
+      }
+      
+      return false; 
+  }
   private checkError(response: any) {
     if(!response.errors||response.errors.length<=0){
         this.pageToList();

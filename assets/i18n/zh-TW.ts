@@ -662,4 +662,6 @@ export default class LangObject implements ILang {
     ccuresqlserver="ccuresqlserver";
     sipassconnect="sipassconnect";
     ccureconnect= "ccureconnect";
+
+    w_Error_DuplicatePermissionTable="Duplicate permission table";
 }

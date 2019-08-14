@@ -663,4 +663,5 @@ export default class LangObject {
     ccuresqlserver="ccuresqlserver";
     sipassconnect="sipassconnect";
     ccureconnect= "ccureconnect";
+    w_Error_DuplicatePermissionTable="Duplicate permission table";
 }
