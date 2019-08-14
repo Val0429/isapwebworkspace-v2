@@ -2,6 +2,9 @@
     <CoreUIBase>
         <template #header>
             Hello iSAP
+
+            <b-button class="float-right mr-4" @click="Logout">{{ _('w_Logout') }}</b-button>
+
         </template>
 
         <template #footer>
@@ -57,5 +60,19 @@ import {
         SidebarNavItem
     }
 })
-export default class CoreUI extends Vue {}
+export default class CoreUI extends Vue {
+    // Logout
+    logoutPath = "/users/logout";
+
+    Logout() {
+        try {
+            this.$logout(this.logoutPath);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            this.$router.push("/login");
+        }
+    }
+
+}
 </script>

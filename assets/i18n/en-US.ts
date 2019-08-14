@@ -41,6 +41,7 @@ export default class LangObject {
     w_Cancel = 'Cancel';
     w_Dialog_SuccessTitle = 'Success';
     w_Dialog_ErrorTitle = 'Error';
+    w_Logout = 'Logout';
 
     /////////////////////////////////////////////
 
