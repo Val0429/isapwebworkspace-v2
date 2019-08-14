@@ -6,7 +6,7 @@ var config: Config = {
 
     // localhost
     ip: 'localhost',
-
+    prodPort:6060,
     port: 6060,
     ssl: false,
     hideDefaultServerErrorModal:true,
@@ -18,7 +18,7 @@ export interface Config {
     ip: string;
     port: number;
     ssl?: boolean;
-
+    prodPort?:number,
     /// only allow server framework > THIS to do login
     serverFrameworkVersionGreaterThan: string;
     /// hide server error popup?
