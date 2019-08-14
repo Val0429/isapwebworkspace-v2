@@ -103,6 +103,7 @@ export default class LangObject implements ILang {
     w_Navigation_Setups_SMS = 'SMS Setting';
     w_Navigation_Setups_SMSOnline = 'Online SMS Provider (SG only)';
     w_Navigation_Setups_VisitorCard = 'Visitor Card';
+    w_Navigation_Setups_Purposes = '目的';
 
     w_Navigation_Tenants = 'Tenant';
     w_Navigation_Tenants_Invitation = 'Invitation';
@@ -321,6 +322,20 @@ export default class LangObject implements ILang {
 
     w_Floor_FloorName = '樓層名稱';
     w_Floor_Floor = '樓層';
+
+    //purposes
+    w_Purposes_Name = 'Purposes Name';
+
+    w_Purposes_List = 'Purposes List';
+    w_Purposes_Add = 'Add Purposes';
+    w_Purposes_Edit = 'Edit Purposes';
+    w_Purposes_View = 'View Purposes';
+
+    w_Purposes_AddSuccess = 'Purposes add success';
+    w_Purposes_ADDFailed = 'Purposes add failed, please try again';
+    w_Purposes_EditSuccess = 'Purposes edit success';
+    w_Purposes_EditFailed = 'Purposes edit failed, please try again';
+    w_Purposes_DeleteConfirm = 'Are you sure to delete selected Purposes(s)?';
 
     ////////////////// Potrait //////////////////
     w_Potrait_Photo = '你的圖片';

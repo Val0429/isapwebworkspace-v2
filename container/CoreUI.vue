@@ -106,6 +106,11 @@
                                 url="/setups/visitor_card"
                             />
 
+                            <SidebarNavItem
+                                :label="_('w_Navigation_Setups_Purposes')"
+                                url="/setups/purposes"
+                            />
+
                         </iv-permission>
 
                     </SidebarNavItem>
