@@ -46,7 +46,7 @@
                         @selected="selectedItem($event)"
                     >
                         <template #status="{$attrs}">
-                            {{ $attrs.value}} {{isExpired(new Date($attrs.row.workEndDate))}}
+                            {{ $attrs.value}} {{isExpired($attrs.row.workEndDate)}}
                         </template>
 
                         <template #workStartDate="{$attrs}">
@@ -194,7 +194,7 @@ export default class Invitation extends Vue {
     mounted() {}
 
     isExpired(date) {
-        if (date.getTime() < new Date().getTime()) {
+        if (date && new Date(date).getTime() < new Date().getTime()) {
             return "(" + this._("w_Expired") + ")";
         } else {
             return "";
