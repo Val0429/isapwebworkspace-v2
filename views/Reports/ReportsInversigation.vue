@@ -56,7 +56,6 @@
                                 <th>{{ _('w_Investigation_VisitorName') }}</th>
                                 <th>{{ _('w_Investigation_Purpose') }}</th>
                                 <th>{{ _('w_Investigation_KioskName') }}</th>
-                                <th>{{ _('w_Investigation_Result') }}</th>
                                 <th>{{ _('w_Investigation_Event') }}</th>
                                 <th>{{ _('w_Investigation_EventTime') }}</th>
                             </thead>
@@ -64,9 +63,8 @@
                                 <tr v-for="(value, index) of tableDatas">
                                     <td>{{ index + 1}}</td>
                                     <td>{{ value.visitorName }}</td>
-                                    <td>{{ value.purpose }}</td>
+                                    <td>{{ value.purposeName }}</td>
                                     <td>{{ value.kioskName }}</td>
-                                    <td>{{ value.result }}</td>
                                     <td>{{ value.event }}</td>
                                     <td>{{ value.eventDateString }}</td>
                                 </tr>
@@ -106,10 +104,12 @@ import VueHtml2Canvas from "vue-html2canvas";
 Vue.use(VueHtml2Canvas);
 
 interface ITableItem {
+    objectId: string;
     visitorName: string;
-    purpose: string;
+    purposeId: string;
+    purposeName: string;
+    kioskId: string;
     kioskName: string;
-    result: string;
     event: string;
     eventDate: Date;
     eventDateString: string;
@@ -169,10 +169,10 @@ export default class ReportsInversigation extends Vue {
         }
     });
 
-    created() {
-        this.initSelectItemPurpose();
-        this.initSelectItemKiosk();
-        this.initDate();
+    async created() {
+        await this.initSelectItemPurpose();
+        await this.initSelectItemKiosk();
+        await this.initDate();
     }
 
     mounted() {}
@@ -220,7 +220,7 @@ export default class ReportsInversigation extends Vue {
                     }
                     break;
                 case EWsType.event:
-                    this.resolveWsData(data);
+                    this.resolveInvestigationResponse(data);
                     break;
             }
         } catch (e) {
@@ -228,24 +228,12 @@ export default class ReportsInversigation extends Vue {
         }
     }
 
-    resolveWsData(data: any) {
-        let tempItem: ITableItem = {
-            visitorName: data.visitor.name,
-            purpose: data.invitation.purpose.name,
-            kioskName: data.kiosk.data.kioskName,
-            result: data.result,
-            event: this.resolveEventString(data.action),
-            eventDateString: Datetime.DateTime2String(
-                data.createdAt,
-                this.eventTimeFormat
-            ),
-            eventDate: new Date(data.createdAt)
-        };
-        this.tableDatas.push(tempItem);
-    }
-
     async initSelectItemPurpose() {
-        let param: {} = {};
+        let param: any = {
+            paging: {
+                pageSize: 10000
+            }
+        };
 
         await this.$server
             .R("/flow1/purposes", param)
@@ -266,7 +254,11 @@ export default class ReportsInversigation extends Vue {
     }
 
     async initSelectItemKiosk() {
-        let param: {} = {};
+        let param: any = {
+            paging: {
+                pageSize: 10000
+            }
+        };
         await this.$server
             .R("/kiosks", param)
             .then((response: any) => {
@@ -316,6 +308,8 @@ export default class ReportsInversigation extends Vue {
 
     updateFilterForm(datas: any) {
         this.inputFilterData[datas.key] = datas.value;
+        console.log(this.inputFilterData);
+        this.filterTableData();
     }
 
     async submitFilterForm() {
@@ -353,46 +347,120 @@ export default class ReportsInversigation extends Vue {
     }
 
     resolveInvestigationResponse(data: any) {
-        let tempItem: ITableItem = {
-            visitorName: data.visitor.name,
-            purpose: data.purpose.name,
-            kioskName: data.kiosk.data.kioskName,
-            result: "",
-            event: "",
-            eventDateString: "",
-            eventDate: new Date()
-        };
+        let purposeName = "";
+        let kioskName = "";
+        let eventTextArray = data.entity.split("$");
+        let eventText =
+            eventTextArray.length > 0
+                ? this.resolveEventString(eventTextArray[0])
+                : "";
 
-        if (data.events.length < 1) {
-            return false;
+        for (let selItem of this.selectItem.purposes) {
+            if (selItem.id == data.data.purpose.objectId) {
+                purposeName = selItem.text;
+                break;
+            }
         }
 
-        let lastEvent: any = data.events[data.events.length - 1];
-        tempItem.result = lastEvent.result;
-        tempItem.event = this.resolveEventString(lastEvent.action);
-        tempItem.eventDate = new Date(lastEvent.createdAt);
-        tempItem.eventDateString = Datetime.DateTime2String(
-            new Date(lastEvent.createdAt),
-            this.eventTimeFormat
-        );
-        this.tableDatas.push(tempItem);
+        for (let selItem of this.selectItem.kiosk) {
+            if (selItem.id == data.data.kiosk.objectId) {
+                kioskName = selItem.text;
+                break;
+            }
+        }
+
+        let tempItem: ITableItem = {
+            objectId: data.objectId,
+            visitorName: data.data.visitorName,
+            purposeId: data.data.purpose.objectId,
+            purposeName: purposeName,
+            kioskId: data.data.kiosk.objectId,
+            kioskName: kioskName,
+            event: eventText,
+            eventDateString: Datetime.DateTime2String(
+                new Date(data.createdAt),
+                this.eventTimeFormat
+            ),
+            eventDate: new Date(data.createdAt)
+        };
+
+        let haveTableData = false;
+        for (let i in this.tableDatas) {
+            let loopTableData = this.tableDatas[i];
+            if (loopTableData.objectId == tempItem.objectId) {
+                haveTableData = true;
+                this.tableDatas[i].visitorName = tempItem.visitorName;
+                this.tableDatas[i].purposeId = tempItem.purposeId;
+                this.tableDatas[i].purposeName = tempItem.purposeName;
+                this.tableDatas[i].kioskId = tempItem.kioskId;
+                this.tableDatas[i].kioskName = tempItem.kioskName;
+                this.tableDatas[i].event = tempItem.event;
+                this.tableDatas[i].eventDateString = tempItem.eventDateString;
+                this.tableDatas[i].eventDate = tempItem.eventDate;
+            }
+        }
+        if (!haveTableData && this.checkFilterData(tempItem)) {
+            this.tableDatas.push(tempItem);
+        }
     }
 
-    resolveEventString(event: string) {
+    filterTableData() {
+        let removeTableDataIndex = [];
+        for (let i in this.tableDatas) {
+            let loopTableData = this.tableDatas[i];
+            if (!this.checkFilterData(loopTableData)) {
+                removeTableDataIndex.push(i);
+            }
+        }
+        for (let i = this.tableDatas.length - 1; i >= 0; i--) {
+            this.tableDatas.splice(removeTableDataIndex[i], 1);
+        }
+    }
+
+    checkFilterData(tempItem: any): boolean {
+        let result = true;
+        if (
+            this.inputFilterData.purpose != "" &&
+            this.inputFilterData.purpose != tempItem.purposeId
+        ) {
+            result = false;
+        }
+        if (
+            this.inputFilterData.kiosk != "" &&
+            this.inputFilterData.kiosk != tempItem.kioskId
+        ) {
+            result = false;
+        }
+        if (
+            tempItem.eventDate.getTime() <
+            this.inputFilterData.startDate.getTime()
+        ) {
+            result = false;
+        }
+        if (
+            tempItem.eventDate.getTime() >
+            this.inputFilterData.endDate.getTime()
+        ) {
+            result = false;
+        }
+        return result;
+    }
+
+    resolveEventString(event: string): string {
         let result = "";
         switch (event) {
-            case "EventStrictCompareFace":
+            case "EventFlow1StrictCompareFace":
                 result = this._("w_Investigation_EventStrictCompareFace");
                 break;
-            case "EventStrictCompleteCheckIn":
+            case "EventFlow1StrictCompleteCheckIn":
                 result = this._("w_Investigation_EventStrictCompleteCheckIn");
                 break;
-            case "EventStrictConfirmPhoneNumber":
+            case "EventFlow1StrictConfirmPhoneNumber":
                 result = this._(
                     "w_Investigation_EventStrictConfirmPhoneNumber"
                 );
                 break;
-            case "EventStrictTryCheckIn":
+            case "EventFlow1StrictTryCheckIn":
                 result = this._("w_Investigation_EventStrictTryCheckIn");
                 break;
         }
