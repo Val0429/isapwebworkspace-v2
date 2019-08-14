@@ -63,8 +63,6 @@
             approval: false
         };
 
-        // TODO: wait api
-        // qrCode: string = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/QRcode_image.svg/220px-QRcode_image.svg.png';
         qrCode: string = this.selectedDetail.qrcode ? this.selectedDetail.qrcode : "";
         ptwText: string = this.selectedDetail.ptwId ? this.selectedDetail.ptwId : "";
 
@@ -135,7 +133,7 @@
                     this.inputFormData.workStartTime = data.value;
                     break;
                 case "workEndDate":
-                    if (data.value.getTime() > new Date().getTime()) {
+                    if (data.value.getTime() > new Date().getTime() || data.value.getTime() > this.inputFormData.workStartDate.getTime()) {
                         this.inputFormData.workEndDate = data.value;
                         this.inputFormData.workEndTime = data.value;
                     } else {

@@ -11,8 +11,9 @@
                     <img
                         :src="qrCode"
                         alt=""
+                        class="col-md-12"
                     >
-                    <p class="mt-3">{{ ptwText }}</p>
+                    <p class="mt-0 ml-3 col-md-12">{{ _('w_Invitation_PTWID') }} : {{ ptwText }}</p>
                 </div>
             </template>
 
@@ -65,8 +66,8 @@ export class Step8 extends Vue {
 
     approval: boolean = false;
 
-    qrCode: string = "";
-    ptwText: string = "";
+    qrCode: string = this.selectedDetail.qrcode ? this.selectedDetail.qrcode : "";
+    ptwText: string = this.selectedDetail.ptwId ? this.selectedDetail.ptwId : "";
 
     async created() {
         this.initInputFormData();
@@ -134,7 +135,7 @@ export class Step8 extends Vue {
                 this.inputFormData.workStartTime = data.value;
                 break;
             case "workEndDate":
-                if (data.value.getTime() > new Date().getTime()) {
+                if (data.value.getTime() > new Date().getTime() || data.value.getTime() > this.inputFormData.workStartDate.getTime()) {
                     this.inputFormData.workEndDate = data.value;
                     this.inputFormData.workEndTime = data.value;
                 } else {

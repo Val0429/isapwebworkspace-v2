@@ -226,7 +226,7 @@ export class Step3 extends Vue {
                 this.inputFormData.workStartTime = data.value;
                 break;
             case "workEndDate":
-                if (data.value.getTime() > new Date().getTime()) {
+                if (data.value.getTime() > new Date().getTime() || data.value.getTime() > this.inputFormData.workStartDate.getTime()) {
                     this.inputFormData.workEndDate = data.value;
                     this.inputFormData.workEndTime = data.value;
                 } else {
