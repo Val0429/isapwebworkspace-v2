@@ -217,7 +217,7 @@ export default class Dashboard extends Vue {
                                     typeof loopData.count == "number"
                                 ) {
                                     let tempDate: Date = loopData.date as Date;
-                                    if (tempDate.getHours() == i) {
+                                    if (new Date(tempDate).getHours() == i) {
                                         haveData = true;
                                         rightTopDatas.push(loopData.count);
                                         break;
