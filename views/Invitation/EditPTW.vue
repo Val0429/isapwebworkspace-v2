@@ -775,14 +775,14 @@ export class EditPTW extends Vue {
 
     async stepTo8() {
         let stepRef: any = this.$refs.step;
-        if (
-            this.inputFormData.persons.length === 0 ||
-            !this.inputFormData.persons
-        ) {
-            Dialog.error(this._("w_ViewPTW_Step_ErrorTipPerson"));
-            stepRef.currentStep = 6;
-            return false;
-        }
+        // if (
+        //     this.inputFormData.persons.length === 0 ||
+        //     !this.inputFormData.persons
+        // ) {
+        //     Dialog.error(this._("w_ViewPTW_Step_ErrorTipPerson"));
+        //     stepRef.currentStep = 6;
+        //     return false;
+        // }
 
         await this.tempSave();
     }
