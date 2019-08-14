@@ -189,7 +189,14 @@
             v-show="transition.step == 2"
             :label="_('w_ViewPTW_ResultTitle')"
         >
-            <div class="ptw-result-content">{{ resultText }}</div>
+            <div
+                v-if="errorText == ''"
+                class="ptw-result-content success"
+            >{{ _("w_ViewPTW_ResultSuccessContent") }}</div>
+            <div
+                v-if="errorText != ''"
+                class="ptw-result-content failed"
+            >{{ errorText }}</div>
         </iv-card>
 
     </div>
@@ -244,7 +251,7 @@ export class AddPTWByCR extends Vue {
         step: 1
     };
 
-    resultText = "";
+    errorText = "";
 
     imageBase64 = ImageBase64;
 
@@ -333,7 +340,6 @@ export class AddPTWByCR extends Vue {
     };
 
     async created() {
-        this.resultText = this._("w_ViewPTW_ResultSuccessContent");
         await this.initTenant();
         if (this.selectedDetail.length) {
             this.inputFormData = this.selectedDetail as any;
@@ -918,10 +924,8 @@ export class AddPTWByCR extends Vue {
             })
             .catch((e: any) => {
                 Loading.hide();
-                if (e.body === '') {
-                    Dialog.error(this._("w_Error_EmailServerError"));
-                }
-                this.resultText = this._("w_ViewPTW_ResultFailedContent");
+                Dialog.error(e.body);
+                this.errorText = e.body;
                 this.transition.step = 2;
             });
 
@@ -1069,6 +1073,12 @@ Vue.component("add-ptw-by-cr", AddPTWByCR);
 .ptw-result-content {
     text-align: center;
     font-size: 3rem;
+    &.success {
+        color: green;
+    }
+    &.failed {
+        color: red;
+    }
 }
 </style>
 
