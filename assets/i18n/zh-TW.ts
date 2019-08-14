@@ -71,7 +71,7 @@ export default class LangObject implements ILang {
     w_Logout = '登出';
 
     // failed to fetch
-    w_FailedToFetch = "連接不到伺服器，請再試一次!";
+    w_FailedToFetch = '連接不到伺服器，請再試一次!';
 
     // 401
     w_UserSession_Empty = '找不到使用者，請重新登入';
@@ -153,175 +153,175 @@ export default class LangObject implements ILang {
     w_User_Password = '密碼';
     w_User_ConfirmPassword = '確認密碼';
     w_User_EditPassword = '編輯';
-    w_User_VisitorCannotLogin = "訪客無法登入";
+    w_User_VisitorCannotLogin = '訪客無法登入';
 
     ////////////////// Role //////////////////
-    w_Role_SystemAdministrator = 'System Administrator';
-    w_Role_Administrator = 'Administrator';
-    w_Role_TenantAdministrator = 'Tenant Administrator';
-    w_Role_TenantUser = 'Tenant User';
-    w_Role_Visitor = 'Visitor';
+    w_Role_SystemAdministrator = '系統管理員';
+    w_Role_Administrator = '管理員';
+    w_Role_TenantAdministrator = '承租管理員';
+    w_Role_TenantUser = '承租用戶';
+    w_Role_Visitor = '訪客';
 
     ////////////////// About //////////////////
-    w_About_About = 'About';
-    w_About_SystemTitle = 'Visitor Management Service';
-    w_About_Copyright = 'Copyright iSAP Solution';
-    w_About_ServerVersion = 'Server Version';
-    w_About_FrameworkVersion = 'Framework Version';
-    w_About_WebClientVersion = 'Web Client Version';
+    w_About_About = '關於';
+    w_About_SystemTitle = '訪客管理服務';
+    w_About_Copyright = '版權 iSAP Solution';
+    w_About_ServerVersion = '伺服器版本';
+    w_About_FrameworkVersion = '框架版本';
+    w_About_WebClientVersion = '網頁客戶版本';
 
     ////////////////// MyProfile //////////////////
-    w_MyProfile_ViewMyProfile = 'My Profile';
-    w_MyProfile_ChangePassword = 'Change Password';
-    w_MyProfile_ChangePasswordSuccess = 'Change Password Success';
-    w_MyProfile_ChangePasswordFailed = 'Change Password Failed';
-    w_MyProfile_OldPassword = 'Old Password';
-    w_MyProfile_NewPassword = 'New Password';
-    w_MyProfile_ConfirmPassword = 'Confirm Password';
-    w_MyProfile_ErrorPasswordNotSame = 'New Password and Confirm is different';
+    w_MyProfile_ViewMyProfile = '我的簡歷';
+    w_MyProfile_ChangePassword = '更換密碼';
+    w_MyProfile_ChangePasswordSuccess = '更換密碼成功';
+    w_MyProfile_ChangePasswordFailed = '更換密碼失敗';
+    w_MyProfile_OldPassword = '就密碼';
+    w_MyProfile_NewPassword = '新密碼';
+    w_MyProfile_ConfirmPassword = '確認密碼';
+    w_MyProfile_ErrorPasswordNotSame = '新密碼語確認密碼不同';
 
     ////////////////// License //////////////////
-    w_License_List = 'License List';
-    w_License_Add = 'Add License';
-    w_License_LicenseKey = 'License Key';
-    w_License_Mac = 'Mac';
-    w_License_productName = 'Product Name';
-    w_License_Quantity = 'Quantity';
-    w_License_Trial = 'Trial';
-    w_License_RegisterDate = 'Register Date';
-    w_License_ExpireDate = 'ExpireDate';
-    w_License_License_Key = 'License Key';
-    w_License_UploadOfflineKey = 'Upload offline key';
-    w_License_UploadOfflineKey1 = '* Upload offline key';
-    w_License_RegisterOnline = 'Register Online';
-    w_License_RegisterOffline = 'Register Offline';
+    w_License_List = '憑證清單';
+    w_License_Add = '新增憑證';
+    w_License_LicenseKey = '憑證碼';
+    w_License_Mac = '實體位址';
+    w_License_productName = '專案名稱';
+    w_License_Quantity = '數量';
+    w_License_Trial = '審查';
+    w_License_RegisterDate = '註冊日';
+    w_License_ExpireDate = '過期日';
+    w_License_License_Key = '憑證碼';
+    w_License_UploadOfflineKey = '上傳離線碼';
+    w_License_UploadOfflineKey1 = '* 上傳離線碼';
+    w_License_RegisterOnline = '註冊上線';
+    w_License_RegisterOffline = '註冊離線';
 
-    w_License_License_KeyPlaceholder = 'License Key. Input 25 digits.  English alphabet or number only.  Format: xxxxx-xxxxx-xxxxx-xxxxx-xxxxx';
+    w_License_License_KeyPlaceholder = '憑證碼，輸入25位數，英文或數字。 格式範例: xxxxx-xxxxx-xxxxx-xxxxx-xxxxx';
 
-    w_License_Setting_Success = 'License set success.';
-    w_License_Setting_Fail = 'License set failed.';
+    w_License_Setting_Success = '憑證設定成功';
+    w_License_Setting_Fail = '憑證設定失敗';
 
-    w_License_MACAddress = 'MAC Address ';
-    w_License_Expired = 'Expired';
+    w_License_MACAddress = 'MAC地址';
+    w_License_Expired = '過期';
 
     ////////////////// FRS Setting //////////////////
-    w_FRSSetting = 'FRS Setting';
-    w_FRSSetting_IPAddress = 'IP Address';
-    w_FRSSetting_HTTPPort = 'HTTP Port';
-    w_FRSSetting_Success = 'FRS Setting has been updated';
-    w_FRSSetting_Fail = 'FRS Setting failed';
-    w_FRSReading_Fail = 'FRS Reading failed';
+    w_FRSSetting = 'FRS設定';
+    w_FRSSetting_IPAddress = 'IP地址';
+    w_FRSSetting_HTTPPort = 'HTTP埠';
+    w_FRSSetting_Success = 'FRS 設定成功';
+    w_FRSSetting_Fail = 'FRS 設定失敗';
+    w_FRSReading_Fail = 'FRS 讀取失敗';
 
     ////////////////// Mail Setting //////////////////
-    w_MailServer_Enable = 'Enable';
-    w_MailServer_placeholder = 'Set Test Email to xxx@xxx.com';
-    w_MailServer_Test = 'Test Email';
+    w_MailServer_Enable = '啟用';
+    w_MailServer_placeholder = '設定測試信箱給 xxx@xxx.com';
+    w_MailServer_Test = '測試信箱';
 
-    w_MailServer_Setting_Fail = 'Email Server set failed';
-    w_MailServer_Test_Success = 'Email Server test success';
-    w_MailServer_Test_EmailSetting = 'Email Setting';
-    w_MailServer_Read_Fail = 'Mail Server read failed';
-    w_MailServer_Read_FailMsg = 'Internal Server Error, please contact administrator';
+    w_MailServer_Setting_Fail = '信箱伺服器設定失敗';
+    w_MailServer_Test_Success = '信箱伺服器設定成功';
+    w_MailServer_Test_EmailSetting = '信箱設定';
+    w_MailServer_Read_Fail = '信箱伺服器讀取失敗';
+    w_MailServer_Read_FailMsg = '伺服器內部錯誤, 請聯絡管理員';
 
-    w_MailSetting_SMTPHostname = 'SMTP Hostname';
-    w_MailSetting_PortNumber = 'Port Number';
-    w_MailSetting_Email = 'Email';
+    w_MailSetting_SMTPHostname = 'SMTP主機名稱';
+    w_MailSetting_PortNumber = '埠號碼';
+    w_MailSetting_Email = '信箱';
 
-    w_MailSetting_EmailSuccess = 'Email Setting has been updated';
+    w_MailSetting_EmailSuccess = '信箱設定成功';
 
     ////////////////// SMS Setting //////////////////
-    w_SmsServer_Enable = 'Enable';
-    w_SmsServer_Setting = 'Set SMS Server';
-    w_SmsServer_Test = 'Test SMS';
-    w_SmsServer_Phone = 'Phone Number';
-    w_SmsServer_Setting_Success = 'SMS Server set success.';
-    w_SmsServer_Setting_Fail = 'SMS Server set failed.';
-    w_SmsServer_Setting_Test_Fail = 'SMS Server test failed.';
-    w_SmsServer_Setting_Test_Success = 'SMS has been sent';
-    w_SmsServer_Read_Fail = 'SMS Server read failed.';
-    w_URL = 'URL';
-    w_SMSSetting_Username = 'Username';
-    w_SMSSetting_EmailSuccess = 'SMS Setting has been updated';
-    w_SMSSetting_placeholder = 'Sent to +xxxxxxxxxx';
-    w_SMSSetting_COMPortNumber = 'COM Port Number';
-    w_SMSSetting_SMSSetting = 'SMS Setting';
+    w_SmsServer_Enable = '啟用';
+    w_SmsServer_Setting = '設定 SMS 伺服器';
+    w_SmsServer_Test = '測試 SMS';
+    w_SmsServer_Phone = '電話號碼';
+    w_SmsServer_Setting_Success = 'SMS 伺服器設定成功。';
+    w_SmsServer_Setting_Fail = 'SMS 伺服器設定失敗。';
+    w_SmsServer_Setting_Test_Fail = 'SMS 伺服器測試失敗。';
+    w_SmsServer_Setting_Test_Success = 'SMS 伺服器設定成功';
+    w_SmsServer_Read_Fail = 'SMS 伺服器讀取失敗';
+    w_URL = '網址';
+    w_SMSSetting_Username = '用戶名稱';
+    w_SMSSetting_EmailSuccess = 'SMS 設定信箱成功';
+    w_SMSSetting_placeholder = '寄送給 +xxxxxxxxxx';
+    w_SMSSetting_COMPortNumber = 'COM埠號碼';
+    w_SMSSetting_SMSSetting = 'SMS 設定';
 
     ////////////////// Visitor Card Setting //////////////////
-    w_VisitorCardSetting = 'Visitor Card Setting';
-    w_VisitorCardSetting_RangeStart = 'Range Start';
-    w_VisitorCardSetting_RangeEnd = 'Range End';
-    w_VisitorCardSetting_Success = 'Visitor Card Setting has been updated';
-    w_VisitorCardSetting_Fail = 'Visitor Card Setting fail';
-    w_VisitorCardSetting_ReadFail = 'Visitor Card read fail';
-    w_VisitorCardSetting_error = 'Range Start, Range End need more than 10000';
-    w_VisitorCardSetting_error1 = 'Range End need more than Range Start';
+    w_VisitorCardSetting = '訪客卡設定';
+    w_VisitorCardSetting_RangeStart = '開始範圍';
+    w_VisitorCardSetting_RangeEnd = '結束範圍';
+    w_VisitorCardSetting_Success = '訪客卡設定成功';
+    w_VisitorCardSetting_Fail = '訪客卡設定失敗';
+    w_VisitorCardSetting_ReadFail = '訪客卡讀取失敗';
+    w_VisitorCardSetting_error = '起始、結束範圍必須超過 10000';
+    w_VisitorCardSetting_error1 = '起始必須小於結束';
 
     ////////////////// Company //////////////////
-    w_Company_List = 'Company List';
-    w_Company_Add = 'Add Company';
-    w_Company_Edit = 'Edit Company';
-    w_Company_View = 'View Company';
+    w_Company_List = '公司清單';
+    w_Company_Add = '新增公司';
+    w_Company_Edit = '編輯公司';
+    w_Company_View = '瀏覽公司';
 
-    w_Company_AddSuccess = 'Company add success';
-    w_Company_ADDFailed = 'Company add failed, please try again';
-    w_Company_EditSuccess = 'Company edit success';
-    w_Company_EditFailed = 'Company edit failed, please try again';
+    w_Company_AddSuccess = '公司編輯成功';
+    w_Company_ADDFailed = '公司新增失敗, 請重試';
+    w_Company_EditSuccess = '公司編輯成功';
+    w_Company_EditFailed = '公司編輯失敗, 請重試';
     w_Company_DeleteConfirm = 'Are you sure to delete selected Company(s)?';
 
-    w_Company_Name = 'Company Name';
-    w_Company_UnitNumber = 'Unit Number';
-    w_Company_ContactPerson = 'Contact Person';
-    w_Company_ContactNumber = 'Contact Number';
-    w_Company_Floor = 'Floor';
+    w_Company_Name = '公司名稱';
+    w_Company_UnitNumber = '單位號碼';
+    w_Company_ContactPerson = '聯絡人';
+    w_Company_ContactNumber = '聯絡號碼';
+    w_Company_Floor = '樓層';
 
     ////////////////// Kiosk //////////////////
-    w_Kiosk_List = 'Kiosk List';
-    w_Kiosk_Add = 'Add Kiosk';
-    w_Kiosk_Edit = 'Edit Kiosk';
-    w_Kiosk_View = 'View Kiosk';
+    w_Kiosk_List = '設備清單';
+    w_Kiosk_Add = '新增設備';
+    w_Kiosk_Edit = '修改設備';
+    w_Kiosk_View = '瀏覽設備';
 
-    w_Kiosk_AddSuccess = 'Kiosk add success';
-    w_Kiosk_ADDFailed = 'Kiosk add failed, please try again';
-    w_Kiosk_EditSuccess = 'Kiosk edit success';
-    w_Kiosk_EditFailed = 'Kiosk edit failed, please try again';
-    w_Kiosk_DeleteConfirm = 'Are you sure to delete selected Kiosk(s)?';
+    w_Kiosk_AddSuccess = '設備新增成功';
+    w_Kiosk_ADDFailed = '設備新增失敗, 請重試';
+    w_Kiosk_EditSuccess = '設備修改成功';
+    w_Kiosk_EditFailed = '設備修改失敗, 請重試';
+    w_Kiosk_DeleteConfirm = '確定刪除選取設備?';
 
-    w_Kiosk_Username = 'Username';
-    w_Kiosk_Id = 'Kiosk Id';
-    w_Kiosk_KioskName = 'Kiosk Name';
-    w_Kiosk_Status = 'Status';
+    w_Kiosk_Username = '用戶名稱';
+    w_Kiosk_Id = '設備編號';
+    w_Kiosk_KioskName = '設備名稱';
+    w_Kiosk_Status = '狀態';
 
     ////////////////// Tenants Invitation //////////////////
-    w_Tenants_InvitationList = 'Invitation List';
-    w_Tenants_MobileNumber = 'Mobile number';
-    w_Tenants_Name = 'Name';
-    w_Tenants_Email = 'Email';
-    w_Tenants_Phone = 'Phone';
-    w_Tenants_Status = 'Status';
-    w_Tenants_StartDate = 'Start';
-    w_Tenants_EndDate = 'End';
-    w_Tenants_Purpose = 'Purpose';
+    w_Tenants_InvitationList = '邀請清單';
+    w_Tenants_MobileNumber = '設備名稱';
+    w_Tenants_Name = '名稱';
+    w_Tenants_Email = '信箱';
+    w_Tenants_Phone = '電話';
+    w_Tenants_Status = '狀態';
+    w_Tenants_StartDate = '起始時間';
+    w_Tenants_EndDate = '結束時間';
+    w_Tenants_Purpose = '目的';
     w_Tenants_sms = 'SMS';
-    w_Tenants_AddInvitation = 'Add Invitation';
-    w_Tenants_EditInvitation = 'Edit Invitation';
+    w_Tenants_AddInvitation = '新增邀請';
+    w_Tenants_EditInvitation = '編輯邀請';
 
     ////////////////// Tenants Visitor //////////////////
-    w_Tenants_VisitorList = 'Visitor List';
+    w_Tenants_VisitorList = '訪客清單';
 
     ////////////////// Floor  //////////////////
-    w_Floor_List = 'Floor List';
-    w_Floor_Add = 'Add Floor';
-    w_Floor_Edit = 'Edit Floor';
-    w_Floor_View = 'View Floor';
+    w_Floor_List = '樓層清單';
+    w_Floor_Add = '新增樓層';
+    w_Floor_Edit = '修改樓層';
+    w_Floor_View = '瀏覽樓層';
 
-    w_Floor_AddSuccess = 'Floor add success';
-    w_Floor_ADDFailed = 'Floor add failed, please try again';
-    w_Floor_EditSuccess = 'Floor edit success';
-    w_Floor_EditFailed = 'Floor edit failed, please try again';
-    w_Floor_DeleteConfirm = 'Are you sure to delete selected Floor(s)?';
+    w_Floor_AddSuccess = '樓層新增成功';
+    w_Floor_ADDFailed = '樓層新增失敗, 請重試';
+    w_Floor_EditSuccess = '樓層編輯成功';
+    w_Floor_EditFailed = '樓層編輯失敗, 請重試';
+    w_Floor_DeleteConfirm = '確定刪除選取樓層?';
 
-    w_Floor_FloorName = 'Floor Name';
-    w_Floor_Floor = 'Floor';
+    w_Floor_FloorName = '樓層名稱';
+    w_Floor_Floor = '樓層';
 
     //purposes
     w_Purposes_Name = 'Purposes Name';
@@ -338,10 +338,10 @@ export default class LangObject implements ILang {
     w_Purposes_DeleteConfirm = 'Are you sure to delete selected Purposes(s)?';
 
     ////////////////// Potrait //////////////////
-    w_Potrait_Photo = 'Your Photo';
-    w_Potrait_PhotoPlaceholder = 'Photo size must bigger than 300 x 300';
-    w_Potrait_ErrorFileToLarge = 'Photo size too large';
-    w_Potrait_SuccessTitle = 'Registration Completed!';
-    w_Potrait_SuccessContent_1 = 'Please take note of the PIN CODE sent to you for your Check-In';
-    w_Potrait_SuccessContent_2 = 'kindly proceed to the Check-in Kiosk and Click "Check-in"';
+    w_Potrait_Photo = '你的圖片';
+    w_Potrait_PhotoPlaceholder = '圖片尺寸必須大於 300 * 300';
+    w_Potrait_ErrorFileToLarge = '圖片尺寸過大';
+    w_Potrait_SuccessTitle = '註冊已完成!';
+    w_Potrait_SuccessContent_1 = '請注意您辦理報到時發送給您的密碼';
+    w_Potrait_SuccessContent_2 = '請前往設備並點擊"報到"';
 }
