@@ -17,6 +17,26 @@
                 </iv-form>
                 
         </iv-modal>
+        <iv-modal :label="_('w_MemberFields')" :visible.sync="importVisible">
+            <iv-form
+                  ref="importForm"
+                    :interface="importInterface()"
+                    @submit="importFile($event)"
+                >
+                <template #data="{$attrs, $listeners}">
+                    <div class="upload_file">
+                        <b-form-file
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            @change="handleXlsxFile($event)"
+                        >
+                        </b-form-file>
+                    </div>
+
+                </template>
+                </iv-form>
+                
+        </iv-modal>
     <iv-card v-show="pageStep === ePageStep.list" :label="_('w_Filter')">
       <iv-form
         ref="filterForm"
@@ -46,7 +66,15 @@
     </iv-card>
     <iv-card v-show="pageStep === ePageStep.list" :label="_('w_Member_List')">
       <template #toolbox>
-         <iv-toolbox-export :disabled="isSelected.length !== 1" @click="showExportDialog()"/>
+           <iv-toolbox-element-base
+              v-bind="$attrs"
+              :title="_('wb_Import')"
+              icon="fa fa-upload"
+              v-show="true"
+              :variant="'light'"
+              :size="'sm'"
+              @click="showImportDialog()"
+          />
         <iv-toolbox-export :disabled="!submitClicked" @click="showExportDialog()"/>
         <iv-toolbox-view :disabled="isSelected.length !== 1" @click="pageToView" />
         <iv-toolbox-edit
@@ -359,7 +387,7 @@ export default class Member extends Vue {
     await this.initCredentialProfile();
     
   }
-  showExportDialog(){
+  getMemberFields(){
     if(this.savedFieldOptions.length==0 && (this.$refs as any).listTable.result.results.length>0){
       for(let key of Object.keys((this.$refs as any).listTable.result.results[0])){
         if(this.exceptionFields.find(x=>x==key))continue;
@@ -368,7 +396,60 @@ export default class Member extends Vue {
       //to trigger option changed
       this.fieldOptions=this.savedFieldOptions;
     }
+    console.log("savedFieldOptions", this.savedFieldOptions);
+  }
+  showExportDialog(){
+    this.getMemberFields();
     this.exportVisible=true;
+  }
+  importVisible:boolean=false;
+  async showImportDialog(){
+    if(this.storedPermissionOptions.length==0) await this.initPremission();
+    this.getMemberFields();
+    this.importVisible=true;
+  }
+  handleXlsxFile(e) {
+    let fieldOptions = this.savedFieldOptions;
+    let storedPermissionOptions = this.storedPermissionOptions;
+    var files = e.target.files, f = files[0];
+    var reader = new FileReader();
+    reader.onload = function(e) {
+    var data = new Uint8Array((e.target as any).result);
+    var workbook = XLSX.read(data, {type: 'array'});
+    /* DO SOMETHING WITH workbook HERE */
+     var sheet_name_list = workbook.SheetNames;
+     console.log(sheet_name_list[0]);
+    let rawJson = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+    console.log("rawJson", rawJson)
+    let records = [];
+    for(let record of rawJson){
+        let newRecord:any={};
+        let i=0;
+        for(const key of Object.keys(record)){
+          if(i==0){
+            let accessRules=[];
+            let permTables = record[key].split(",");
+            for(let permTable of permTables){
+                let exist = storedPermissionOptions.find(x=>x.text == permTable);
+                accessRules.push(exist ? exist.value : "0");
+            }
+            newRecord[fieldOptions[i].value]=accessRules;
+          }
+          else newRecord[fieldOptions[i].value]=record[key];
+          i++;
+        }
+        records.push(newRecord);
+    }
+    console.log(records);
+  };
+  reader.readAsArrayBuffer(f);
+}
+  importInterface(){
+    return `
+      interface {        
+        data:any;
+      }
+    `; 
   }
   exportInterface(){
     return `
