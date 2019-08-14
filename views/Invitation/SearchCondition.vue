@@ -153,7 +153,7 @@ export class SearchCondition extends Vue {
 
     async doSubmit(data) {
         const doSubmitParam: {
-            paging: IPaging;
+            paging?: IPaging;
             startDate: Date;
             endDate: Date;
             status: string;
@@ -167,10 +167,10 @@ export class SearchCondition extends Vue {
             workContact: string;
             contractorCompanyName: string;
         } = {
-            paging: {
-                pageSize: 10,
-                page: 1
-            },
+            // paging: {
+            //     pageSize: 10,
+            //     page: 1
+            // },
             startDate: Datetime.DateToZero(data.startDate),
             endDate: Datetime.DateTo23595959(data.endDate),
             status: data.ptwStatus,
