@@ -764,9 +764,12 @@ private async getFloorGroup() {
             this.busy=true;
             let duplicate = await this.checkDuplication({objectId: this.inputFormData.id, tablename:this.inputFormData.permissionName})
             if(!duplicate) await this.doSave();
-        }catch(err){
-            console.error("doSubmit", err)
-        }finally{
+        }
+        // let global error handles this
+        // catch(err){
+        //     console.error("doSubmit", err)
+        // }
+        finally{
             this.busy=false;
         }
     }
