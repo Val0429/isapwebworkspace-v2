@@ -324,18 +324,18 @@ export default class LangObject implements ILang {
     w_Floor_Floor = '樓層';
 
     //purposes
-    w_Purposes_Name = 'Purposes Name';
+    w_Purposes_Name = '目的名稱';
 
-    w_Purposes_List = 'Purposes List';
-    w_Purposes_Add = 'Add Purposes';
-    w_Purposes_Edit = 'Edit Purposes';
-    w_Purposes_View = 'View Purposes';
+    w_Purposes_List = '目的清單';
+    w_Purposes_Add = '新增目的';
+    w_Purposes_Edit = '修改目的';
+    w_Purposes_View = '瀏覽目的';
 
-    w_Purposes_AddSuccess = 'Purposes add success';
-    w_Purposes_ADDFailed = 'Purposes add failed, please try again';
-    w_Purposes_EditSuccess = 'Purposes edit success';
-    w_Purposes_EditFailed = 'Purposes edit failed, please try again';
-    w_Purposes_DeleteConfirm = 'Are you sure to delete selected Purposes(s)?';
+    w_Purposes_AddSuccess = '目的新增成功';
+    w_Purposes_ADDFailed = '目的新增失敗, 請重試';
+    w_Purposes_EditSuccess = '目的修改成功';
+    w_Purposes_EditFailed = '目的修改失敗, 請重試';
+    w_Purposes_DeleteConfirm = '是否確定刪除選取目的?';
 
     ////////////////// Potrait //////////////////
     w_Potrait_Photo = '你的圖片';
