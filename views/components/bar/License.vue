@@ -340,9 +340,9 @@ export default class License extends Vue {
 
     async saveAddLicenseOffLine(data) {
         const licenseParam: {
-            data: string;
+            keyOrData: any;
         } = {
-            data: data.data
+            keyOrData: data.data
         };
 
         await this.$server
