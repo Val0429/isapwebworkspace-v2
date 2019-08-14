@@ -45,6 +45,10 @@
                         :params="flow1Params"
                         @selected="selectedItem($event)"
                     >
+                        <template #status="{$attrs}">
+                            {{ $attrs.value}} {{isExpired(new Date($attrs.row.workEndDate))}}
+                        </template>
+
                         <template #workStartDate="{$attrs}">
                             {{ $attrs.value ? dateToYYYY_MM_DD($attrs.value) : ''}}
                         </template>
@@ -190,8 +194,8 @@ export default class Invitation extends Vue {
     mounted() {}
 
     isExpired(date) {
-        if (date.getTime > new Date().getTime) {
-            return "(Expired)";
+        if (date.getTime() < new Date().getTime()) {
+            return "(" + this._("w_Expired") + ")";
         } else {
             return "";
         }

@@ -13,6 +13,7 @@ export default class LangObject {
     w_Upload = 'Upload';
     w_ExportExcel = 'Export Excel';
     w_HowToExportExcel = 'How To Export Excel?';
+    w_Expired = 'Expired';
 
     w_Username = 'User name';
     w_Roles = 'Role';
