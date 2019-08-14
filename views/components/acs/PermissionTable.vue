@@ -512,7 +512,7 @@ private async getFloorGroup() {
 
   private async getTimeSchedule() {
     await this.$server
-      .R("/acs/timeschedule",{ "paging.all": "true" })
+      .R("/acs/timeschedule",{ "paging.all": "true", system:1 })
       .then((response: any) => {
         for(let tempItem of response.results) {
           this.selectItem.timeSchedule[tempItem.objectId]=tempItem.timename;
