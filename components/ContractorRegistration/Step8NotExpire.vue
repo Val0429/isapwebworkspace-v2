@@ -36,6 +36,7 @@
     import { toEnumInterface } from "@/../core";
     import { IWorkPermitAccessGroup } from '.';
     import ResponseFilter from '@/services/ResponseFilter';
+    import Dialog from '@/services/Dialog';
 
     @Component({
         components: {}
@@ -62,8 +63,6 @@
             approval: false
         };
 
-        // TODO: wait api
-        // qrCode: string = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/QRcode_image.svg/220px-QRcode_image.svg.png';
         qrCode: string = this.selectedDetail.qrcode ? this.selectedDetail.qrcode : "";
         ptwText: string = this.selectedDetail.ptwId ? this.selectedDetail.ptwId : "";
 
@@ -134,13 +133,20 @@
                     this.inputFormData.workStartTime = data.value;
                     break;
                 case "workEndDate":
-                    this.inputFormData.workEndDate = data.value;
-                    this.inputFormData.workEndTime = data.value;
+                    if (data.value.getTime() > new Date().getTime() || data.value.getTime() > this.inputFormData.workStartDate.getTime()) {
+                        this.inputFormData.workEndDate = data.value;
+                        this.inputFormData.workEndTime = data.value;
+                    } else {
+                        Dialog.error(this._("w_Invitation_DateErrorCheck"));
+                    }
+
                     break;
                 case "accessGroupsForm":
                     this.inputFormData.accessGroupsForm = data.value;
                     break;
             }
+
+            this.inputFormData.accessGroups = [];
 
             for (const detail in this.accessGroupSelectItem) {
                 for (const id of this.inputFormData.accessGroupsForm) {
@@ -152,7 +158,6 @@
             }
 
             this.$emit("step8", this.inputFormData);
-
         }
 
         changeApproval() {

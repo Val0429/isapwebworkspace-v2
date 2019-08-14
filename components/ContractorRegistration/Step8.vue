@@ -11,8 +11,9 @@
                     <img
                         :src="qrCode"
                         alt=""
+                        class="col-md-12"
                     >
-                    <p class="mt-3">{{ ptwText }}</p>
+                    <p class="mt-0 ml-3 col-md-12">{{ _('w_Invitation_PTWID') }} : {{ ptwText }}</p>
                 </div>
             </template>
 
@@ -35,6 +36,8 @@ import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator
 import { toEnumInterface } from "@/../core";
 import { IWorkPermitAccessGroup } from '.';
 import ResponseFilter from '@/services/ResponseFilter';
+import Datetime from '@/services/Datetime';
+import Dialog from '@/services/Dialog';
 
 @Component({
     components: {}
@@ -61,10 +64,10 @@ export class Step8 extends Vue {
         approval: false
     };
 
-    approval: boolean = true;
+    approval: boolean = false;
 
-    qrCode: string = "";
-    ptwText: string = "";
+    qrCode: string = this.selectedDetail.qrcode ? this.selectedDetail.qrcode : "";
+    ptwText: string = this.selectedDetail.ptwId ? this.selectedDetail.ptwId : "";
 
     async created() {
         this.initInputFormData();
@@ -132,17 +135,20 @@ export class Step8 extends Vue {
                 this.inputFormData.workStartTime = data.value;
                 break;
             case "workEndDate":
-                this.inputFormData.workEndDate = data.value;
-                this.inputFormData.workEndTime = data.value;
+                if (data.value.getTime() > new Date().getTime() || data.value.getTime() > this.inputFormData.workStartDate.getTime()) {
+                    this.inputFormData.workEndDate = data.value;
+                    this.inputFormData.workEndTime = data.value;
+                } else {
+                    Dialog.error(this._("w_Invitation_DateErrorCheck"));
+                }
+
                 break;
             case "accessGroupsForm":
                 this.inputFormData.accessGroupsForm = data.value;
                 break;
         }
 
-    }
-
-    changeApproval() {
+        this.inputFormData.accessGroups = [];
 
         for (const detail in this.accessGroupSelectItem) {
             for (const id of this.inputFormData.accessGroupsForm) {
@@ -152,6 +158,11 @@ export class Step8 extends Vue {
                 }
             }
         }
+    }
+
+    changeApproval() {
+
+        console.log('this.approval ~ ', this.approval);
 
         this.$emit("step8", this.inputFormData, this.approval);
     }

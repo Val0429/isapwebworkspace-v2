@@ -11,8 +11,9 @@
                     <img
                         :src="qrCode"
                         alt=""
+                        class="col-md-12"
                     >
-                    <p class="mt-3">{{ ptwText }}</p>
+                    <p class="mt-0 ml-3 col-md-12">{{ _('w_Invitation_PTWID') }} : {{ ptwText }}</p>
                 </div>
             </template>
 
@@ -56,13 +57,13 @@
             workStartTime: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
             workEndDate: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
             workEndTime: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
-            accessGroups: [],
-            accessGroupsForm: [],
+            accessGroups: this.selectedDetail.accessGroups != undefined ? this.selectedDetail.accessGroups : [] ,
+            accessGroupsForm: this.selectedDetail.accessGroups ? this.selectedDetail.accessGroups.map(item => item.doorId) : [],
             approval: false
         };
 
-        qrCode: string = "";
-        ptwText: string = "";
+	    qrCode: string = this.selectedDetail.qrcode ? this.selectedDetail.qrcode : "";
+	    ptwText: string = this.selectedDetail.ptwId ? this.selectedDetail.ptwId : "";
 
         created() {
             this.initInputFormData()

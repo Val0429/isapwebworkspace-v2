@@ -13,6 +13,7 @@ export default class LangObject {
     w_Upload = 'Upload';
     w_ExportExcel = 'Export Excel';
     w_HowToExportExcel = 'How To Export Excel?';
+    w_Expired = 'Expired';
 
     w_Username = 'User name';
     w_Roles = 'Role';
@@ -111,7 +112,8 @@ export default class LangObject {
     w_Invitation_Rejected = 'Rejected';
 
     w_Invitation_DateError = 'End date must greater or equal than start date';
-    w_Invitation_EmailError = 'Email format wrong';
+    w_Invitation_DateErrorCheck = 'End date must greater than today';
+    w_Invitation_EmadilError = 'Email format wrong';
 
     w_Invitation_CompanyAddPTW = 'Add PTW';
     w_Invitation_CompanyEmail = 'Company Email';
