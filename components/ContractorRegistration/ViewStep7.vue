@@ -163,7 +163,7 @@ export class ViewStep7 extends Vue {
 
     personTable: any = {
         title: [],
-        tableDataFromApi: []
+        tableDataFromApi: this.selectedDetail.persons ? this.selectedDetail.persons : []
     };
 
     inputFormData: IWorkPermitPerson = {

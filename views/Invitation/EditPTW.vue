@@ -490,15 +490,12 @@ export class EditPTW extends Vue {
                 }
             );
         }
-
-        console.log("this.inputFormData ~ ", this.inputFormData);
     }
 
     ////////////////////////////// step 1  //////////////////////////////
 
     receiveStep1Data(step1Date) {
         this.inputFormData.pdpaAccepted = step1Date;
-        //        console.log(' ~ ', this.inputFormData.accepted)
     }
 
     async stepTo2() {
