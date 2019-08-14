@@ -171,8 +171,8 @@ export class SearchCondition extends Vue {
                 pageSize: 10,
                 page: 1
             },
-            startDate: data.startDate,
-            endDate: data.endDate,
+            startDate: Datetime.DateToZero(data.startDate),
+            endDate: Datetime.DateToZero(data.endDate),
             status: data.ptwStatus,
             ptwId: data.ptwId,
             contactEmail: data.email,
