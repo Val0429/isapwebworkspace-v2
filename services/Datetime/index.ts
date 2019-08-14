@@ -361,6 +361,12 @@ class Datetime {
         return date;
     }
 
+    DateTo23595959(value: Date): Date {
+        let date = new Date(value.getTime());
+        date.setHours(23, 59, 59, 59);
+        return date;
+    }
+
     /////////////////////////////////////////////
     SortDateGap(startDate: Date, endDate: Date): { startDate: Date; endDate: Date } {
         let result = { startDate: startDate, endDate: endDate };
