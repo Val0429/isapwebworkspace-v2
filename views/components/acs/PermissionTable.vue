@@ -884,17 +884,8 @@ private async getFloorGroup() {
         Dialog.error(this._("w_Error_AccessLevelIsNotInCCure")+"<br/>"+messages);
                
     }else if(response.errors.find(x=>x.type=="clearanceIsNotInCCure")){
-        let messages = ``;
-        let existname = response.permTableNames.find(x=>x.permissionTableName == this.inputFormData.permissionName);
-        if(existname){
-                messages=this.createPermTableMessage(messages, existname);
-        }else{
-            messages=this.createPermTableMessage(messages, {permissionTableName:this.inputFormData.permissionName, devices:Object.assign([], this.savedAccessLevels)});
-            // for(let permTable of response.permTableNames){
-            //     messages=this.createPermTableMessage(messages, permTable);
-            // }
-        }
-       
+        let messages = this.createPermTableMessage("", {permissionTableName:this.inputFormData.permissionName, devices:Object.assign([], this.savedAccessLevels)});
+           
         Dialog.error(this._("w_Error_AccessLevelIsNotInCCure")+"<br/>"+messages);
     }else{
         this.pageToList();
