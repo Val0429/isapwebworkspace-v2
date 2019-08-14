@@ -93,10 +93,10 @@ export default class LangObject {
     w_Navigation_Reports_Investigation = 'Investigation';
 
     w_Navigation_Setups = 'Setup';
-    w_Navigation_Setups_Floor = 'Floor Managerment';
+    w_Navigation_Setups_Floor = 'Floor Management';
     w_Navigation_Setups_Company = 'Company Management';
-    w_Navigation_Setups_Account = 'Account Managerment';
-    w_Navigation_Setups_Kiosk = 'Kiosk Managerment';
+    w_Navigation_Setups_Account = 'Account Management';
+    w_Navigation_Setups_Kiosk = 'Kiosk Management';
     w_Navigation_Setups_License = 'License';
     w_Navigation_Setups_FRS = 'FRS Setting';
     w_Navigation_Setups_Email = 'Email Setting';

@@ -34,6 +34,7 @@ import SetupsLicense from './Setups/SetupsLicense.vue';
 import SetupsSMS from './Setups/SetupsSMS.vue';
 import SetupsSMSOnline from './Setups/SetupsSMSOnline.vue';
 import SetupsVisitorCard from './Setups/SetupsVisitorCard.vue';
+import SetupsPurposes from './Setups/SetupsPurposes.vue';
 
 $({ path: '/setups', name: "_('w_Navigation_Setups')", icon: 'fa-cog', redirect: '/setups/account' })();
 $({ path: '/setups/floor', name: "_('w_Navigation_Setups_Floor')", icon: 'fa-building' })(SetupsFloor);
@@ -46,6 +47,7 @@ $({ path: '/setups/email', name: "_('w_Navigation_Setups_Email')", icon: 'fa-inb
 $({ path: '/setups/sms', name: "_('w_Navigation_Setups_SMS')", icon: 'fa-envelope' })(SetupsSMS);
 $({ path: '/setups/sms_online', name: "_('w_Navigation_Setups_SMSOnline')", icon: 'fa-cloud' })(SetupsSMSOnline);
 $({ path: '/setups/visitor_card', name: "_('w_Navigation_Setups_VisitorCard')", icon: 'fa-id-card' })(SetupsVisitorCard);
+$({ path: '/setups/purposes', name: "_('w_Navigation_Setups_VisitorCard')", icon: 'fa-id-card' })(SetupsPurposes);
 
 // Tenants
 import TenantsInvitation from './Tenants/TenantsInvitation.vue';
