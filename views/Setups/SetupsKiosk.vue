@@ -175,11 +175,13 @@ export default class SetupsKiosk extends Vue {
     inputFormData: any = {
         objectId: "",
         name: "",
-        password: "",
-        confirmPassword: "",
         kioskId: "",
         kioskName: "",
-        roles: []
+        roles: [],
+        password: "",
+        confirmPassword: "",
+        updatePassword: "",
+        updateConfirmPassword: ""
     };
 
     kioskStatus: IKioskStatus[] = [];
@@ -309,11 +311,13 @@ export default class SetupsKiosk extends Vue {
         this.inputFormData = {
             objectId: "",
             name: "",
-            password: "",
-            confirmPassword: "",
             kioskId: "",
             kioskName: "",
-            roles: []
+            roles: [],
+            password: "",
+            confirmPassword: "",
+            updatePassword: "",
+            updateConfirmPassword: ""
         };
     }
 
@@ -366,7 +370,6 @@ export default class SetupsKiosk extends Vue {
     async saveAddOrEdit(data) {
         let param: any = {
             username: data.username,
-            password: data.password,
             data: {
                 kioskId: data.kioskId,
                 kioskName: data.kioskName
@@ -376,6 +379,8 @@ export default class SetupsKiosk extends Vue {
 
         // add
         if (!this.inputFormData.objectId) {
+            param.password = data.password;
+
             Loading.show();
             await this.$server
                 .C("/kiosks", param)
@@ -399,6 +404,9 @@ export default class SetupsKiosk extends Vue {
                 });
         } else {
             param.objectId = data.objectId;
+            if (data.updatePassword != "") {
+                param.password = data.updatePassword;
+            }
 
             Loading.show();
             await this.$server
@@ -511,7 +519,6 @@ export default class SetupsKiosk extends Vue {
         return `
             interface {
 
-
                 /**
                  * @uiLabel - ${this._("w_Company_UnitNumber")}
                  * @uiPlaceHolder - ${this._("w_Company_UnitNumber")}
@@ -523,18 +530,28 @@ export default class SetupsKiosk extends Vue {
                 */
                 username: string;
 
+                /**
+                 * @uiLabel - ${this._("w_Kiosk_Id")}
+                 * @uiPlaceHolder - ${this._("w_Kiosk_Id")}
+                 */
+                kioskId: string;
 
-                 /**
+                /**
+                 * @uiLabel - ${this._("w_Kiosk_KioskName")}
+                 * @uiPlaceHolder - ${this._("w_Kiosk_KioskName")}
+                 */
+                kioskName: string;
+
+                /**
                   * @uiLabel - ${this._("w_Password")}
                   * @uiPlaceHolder - ${this._("w_Password")}
                   * @uiType - iv-form-password
                   * @uiColumnGroup - password
                   * @uiHidden - ${!!this.inputFormData.objectId}
                   */
-                 password: string;
+                password: string;
 
-
-                 /**
+                /**
                  * @uiLabel - ${this._("w_PasswordConfirm")}
                  * @uiPlaceHolder - ${this._("w_PasswordConfirm")}
                  * @uiType - iv-form-password
@@ -543,21 +560,27 @@ export default class SetupsKiosk extends Vue {
                  * @uiInvalidMessage - ${this._("w_Error_Password")}
                  * @uiHidden - ${!!this.inputFormData.objectId}
                 */
-                 confirmPassword: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Kiosk_Id")}
-                 * @uiPlaceHolder - ${this._("w_Kiosk_Id")}
-                 */
-                kioskId: string;
-
+                confirmPassword: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Kiosk_KioskName")}
-                 * @uiPlaceHolder - ${this._("w_Kiosk_KioskName")}
-                 */
-                kioskName: string;
+                  * @uiLabel - ${this._("w_Password")}
+                  * @uiPlaceHolder - ${this._("w_Password")}
+                  * @uiType - iv-form-password
+                  * @uiColumnGroup - updatePassword
+                  * @uiHidden - ${!this.inputFormData.objectId}
+                  */
+                updatePassword?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_PasswordConfirm")}
+                 * @uiPlaceHolder - ${this._("w_PasswordConfirm")}
+                 * @uiType - iv-form-password
+                 * @uiColumnGroup - updatePassword
+                 * @uiValidation - (value, all) => value === all.updatePassword
+                 * @uiInvalidMessage - ${this._("w_Error_Password")}
+                 * @uiHidden - ${!this.inputFormData.objectId}
+                */
+                updateConfirmPassword?: string;
 
             }
         `;
