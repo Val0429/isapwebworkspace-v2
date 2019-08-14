@@ -134,10 +134,10 @@ export default class LangObject {
     w_Investigation_Event = 'Event';
     w_Investigation_EventTime = 'Event Time';
 
-    w_Investigation_EventStrictCompareFace: 'Compare Face';
-    w_Investigation_EventStrictCompleteCheckIn: 'Complete Check-In';
-    w_Investigation_EventStrictConfirmPhoneNumber: 'Confirm Phone Number';
-    w_Investigation_EventStrictTryCheckIn: 'Try Check-In';
+    w_Investigation_EventStrictCompareFace = 'Compare Face';
+    w_Investigation_EventStrictCompleteCheckIn = 'Complete Check-In';
+    w_Investigation_EventStrictConfirmPhoneNumber = 'Confirm Phone Number';
+    w_Investigation_EventStrictTryCheckIn = 'Try Check-In';
 
     ////////////////// User //////////////////
     w_User_UserName = 'User Name';

@@ -2,158 +2,158 @@ import { RegisterLanguage, ILang } from '@/../core/i18n';
 
 @RegisterLanguage('zh-TW', '正體中文')
 export default class LangObject implements ILang {
-    w_Name = 'Name';
-    w_Enabled = 'Enabled';
-    w_Value = 'Value';
-    w_Startdate = 'Start Date';
-    w_Enddate = 'End Date';
-    w_Password = 'Password';
-    w_PasswordConfirm = 'Confirm Password';
-    w_Selection = 'Selection';
-    w_Multi = 'Multi';
+    w_Name = '姓名';
+    w_Enabled = '啟用';
+    w_Value = '值';
+    w_Startdate = '開始日期';
+    w_Enddate = '結束日期';
+    w_Password = '密碼';
+    w_PasswordConfirm = '確認密碼';
+    w_Selection = '選擇';
+    w_Multi = '多';
 
-    w_Username = 'User name';
-    w_Roles = 'Roles';
-    w_Email = 'Email';
-    w_CreatedAt = 'Created Date';
-    w_UpdatedAt = 'Updated Date';
-    w_Actions = 'Actions';
-    w_ConfirmPassword = 'Confirm Password';
+    w_Username = '使用者姓名';
+    w_Roles = '腳色';
+    w_Email = '信箱';
+    w_CreatedAt = '建立日期';
+    w_UpdatedAt = '更新日期';
+    w_Actions = '動作';
+    w_ConfirmPassword = '確認密碼';
 
-    w_User = 'User';
-    w_UserAdd = 'Add User';
-    w_UserEdit = 'Edit User';
+    w_User = '使用者';
+    w_UserAdd = '增加使用者';
+    w_UserEdit = '編輯使用者';
 
-    m_PasswordShouldBeSame = 'Both password should same';
+    m_PasswordShouldBeSame = '密碼與確認密碼必須相同';
 
     ////////////////// Common //////////////////
-    w_ThisMonth = 'This Month';
-    w_ThisWeek = 'This Week';
-    w_Today = 'Today';
+    w_ThisMonth = '這個月';
+    w_ThisWeek = '這個星期';
+    w_Today = '今天';
 
-    w_Options = 'Options';
-    w_Chooses = 'Choose';
+    w_Options = '選擇';
+    w_Chooses = '選擇';
 
-    w_AllChoose = 'All';
-    w_Reset = 'Reset';
-    w_Back = 'Back';
-    w_Submit = 'Submit';
+    w_AllChoose = '全部';
+    w_Reset = '重啟';
+    w_Back = '返回';
+    w_Submit = '送出';
 
-    w_Confirm = 'Confirm';
-    w_Cancel = 'Cancel';
-    w_Cancelled = 'Cancelled';
+    w_Confirm = '確認';
+    w_Cancel = '取消';
+    w_Cancelled = '已取消';
 
-    w_Dialog_ErrorTitle = 'Error';
-    w_Dialog_SuccessTitle = 'Success';
+    w_Dialog_ErrorTitle = '錯誤';
+    w_Dialog_SuccessTitle = '成功';
 
-    w_Error_Port = 'Port should be in 1~65535';
-    w_Error_Phone = 'Please check Phone Format';
-    w_Error_Password = 'Password and PasswordConfirm should be same';
+    w_Error_Port = '埠號應該在1~65535之間';
+    w_Error_Phone = '請確認電話格式';
+    w_Error_Password = '密碼與確認密碼必須相同';
 
-    w_No = 'No';
-    w_StepBackward = 'Step Backward';
-    w_Account = 'Account';
-    w_Test = 'Test';
-    w_Send = 'Send';
+    w_No = '編號';
+    w_StepBackward = '前一步';
+    w_Account = '帳號';
+    w_Test = '測試';
+    w_Send = '送出';
 
-    w_Delete_ConfirmLabel = 'Confirm Delete';
-    w_Delete_ConfirmContent = 'Please confirm delete choose';
+    w_Delete_ConfirmLabel = '確認刪除';
+    w_Delete_ConfirmContent = '請確認刪除的選項';
 
-    w_ExportPDF = 'Export PDF';
+    w_ExportPDF = '匯出PDF';
 
     /////////////////////////////////////////////
 
     // Login
-    w_Login_LoginTitle = 'Login';
-    w_Login_ForgotPassword = 'Forgot Password';
+    w_Login_LoginTitle = '登入';
+    w_Login_ForgotPassword = '忘記密碼';
 
     // Logout
-    w_Logout = 'Logout';
+    w_Logout = '登出';
 
     // failed to fetch
-    w_FailedToFetch = "We can't connect to server, please try again!";
+    w_FailedToFetch = "連接不到伺服器，請再試一次!";
 
     // 401
-    w_UserSession_Empty = 'Not find User, Please login again';
+    w_UserSession_Empty = '找不到使用者，請重新登入';
 
     // 404
-    w_APINotFind = 'API Not Find';
+    w_APINotFind = '找不到API';
 
-    w_DeleteConfirm = 'Delete Confirm';
-    w_DeleteFailed = 'Delete Failed';
+    w_DeleteConfirm = '確認刪除';
+    w_DeleteFailed = '刪除失敗';
 
     ////////////////// Navigation //////////////////
 
-    w_Navigation_About = 'About';
+    w_Navigation_About = '關於';
 
-    w_Navigation_MyProfile = 'My Profile';
+    w_Navigation_MyProfile = '個人資料';
 
-    w_Navigation_Reports = 'Report';
-    w_Navigation_Reports_Dashboard = 'Dashboard';
-    w_Navigation_Reports_Investigation = 'Investigation';
+    w_Navigation_Reports = '報告';
+    w_Navigation_Reports_Dashboard = '儀表板';
+    w_Navigation_Reports_Investigation = '調查';
 
-    w_Navigation_Setups = 'Setup';
-    w_Navigation_Setups_Floor = 'Floor Management';
-    w_Navigation_Setups_Company = 'Company Management';
-    w_Navigation_Setups_Account = 'Account Management';
-    w_Navigation_Setups_Kiosk = 'Kiosk Management';
-    w_Navigation_Setups_License = 'License';
-    w_Navigation_Setups_FRS = 'FRS Setting';
-    w_Navigation_Setups_Email = 'Email Setting';
-    w_Navigation_Setups_SMS = 'SMS Setting';
-    w_Navigation_Setups_SMSOnline = 'Online SMS Provider (SG only)';
-    w_Navigation_Setups_VisitorCard = 'Visitor Card';
+    w_Navigation_Setups = '設定';
+    w_Navigation_Setups_Floor = '樓層管理';
+    w_Navigation_Setups_Company = '公司管理';
+    w_Navigation_Setups_Account = '帳號管理';
+    w_Navigation_Setups_Kiosk = '設備管理';
+    w_Navigation_Setups_License = '許可證';
+    w_Navigation_Setups_FRS = 'FRS設定';
+    w_Navigation_Setups_Email = '信箱設定';
+    w_Navigation_Setups_SMS = '簡訊設定';
+    w_Navigation_Setups_SMSOnline = '線上簡訊提供者設定(新加坡)';
+    w_Navigation_Setups_VisitorCard = '訪客卡片';
     w_Navigation_Setups_Purposes = '目的';
 
-    w_Navigation_Tenants = 'Tenant';
-    w_Navigation_Tenants_Invitation = 'Invitation';
-    w_Navigation_Tenants_Visitor = 'Visitor';
+    w_Navigation_Tenants = '承租人';
+    w_Navigation_Tenants_Invitation = '邀請';
+    w_Navigation_Tenants_Visitor = '訪客';
 
-    w_Navigation_Registration_Potrait = 'Potrait';
+    w_Navigation_Registration_Potrait = '大頭照';
 
     ////////////////// Dashboard //////////////////
-    w_Dashboard_VisitorOnSite = 'Visitor On Site';
-    w_Dashboard_dailyTotalVisitor = 'Daily Total Visitor';
+    w_Dashboard_VisitorOnSite = '入場訪客';
+    w_Dashboard_dailyTotalVisitor = '每日訪客統計';
 
-    w_Dashboard_ChartStatisticTitle = 'Check In Statistic';
-    w_Dashboard_ChartRecurringTitle = 'Recurring Visitor';
+    w_Dashboard_ChartStatisticTitle = '報到統計';
+    w_Dashboard_ChartRecurringTitle = '定期訪客';
 
-    w_Dashboard_ChartStatisticSuccess = 'Success';
-    w_Dashboard_ChartStatisticException = 'Exception';
+    w_Dashboard_ChartStatisticSuccess = '成功';
+    w_Dashboard_ChartStatisticException = '例外';
 
     ////////////////// Investigation //////////////////
-    w_Investigation_FilterTitle = 'Filter';
-    w_Investigation_ContentTitle = 'Investigation';
-    w_Investigation_StartDate = 'Start';
-    w_Investigation_EndDate = 'End';
-    w_Investigation_Purpose = 'Purpose';
-    w_Investigation_Kiosk = 'Kiosk';
-    w_Investigation_VisitorName = 'Visitor Name';
-    w_Investigation_KioskName = 'Kiosk Name';
-    w_Investigation_Result = 'Result';
-    w_Investigation_Event = 'Event';
-    w_Investigation_EventTime = 'Event Time';
+    w_Investigation_FilterTitle = '篩選';
+    w_Investigation_ContentTitle = '調查';
+    w_Investigation_StartDate = '開始';
+    w_Investigation_EndDate = '結束';
+    w_Investigation_Purpose = '目的';
+    w_Investigation_Kiosk = '設備';
+    w_Investigation_VisitorName = '訪客姓名';
+    w_Investigation_KioskName = '設備名稱';
+    w_Investigation_Result = '結果';
+    w_Investigation_Event = '事件';
+    w_Investigation_EventTime = '事件時間';
 
-    w_Investigation_EventStrictCompareFace: 'Compare Face';
-    w_Investigation_EventStrictCompleteCheckIn: 'Complete Check-In';
-    w_Investigation_EventStrictConfirmPhoneNumber: 'Confirm Phone Number';
-    w_Investigation_EventStrictTryCheckIn: 'Try Check-In';
+    w_Investigation_EventStrictCompareFace = '臉部比對';
+    w_Investigation_EventStrictCompleteCheckIn = '報到完成';
+    w_Investigation_EventStrictConfirmPhoneNumber = '確認電話號碼';
+    w_Investigation_EventStrictTryCheckIn = '再次報到';
 
     ////////////////// User //////////////////
-    w_User_UserName = 'User Name';
-    w_User_Email = 'Email';
-    w_User_Phone = 'Phone';
-    w_User_Roles = 'Roles';
-    w_User_FloorName = 'Floor';
-    w_User_CompanyName = 'Company';
-    w_User_AccountList = 'Account List';
-    w_User_ViewUser = 'Preview Account';
-    w_User_AddUser = 'Add Account';
-    w_User_EditUser = 'Edit Account';
-    w_User_Password = 'Password';
-    w_User_ConfirmPassword = 'Confirm Password';
-    w_User_EditPassword = 'Edit Password';
-    w_User_VisitorCannotLogin = "Visitor can't login";
+    w_User_UserName = '使用者姓名';
+    w_User_Email = '信箱';
+    w_User_Phone = '電話';
+    w_User_Roles = '角色';
+    w_User_FloorName = '樓層';
+    w_User_CompanyName = '公司';
+    w_User_AccountList = '帳號清單';
+    w_User_ViewUser = '帳號預覽';
+    w_User_AddUser = '增加帳號';
+    w_User_EditUser = '編輯帳號';
+    w_User_Password = '密碼';
+    w_User_ConfirmPassword = '確認密碼';
+    w_User_EditPassword = '編輯';
+    w_User_VisitorCannotLogin = "訪客無法登入";
 
     ////////////////// Role //////////////////
     w_Role_SystemAdministrator = 'System Administrator';
