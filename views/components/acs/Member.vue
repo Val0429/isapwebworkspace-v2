@@ -47,6 +47,7 @@
     <iv-card v-show="pageStep === ePageStep.list" :label="_('w_Member_List')">
       <template #toolbox>
          <iv-toolbox-export :disabled="isSelected.length !== 1" @click="showExportDialog()"/>
+        <iv-toolbox-export :disabled="!submitClicked" @click="showExportDialog()"/>
         <iv-toolbox-view :disabled="isSelected.length !== 1" @click="pageToView" />
         <iv-toolbox-edit
           v-show="canEdit"
@@ -359,6 +360,14 @@ export default class Member extends Vue {
     
   }
   showExportDialog(){
+    if(this.savedFieldOptions.length==0 && (this.$refs as any).listTable.result.results.length>0){
+      for(let key of Object.keys((this.$refs as any).listTable.result.results[0])){
+        if(this.exceptionFields.find(x=>x==key))continue;
+        this.savedFieldOptions.push({value:key, text:this._(key as any)});
+      }
+      //to trigger option changed
+      this.fieldOptions=this.savedFieldOptions;
+    }
     this.exportVisible=true;
   }
   exportInterface(){
@@ -373,7 +382,7 @@ export default class Member extends Vue {
         if(this.fieldSelected.length==0)return;
         if(this.storedPermissionOptions.length==0) await this.initPremission();
 
-        let members:any = await this.$server.R("/acs/member", {"paging.all":"true"});
+        let members:any = await this.$server.R("/acs/member", Object.assign({"paging.all":"true"}, this.getParams));
         let exportList =[];
         let headers=[];
         for(let field of this.fieldSelected){
@@ -462,15 +471,6 @@ export default class Member extends Vue {
   fieldSelected=[];
   exceptionFields = ["objectId","cardAllNumber","pinDigit","profileName", "technologyCode", "pinMode"];
   selectedItem(data) {
-    if(this.savedFieldOptions.length==0 && data.length>0){
-      for(let key of Object.keys(data[0])){
-        if(this.exceptionFields.find(x=>x==key))continue;
-        this.savedFieldOptions.push({value:key, text:this._(key as any)});
-      }
-      //to trigger option changed
-      this.fieldOptions=this.savedFieldOptions;
-    }
-    
     this.isSelected = data;
     this.selectedDetail = data;
   }
@@ -1854,6 +1854,7 @@ export default class Member extends Vue {
         }`;
   }
   private isMounted: boolean = false;
+  private submitClicked: boolean = false;
   getParams: any = {};
   private doMounted() {
     this.isMounted = true;
@@ -1873,6 +1874,7 @@ export default class Member extends Vue {
       if(indexOfhash>-1)params[key]=value.substr(0, indexOfhash);
     }
     this.getParams = params;
+    this.submitClicked=true;
   }
 }
 </script>
