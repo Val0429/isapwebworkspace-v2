@@ -1,6 +1,6 @@
 {
     "name": "visitor-management-service",
-    "version": "3.00.02",
+    "version": "3.00.03",
     "flow": "/flow1",
     "description": "Visitor Management Service",
     "scripts": {
