@@ -98,7 +98,7 @@
         @update:*="tempSaveInputData($event)"
         @update:cardCertificate="onCardCertificateUpdate($event)"
         @update:personPhoto="updateShowPhoto($event)"
-        @submit="saveAddOrEdit($event)"
+        @submit="doSave($event)"
       >
         <template #infoCard="{ $attr }">
           <h4 class="ml-3 mt-4 font-weight-bold">{{ _('w_Member_Info') }}</h4>
@@ -583,40 +583,43 @@ export default class Member extends Vue {
         return;
     }
   }
-  async saveAddOrEdit() {
+  async doSave($event){
+    await this.saveAddOrEdit(this.inputFormData, this.permissionSelected);
+  }
+  async saveAddOrEdit(inputFormData:any, accessRules:string[], checkDuplication:boolean=true,refreshAfterwards:boolean=true) {
 
-    let dob = this.testDate(this.inputFormData.birthday);
+    let dob = this.testDate(inputFormData.birthday);
     console.log("dob", dob);
     let tempPersonalDetails: any = {
           Address: "",
           ContactDetails: {
-              Email: this.inputFormData.email || "",
-              MobileNumber: this.inputFormData.extensionNumber || "",
+              Email: inputFormData.email || "",
+              MobileNumber: inputFormData.extensionNumber || "",
               MobileServiceProviderId: "0",
               PagerNumber: "",
               PagerServiceProviderId: "0",
-              PhoneNumber: this.inputFormData.phone || "",
+              PhoneNumber: inputFormData.phone || "",
               },
               DateOfBirth: dob || "",
               PayrollNumber: "",
               Title: "",
               UserDetails: {
-                  Password: this.inputFormData.password || "",
-                  UserName: this.inputFormData.account || ""
+                  Password: inputFormData.password || "",
+                  UserName: inputFormData.account || ""
               }
     };
     
     let credential = {
-          CardNumber: this.inputFormData.cardNumber || "",
-          Pin: this.inputFormData.pin || "0",
-          FacilityCode: parseInt(this.inputFormData.deviceNumber||"469"),
-          ProfileId: !isNaN(parseInt(this.inputFormData.cardCertificate)) ? parseInt(this.inputFormData.cardCertificate) : 0,
-          ProfileName : this.inputFormData.profileName || "基礎",
-          CardTechnologyCode : this.inputFormData.technologyCode || 10,
-          PinMode: this.inputFormData.pinMode || 1,          
-          PinDigit:this.inputFormData.pinDigit || 0,
-          EndDate:this.inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate(),
-          StartDate:this.inputFormData.startDate || new Date()
+          CardNumber: inputFormData.cardNumber || "",
+          Pin: inputFormData.pin || "0",
+          FacilityCode: parseInt(inputFormData.deviceNumber||"469"),
+          ProfileId: !isNaN(parseInt(inputFormData.cardCertificate)) ? parseInt(inputFormData.cardCertificate) : 0,
+          ProfileName : inputFormData.profileName || "基礎",
+          CardTechnologyCode : inputFormData.technologyCode || 10,
+          PinMode: inputFormData.pinMode || 1,          
+          PinDigit:inputFormData.pinDigit || 0,
+          EndDate:inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate(),
+          StartDate:inputFormData.startDate || new Date()
         };
         
     let tempCredentials:any[] = credential.CardNumber && credential.CardNumber.trim()!="" ? [credential] : [];
@@ -625,24 +628,24 @@ export default class Member extends Vue {
     let tempCustomFieldsList: any = [];
     for(let field of CustomFields){             
       if(field.date) {
-          let dt = this.testDate(this.inputFormData[field.name]);
+          let dt = this.testDate(inputFormData[field.name]);
           tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue: dt ? moment(dt).format("YYYY-MM-DD"): ""});      
       }
-      else tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue:this.inputFormData[field.name] || ""});      
+      else tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue:inputFormData[field.name] || ""});      
     }
-    let wg=this.workGroupSelectItems.find(x=>x.groupid==parseInt(this.inputFormData.personType || "1"));
+    let wg=this.workGroupSelectItems.find(x=>x.groupid==parseInt(inputFormData.personType || "1"));
     let member = {        
         // master
-        objectId: this.inputFormData.objectId,
-        AccessRules: this.permissionSelected,
+        objectId: inputFormData.objectId,
+        AccessRules: accessRules,
         PrimaryWorkgroupId: wg ? wg.groupid : 1,
         ApbWorkgroupId: wg ? wg.groupid : 1,
         PrimaryWorkgroupName: wg? wg.groupname:"正職",
-        EmployeeNumber: this.inputFormData.employeeNumber,
-        LastName: this.inputFormData.chineseName,
-        FirstName: this.inputFormData.englishName || "-",
-        StartDate: this.inputFormData.startDate || credential.StartDate,
-        EndDate: this.inputFormData.endDate || credential.EndDate,
+        EmployeeNumber: inputFormData.employeeNumber,
+        LastName: inputFormData.chineseName,
+        FirstName: inputFormData.englishName || "-",
+        StartDate: inputFormData.startDate || credential.StartDate,
+        EndDate: inputFormData.endDate || credential.EndDate,
         SmartCardProfileId:"0",
         Status:1,
         //new addition
@@ -664,27 +667,27 @@ export default class Member extends Vue {
         PersonalDetails: tempPersonalDetails,
         CustomFields: tempCustomFieldsList
       };
-    if (this.selectedDetail[0] && this.selectedDetail[0].objectId) {
-      // master
-      member.objectId = this.selectedDetail[0].objectId;
-
-      let isDuplicateFound = await this.checkDuplication(member);
-      if(isDuplicateFound)return;
-
+    if (member.objectId) {
+      if(checkDuplication){
+        let isDuplicateFound = await this.checkDuplication(member);
+        if(isDuplicateFound)return;
+      }
       await this.$server
         .U("/acs/member", member)
         .then((response: any) => {
-          this.pageToList();
+          if(refreshAfterwards)this.pageToList();
         });
     } 
     else {
-      let isDuplicateFound = await this.checkDuplication(member);
-      if(isDuplicateFound)return;
+      if(checkDuplication){
+        let isDuplicateFound = await this.checkDuplication(member);
+        if(isDuplicateFound)return;
+      }
       
       await this.$server
         .C("/acs/member", member)
         .then((response: any) => {
-          this.pageToList();
+          if(refreshAfterwards)this.pageToList();
         });
     }
   }
