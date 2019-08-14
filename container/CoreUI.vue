@@ -1,14 +1,21 @@
 <template>
     <CoreUIBase>
         <template #header>
-            Hello iSAP
 
-            <b-button class="float-right mr-4" @click="Logout">{{ _('w_Logout') }}</b-button>
+            <div class="float-right navbar-nav" >
+                <div class="navbar-nav-user-name">{{ $user && $user.user && $user.user.username ? $user.user.username : "" }}</div>
+                <b-button @click="Logout">{{ _('w_Logout') }}</b-button>
+            </div>
 
         </template>
 
         <template #footer>
-            iSAP
+            <div class="footer-copy">
+                <a
+                    href="http://www.isapsolution.com/"
+                    target="_blank"
+                >www.isapsolution.com</a>&copy;2019
+            </div>
         </template>
 
         <template #nav>
@@ -76,3 +83,28 @@ export default class CoreUI extends Vue {
 
 }
 </script>
+<style lang="scss" scoped>
+    .app-header {
+        .navbar-nav {
+            padding-right: 20px;
+            -ms-flex-direction: row;
+            flex-direction: row;
+            -ms-flex-align: center;
+            align-items: center;
+
+            .navbar-nav-user-name {
+                font-weight: bold;
+                font-size: 1rem;
+                margin-right: 10px;
+            }
+
+            img.img-avatar {
+                height: 35px;
+                margin: 0 10px;
+            }
+        }
+    }
+    .footer-copy {
+        padding: 10px;
+    }
+</style>

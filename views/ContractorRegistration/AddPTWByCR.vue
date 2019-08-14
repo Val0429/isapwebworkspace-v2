@@ -918,6 +918,9 @@ export class AddPTWByCR extends Vue {
             })
             .catch((e: any) => {
                 Loading.hide();
+                if (e.body === '') {
+                    Dialog.error(this._("w_Error_EmailServerError"));
+                }
                 this.resultText = this._("w_ViewPTW_ResultFailedContent");
                 this.transition.step = 2;
             });
