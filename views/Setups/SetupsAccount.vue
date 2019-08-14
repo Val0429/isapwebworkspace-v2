@@ -47,10 +47,14 @@
                             :disabled="selectedDetail.length !== 1"
                         >
                             <iv-toolbox-view @click="pageToView" />
-                            <iv-permission :allow="['SystemAdministrator', 'Administrator']">
-                                <iv-toolbox-edit @click="pageToEdit" />
-                                <iv-toolbox-delete @click="doDelete" />
-                            </iv-permission>
+                            <iv-toolbox-edit
+                                v-if="haveSystemAdministrator() || haveAdministrator()"
+                                @click="pageToEdit"
+                            />
+                            <iv-toolbox-delete
+                                v-if="haveSystemAdministrator() || haveAdministrator()"
+                                @click="doDelete"
+                            />
 
                         </iv-toolbox-more>
                     </template>
@@ -323,6 +327,26 @@ export default class SetupsAccount extends Vue {
                 haveRequest.floor = true;
             }
         }
+    }
+
+    haveSystemAdministrator() {
+        return RoleService.haveSystemAdministrator(this);
+    }
+
+    haveAdministrator() {
+        return RoleService.haveAdministrator(this);
+    }
+
+    haveTenantAdministrator() {
+        return RoleService.haveTenantAdministrator(this);
+    }
+
+    haveTenantUser() {
+        return RoleService.haveTenantUser(this);
+    }
+
+    haveVisitor() {
+        return RoleService.haveVisitor(this);
     }
 
     initSelectItemRole() {
