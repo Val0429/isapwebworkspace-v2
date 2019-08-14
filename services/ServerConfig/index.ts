@@ -17,22 +17,26 @@ export class ServerConfig {
     private _port: string = window.location.port;
     private _url: string = '';
 
+    private _productPort: string | null = '6061';
+
     constructor() {
         this.initServerConfig();
     }
 
     initServerConfig() {
         let productMode = process.env.NODE_ENV;
+
         if (productMode == 'production') {
             var tempPortString = '';
             if (this._protocol == 'http:' && this._port != '80') {
                 tempPortString = ':' + this._port;
             }
-
             if (this._protocol == 'https:' && this._port != '443') {
                 tempPortString = ':' + this._port;
             }
-
+            if (this._productPort != null && this._productPort != '' && !isNaN(parseInt(this._productPort))) {
+                tempPortString = ':' + this._productPort;
+            }
             this._url += this._protocol;
             this._url += '//';
             this._url += this._host;
@@ -45,11 +49,9 @@ export class ServerConfig {
             if (this._protocol == 'http:' && this._port != '80') {
                 tempPortString = ':' + this._port;
             }
-
             if (this._protocol == 'https:' && this._port != '443') {
                 tempPortString = ':' + this._port;
             }
-
             this._url += this._protocol;
             this._url += '//';
             this._url += this._host;
