@@ -323,6 +323,20 @@ export default class LangObject implements ILang {
     w_Floor_FloorName = 'Floor Name';
     w_Floor_Floor = 'Floor';
 
+    //purposes
+    w_Purposes_Name = 'Purposes Name';
+
+    w_Purposes_List = 'Purposes List';
+    w_Purposes_Add = 'Add Purposes';
+    w_Purposes_Edit = 'Edit Purposes';
+    w_Purposes_View = 'View Purposes';
+
+    w_Purposes_AddSuccess = 'Purposes add success';
+    w_Purposes_ADDFailed = 'Purposes add failed, please try again';
+    w_Purposes_EditSuccess = 'Purposes edit success';
+    w_Purposes_EditFailed = 'Purposes edit failed, please try again';
+    w_Purposes_DeleteConfirm = 'Are you sure to delete selected Purposes(s)?';
+
     ////////////////// Potrait //////////////////
     w_Potrait_Photo = 'Your Photo';
     w_Potrait_PhotoPlaceholder = 'Photo size must bigger than 300 x 300';

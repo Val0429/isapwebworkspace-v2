@@ -35,6 +35,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // visitors/invites
         '/flow1/visitors/invites': [any, any, false];
+
+        //purposes
+        '/flow1/purposes': [any, any, false];
     };
 
     Get: {
@@ -97,6 +100,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Registration
         '/visitors/pre-registration': [any, any, false];
+
+        //purposes
+        '/flow1/purposes': [any, any, false];
     };
     Delete: {
         // companies
@@ -108,6 +114,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // Floor
         '/flow1/floors': [any, any, false];
+
+        //purposes
+        '/flow1/purposes': [any, any, false];
     };
     Ws: {};
 }
