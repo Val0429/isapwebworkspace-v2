@@ -20,7 +20,10 @@
                 key="transition_3"
                 v-show="transition.step === 3"
             >
-                <add-ptw-by-cr :selectedDetail="selectedDetail"></add-ptw-by-cr>
+                <add-ptw-by-cr
+                    :selectedDetail="selectedDetail"
+                    @checkVerification="checkVerification"
+                ></add-ptw-by-cr>
             </div>
         </iv-auto-transition>
     </div>
@@ -80,10 +83,16 @@ export default class ContractorRegistration extends Vue {
         this.checkContractorRegistration();
     }
 
-    checkContractorRegistration() {
-        if (this.$route.query.id) {
+    checkVerification(isCheck) {
+        if (isCheck) {
             this.pageToStep1();
         } else {
+            this.pageToStep2();
+        }
+    }
+
+    checkContractorRegistration() {
+        if (!this.$route.query.id) {
             this.pageToStep2();
         }
     }

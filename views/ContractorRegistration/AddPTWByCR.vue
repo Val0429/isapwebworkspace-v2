@@ -203,7 +203,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit } from "vue-property-decorator";
 import Step1 from "@/components/ContractorRegistration/Step1.vue";
 import Step2 from "@/components/ContractorRegistration/Step2.vue";
 import Step3 from "@/components/ContractorRegistration/Step3.vue";
@@ -584,10 +584,11 @@ export class AddPTWByCR extends Vue {
                         );
                     }
                 });
+                this.$emit("checkVerification", true);
             })
             .catch((e: any) => {
                 Loading.hide();
-                this.transition.step = 2;
+                this.$emit("checkVerification", false);
             });
     }
 
@@ -928,8 +929,6 @@ export class AddPTWByCR extends Vue {
                 this.errorText = e.body;
                 this.transition.step = 2;
             });
-
-        this.$emit("submit-data", doSubmitParam);
     }
 
     IStep8() {
