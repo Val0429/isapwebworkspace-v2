@@ -896,11 +896,11 @@ export class AddPTWByCR extends Vue {
             this.inputFormData.persons
         );
 
-        if (!this.inputFormData.persons) {
-            Dialog.error(this._("w_ViewPTW_Step_ErrorTipPerson"));
-            stepRef.currentStep = 7;
-            return false;
-        }
+        // if (!this.inputFormData.persons) {
+        //     Dialog.error(this._("w_ViewPTW_Step_ErrorTipPerson"));
+        //     stepRef.currentStep = 7;
+        //     return false;
+        // }
 
         await this.tempSave();
 
@@ -1010,7 +1010,7 @@ export class AddPTWByCR extends Vue {
             termsAccepted: this.inputFormData.termsAccepted,
 
             // step7
-            persons: this.inputFormData.persons
+            persons: this.inputFormData.persons ? this.inputFormData.persons : []
         };
 
         for (let attachment of this.inputFormData.attachments) {
