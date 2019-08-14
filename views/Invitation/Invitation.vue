@@ -218,6 +218,8 @@ export default class Invitation extends Vue {
                         "HH:mm:ss"
                     )}`
                 );
+            } else {
+                tempStartDate = null;
             }
             if (data.workEndDate && data.workEndTime) {
                 tempEndDate = new Date(
@@ -229,6 +231,8 @@ export default class Invitation extends Vue {
                         "HH:mm:ss"
                     )}`
                 );
+            } else {
+                tempEndDate = null;
             }
             data.workStartDate = tempStartDate;
             data.workStartTime = tempStartDate;
