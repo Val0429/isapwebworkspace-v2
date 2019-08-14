@@ -168,7 +168,7 @@
                 <p class="col-md-10 mt-2">
                     <span>{{ _('w_ViewPTW_Step4_9') }}</span> &nbsp;
                     <a
-                        href="/Briefing_Of_HSE_ORL_CLM.pdf"
+                        href="/public/Briefing_Of_HSE_ORL_CLM.pdf"
                         target="_blank"
                     >{{ _('w_ViewPTW_Step4_91') }}</a>
                     <span>{{ _('w_ViewPTW_Step4_93') }}</span> &nbsp;
@@ -223,10 +223,6 @@ export class ViewStep4 extends Vue {
         checklistRemark6: "",
         checklistRemark7: ""
     };
-
-    // TODO: wait api
-    // path: string = require('@/assets/pdf/Briefing_Of_HSE_ORL_CLM.pdf');
-    path: string = "";
 
     created() {}
 

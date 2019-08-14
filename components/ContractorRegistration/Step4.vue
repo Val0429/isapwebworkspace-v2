@@ -153,7 +153,7 @@
                 <p class="col-md-10 mt-2">
                     <span>{{ _('w_ViewPTW_Step4_9') }}</span> &nbsp;
                     <a
-                        href="/Briefing_Of_HSE_ORL_CLM.pdf"
+                        href="/public/Briefing_Of_HSE_ORL_CLM.pdf"
                         target="_blank"
                     >{{ _('w_ViewPTW_Step4_91') }}</a>
                     <span>{{ _('w_ViewPTW_Step4_93') }}</span> &nbsp;
@@ -172,7 +172,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
+import {
+    Vue,
+    Component,
+    Prop,
+    Emit,
+    Model,
+    Watch
+} from "vue-property-decorator";
 import { IStep4 } from ".";
 
 @Component({
@@ -189,34 +196,61 @@ export class Step4 extends Vue {
     options: any = [];
 
     inputFormData: IStep4 = {
-        checklist1: this.selectedDetail.checklist1 ? this.selectedDetail.checklist1 : false,
-        checklist2: this.selectedDetail.checklist2 ? this.selectedDetail.checklist2 : false,
-        checklist3: this.selectedDetail.checklist3 ? this.selectedDetail.checklist3 : false,
-        checklist4: this.selectedDetail.checklist4 ? this.selectedDetail.checklist4 : false,
-        checklist5: this.selectedDetail.checklist5 ? this.selectedDetail.checklist5 : false,
-        checklist6: this.selectedDetail.checklist6 ? this.selectedDetail.checklist6 : false,
-        checklist7: this.selectedDetail.checklist7 ? this.selectedDetail.checklist7 : false,
-        checklist8: this.selectedDetail.checklist8 ? this.selectedDetail.checklist8 : false,
-        checklist9: this.selectedDetail.checklist9 ? this.selectedDetail.checklist9 : false,
+        checklist1: this.selectedDetail.checklist1
+            ? this.selectedDetail.checklist1
+            : false,
+        checklist2: this.selectedDetail.checklist2
+            ? this.selectedDetail.checklist2
+            : false,
+        checklist3: this.selectedDetail.checklist3
+            ? this.selectedDetail.checklist3
+            : false,
+        checklist4: this.selectedDetail.checklist4
+            ? this.selectedDetail.checklist4
+            : false,
+        checklist5: this.selectedDetail.checklist5
+            ? this.selectedDetail.checklist5
+            : false,
+        checklist6: this.selectedDetail.checklist6
+            ? this.selectedDetail.checklist6
+            : false,
+        checklist7: this.selectedDetail.checklist7
+            ? this.selectedDetail.checklist7
+            : false,
+        checklist8: this.selectedDetail.checklist8
+            ? this.selectedDetail.checklist8
+            : false,
+        checklist9: this.selectedDetail.checklist9
+            ? this.selectedDetail.checklist9
+            : false,
 
-        checklistRemark1: this.selectedDetail.checklistRemark1 ?  this.selectedDetail.checklistRemark1: "",
-        checklistRemark2: this.selectedDetail.checklistRemark2 ?  this.selectedDetail.checklistRemark2: "",
-        checklistRemark3: this.selectedDetail.checklistRemark3 ?  this.selectedDetail.checklistRemark3: "",
-        checklistRemark4: this.selectedDetail.checklistRemark4 ?  this.selectedDetail.checklistRemark4: "",
-        checklistRemark5: this.selectedDetail.checklistRemark5 ?  this.selectedDetail.checklistRemark5: "",
-        checklistRemark6: this.selectedDetail.checklistRemark6 ?  this.selectedDetail.checklistRemark6: "",
-        checklistRemark7: this.selectedDetail.checklistRemark7 ?  this.selectedDetail.checklistRemark7: "",
+        checklistRemark1: this.selectedDetail.checklistRemark1
+            ? this.selectedDetail.checklistRemark1
+            : "",
+        checklistRemark2: this.selectedDetail.checklistRemark2
+            ? this.selectedDetail.checklistRemark2
+            : "",
+        checklistRemark3: this.selectedDetail.checklistRemark3
+            ? this.selectedDetail.checklistRemark3
+            : "",
+        checklistRemark4: this.selectedDetail.checklistRemark4
+            ? this.selectedDetail.checklistRemark4
+            : "",
+        checklistRemark5: this.selectedDetail.checklistRemark5
+            ? this.selectedDetail.checklistRemark5
+            : "",
+        checklistRemark6: this.selectedDetail.checklistRemark6
+            ? this.selectedDetail.checklistRemark6
+            : "",
+        checklistRemark7: this.selectedDetail.checklistRemark7
+            ? this.selectedDetail.checklistRemark7
+            : ""
     };
-
-    // TODO: wait api
-    // path: string = require('@/assets/pdf/Briefing_Of_HSE_ORL_CLM.pdf');
-    path: string = "";
 
     created() {}
 
     mounted() {
         this.initSelectItem();
-
     }
 
     @Watch("selectedDetail", { deep: true })
@@ -225,7 +259,6 @@ export class Step4 extends Vue {
     }
 
     initInputFormData() {
-
         this.inputFormData.checklist1 = this.selectedDetail.checklist1;
         this.inputFormData.checklist2 = this.selectedDetail.checklist2;
         this.inputFormData.checklist3 = this.selectedDetail.checklist3;

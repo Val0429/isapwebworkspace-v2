@@ -16,7 +16,7 @@ export default class Login extends Vue {
     private username: string = '';
     private password: string = '';
 
-    backgroundImage = `url(/background.jpg)`;
+    backgroundImage = `url(/public/background.jpg)`;
 
     mounted() {}
 
