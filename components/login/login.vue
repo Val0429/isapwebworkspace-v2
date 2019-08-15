@@ -47,14 +47,18 @@
                                             v-model="password"
                                             :placeholder="_('wb_Password')"
                                         >
-
                                     </div>
 
-                                    <!-- language -->
-                                    <!-- <div class="input-group mb-4">
-                                        <iv-language-button class="mb-4" />
-                                    </div> -->
-                                    <!--== language ==-->
+                                    <div class="input-group mb-4">
+                                        <b-form-checkbox
+                                            v-model="remeberMe"
+                                            name="checkbox-1"
+                                            :value="eRemeberMe.rememberMe"
+                                            :unchecked-value="eRemeberMe.noRemeberMe"
+                                        >
+                                            {{ _('w_Login_RemeberMe') }}
+                                        </b-form-checkbox>
+                                    </div>
 
                                     <b-row>
                                         <b-col cols="6">
@@ -74,39 +78,11 @@
                                             <iv-language-button />
                                             <!--== language ==-->
 
-                                            <!-- forgot password -->
-                                            <!-- <b-button
-                                                variant="link"
-                                                class="px-0"
-                                                @click="forgotPassword"
-                                            >
-                                                {{ _('w_Login_ForgotPassword') }}
-                                            </b-button> -->
-                                            <!--== forgot password ==-->
-
                                         </b-col>
                                     </b-row>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Signup -->
-                        <!-- <div
-                            class="card text-white bg-primary py-5 d-md-down-none"
-                            style="width:44%"
-                        >
-                            <div class="card-body text-center">
-                                <div>
-                                    <h2>{{ _('w_Login_SignUpTitle') }}</h2>
-                                    <p>{{ _('w_Login_SignUpContent') }}</p>
-                                    <b-button
-                                        variant="primary"
-                                        class="active mt-3"
-                                    >{{ _('Register Now') }}!</b-button>
-                                </div>
-                            </div>
-                        </div> -->
-                        <!--== Signup ==-->
 
                     </div>
                 </b-col>
