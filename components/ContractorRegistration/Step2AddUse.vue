@@ -241,14 +241,14 @@ export class Step2AddUse extends Vue {
                  * @uiLabel - ${this._("w_ViewPTW_Step2_ContactNumber")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_ContactNumber")}
                  */
-                 contractorCompanyContactPhone: string;
+                 contractorCompanyContactPhone: number;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
                  */
-                 contractorCompanyFax: string;
+                 contractorCompanyFax: number;
 
                 contractorIsRequired?: any;
 
