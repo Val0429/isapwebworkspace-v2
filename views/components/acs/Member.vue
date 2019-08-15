@@ -702,7 +702,7 @@ export default class Member extends Vue {
   testDate(date){
       try{    
        let dt = new Date(date);
-       return dt.toISOString().split("T")[0];
+       return dt.toISOString().split(".")[0];
     }catch (err){
         return;
     }
@@ -711,8 +711,14 @@ export default class Member extends Vue {
     await this.saveAddOrEdit(this.inputFormData, this.permissionSelected);
   }
   async saveAddOrEdit(inputFormData:any, accessRules:string[], checkDuplication:boolean=true,refreshAfterwards:boolean=true) {
-
-    let dob = this.testDate(inputFormData.birthday);
+    let dob="";
+    try{    
+          let dt = new Date(inputFormData.birthday || "");
+          dob = dt.toISOString().split("T")[0];
+        }catch (err){
+            ;
+        }
+        
     console.log("dob", dob);
     let tempPersonalDetails: any = {
           Address: "",
@@ -753,7 +759,7 @@ export default class Member extends Vue {
     for(let field of CustomFields){             
       if(field.date) {
           let dt = this.testDate(inputFormData[field.name]);
-          tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue: dt ? moment(dt).format("YYYY-MM-DD"): ""});      
+          tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue: dt || ""});      
       }
       else tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue:inputFormData[field.name] || ""});      
     }
