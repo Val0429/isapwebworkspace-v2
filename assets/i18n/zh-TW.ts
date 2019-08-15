@@ -664,4 +664,7 @@ export default class LangObject implements ILang {
     ccureconnect= "ccureconnect";
 
     w_Error_DuplicatePermissionTable="Duplicate permission table";
+    cannotGetTokenFromSipass="cannotGetTokenFromSipass";
+    accessLevelIsNotInSipass="accessLevelIsNotInSipass";
+    w_Error_AccessLevelIsNotInAcs="w_Error_AccessLevelIsNotInAcs";
 }

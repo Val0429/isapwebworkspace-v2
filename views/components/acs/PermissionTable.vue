@@ -913,30 +913,40 @@ private async checkDuplication(permtable:any):Promise<boolean>{
     };
     
     if(response.errors.find(x=>x.type=="accessLevelIsNotInCCure")){
-        let messages = `<table class="table"><tr><th>${this._("w_Device")}</th><th>${this._("w_TimeSchedule")}</th><th></th></tr><tr>`;
+        let messages = `<table class="table"><tr><th>${this._("w_Device")}</th><th>${this._("w_TimeSchedule")}</th><th></th></tr>`;
         for(let error of response.errors.filter(x=>x.type=="accessLevelIsNotInCCure")){
             messages+=`<tr><td>${error.devicename || ""}</td><td>${error.timename  ||""}</td><td>${error.message || ""}</td></tr>`;
         }
-        messages+="</tr></table>"
+        messages+="</table>"
+        Dialog.error(this._("w_Error_AccessLevelIsNotInCCure")+"<br/>"+messages);               
+    }
+    else if(response.errors.find(x=>x.type=="accessLevelIsNotInAcs")){ 
+        let messages = `ACS ${this._("w_PermissionTable")}: ${this.inputFormData.permissionName||""}<br/>`       
+        messages += `<table class="table"><tr><th>${this._("w_Device")}</th><th>${this._("w_TimeSchedule")}</th><th></th></tr>`;
+        for(let error of response.errors.filter(x=>x.type=="accessLevelIsNotInAcs")){
+            messages+=`<tr><td>${error.devicename || ""}</td><td>${error.timename  ||""}</td><td>${error.message || ""}</td></tr>`;
+        }
+        messages+="</table>";
+        messages += this.createPermTableMessage({permissionTableName:this.inputFormData.permissionName, devices:Object.assign([], this.savedAccessLevels)});
+        Dialog.error(this._("w_Error_AccessLevelIsNotInAcs")+"<br/>"+messages);
+    }
+    else if(response.errors.find(x=>x.type=="clearanceIsNotInCCure")){
+        let messages = this.createPermTableMessage({permissionTableName:this.inputFormData.permissionName, devices:Object.assign([], this.savedAccessLevels)});           
         Dialog.error(this._("w_Error_AccessLevelIsNotInCCure")+"<br/>"+messages);
-               
-    }else if(response.errors.find(x=>x.type=="clearanceIsNotInCCure")){
-        let messages = this.createPermTableMessage("", {permissionTableName:this.inputFormData.permissionName, devices:Object.assign([], this.savedAccessLevels)});
-           
-        Dialog.error(this._("w_Error_AccessLevelIsNotInCCure")+"<br/>"+messages);
-    }else{
+    }    
+    else{
         this.pageToList();
     }
   }
-
-  private createPermTableMessage(messages: string,permTable: any) {
-    messages+=`${this._("w_PermissionTable")}: ${permTable.permissionTableName||""}<br/>`;
-    messages+=`<table class="table"><tr><th>${this._("w_Device")}</th><th>${this._("w_TimeSchedule")}</th><th></th></tr><tr>`;
+    
+  private createPermTableMessage(permTable: any) {
+    let messages=`ACS ${this._("w_PermissionTable")}: ${permTable.permissionTableName||""}<br/>`;
+    messages+=`<table class="table"><tr><th>${this._("w_Device")}</th><th>${this._("w_TimeSchedule")}</th><th></th></tr>`;
     for(let dev of this.savedAccessLevels) {
         let exists = permTable.devices.find(x=>x.devicename==dev.devicename && x.timename==dev.timename);
         messages+=`<tr ${exists ? 'style="color:red"' : ''}><td>${dev.devicename||""}</td><td>${dev.timename||""}</td><td>${dev.message||""}</td></tr>`;
     }
-    messages+="</tr></table>";
+    messages+="</table>";
     return messages;
   }
 
