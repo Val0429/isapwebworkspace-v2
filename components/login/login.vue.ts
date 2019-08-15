@@ -38,7 +38,6 @@ export default class Login extends Vue {
         if (loginInfo.username != '' && loginInfo.password != '') {
             this.remeberMe = ERemeberMe.rememberMe;
         }
-        console.log(loginInfo);
     }
 
     async Login() {
