@@ -921,7 +921,7 @@ private async checkDuplication(permtable:any):Promise<boolean>{
         Dialog.error(this._("w_Error_AccessLevelIsNotInCCure")+"<br/>"+messages);               
     }
     else if(response.errors.find(x=>x.type=="accessLevelIsNotInAcs")){ 
-        let messages = `ACS ${this._("w_PermissionTable")}: ${this.inputFormData.permissionName||""}<br/>`       
+        let messages = `CCURE ${this._("w_PermissionTable")}: ${this.inputFormData.permissionName||""}<br/>`       
         messages += `<table class="table"><tr><th>${this._("w_Device")}</th><th>${this._("w_TimeSchedule")}</th><th></th></tr>`;
         for(let error of response.errors.filter(x=>x.type=="accessLevelIsNotInAcs")){
             messages+=`<tr><td>${error.devicename || ""}</td><td>${error.timename  ||""}</td><td>${error.message || ""}</td></tr>`;
