@@ -734,7 +734,7 @@ export default class Member extends Vue {
     };
     
     let credential = {
-          CardNumber: inputFormData.cardNumber || "",
+          CardNumber: (inputFormData.cardNumber || "").toString(),
           Pin: inputFormData.pin || "0",
           FacilityCode: parseInt(inputFormData.deviceNumber||"469"),
           ProfileId: !isNaN(parseInt(inputFormData.cardCertificate)) ? parseInt(inputFormData.cardCertificate) : 0,
@@ -765,7 +765,7 @@ export default class Member extends Vue {
         PrimaryWorkgroupId: wg ? wg.groupid : 1,
         ApbWorkgroupId: wg ? wg.groupid : 1,
         PrimaryWorkgroupName: wg? wg.groupname:"正職",
-        EmployeeNumber: inputFormData.employeeNumber,
+        EmployeeNumber: inputFormData.employeeNumber.toString(),
         LastName: inputFormData.chineseName,
         FirstName: inputFormData.englishName || "-",
         StartDate: inputFormData.startDate || credential.StartDate,
