@@ -297,8 +297,8 @@ export class StatusApproveNotExpireDate extends Vue {
         contractorCompanyName: "",
         contractorCompanyAddress: "",
         contractorCompanyEmail: "",
-        contractorCompanyContactPhone: "",
-        contractorCompanyFax: "",
+        contractorCompanyContactPhone: 0,
+        contractorCompanyFax: 0,
 
         // step3
         workPremisesUnit: "",
@@ -317,7 +317,7 @@ export class StatusApproveNotExpireDate extends Vue {
         workEndDate: new Date(),
         workEndTime: new Date(),
         workContact: "",
-        workContactPhone: "",
+        workContactPhone: 0,
 
         // step4
         checklist1: false,
@@ -379,8 +379,11 @@ export class StatusApproveNotExpireDate extends Vue {
         this.inputFormData.contractorCompanyName = this.selectedDetail.contractorCompanyName;
         this.inputFormData.contractorCompanyAddress = this.selectedDetail.contractorCompanyAddress;
         this.inputFormData.contractorCompanyEmail = this.selectedDetail.contractorCompanyEmail;
-        this.inputFormData.contractorCompanyContactPhone = this.selectedDetail.contractorCompanyContactPhone;
-        this.inputFormData.contractorCompanyFax = this.selectedDetail.contractorCompanyFax;
+
+
+        this.inputFormData.contractorCompanyContactPhone = !isNaN(parseInt(this.selectedDetail.contractorCompanyContactPhone)) ? parseInt(this.selectedDetail.contractorCompanyContactPhone) : 0;
+        this.inputFormData.contractorCompanyFax = !isNaN(parseInt(this.selectedDetail.contractorCompanyFax)) ? parseInt(this.selectedDetail.contractorCompanyFax) : 0;
+
         this.inputFormData.workPremisesUnit = this.selectedDetail.workPremisesUnit;
         this.inputFormData.workLocation = this.selectedDetail.workLocation;
         this.inputFormData.workDescription = this.selectedDetail.workDescription;
@@ -392,8 +395,20 @@ export class StatusApproveNotExpireDate extends Vue {
         this.inputFormData.workType6 = this.selectedDetail.workType6;
         this.inputFormData.workType7 = this.selectedDetail.workType7;
         this.inputFormData.workType8 = this.selectedDetail.workType8;
+        this.inputFormData.workStartDate = this.selectedDetail.workStartDate
+            ? this.selectedDetail.workStartDate
+            : new Date();
+        this.inputFormData.workStartTime = this.selectedDetail.workStartDate
+            ? this.selectedDetail.workStartDate
+            : new Date();
+        this.inputFormData.workEndDate = this.selectedDetail.workEndDate
+            ? this.selectedDetail.workEndDate
+            : new Date();
+        this.inputFormData.workEndTime = this.selectedDetail.workEndDate
+            ? this.selectedDetail.workEndDate
+            : new Date();
         this.inputFormData.workContact = this.selectedDetail.workContact;
-        this.inputFormData.workContactPhone = this.selectedDetail.workContactPhone;
+        this.inputFormData.workContactPhone = !isNaN(parseInt(this.selectedDetail.workContactPhone)) ? parseInt(this.selectedDetail.workContactPhone) : 0;
 
         this.inputFormData.checklist1 = this.selectedDetail.checklist1;
         this.inputFormData.checklistRemark1 = this.selectedDetail.checklistRemark1;

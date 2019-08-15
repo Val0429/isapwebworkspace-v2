@@ -71,8 +71,8 @@ export class Step2 extends Vue {
         contractorCompanyName: this.selectedDetail.contractorCompanyName ? this.selectedDetail.contractorCompanyName : "",
         contractorCompanyAddress: this.selectedDetail.contractorCompanyAddress ? this.selectedDetail.contractorCompanyAddress : "",
         contractorCompanyEmail: this.selectedDetail.contractorCompanyEmail ? this.selectedDetail.contractorCompanyEmail : "",
-        contractorCompanyContactPhone: this.selectedDetail.contractorCompanyContactPhone ? this.selectedDetail.contractorCompanyContactPhone : "",
-        contractorCompanyFax: this.selectedDetail.contractorCompanyFax ? this.selectedDetail.contractorCompanyFax : ""
+        contractorCompanyContactPhone: this.selectedDetail.contractorCompanyContactPhone ? this.selectedDetail.contractorCompanyContactPhone : 0,
+        contractorCompanyFax: this.selectedDetail.contractorCompanyFax ? this.selectedDetail.contractorCompanyFax : 0
     };
 
     created() {}
@@ -247,15 +247,17 @@ export class Step2 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_ContactNumber")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_ContactNumber")}
+                 * @uiAttrs - { min: 0}
                  */
-                 contractorCompanyContactPhone: string;
+                 contractorCompanyContactPhone: number;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
+                 * @uiAttrs - { min: 0 }
                  */
-                 contractorCompanyFax: string;
+                 contractorCompanyFax: number;
 
                 contractorIsRequired?: any;
 
