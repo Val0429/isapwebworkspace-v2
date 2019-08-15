@@ -1255,14 +1255,8 @@ export default class Member extends Vue {
                 /**
                  * @uiLabel - ${this._("gender")}
                  * @uiColumnGroup - row2
-                 * @uiType - ${
-                   this.pageStep === EPageStep.add ||
-                   this.pageStep === EPageStep.edit
-                     ? "iv-form-string"
-                     : "iv-form-label"
-                 }
                  */
-                gender?: string;
+                gender?: ${toEnumInterface({"男":"男","女":"女"},false)};
 
                 /**
                  * @uiLabel - ${this._("birthday")}
