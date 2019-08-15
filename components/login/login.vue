@@ -48,6 +48,17 @@
 
                                     </div>
 
+                                    <div class="input-group mb-4">
+                                        <b-form-checkbox
+                                            v-model="remeberMe"
+                                            name="checkbox-1"
+                                            :value="eRemeberMe.rememberMe"
+                                            :unchecked-value="eRemeberMe.noRemeberMe"
+                                        >
+                                            {{ _('w_Login_RemeberMe') }}
+                                        </b-form-checkbox>
+                                    </div>
+
                                     <!-- language -->
                                     <!-- <div class="input-group mb-4">
                                         <iv-language-button class="mb-4" />
