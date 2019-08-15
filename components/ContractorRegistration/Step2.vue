@@ -60,19 +60,39 @@ export class Step2 extends Vue {
 
     inputFormData: IStep2 = {
         // PTW Data
-        ptwId: this.selectedDetail.ptwId ? this.selectedDetail.ptwId : '',
-        tenant: this.selectedDetail.company && this.selectedDetail.company.objectId ? this.selectedDetail.company.objectId : "",
-        workCategoryId: this.selectedDetail.workCategory && this.selectedDetail.workCategory.objectId ? this.selectedDetail.workCategory.objectId : '',
+        ptwId: this.selectedDetail.ptwId ? this.selectedDetail.ptwId : "",
+        tenant:
+            this.selectedDetail.company && this.selectedDetail.company.objectId
+                ? this.selectedDetail.company.objectId
+                : "",
+        workCategoryId:
+            this.selectedDetail.workCategory &&
+            this.selectedDetail.workCategory.objectId
+                ? this.selectedDetail.workCategory.objectId
+                : "",
 
         // Contractor Information
-        applicantName: this.selectedDetail.applicantName ? this.selectedDetail.applicantName : '',
+        applicantName: this.selectedDetail.applicantName
+            ? this.selectedDetail.applicantName
+            : "",
 
         // Company
-        contractorCompanyName: this.selectedDetail.contractorCompanyName ? this.selectedDetail.contractorCompanyName : "",
-        contractorCompanyAddress: this.selectedDetail.contractorCompanyAddress ? this.selectedDetail.contractorCompanyAddress : "",
-        contractorCompanyEmail: this.selectedDetail.contractorCompanyEmail ? this.selectedDetail.contractorCompanyEmail : "",
-        contractorCompanyContactPhone: this.selectedDetail.contractorCompanyContactPhone ? this.selectedDetail.contractorCompanyContactPhone : 0,
-        contractorCompanyFax: this.selectedDetail.contractorCompanyFax ? this.selectedDetail.contractorCompanyFax : 0
+        contractorCompanyName: this.selectedDetail.contractorCompanyName
+            ? this.selectedDetail.contractorCompanyName
+            : "",
+        contractorCompanyAddress: this.selectedDetail.contractorCompanyAddress
+            ? this.selectedDetail.contractorCompanyAddress
+            : "",
+        contractorCompanyEmail: this.selectedDetail.contractorCompanyEmail
+            ? this.selectedDetail.contractorCompanyEmail
+            : "",
+        contractorCompanyContactPhone: this.selectedDetail
+            .contractorCompanyContactPhone
+            ? this.selectedDetail.contractorCompanyContactPhone
+            : 0,
+        contractorCompanyFax: this.selectedDetail.contractorCompanyFax
+            ? this.selectedDetail.contractorCompanyFax
+            : 0
     };
 
     created() {}
