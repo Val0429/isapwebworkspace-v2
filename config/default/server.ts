@@ -10,6 +10,9 @@ interface RestfulRequest extends ApisRequestBase {
         '/flow1/crms': [any, any, true];
         '/flow1/crms/tenant': [any, any, true];
         '/flow1/crms/dashboard': [any, any, true];
+
+        // General Setting
+        '/config': [any, any, true];
     };
 
     Get: {
@@ -29,6 +32,7 @@ interface RestfulRequest extends ApisRequestBase {
 
         // General Setting
         '/flow1/crms/remove_worker_data_days': [any, any, true];
+        '/config': [any, any, true];
 
         '/flow1/crms/access-group': [any, any, true];
     };

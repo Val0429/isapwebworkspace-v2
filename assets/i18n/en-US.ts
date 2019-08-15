@@ -270,7 +270,9 @@ export default class LangObject {
 
     w_GeneralSettings_RemoveWorkerDaysCardTitle = 'Remove worker data days';
     w_GeneralSettings_RemoveWorkerDaysFormLabel = 'Remove Worker Data from Days';
-    w_GeneralSettings_RemoveWorkerDaysUpdateSuccess = 'Update remove worker data days is success';
+    w_GeneralSettings_UpdateSuccess = 'Update general setting is success';
+    w_GeneralSettings_PublicExternalIPFormLabel = 'External Address';
+    w_GeneralSettings_PublicExternalNotURL = 'External Address please input URL';
 
     /////////////////////// Dashboard //////////////////////
     w_Dashboard_Dashboard = 'Dashboard';

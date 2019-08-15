@@ -38,6 +38,7 @@ import { ITransition } from "@/services/Transition";
 import Dialog from "@/services/Dialog";
 import ImageBase64 from "@/services/ImageBase64";
 import ResponseFilter from "@/services/ResponseFilter";
+import RegexServices from "@/services/RegexServices";
 
 @Component({
     components: {}
@@ -51,12 +52,15 @@ export default class GeneralSettings extends Vue {
 
     inputFormData: {
         removeWorkerDays: number;
+        publicExternalIP: string;
     } = {
-        removeWorkerDays: 0
+        removeWorkerDays: 0,
+        publicExternalIP: ""
     };
 
     created() {
         this.initRemoveWorkerDays();
+        this.initConfig();
     }
 
     mounted() {}
@@ -80,7 +84,31 @@ export default class GeneralSettings extends Vue {
             });
     }
 
+    async initConfig() {
+        await this.$server
+            .R("/config")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (
+                        response.core != undefined &&
+                        response.core.publicExternalIP != undefined
+                    ) {
+                        this.inputFormData.publicExternalIP =
+                            response.core.publicExternalIP;
+                    }
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+    }
+
     async saveRemoveWorkerDaysInf() {
+        if (!RegexServices.url(this.inputFormData.publicExternalIP)) {
+            Dialog.error(this._("w_GeneralSettings_PublicExternalNotURL"));
+            return false;
+        }
+
         let param: any = {
             days: this.inputFormData.removeWorkerDays
         };
@@ -88,11 +116,25 @@ export default class GeneralSettings extends Vue {
             .U("/flow1/crms/remove_worker_data_days", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    Dialog.success(
-                        this._(
-                            "w_GeneralSettings_RemoveWorkerDaysUpdateSuccess"
-                        )
-                    );
+                    Dialog.success(this._("w_GeneralSettings_UpdateSuccess"));
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+
+        let configParam: any = {
+            data: {
+                core: {
+                    publicExternalIP: this.inputFormData.publicExternalIP
+                }
+            }
+        };
+        await this.$server
+            .C("/config", configParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    Dialog.success(this._("w_GeneralSettings_UpdateSuccess"));
                 });
             })
             .catch((e: any) => {
@@ -110,6 +152,13 @@ export default class GeneralSettings extends Vue {
                  * @uiAttrs - { min: 0 }
                  */
                 removeWorkerDays?: number;
+
+                /**
+                 * @uiLabel - ${this._(
+                     "w_GeneralSettings_PublicExternalIPFormLabel"
+                 )}
+                 */
+                publicExternalIP?: string;
             }
         `;
     }
