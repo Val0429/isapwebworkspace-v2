@@ -56,6 +56,7 @@ export default class LangObject {
     // Login
     w_Login_LoginTitle = 'Login';
     w_Login_ForgotPassword = 'Forgot password';
+    w_Login_RemeberMe = 'Remeber Me';
 
     // failed to fetch
     w_FailedToFetch = "We can't connect to server, please try again!";

@@ -4,6 +4,12 @@ import { ServerName, ServerVersion } from '@/../core/server';
 import { EUserRole } from '@/services/Role';
 import Dialog from '@/services/Dialog';
 import Loading from '@/services/Loading';
+import RemeberMe from '@/services/RemeberMe';
+
+enum ERemeberMe {
+    rememberMe = 'rememberMe',
+    noRemeberMe = 'noRemeberMe',
+}
 
 @RegisterLoginRouter({
     name: "_('w_Login_LoginTitle')",
@@ -15,10 +21,24 @@ export default class Login extends Vue {
     private version = `${ServerName} ${ServerVersion}`;
     private username: string = '';
     private password: string = '';
+    private remeberMe: string = ERemeberMe.noRemeberMe;
+    private eRemeberMe: any = ERemeberMe;
+    private backgroundImage = `url(/public/background.jpg)`;
 
-    backgroundImage = `url(/public/background.jpg)`;
+    created() {}
 
-    mounted() {}
+    mounted() {
+        this.initLoginInfo();
+    }
+
+    initLoginInfo() {
+        let loginInfo = RemeberMe.getLogin();
+        this.username = loginInfo.username;
+        this.password = loginInfo.password;
+        if (loginInfo.username != '' && loginInfo.password != '') {
+            this.remeberMe = ERemeberMe.rememberMe;
+        }
+    }
 
     async Login() {
         Loading.show();
@@ -26,9 +46,19 @@ export default class Login extends Vue {
             username: this.username,
             password: this.password,
         };
+
+        if (this.remeberMe == ERemeberMe.noRemeberMe) {
+            RemeberMe.clearLogin();
+        }
+
         await this.$login(param)
             .then(() => {
                 Loading.hide();
+
+                if (this.remeberMe == ERemeberMe.rememberMe) {
+                    RemeberMe.saveLogin(param);
+                }
+
                 let userRole = '';
                 if (this.$user.user != undefined && this.$user.user.roles != undefined && this.$user.user.roles[0] != undefined && this.$user.user.roles[0].name != undefined) {
                     userRole = this.$user.user.roles[0].name;
