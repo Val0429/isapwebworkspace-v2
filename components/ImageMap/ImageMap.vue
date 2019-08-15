@@ -13,14 +13,17 @@
                 >
                     <div class="tag-label-title-view">
                         <div>{{ _('w_ImageMap_DeviceGroupTagLabelTitle') }}</div>
-                        <div>
+
+                        <!-- bar2.0 此功能移至其他頁面新刪修 -->
+                        <!-- <div>
                             <template>
                                 <iv-toolbox-add
                                     class="button-add"
                                     @click="clickAddTagLabel"
                                 />
                             </template>
-                        </div>
+                        </div> -->
+
                     </div>
 
                     <tag-label-view
@@ -71,7 +74,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
-import { EDragType, ImageMapItem, ESetupMode } from "./models";
+import { EDragType, ImageMapItem, ESetupMode } from "./";
 import { ImageBox } from "./ImageBox.vue";
 import { TagLabelView } from "./tagLabels/TagLabelView.vue";
 

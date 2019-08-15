@@ -50,7 +50,7 @@ import {
     ImageMapItem,
     ImageBoxItem,
     DeviceFisheyeCameraItem
-} from "../models";
+} from "../";
 import DeviceFisheyeCamera from "./DeviceFisheyeCamera.vue";
 
 @Component({

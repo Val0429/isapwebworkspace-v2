@@ -55,7 +55,7 @@ import {
     EDragType,
     ImageMapItem,
     DataWindowLicensePlateRecognitionItem
-} from "../models";
+} from "../";
 
 @Component({
     components: {}

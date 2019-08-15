@@ -1,49 +1,64 @@
 <template>
     <div class="animated fadeIn">
-        <div
-            v-show="pageStep == ePageStep.showResult"
-            class="demo-region-tree-select"
+
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
         >
-            <b-button @click="pageToChooseTree">
-                Choose region tree
-            </b-button>
             <div
-                v-for="value in selecteds"
-                v-html="`objectid : ${value.objectId}, name: ${value.name}, type: ${value.type} <br/>`"
-                class="demo-region-tree-select-result"
+                key="transition_1"
+                v-show="transition.step === 1"
+                class="demo-region-tree-select"
             >
+                <b-button @click="pageToChooseTree">
+                    Choose region tree
+                </b-button>
+                <div
+                    v-for="value in selecteds"
+                    v-html="`objectid : ${value.objectId}, name: ${value.name}, type: ${value.type} <br/>`"
+                    class="demo-region-tree-select-result"
+                >
+                </div>
             </div>
-        </div>
-        <div class="col-md-8">
-            <region-tree-select
-                v-show="pageStep == ePageStep.chooseTree"
-                v-on:click-back="pageToShowResult"
-                :multiple="true"
-                :regionTreeItem="regionTreeItem"
-                :selectType="selectType"
-                :selecteds="selecteds"
+            <div
+                class="col-md-8"
+                key="transition_2"
+                v-show="transition.step === 2"
             >
-            </region-tree-select>
-        </div>
+                <region-tree-select
+                    v-on:click-back="pageToShowResult"
+                    :multiple="true"
+                    :regionTreeItem="regionTreeItem"
+                    :selectType="selectType"
+                    :selecteds="selecteds"
+                >
+                </region-tree-select>
+            </div>
+        </iv-auto-transition>
     </div>
 </template>
 
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+
+// Vue
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
-import RegionAPI from "@/services/RegionAPI";
+
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
+
+// Region Tree
 import {
     RegionTreeItem,
     ERegionType,
     IRegionItem,
     IRegionTreeSelected
-} from "@/components/RegionTree/models";
+} from "@/components/RegionTree";
 
-enum EPageStep {
-    showResult,
-    chooseTree
-}
+// Service
+import RegionAPI from "@/services/RegionAPI";
 
 @Component({
     components: {
@@ -51,10 +66,13 @@ enum EPageStep {
     }
 })
 export default class DemoRegionTreeSelect extends Vue {
-    ePageStep = EPageStep;
-    selectType = ERegionType.globe;
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
 
-    pageStep = EPageStep.showResult;
+    selectType = ERegionType.globe;
     regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [
         { objectId: "znIPgBUWGE", type: ERegionType.area, name: "test" },
@@ -76,12 +94,13 @@ export default class DemoRegionTreeSelect extends Vue {
     mounted() {}
 
     pageToShowResult() {
-        this.pageStep = EPageStep.showResult;
-        console.log(JSON.stringify(this.selecteds));
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
     }
 
     pageToChooseTree() {
-        this.pageStep = EPageStep.chooseTree;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
     }
 
     initRegionTreeSelect() {

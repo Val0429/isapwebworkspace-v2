@@ -197,7 +197,7 @@ import {
     DeviceNormalCameraItem,
     DataWindowOccupancyItem,
     DataWindowPeopleCountingItem
-} from "./models";
+} from "./";
 import IconBase64 from "./models/IconBase64";
 
 @Component({
@@ -248,14 +248,22 @@ export class ImageBox extends Vue {
 
     start() {
         let mapParentRef: any = this.$refs.mapParent;
-        if (mapParentRef.clientWidth <= 0 && this.widthControlTimes < 100) {
+        if (
+            mapParentRef &&
+            mapParentRef.clientWidth <= 0 &&
+            this.widthControlTimes < 100
+        ) {
             this.widthControlTimes++;
             setTimeout(this.start, 100);
             return false;
         }
         this.widthControlTimes = 0;
-        this.imageMap.imageBox.showSizeWidth = mapParentRef.clientWidth;
-        this.imageMap.dropItem.size.width = mapParentRef.clientWidth;
+        this.imageMap.imageBox.showSizeWidth = mapParentRef
+            ? mapParentRef.clientWidth
+            : 0;
+        this.imageMap.dropItem.size.width = mapParentRef
+            ? mapParentRef.clientWidth
+            : 0;
         this.imageMap.dropItem.size.height = this.imageMap.imageBox.showSize.height;
         this.imageMap.dropItem.left = this.imageMapMarginLeft;
 

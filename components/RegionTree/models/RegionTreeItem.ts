@@ -18,6 +18,7 @@ class RegionTreeItem {
         status: { focusBar: false, showBar: true, showCard: true, showToggle: true, searchBar: true },
         sites: [],
         tags: [],
+        tagIds: [],
         children: [],
     };
 

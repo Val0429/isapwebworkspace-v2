@@ -43,7 +43,7 @@ import {
     EVideoSource,
     EDeviceType,
     ISize
-} from "../models";
+} from "../";
 import { TagLabelDeviceGroup } from "../tagLabels/TagLabelDeviceGroup.vue";
 import { TagLabelDeviceNormalCamera } from "../tagLabels/TagLabelDeviceNormalCamera.vue";
 import { TagLabelDeviceFisheyeCamera } from "../tagLabels/TagLabelDeviceFisheyeCamera.vue";
@@ -132,7 +132,6 @@ export class TagLabelView extends Vue {
                             x: 0,
                             y: 0
                         };
-                        console.log(tempObject);
                         break;
                     }
                 }

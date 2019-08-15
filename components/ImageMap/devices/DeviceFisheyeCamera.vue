@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
-import { EDragType, DeviceFisheyeCameraItem, EVideoSource } from "../models";
+import { EDragType, DeviceFisheyeCameraItem, EVideoSource } from "../";
 
 @Component({
     components: {}

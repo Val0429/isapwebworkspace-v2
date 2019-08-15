@@ -216,7 +216,7 @@ import {
     DataWindowLicensePlateRecognitionItem,
     DataWindowOccupancyItem,
     DataWindowPeopleCountingItem
-} from "@/components/ImageMap/models";
+} from "@/components/ImageMap";
 import DeviceFisheyeCamera from "../components/Map/DeviceFisheyeCamera.vue";
 
 @Component({
@@ -432,7 +432,6 @@ export default class DemoImageMap extends Vue {
     }
 
     pageEditDeviceGroup(event: any, data: any) {
-        console.log("!!! pageEditDeviceGroup", event, data);
         for (let tempData of this.imageMap.deviceGroups) {
             if (data == tempData) {
                 console.log("Edit - deviceGroupId: ", data.deviceGroupId);

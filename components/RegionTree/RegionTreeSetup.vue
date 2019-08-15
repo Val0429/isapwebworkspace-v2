@@ -174,7 +174,7 @@ import {
     IRegionTreeTag,
     IRegionItem,
     RegionTreeItem
-} from "./models";
+} from "./";
 
 interface IGoogleMap {
     src: string;
