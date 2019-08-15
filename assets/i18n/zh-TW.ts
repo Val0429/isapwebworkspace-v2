@@ -61,6 +61,8 @@ export default class LangObject implements ILang {
 
     w_ExportPDF = '匯出PDF';
 
+    w_Website_title = 'iSAP訪客管理系統';
+
     /////////////////////////////////////////////
 
     // Login

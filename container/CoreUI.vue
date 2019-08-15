@@ -24,7 +24,7 @@
 
         <template #nav>
 
-            <SidebarHeader label="iSAP Web Framework" />
+            <SidebarHeader :label="_('w_Website_title')" />
 
             <SidebarNav>
 

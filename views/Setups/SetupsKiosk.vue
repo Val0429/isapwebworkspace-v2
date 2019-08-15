@@ -515,13 +515,42 @@ export default class SetupsKiosk extends Vue {
         `;
     }
 
+    IViewForm() {
+        return `
+            interface {
+
+
+            /**
+             * @uiLabel - ${this._("w_Kiosk_Username")}
+             * @uiType - iv-form-label
+             */
+            username: string;
+
+
+            /**
+             * @uiLabel - ${this._("w_Kiosk_Id")}
+             * @uiType - iv-form-label
+             */
+            kioskId: string;
+
+
+            /**
+             * @uiLabel - ${this._("w_Kiosk_KioskName")}
+             * @uiType - iv-form-label
+             */
+            kioskName: string;
+
+            }
+        `;
+    }
+
     IAddAndEditForm() {
         return `
             interface {
 
                 /**
-                 * @uiLabel - ${this._("w_Company_UnitNumber")}
-                 * @uiPlaceHolder - ${this._("w_Company_UnitNumber")}
+                 * @uiLabel - ${this._("w_Kiosk_Username")}
+                 * @uiPlaceHolder - ${this._("w_Kiosk_Username")}
                  * @uiType - ${
                      this.inputFormData.objectId === ""
                          ? "iv-form-string"
@@ -581,35 +610,6 @@ export default class SetupsKiosk extends Vue {
                  * @uiHidden - ${!this.inputFormData.objectId}
                 */
                 updateConfirmPassword?: string;
-
-            }
-        `;
-    }
-
-    IViewForm() {
-        return `
-            interface {
-
-
-            /**
-             * @uiLabel - ${this._("w_Kiosk_Username")}
-             * @uiType - iv-form-label
-             */
-            username: string;
-
-
-            /**
-             * @uiLabel - ${this._("w_Kiosk_Id")}
-             * @uiType - iv-form-label
-             */
-            kioskId: string;
-
-
-            /**
-             * @uiLabel - ${this._("w_Kiosk_KioskName")}
-             * @uiType - iv-form-label
-             */
-            kioskName: string;
 
             }
         `;

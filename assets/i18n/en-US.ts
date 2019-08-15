@@ -61,6 +61,8 @@ export default class LangObject {
 
     w_ExportPDF = 'Export PDF';
 
+    w_Website_title = 'iSAP Visitor Management System';
+
     /////////////////////////////////////////////
 
     // Login
