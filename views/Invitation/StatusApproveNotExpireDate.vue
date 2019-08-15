@@ -477,7 +477,6 @@ export class StatusApproveNotExpireDate extends Vue {
 
     receiveStep1Data(step1Date) {
         this.inputFormData.pdpaAccepted = step1Date;
-        //        console.log(' ~ ', this.inputFormData.accepted)
     }
 
     stepTo2() {
@@ -523,7 +522,6 @@ export class StatusApproveNotExpireDate extends Vue {
         this.inputFormData.contractorCompanyFax =
             step2Date.contractorCompanyFax;
 
-        console.log("inputFormData ~ ", this.inputFormData);
         this.isChange = true;
     }
 
@@ -578,7 +576,6 @@ export class StatusApproveNotExpireDate extends Vue {
         this.inputFormData.workContact = step3Date.workContact;
         this.inputFormData.workContactPhone = step3Date.workContactPhone;
 
-        console.log("inputFormData ~ ", this.inputFormData);
         this.isChange = true;
     }
 
@@ -749,10 +746,7 @@ export class StatusApproveNotExpireDate extends Vue {
 
     receiveStep7Data(step7Date) {
         this.inputFormData.persons = step7Date;
-        console.log(
-            "this.inputFormData.step7PersonDetail ~ ",
-            this.inputFormData.persons
-        );
+
         this.isChange = true;
     }
 
@@ -785,7 +779,6 @@ export class StatusApproveNotExpireDate extends Vue {
         this.inputFormData.workEndTime = step8Date.workEndTime;
         this.inputFormData.accessGroups = step8Date.accessGroups;
 
-        console.log("this.inputFormData ~ ", this.inputFormData);
         this.isChange = true;
     }
 

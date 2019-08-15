@@ -161,9 +161,6 @@ export class Step8 extends Vue {
     }
 
     changeApproval() {
-
-        console.log('this.approval ~ ', this.approval);
-
         this.$emit("step8", this.inputFormData, this.approval);
     }
 
