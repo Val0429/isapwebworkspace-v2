@@ -139,7 +139,7 @@ export default class QueryPermission extends Vue {
 
         console.log("filter", this.filter);
 
-        let promise = this.$server.R('/acs/permissiontable'as any, Object.assign({system:0,paging:{page:ctx.currentPage, pageSize:ctx.perPage}}, this.filter));
+        let promise = this.$server.R('/acs/permissiontable'as any, Object.assign({system:800,paging:{page:ctx.currentPage, pageSize:ctx.perPage}}, this.filter));
 
         return promise.then(async (data:any) => {
           this.total = data.paging.total;
