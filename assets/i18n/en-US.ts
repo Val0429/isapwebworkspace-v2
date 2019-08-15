@@ -667,4 +667,5 @@ export default class LangObject {
     cannotGetTokenFromSipass="cannotGetTokenFromSipass";
     accessLevelIsNotInSipass="accessLevelIsNotInSipass";
     w_Error_AccessLevelIsNotInAcs="w_Error_AccessLevelIsNotInAcs";
+    w_Error_LoginFailed="Login Failed";
 }

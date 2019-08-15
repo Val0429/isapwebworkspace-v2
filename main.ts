@@ -8,15 +8,20 @@ if(debug.prodMode){
         let lang = new Language();
         console.error("Vue.config.errorHandler", vm.$route, error);
         let err :any = error as any;
-        if(err.res && err.res.statusCode && err.res.statusCode===401 && vm.$route.fullPath!=="/login") {        
-            console.error("redirected to login");
-            await Dialog.confirm(
-                lang.translate("w_RedirectToLoginMessage"),
-                lang.translate("w_Error"),
-                () => {
-                    vm.$router.push("/login");
-                }
-              );
+        if(err.res && err.res.statusCode && err.res.statusCode===401 ) {       
+            if(vm.$route.fullPath!=="/login") {
+                console.error("redirected to login");
+                await Dialog.confirm(
+                    lang.translate("w_RedirectToLoginMessage"),
+                    lang.translate("w_Error"),
+                    () => {
+                        vm.$router.push("/login");
+                    }
+                  );
+            }
+            else{
+                await Dialog.error(lang.translate("w_Error_LoginFailed"));
+            }
             
         }
         if(err.res && err.res.statusCode && (err.res.statusCode===400||err.res.statusCode===500) && err.body ) { 

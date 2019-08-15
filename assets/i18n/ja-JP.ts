@@ -661,4 +661,5 @@ export default class LangObject implements ILang {
     cannotGetTokenFromSipass="cannotGetTokenFromSipass";
     accessLevelIsNotInSipass="accessLevelIsNotInSipass";
     w_Error_AccessLevelIsNotInAcs="w_Error_AccessLevelIsNotInAcs";
+    w_Error_LoginFailed="Login Failed";
 }
