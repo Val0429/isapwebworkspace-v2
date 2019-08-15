@@ -14,6 +14,7 @@
                     <iv-form
                         :interface="removeWorkerDaysInf()"
                         :value="inputFormData"
+                        @update:*="updateRemoveWorkDay($event)"
                         @submit="saveRemoveWorkerDaysInf($event)"
                     >
                     </iv-form>
@@ -60,6 +61,10 @@ export default class GeneralSettings extends Vue {
 
     mounted() {}
 
+    updateRemoveWorkDay(data) {
+        this.inputFormData[data.key] = data.value;
+    }
+
     async initRemoveWorkerDays() {
         await this.$server
             .R("/flow1/crms/remove_worker_data_days")
@@ -80,7 +85,7 @@ export default class GeneralSettings extends Vue {
             days: this.inputFormData.removeWorkerDays
         };
         await this.$server
-            .R("/flow1/crms/remove_worker_data_days")
+            .U("/flow1/crms/remove_worker_data_days", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     Dialog.success(
