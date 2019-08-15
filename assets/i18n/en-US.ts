@@ -66,6 +66,7 @@ export default class LangObject {
     // Login
     w_Login_LoginTitle = 'Login';
     w_Login_ForgotPassword = 'Forgot Password';
+    w_Login_RemeberMe = 'Remeber Me';
 
     // Logout
     w_Logout = 'Logout';

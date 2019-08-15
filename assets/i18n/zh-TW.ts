@@ -66,6 +66,7 @@ export default class LangObject implements ILang {
     // Login
     w_Login_LoginTitle = '登入';
     w_Login_ForgotPassword = '忘記密碼';
+    w_Login_RemeberMe = '記住我';
 
     // Logout
     w_Logout = '登出';
