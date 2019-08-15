@@ -194,7 +194,7 @@ export default class Invitation extends Vue {
     mounted() {}
 
     isExpired(date, time, status) {
-        if (status == "new" || status == "pendding") {
+        if (status != EStatus.approve) {
             return "";
         }
         let tempDate = new Date(
