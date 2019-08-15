@@ -764,11 +764,15 @@ private async getFloorGroup() {
             this.busy=true;
             let duplicate = await this.checkDuplication({objectId: this.inputFormData.id, tablename:this.inputFormData.permissionName})
             if(!duplicate) await this.doSave();
+        }        
+        catch(err){
+            console.error("doSubmit", err)
+            if(err.res && err.res.statusCode && err.res.statusCode===400 && (err.body =="accessLevelIsNotInSipass" || err.body =="cannotGetTokenFromSipass")) { 
+                await Dialog.error(this._(err.body)); 
+            }
+            // let global error handles this
+            else throw err;
         }
-        // let global error handles this
-        // catch(err){
-        //     console.error("doSubmit", err)
-        // }
         finally{
             this.busy=false;
         }
