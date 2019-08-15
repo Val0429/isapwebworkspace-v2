@@ -43,6 +43,8 @@ export default class LangObject {
     w_Dialog_ErrorTitle = 'Error';
     w_Logout = 'Logout';
 
+    w_Website_title = 'iSAP Contractor Management System';
+
     /////////////////////////////////////////////
 
     w_Error_FileToLarge = 'File to large';

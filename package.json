@@ -1,8 +1,8 @@
 {
-    "name": "contractor-mangement-system",
+    "name": "contractor-management-system",
     "version": "1.00.08",
     "flow": "/flow1",
-    "description": "Contractor Mangement System",
+    "description": "Contractor Management System",
     "scripts": {
         "start": "npm run start --prefix ../",
         "build": "npm run build --prefix ../",
