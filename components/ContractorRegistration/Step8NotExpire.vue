@@ -68,7 +68,6 @@
 
         async created() {
             this.initInputFormData();
-            console.log('accessGroupsForm ~ ', this.inputFormData)
         }
 
         mounted() {

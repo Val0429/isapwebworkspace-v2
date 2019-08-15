@@ -493,7 +493,6 @@ export class StatusNewView extends Vue {
 
     receiveStep1Data(step1Date) {
         this.inputFormData.pdpaAccepted = step1Date;
-        //        console.log(' ~ ', this.inputFormData.accepted)
     }
 
     tempSave() {
@@ -543,7 +542,6 @@ export class StatusNewView extends Vue {
         this.inputFormData.contractorCompanyFax =
             step2Date.contractorCompanyFax;
 
-        console.log("inputFormData ~ ", this.inputFormData);
         this.isChange = true;
     }
 
@@ -794,10 +792,6 @@ export class StatusNewView extends Vue {
 
     receiveStep7Data(step7Date) {
         this.inputFormData.persons = step7Date;
-        console.log(
-            "this.inputFormData.step7PersonDetail ~ ",
-            this.inputFormData.persons
-        );
         this.isChange = true;
     }
 
@@ -856,7 +850,6 @@ export class StatusNewView extends Vue {
         this.inputFormData.workEndDate = tempEndDate;
         this.inputFormData.workEndTime = tempEndDate;
 
-        console.log("this.inputFormData ~ ", this.inputFormData);
         this.isChange = true;
     }
 

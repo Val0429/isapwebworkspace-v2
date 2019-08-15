@@ -476,7 +476,6 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
 
     receiveStep1Data(step1Date) {
         this.inputFormData.pdpaAccepted = step1Date;
-        //        console.log(' ~ ', this.inputFormData.accepted)
     }
 
     async tempSave() {
@@ -843,10 +842,6 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
 
     receiveStep7Data(step7Date) {
         this.inputFormData.persons = step7Date;
-        console.log(
-            "this.inputFormData.step7PersonDetail ~ ",
-            this.inputFormData.persons
-        );
         this.isChange = true;
     }
 

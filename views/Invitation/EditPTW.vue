@@ -358,7 +358,6 @@ export class EditPTW extends Vue {
     }
 
     created() {
-        console.log("selectedDetail ~ ", this.selectedDetail);
     }
 
     mounted() {

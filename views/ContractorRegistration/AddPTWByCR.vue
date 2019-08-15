@@ -363,7 +363,6 @@ export class AddPTWByCR extends Vue {
         await this.$server
             .R("/flow1/crms/tenant", readParam)
             .then((response: any) => {
-                console.log("response ~ ", response);
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     if (response.company && response.company.objectId) {
                         this.selectedDetail.tenant = response.company.name;
@@ -641,8 +640,6 @@ export class AddPTWByCR extends Vue {
             step2Data.contractorCompanyContactPhone;
         this.inputFormData.contractorCompanyFax =
             step2Data.contractorCompanyFax;
-
-        console.log("inputFormData ~ ", this.inputFormData);
     }
 
     async stepTo3() {
@@ -694,7 +691,6 @@ export class AddPTWByCR extends Vue {
         this.inputFormData.workContact = step3Date.workContact;
         this.inputFormData.workContactPhone = step3Date.workContactPhone;
 
-        console.log("inputFormData ~ ", this.inputFormData);
     }
 
     async stepTo4() {
