@@ -53,6 +53,7 @@ export default class LangObject implements ILang {
 
     // Error
     w_Error_FailedToFetch = "We can't connect to server, please try again!"; // failed to fetch
+    w_Error_ResponseUndefined = "We can't get any response"; // no response
     w_Error_401 = 'Not find User, Please login again'; // 401
     w_Error_404 = 'API Not Find'; // 404
 
