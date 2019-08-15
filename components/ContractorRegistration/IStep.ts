@@ -15,8 +15,8 @@ interface IStep2 {
     contractorCompanyName: string;
     contractorCompanyAddress: string;
     contractorCompanyEmail: string;
-    contractorCompanyContactPhone: string;
-    contractorCompanyFax: string;
+    contractorCompanyContactPhone: number;
+    contractorCompanyFax: number;
 }
 
 interface IStep3 {
@@ -36,7 +36,7 @@ interface IStep3 {
     workEndDate: Date;
     workEndTime: Date;
     workContact: string;
-    workContactPhone: string;
+    workContactPhone: number;
 }
 
 interface IStep4 {

@@ -89,10 +89,10 @@ export class Step2 extends Vue {
         contractorCompanyContactPhone: this.selectedDetail
             .contractorCompanyContactPhone
             ? this.selectedDetail.contractorCompanyContactPhone
-            : "",
+            : 0,
         contractorCompanyFax: this.selectedDetail.contractorCompanyFax
             ? this.selectedDetail.contractorCompanyFax
-            : ""
+            : 0
     };
 
     created() {}
@@ -267,6 +267,7 @@ export class Step2 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_ContactNumber")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_ContactNumber")}
+                 * @uiAttrs - { min: 0}
                  */
                  contractorCompanyContactPhone: number;
 
@@ -274,6 +275,7 @@ export class Step2 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
+                 * @uiAttrs - { min: 0 }
                  */
                  contractorCompanyFax: number;
 

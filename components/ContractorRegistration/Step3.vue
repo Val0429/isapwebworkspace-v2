@@ -142,7 +142,7 @@ export class Step3 extends Vue {
         workEndDate: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
         workEndTime: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
         workContact: this.selectedDetail.workContact ? this.selectedDetail.workContact : "",
-        workContactPhone: this.selectedDetail.workContactPhone ?  this.selectedDetail.workContactPhone : ''
+        workContactPhone: this.selectedDetail.workContactPhone ?  this.selectedDetail.workContactPhone : 0
     };
 
     created() {}

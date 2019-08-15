@@ -60,19 +60,19 @@ export class Step2AddUse extends Vue {
 
     inputFormData: IStep2 = {
         // PTW Data
-        ptwId: this.selectedDetail.ptwId,
-        tenant: "",
-        workCategoryId: "",
+        ptwId: this.selectedDetail.ptwId ? this.selectedDetail.ptwId : '',
+        tenant: this.selectedDetail.company && this.selectedDetail.company.objectId ? this.selectedDetail.company.objectId : "",
+        workCategoryId: this.selectedDetail.workCategory && this.selectedDetail.workCategory.objectId ? this.selectedDetail.workCategory.objectId : '',
 
         // Contractor Information
-        applicantName: "",
+        applicantName: this.selectedDetail.applicantName ? this.selectedDetail.applicantName : '',
 
         // Company
-        contractorCompanyName: "",
-        contractorCompanyAddress: "",
-        contractorCompanyEmail: "",
-        contractorCompanyContactPhone: "",
-        contractorCompanyFax: ""
+        contractorCompanyName: this.selectedDetail.contractorCompanyName ? this.selectedDetail.contractorCompanyName : "",
+        contractorCompanyAddress: this.selectedDetail.contractorCompanyAddress ? this.selectedDetail.contractorCompanyAddress : "",
+        contractorCompanyEmail: this.selectedDetail.contractorCompanyEmail ? this.selectedDetail.contractorCompanyEmail : "",
+        contractorCompanyContactPhone: this.selectedDetail.contractorCompanyContactPhone ? this.selectedDetail.contractorCompanyContactPhone : 0,
+        contractorCompanyFax: this.selectedDetail.contractorCompanyFax ? this.selectedDetail.contractorCompanyFax : 0
     };
 
     created() {}
@@ -240,6 +240,7 @@ export class Step2AddUse extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_ContactNumber")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_ContactNumber")}
+                 * @uiAttrs - { min: 0 }
                  */
                  contractorCompanyContactPhone: number;
 
@@ -247,6 +248,7 @@ export class Step2AddUse extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
+                 * @uiAttrs - { min: 0 }
                  */
                  contractorCompanyFax: number;
 
