@@ -1,4 +1,4 @@
-import { RegisterLanguage, ILang } from '@/../core/i18n';
+﻿import { RegisterLanguage, ILang } from '@/../core/i18n';
 
 @RegisterLanguage('zh-TW', '正體中文')
 export default class LangObject implements ILang {
@@ -667,5 +667,7 @@ export default class LangObject implements ILang {
     cannotGetTokenFromSipass="cannotGetTokenFromSipass";
     accessLevelIsNotInSipass="accessLevelIsNotInSipass";
     w_Error_AccessLevelIsNotInAcs="w_Error_AccessLevelIsNotInAcs";
+    importResult="Import Result";
     w_Error_LoginFailed="Login Failed";
+    w_Import_RecordCount="Record Count";
 }

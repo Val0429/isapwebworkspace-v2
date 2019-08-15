@@ -667,5 +667,7 @@ export default class LangObject {
     cannotGetTokenFromSipass="cannotGetTokenFromSipass";
     accessLevelIsNotInSipass="accessLevelIsNotInSipass";
     w_Error_AccessLevelIsNotInAcs="w_Error_AccessLevelIsNotInAcs";
+    importResult="Import Result";
     w_Error_LoginFailed="Login Failed";
+    w_Import_RecordCount="Record Count";
 }

@@ -21,7 +21,7 @@
             <iv-form
                   ref="importForm"
                     :interface="importInterface()"
-                    @submit="importFile($event)"
+                    @submit="importMember($event)"
                 >
                 <template #data="{$attrs, $listeners}">
                     <div class="upload_file">
@@ -35,7 +35,7 @@
 
                 </template>
                 </iv-form>
-                
+                {{_("w_Import_RecordCount")}}:{{this.importRecords.length}}
         </iv-modal>
     <iv-card v-show="pageStep === ePageStep.list" :label="_('w_Filter')">
       <iv-form
@@ -408,7 +408,10 @@ export default class Member extends Vue {
     this.getMemberFields();
     this.importVisible=true;
   }
+  importRecords:any[]=[];
   handleXlsxFile(e) {
+    this.importRecords=[];
+    let records = this.importRecords;
     let fieldOptions = this.savedFieldOptions;
     let storedPermissionOptions = this.storedPermissionOptions;
     var files = e.target.files, f = files[0];
@@ -420,13 +423,13 @@ export default class Member extends Vue {
      var sheet_name_list = workbook.SheetNames;
      console.log(sheet_name_list[0]);
     let rawJson = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
-    console.log("rawJson", rawJson.splice(0,1))
-    let records = [];
+    console.log("rawJson", rawJson.splice(0,1));
     for(let record of rawJson){
         let newRecord:any={};
         
-        for(const key of Object.keys(record)){
+        for(const key of fieldOptions.map(x=>x.value)){
           if(key=="permissionTable"){
+             newRecord["tempPermissionTable"]=record[key];
             let accessRules=[];
             let permTables = record[key].split(",");
             for(let permTable of permTables){
@@ -435,6 +438,7 @@ export default class Member extends Vue {
                 accessRules.push(exist ? exist.value : permTable);
             }
             newRecord[key]=accessRules;
+           
           }
           else newRecord[key]=record[key];
           
@@ -501,7 +505,43 @@ export default class Member extends Vue {
         this.fieldSelected=[];
         this.fieldOptions = this.savedFieldOptions;
   }
-  
+  async importMember($event){
+    if(this.importRecords.length==0)return;
+    let promises =[];
+    for(let record of this.importRecords){
+        if(!record.employeeNumber){
+          record.importResult="failed";
+          continue;
+        }
+        let empNoCheck:any = await this.$server.R("/acs/member",{eEmployeeNumber:record.employeeNumber});
+        if(empNoCheck.results.length>0){
+            let exist = empNoCheck.results.find(x=>x.employeeNumber == record.employeeNumber);
+            record.objectId = exist.objectId;
+        }
+        promises.push(this.saveAddOrEdit(record, record.permissionTable, false, false)
+            .then(()=>{
+              record.importResult=record.objectId?"updated": "created";
+              record.permissionTable = record.tempPermissionTable;
+              delete(record.objectId);
+              delete(record.tempPermissionTable);
+              }));
+    }
+    await Promise.all(promises);
+    let headers=[];
+        let extraHeader:any={};
+        for(let field of Object.keys(this.importRecords[0])){
+          headers.push(field);
+          extraHeader[field]=this._(field as any);
+        }
+        this.importRecords.unshift(extraHeader);
+        
+    let workbook = XLSX.utils.book_new();
+        let ws = XLSX.utils.aoa_to_sheet([headers]);        
+        XLSX.utils.sheet_add_json(ws, this.importRecords,  {skipHeader: true, origin: "A2"});
+        XLSX.utils.book_append_sheet(workbook, ws, "Sheet1");    
+        XLSX.writeFile(workbook, `importresult.xlsx`);
+    this.importVisible=false;
+  }
   onCardCertificateUpdate(value:any){
     let profile = this.credentialProfiles.find(x=>x.Token == value);
     if(!profile)return;
