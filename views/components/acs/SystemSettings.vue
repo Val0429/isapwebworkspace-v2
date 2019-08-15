@@ -39,18 +39,6 @@
                 >
                 </iv-form>
          </iv-auto-card>
-         <iv-auto-card :label="_('ccuresqlserver')" v-show="currentConfig=='ccuresqlserver'">
-                <template #footer-before>
-                    <b-button size="lg" variant="secondary" @click="currentConfig='none'">{{ _("wb_Back") }}</b-button>
-                </template>
-                <iv-form
-                    :interface="ccuresqlserverInf()"                    
-                    :value="ccuresqlserver"
-                                      
-                    @submit="submitConfig({ccuresqlserver:$event})"
-                >
-                </iv-form>
-         </iv-auto-card>
          <iv-auto-card :label="_('sipassconnect')" v-show="currentConfig=='sipassconnect'">
                 <template #footer-before>
                     <b-button size="lg" variant="secondary" @click="currentConfig='none'">{{ _("wb_Back") }}</b-button>
@@ -93,7 +81,6 @@ export default class SyncReceiver extends Vue {
     allConfig:any={};
     ccureconnect: any={};
     smtp:any={};
-    ccuresqlserver:any={};
     sipassconnect:any={};
     sipassdb:any={};
     sysSettings:any[]=[];
@@ -103,13 +90,11 @@ export default class SyncReceiver extends Vue {
     console.log("allconfig",this.allConfig);
     this.smtp=Object.assign({},this.allConfig.smtp);
     this.ccureconnect=Object.assign({},this.allConfig.ccureconnect);
-    this.ccuresqlserver=Object.assign({},this.allConfig.ccuresqlserver);
     this.sipassconnect=Object.assign({},this.allConfig.sipassconnect);
     this.sipassdb=Object.assign({},this.allConfig.sipassdb);
     this.sysSettings=[];
     this.sysSettings.push({name:"smtp", label:this._("smtp"), config:this.smtp});
     this.sysSettings.push({name:"ccureconnect", label:this._("ccureconnect"), config:this.ccureconnect});
-    this.sysSettings.push({name:"ccuresqlserver", label:this._("ccuresqlserver"), config:this.ccuresqlserver});
     this.sysSettings.push({name:"sipassconnect", label:this._("sipassconnect"), config:this.sipassconnect});
     this.sysSettings.push({name:"sipassdb", label:this._("sipassdb"), config:this.sipassdb});
   }
@@ -155,6 +140,7 @@ export default class SyncReceiver extends Vue {
                 database: string;
                 connectionTimeout?: number;
                 mdbpath?: string; 
+                mdbpath2?: string; 
             }
         `;
     }
@@ -184,21 +170,6 @@ export default class SyncReceiver extends Vue {
                 */
                 password: string;
                 uniqueId: string;
-            }
-        `;
-    }
-    ccuresqlserverInf(){
-        return `
-            interface {
-                server: string;
-                port: number;
-                user: string;
-                /***
-                *@uiType - iv-form-password
-                */
-                password: string;
-                database: string;
-                connectionTimeout?: number;
             }
         `;
     }
