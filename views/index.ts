@@ -42,6 +42,7 @@ import DemoRegionTreeSelect from './Demos/DemoRegionTreeSelect.vue';
 import DemoROI from './Demos/DemoROI.vue';
 import DemoSortSelect from './Demos/DemoSortSelect.vue';
 import DemoEncrypt from './Demos/DemoEncrypt.vue';
+import DemoDatetimeServices from './Demos/DemoDatetimeServices.vue';
 
 $({ path: '/demos', name: 'Demo', redirect: '/demos/region-tree-select' })();
 $({ path: '/demos/dialog', name: 'Dialog', permission: false })(DemoDialog);
@@ -52,3 +53,4 @@ $({ path: '/demos/region-tree-select', name: 'Region Tree Select', permission: f
 $({ path: '/demos/roi', name: 'ROI', permission: false })(DemoROI);
 $({ path: '/demos/sort_select', name: 'Sort Select', permission: false })(DemoSortSelect);
 $({ path: '/demos/encrypt', name: 'SHA', permission: false })(DemoEncrypt);
+$({ path: '/demos/datetime', name: 'SHA', permission: false })(DemoDatetimeServices);

@@ -314,61 +314,22 @@ class Datetime {
 
     //獲得上月開始日期
     LastMonthStartDate(date: Date): Date {
-        let nowYear = date.getFullYear(); //當前年
-        nowYear += nowYear < 2000 ? 1900 : 0;
-
-        let lastMonthDate = new Date(); //上月日期
-        lastMonthDate.setDate(1);
-        lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
-        const lastYear = lastMonthDate.getFullYear();
-        const lastMonth = lastMonthDate.getMonth();
-
-        const lastMonthStartDate = new Date(date.getFullYear(), lastMonth, 1);
-        return new Date();
-        // return this.DateTime2String(lastMonthStartDate, DateFormat.default);
+        return this.DateStart(new Date(date.getFullYear(), date.getMonth() - 1, 1));
     }
 
     // 獲得上月結束日期
-    LastMonthEndDate(date: Date): string {
-        const nowMonth = date.getMonth(); //當前月 0（1月）到 11（12月）
-        let nowYear = date.getFullYear(); //當前年
-        nowYear += nowYear < 2000 ? 1900 : 0;
-
-        let lastMonthDate = new Date(); //上月日期
-        lastMonthDate.setDate(1);
-        lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
-        const lastMonth = lastMonthDate.getMonth();
-
-        const lastMonthEndDate = new Date(nowYear, lastMonth, this.LastMonthDays(date));
-        return this.DateTime2String(lastMonthEndDate, DateFormat.default);
+    LastMonthEndDate(date: Date): Date {
+        return this.MonthEnd(new Date(date.getFullYear(), date.getMonth() - 1));
     }
 
     // 獲得本月的天數
     MonthDateCount(date: Date): number {
-        const nowMonth = date.getMonth(); //當前月 0（1月）到 11（12月）
-        let nowYear = date.getFullYear(); //當前年
-        nowYear += nowYear < 2000 ? 1900 : 0;
-
-        let lastMonthDate = new Date(); //上月日期
-        lastMonthDate.setDate(1);
-        lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
-
-        const thisMonthDays = new Date(nowYear, nowMonth + 1, 0).getDate();
-        return thisMonthDays;
+        return new Date(date.getFullYear(), date.getMinutes() + 1, 0).getDate();
     }
 
     // 獲得上月的天數
-    LastMonthDays(date: Date): number {
-        const nowMonth = date.getMonth(); //當前月 0（1月）到 11（12月）
-        let nowYear = date.getFullYear(); //當前年
-        nowYear += nowYear < 2000 ? 1900 : 0;
-
-        let lastMonthDate = new Date(); //上月日期
-        lastMonthDate.setDate(1);
-        lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
-
-        const lastMonthDays = new Date(nowYear, nowMonth, 0).getDate();
-        return lastMonthDays;
+    LastMonthCount(date: Date): number {
+        return this.LastMonthEndDate(date).getDate();
     }
 
     // Week
