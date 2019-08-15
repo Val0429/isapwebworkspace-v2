@@ -846,7 +846,7 @@ export default class SetupsAccount extends Vue {
                  * @uiLabel - ${this._("w_User_Roles")}
                  * @uiHidden - ${this.inputFormData.objectId != ""}
                  */
-                roles?: ${toEnumInterface(this.selectItem.role, false)};
+                roles: ${toEnumInterface(this.selectItem.role, false)};
 
                  /**
                  * @uiLabel - ${this._("w_User_Email")}

@@ -73,6 +73,18 @@ export class ResponseFilter {
     catchError(vue: any, e: any, message: string = '') {
         console.log('error: ', e);
         Loading.hide();
+
+        let errorMessage = "";
+        if (e.message != undefined ) {
+            errorMessage = e.message;
+        }
+        if (e.body != undefined) {
+            errorMessage = e.body;
+        }
+        if (message != '') {
+            errorMessage = message;
+        }
+
         if (e.err != undefined && e.err == 'Failed to fetch') {
             Dialog.error(vue._('w_FailedToFetch'));
             return true;
@@ -92,7 +104,7 @@ export class ResponseFilter {
             Dialog.error(vue._('w_APINotFind'));
             return true;
         }
-        Dialog.error(message != '' ? message : e.message);
+        Dialog.error(errorMessage);
         return true;
     }
 }
