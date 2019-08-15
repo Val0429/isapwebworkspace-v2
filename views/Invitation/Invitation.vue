@@ -46,7 +46,7 @@
                         @selected="selectedItem($event)"
                     >
                         <template #status="{$attrs}">
-                            {{ $attrs.value}} {{isExpired($attrs.row.workEndDate)}}
+                            {{ $attrs.value}} {{isExpired($attrs.row.workEndDate,$attrs.row.workEndTime, $attrs.value)}}
                         </template>
 
                         <template #workStartDate="{$attrs}">
@@ -193,8 +193,18 @@ export default class Invitation extends Vue {
 
     mounted() {}
 
-    isExpired(date) {
-        if (date && new Date(date).getTime() < new Date().getTime()) {
+    isExpired(date, time, status) {
+        if (status == "new" || status == "pendding") {
+            return "";
+        }
+        let tempDate = new Date(
+            `${Datetime.DateTime2String(
+                new Date(date),
+                "YYYY-MM-DD"
+            )} ${Datetime.DateTime2String(new Date(time), "HH:mm:ss")}`
+        );
+
+        if (tempDate && new Date(tempDate).getTime() < new Date().getTime()) {
             return "(" + this._("w_Expired") + ")";
         } else {
             return "";
