@@ -149,7 +149,7 @@ export class ViewStep3 extends Vue {
         workEndDate: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
         workEndTime: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
         workContact: this.selectedDetail.workContact ? this.selectedDetail.workContact : "",
-        workContactPhone: this.selectedDetail.workContactPhone ?  this.selectedDetail.workContactPhone : 0
+        workContactPhone: this.selectedDetail.workContactPhone ?  this.selectedDetail.workContactPhone : ''
     };
 
     created() {}
@@ -343,7 +343,7 @@ export class ViewStep3 extends Vue {
                  )}
                  * @uiType - iv-form-label
                  */
-                workContactPhone: any;
+                workContactPhone: string;
 
                 contractorIsRequired?: any;
 

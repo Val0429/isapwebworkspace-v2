@@ -136,6 +136,7 @@ export default class LangObject {
     w_ViewPTW_Step_ErrorTip = 'Please check the blank field';
     w_ViewPTW_Step_ErrorTipYes = 'Please check the answer';
     w_ViewPTW_Step_ErrorTipPerson = 'Please add person';
+    w_ViewPTW_Step_ErrorPhone = 'Number only';
 
     w_ViewPTW_Step_AsteriskIsRequired = '* Asterisk is required.';
 

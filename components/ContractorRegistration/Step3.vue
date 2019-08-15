@@ -111,6 +111,7 @@
 import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
 import { IStep3 } from '.';
 import Dialog from '@/services/Dialog';
+import RegexService from '@/services/RegexServices';
 
 @Component({
     components: {}
@@ -142,7 +143,7 @@ export class Step3 extends Vue {
         workEndDate: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
         workEndTime: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
         workContact: this.selectedDetail.workContact ? this.selectedDetail.workContact : "",
-        workContactPhone: this.selectedDetail.workContactPhone ?  this.selectedDetail.workContactPhone : 0
+        workContactPhone: this.selectedDetail.workContactPhone ?  this.selectedDetail.workContactPhone : ''
     };
 
     created() {}
@@ -237,6 +238,11 @@ export class Step3 extends Vue {
                 this.inputFormData.workContact = data.value;
                 break;
             case "workContactPhone":
+                if (!RegexService.number(data.value)) {
+                    Dialog.error(this._("w_ViewPTW_Step_ErrorPhone"));
+                    return false;
+                }
+
                 this.inputFormData.workContactPhone = data.value;
                 break;
         }

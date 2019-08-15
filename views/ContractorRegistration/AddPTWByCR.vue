@@ -280,8 +280,8 @@ export class AddPTWByCR extends Vue {
         contractorCompanyName: "",
         contractorCompanyAddress: "",
         contractorCompanyEmail: "",
-	    contractorCompanyContactPhone: 0,
-	    contractorCompanyFax: 0,
+	      contractorCompanyContactPhone: "",
+	      contractorCompanyFax: "",
 
         // step3
         workPremisesUnit: "",
@@ -300,7 +300,7 @@ export class AddPTWByCR extends Vue {
         workEndDate: new Date(),
         workEndTime: new Date(),
         workContact: "",
-        workContactPhone: 0,
+        workContactPhone: "",
 
         // step4
         checklist1: false,
@@ -389,10 +389,10 @@ export class AddPTWByCR extends Vue {
                     this.selectedDetail.contractorCompanyEmail =
                         response.contractorCompanyEmail;
 
-	                this.selectedDetail.contractorCompanyContactPhone = !isNaN(parseInt(response.contractorCompanyContactPhone)) ? parseInt(response.contractorCompanyContactPhone) : 0;
-	                this.selectedDetail.contractorCompanyFax = !isNaN(parseInt(response.contractorCompanyFax)) ? parseInt(response.contractorCompanyFax) : 0;
+	                  this.selectedDetail.contractorCompanyContactPhone = response.contractorCompanyContactPhone;
+	                  this.selectedDetail.contractorCompanyFax = response.contractorCompanyFax;
 
-	                this.selectedDetail.workLocation = response.workLocation;
+	                  this.selectedDetail.workLocation = response.workLocation;
                     this.selectedDetail.workDescription = response.workDescription;
                     this.selectedDetail.workType1 = response.workType1;
                     this.selectedDetail.workType2 = response.workType2;
@@ -404,7 +404,7 @@ export class AddPTWByCR extends Vue {
                     this.selectedDetail.workType8 = response.workType8;
 
                     this.selectedDetail.workContact = response.workContact;
-                    this.selectedDetail.workContactPhone = !isNaN(parseInt(response.workContactPhone)) ? parseInt(response.workContactPhone) : 0;
+                    this.selectedDetail.workContactPhone = response.workContactPhone;
                     this.selectedDetail.checklist1 = response.checklist1;
                     this.selectedDetail.checklistRemark1 =
                         response.checklistRemark1;
@@ -505,8 +505,8 @@ export class AddPTWByCR extends Vue {
                         response.contractorCompanyAddress;
                     this.inputFormData.contractorCompanyEmail =
                         response.contractorCompanyEmail;
-                    this.inputFormData.contractorCompanyContactPhone = !isNaN( parseInt(response.contractorCompanyContactPhone)) ?  parseInt(response.contractorCompanyContactPhone) : 0;
-                    this.inputFormData.contractorCompanyFax = !isNaN( parseInt(response.contractorCompanyFax)) ?  parseInt(response.contractorCompanyFax) : 0;
+                    this.inputFormData.contractorCompanyContactPhone = response.contractorCompanyContactPhone;
+                    this.inputFormData.contractorCompanyFax = response.contractorCompanyFax;
 
                     this.inputFormData.workLocation = response.workLocation;
                     this.inputFormData.workDescription =
@@ -532,7 +532,7 @@ export class AddPTWByCR extends Vue {
                         ? response.workEndTime
                         : new Date();
                     this.inputFormData.workContact = response.workContact;
-	                this.inputFormData.workContactPhone = !isNaN( parseInt(response.workContactPhone)) ?  parseInt(response.workContactPhone) : 0;
+                    this.inputFormData.workContactPhone = response.workContactPhone;
 
                     this.inputFormData.checklist1 = response.checklist1;
                     this.inputFormData.checklistRemark1 =
@@ -634,9 +634,9 @@ export class AddPTWByCR extends Vue {
         this.inputFormData.contractorCompanyEmail =
             step2Data.contractorCompanyEmail;
         this.inputFormData.contractorCompanyContactPhone =
-            step2Data.contractorCompanyContactPhone.toString();
+            step2Data.contractorCompanyContactPhone;
         this.inputFormData.contractorCompanyFax =
-            step2Data.contractorCompanyFax.toString();
+            step2Data.contractorCompanyFax;
     }
 
     async stepTo3() {
@@ -686,7 +686,7 @@ export class AddPTWByCR extends Vue {
         this.inputFormData.workEndDate = step3Date.workEndDate;
         this.inputFormData.workEndTime = step3Date.workEndTime;
         this.inputFormData.workContact = step3Date.workContact;
-        this.inputFormData.workContactPhone = step3Date.workContactPhone.toString();
+        this.inputFormData.workContactPhone = step3Date.workContactPhone;
 
     }
 
@@ -952,8 +952,8 @@ export class AddPTWByCR extends Vue {
             contractorCompanyAddress: this.inputFormData
                 .contractorCompanyAddress,
             contractorCompanyEmail: this.inputFormData.contractorCompanyEmail,
-	        contractorCompanyContactPhone: this.inputFormData.contractorCompanyContactPhone.toString(),
-	        contractorCompanyFax: this.inputFormData.contractorCompanyFax.toString(),
+	        contractorCompanyContactPhone: this.inputFormData.contractorCompanyContactPhone,
+	        contractorCompanyFax: this.inputFormData.contractorCompanyFax,
 
             // step3
             workPremisesUnit: this.inputFormData.workPremisesUnit,
@@ -972,7 +972,7 @@ export class AddPTWByCR extends Vue {
             workEndDate: this.inputFormData.workEndDate,
             workEndTime: this.inputFormData.workEndTime,
             workContact: this.inputFormData.workContact,
-            workContactPhone: this.inputFormData.workContactPhone.toString(),
+            workContactPhone: this.inputFormData.workContactPhone,
 
             // step4
             checklist1: this.inputFormData.checklist1,

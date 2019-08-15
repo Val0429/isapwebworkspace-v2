@@ -296,8 +296,8 @@ export class EditPTW extends Vue {
         contractorCompanyName: "",
         contractorCompanyAddress: "",
         contractorCompanyEmail: "",
-        contractorCompanyContactPhone: 0,
-        contractorCompanyFax: 0,
+        contractorCompanyContactPhone: '',
+        contractorCompanyFax: '',
 
         // step3
         workPremisesUnit: "",
@@ -316,7 +316,7 @@ export class EditPTW extends Vue {
         workEndDate: new Date(),
         workEndTime: new Date(),
         workContact: "",
-        workContactPhone: 0,
+        workContactPhone: '',
 
         // step4
         checklist1: false,
@@ -390,9 +390,8 @@ export class EditPTW extends Vue {
         this.inputFormData.contractorCompanyAddress = this.selectedDetail.contractorCompanyAddress;
         this.inputFormData.contractorCompanyEmail = this.selectedDetail.contractorCompanyEmail;
 
-
-        this.inputFormData.contractorCompanyContactPhone = !isNaN(parseInt(this.selectedDetail.contractorCompanyContactPhone)) ? parseInt(this.selectedDetail.contractorCompanyContactPhone) : 0;
-        this.inputFormData.contractorCompanyFax = !isNaN(parseInt(this.selectedDetail.contractorCompanyFax)) ? parseInt(this.selectedDetail.contractorCompanyFax) : 0;
+        this.inputFormData.contractorCompanyContactPhone = this.selectedDetail.contractorCompanyContactPhone;
+        this.inputFormData.contractorCompanyFax = this.selectedDetail.contractorCompanyFax;
 
         this.inputFormData.workPremisesUnit = this.selectedDetail.workPremisesUnit;
         this.inputFormData.workLocation = this.selectedDetail.workLocation;
@@ -418,7 +417,7 @@ export class EditPTW extends Vue {
             ? this.selectedDetail.workEndDate
             : new Date();
         this.inputFormData.workContact = this.selectedDetail.workContact;
-        this.inputFormData.workContactPhone = !isNaN(parseInt(this.selectedDetail.workContactPhone)) ? parseInt(this.selectedDetail.workContactPhone) : 0;
+        this.inputFormData.workContactPhone = this.selectedDetail.workContactPhone;
 
         this.inputFormData.checklist1 = this.selectedDetail.checklist1;
         this.inputFormData.checklistRemark1 = this.selectedDetail.checklistRemark1;
@@ -543,7 +542,6 @@ export class EditPTW extends Vue {
         this.inputFormData.contractorCompanyFax =
             step2Date.contractorCompanyFax;
 
-        console.log("inputFormData ~ ", this.inputFormData);
         this.isChange = true;
     }
 
@@ -840,8 +838,8 @@ export class EditPTW extends Vue {
                 contractorCompanyAddress: this.inputFormData
                     .contractorCompanyAddress,
                 contractorCompanyEmail: this.inputFormData.contractorCompanyEmail,
-                contractorCompanyContactPhone: this.inputFormData.contractorCompanyContactPhone.toString(),
-                contractorCompanyFax: this.inputFormData.contractorCompanyFax.toString(),
+                contractorCompanyContactPhone: this.inputFormData.contractorCompanyContactPhone,
+                contractorCompanyFax: this.inputFormData.contractorCompanyFax,
 
                 // step3
                 workPremisesUnit: this.inputFormData.workPremisesUnit,
@@ -860,7 +858,7 @@ export class EditPTW extends Vue {
                 workEndDate: this.inputFormData.workEndDate,
                 workEndTime: this.inputFormData.workEndTime,
                 workContact: this.inputFormData.workContact,
-                workContactPhone: this.inputFormData.workContactPhone.toString(),
+                workContactPhone: this.inputFormData.workContactPhone,
 
                 // step4
                 checklist1: this.inputFormData.checklist1,

@@ -35,6 +35,8 @@ import {
 import { toEnumInterface } from "@/../core";
 import { IStep2 } from ".";
 import ResponseFilter from "@/services/ResponseFilter";
+import RegexService from '@/services/RegexServices';
+import Dialog from '@/services/Dialog';
 
 @Component({
     components: {}
@@ -89,10 +91,10 @@ export class Step2 extends Vue {
         contractorCompanyContactPhone: this.selectedDetail
             .contractorCompanyContactPhone
             ? this.selectedDetail.contractorCompanyContactPhone
-            : 0,
+            : '',
         contractorCompanyFax: this.selectedDetail.contractorCompanyFax
             ? this.selectedDetail.contractorCompanyFax
-            : 0
+            : ''
     };
 
     created() {}
@@ -189,9 +191,17 @@ export class Step2 extends Vue {
                 this.inputFormData.contractorCompanyEmail = data.value;
                 break;
             case "contractorCompanyContactPhone":
+                if (!RegexService.number(data.value)) {
+                    Dialog.error(this._("w_ViewPTW_Step_ErrorPhone"));
+                    return false;
+                }
                 this.inputFormData.contractorCompanyContactPhone = data.value;
                 break;
             case "contractorCompanyFax":
+                if (!RegexService.number(data.value)) {
+                    Dialog.error(this._("w_ViewPTW_Step_ErrorPhone"));
+                    return false;
+                }
                 this.inputFormData.contractorCompanyFax = data.value;
                 break;
         }
@@ -267,17 +277,15 @@ export class Step2 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_ContactNumber")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_ContactNumber")}
-                 * @uiAttrs - { min: 0}
                  */
-                 contractorCompanyContactPhone: number;
+                 contractorCompanyContactPhone: string;
 
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2CompanyFaxNo")}
-                 * @uiAttrs - { min: 0 }
                  */
-                 contractorCompanyFax: number;
+                 contractorCompanyFax: string;
 
                 contractorIsRequired?: any;
 
