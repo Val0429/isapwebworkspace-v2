@@ -65,8 +65,8 @@ export class SearchCondition extends Vue {
     workTypeSelectItem: any = {};
 
     inputFormData: any = {
-        startDate: new Date(),
-        endDate: new Date(),
+        startDate: null,
+        endDate: null,
         ptwStatus: "",
         ptwId: "",
         email: "",
@@ -137,17 +137,16 @@ export class SearchCondition extends Vue {
             });
     }
 
-
     async initWorkTypeSelectItem() {
         this.workTypeSelectItem = {
-            1: this._('w_ViewPTW_Step3_TypesOfWorkInvolved1'),
-            2: this._('w_ViewPTW_Step3_TypesOfWorkInvolved2'),
-            3: this._('w_ViewPTW_Step3_TypesOfWorkInvolved3'),
-            4: this._('w_ViewPTW_Step3_TypesOfWorkInvolved4'),
-            5: this._('w_ViewPTW_Step3_TypesOfWorkInvolved5'),
-            6: this._('w_ViewPTW_Step3_TypesOfWorkInvolved6'),
-            7: this._('w_ViewPTW_Step3_TypesOfWorkInvolved7'),
-            8: this._('w_ViewPTW_Step3_TypesOfWorkInvolved8'),
+            1: this._("w_ViewPTW_Step3_TypesOfWorkInvolved1"),
+            2: this._("w_ViewPTW_Step3_TypesOfWorkInvolved2"),
+            3: this._("w_ViewPTW_Step3_TypesOfWorkInvolved3"),
+            4: this._("w_ViewPTW_Step3_TypesOfWorkInvolved4"),
+            5: this._("w_ViewPTW_Step3_TypesOfWorkInvolved5"),
+            6: this._("w_ViewPTW_Step3_TypesOfWorkInvolved6"),
+            7: this._("w_ViewPTW_Step3_TypesOfWorkInvolved7"),
+            8: this._("w_ViewPTW_Step3_TypesOfWorkInvolved8")
         };
     }
 
