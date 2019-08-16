@@ -19,7 +19,7 @@
 
             <template #approval>
                 <b-form-radio-group
-                    v-model="inputFormData.approval"
+                    v-model="approval"
                     :options="options"
                     name="approval"
                     class="col-md-2 mb-2 mt-2"
@@ -60,8 +60,10 @@
             workEndTime: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
             accessGroups: this.selectedDetail.accessGroups != undefined ? this.selectedDetail.accessGroups : [] ,
             accessGroupsForm: this.selectedDetail.accessGroups ? this.selectedDetail.accessGroups.map(item => item.doorId) : [],
-            approval: false
+            approval: null
         };
+
+        approval: boolean = null;
 
         qrCode: string = this.selectedDetail.qrcode ? this.selectedDetail.qrcode : "";
         ptwText: string = this.selectedDetail.ptwId ? this.selectedDetail.ptwId : "";

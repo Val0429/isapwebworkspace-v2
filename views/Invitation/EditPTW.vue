@@ -167,7 +167,6 @@
                         <template #step7>
                             <step7
                                 :selectedDetail="selectedDetail"
-                                :permission="true"
                                 class="col-md-12"
                                 @step7="receiveStep7Data"
                             ></step7>

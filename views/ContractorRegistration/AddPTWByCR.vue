@@ -673,14 +673,14 @@ export class AddPTWByCR extends Vue {
         this.inputFormData.workPremisesUnit = step3Date.workPremisesUnit;
         this.inputFormData.workLocation = step3Date.workLocation;
         this.inputFormData.workDescription = step3Date.workDescription;
-        this.inputFormData.workType1 = step3Date.workType1;
-        this.inputFormData.workType2 = step3Date.workType2;
-        this.inputFormData.workType3 = step3Date.workType3;
-        this.inputFormData.workType4 = step3Date.workType4;
-        this.inputFormData.workType5 = step3Date.workType5;
-        this.inputFormData.workType6 = step3Date.workType6;
-        this.inputFormData.workType7 = step3Date.workType7;
-        this.inputFormData.workType8 = step3Date.workType8;
+        this.inputFormData.workType1 = step3Date.workType1 ? step3Date.workType1 : false;
+        this.inputFormData.workType2 = step3Date.workType2 ? step3Date.workType2 : false;
+        this.inputFormData.workType3 = step3Date.workType3 ? step3Date.workType3 : false;
+        this.inputFormData.workType4 = step3Date.workType4 ? step3Date.workType4 : false;
+        this.inputFormData.workType5 = step3Date.workType5 ? step3Date.workType5 : false;
+        this.inputFormData.workType6 = step3Date.workType6 ? step3Date.workType6 : false;
+        this.inputFormData.workType7 = step3Date.workType7 ? step3Date.workType7 : false;
+        this.inputFormData.workType8 = step3Date.workType8 ? step3Date.workType8 : false;
         this.inputFormData.workStartDate = step3Date.workStartDate;
         this.inputFormData.workStartTime = step3Date.workStartTime;
         this.inputFormData.workEndDate = step3Date.workEndDate;
@@ -1017,18 +1017,18 @@ export class AddPTWByCR extends Vue {
             updateParam.attachments.push(attachment.base64);
         }
 
-        await this.$server
+        let result = await this.$server
             .U("/flow1/crms/tenant", updateParam)
-            .then((response: any) => {
-                ResponseFilter.successCheck(
-                    this,
-                    response,
-                    (response: any) => {}
-                );
-            })
             .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
+                ResponseFilter.catchError(this, e);
+                throw e
             });
+
+        ResponseFilter.successCheck(
+            this,
+            result,
+            (response: any) => {}
+        );
     }
 }
 

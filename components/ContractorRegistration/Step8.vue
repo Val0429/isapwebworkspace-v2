@@ -64,7 +64,7 @@ export class Step8 extends Vue {
         approval: false
     };
 
-    approval: boolean = false;
+    approval: boolean = null;
 
     qrCode: string = this.selectedDetail.qrcode ? this.selectedDetail.qrcode : "";
     ptwText: string = this.selectedDetail.ptwId ? this.selectedDetail.ptwId : "";
