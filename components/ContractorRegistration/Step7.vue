@@ -91,6 +91,7 @@
             <iv-form
                 :interface="IForm()"
                 :value="inputFormData"
+                @update:*="updateInputFormData($event)"
                 @submit="doSubmit($event)"
             >
 
@@ -129,6 +130,7 @@ import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator
 import { toEnumInterface } from "@/../core";
 import Dialog from "@/services/Dialog";
 import { IStep7, IWorkPermitPerson } from ".";
+import RegexService from '@/services/RegexServices';
 
 enum EPageStep {
     list = "list",
@@ -254,6 +256,21 @@ export class Step7 extends Vue {
             companyName: "",
             shift: ""
         };
+    }
+
+    updateInputFormData(data) {
+        switch (data.key) {
+
+            case "phone":
+                if (!RegexService.number(data.value)) {
+                    Dialog.error(this._("w_ViewPTW_Step_ErrorPhone"));
+                    data.value.replace(/[^0-9]/ig, "");
+                    return false;
+                }
+                this.inputFormData.phone = data.value;
+                break;
+
+        }
     }
 
     pageToList() {
