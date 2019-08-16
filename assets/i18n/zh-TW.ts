@@ -52,24 +52,24 @@ export default class LangObject implements ILang {
     createdAt = '建立日期';
     updatedAt = '編輯日期';
 
-    w_Door = '門號';
-    w_DoorAdd = '新增門號';
-    w_DoorEdit = '編輯門號';
+    w_Door = '出入口';
+    w_DoorAdd = '新增出入口';
+    w_DoorEdit = '編輯出入口';
     system = '門禁系統';
-    doorid = '門號ID';
-    doorname = '門號名稱';
+    doorid = '出入口ID';
+    doorname = '出入口名稱';
     unlocktime = 'Unlock Time';
     shunttime = 'Shunt Time';
     readerin = '讀卡機_進';
     readerout = '讀卡機_出';
 
-    w_DoorGroup = '門號群組';
-    w_DoorGroupAdd = '新增門號群組';
-    w_DoorGroupEdit = '編輯門號群組';
-    groupid = '門號群組ID';
-    groupname = '門號群組名稱';
-    doors = '門號';
-    doorscount = '門號數量';
+    w_DoorGroup = '出入口群組';
+    w_DoorGroupAdd = '新增出入口群組';
+    w_DoorGroupEdit = '編輯出入口群組';
+    groupid = '出入口群組ID';
+    groupname = '出入口群組名稱';
+    doors = '出入口';
+    doorscount = '出入口數量';
     readerscount = '讀卡機數量';
 
     w_Elevator = '電梯';
@@ -108,7 +108,7 @@ export default class LangObject implements ILang {
 
     levelid = '門禁級別 ID';
     levelname = '門禁級別名稱';
-    door = '門號';
+    door = '出入口';
     reader = '讀卡機';
     timeschedule = '時間表';
 
@@ -402,12 +402,12 @@ export default class LangObject implements ILang {
     w_Permission_DeviceName = '裝置名稱';
     w_Permission_DeviceArea = '裝置區域';
     w_Permission_DeviceTimeFormat = '時間格式';
-    w_Permission_Door = '門號名稱';
+    w_Permission_Door = '出入口名稱';
     w_Permission_Elevator = '電梯名稱';
     w_Permission_DoorGroup = '門組名稱';
     w_Permission_DoorAdd = '新增門號';
     w_Permission_ElevatorAdd = '新增電梯';
-    w_Permission_DoorGroupAdd = '新增門組';
+    w_Permission_DoorGroupAdd = '新增出入口群組';
 
     // button
     w_Save = '儲存';
@@ -491,7 +491,7 @@ export default class LangObject implements ILang {
     w_License_Step1_mac = '新增憑證金鑰及MAC位址';
     w_License_Step1_offline = '離線上傳憑證金鑰';
 
-    w_Manual_Sync = "手動同步讀卡機";
+    w_Manual_Sync = "手動同步";
     w_Not_Selected = "不限";
     w_RedirectToLoginMessage = "因閒置過久已被登出，請重新登入";
     w_QueryPermission = "許可表查詢";
@@ -526,8 +526,8 @@ export default class LangObject implements ILang {
     report_visitor_R="查詢訪客卡號紀錄";
     door_permissiontable_CRUD="編輯門禁權限";
     door_member_CRUD="編輯人員";
-    door_doorgroup_CRUD="編輯門號群組";
-    door_door_CRUD="編輯門號";
+    door_doorgroup_CRUD="編輯出入口群組";
+    door_door_CRUD="編輯出入口";
     door_reader_CRUD="查詢讀卡機";
     door_elevatorgroup_CRUD="編輯電梯群組";
     door_elevator_CRUD="編輯電梯";
@@ -656,18 +656,18 @@ export default class LangObject implements ILang {
     infoOfViolation3 = '違規說明III';
     dateOfViolation3 = '違規日期III';
     
-    w_Settings = "System Settings";
-    sipassdb="sipassdb";
-    smtp="smtp";
+    w_Settings = "系統設定";
+    sipassdb="SiPass 資料庫";
+    smtp="SMTP";
     ccuresqlserver="ccuresqlserver";
-    sipassconnect="sipassconnect";
-    ccureconnect= "ccureconnect";
+    sipassconnect="SiPass 連線資訊";
+    ccureconnect= "CCure 連線資訊";
 
-    w_Error_DuplicatePermissionTable="Duplicate permission table";
-    cannotGetTokenFromSipass="cannotGetTokenFromSipass";
-    accessLevelIsNotInSipass="accessLevelIsNotInSipass";
-    w_Error_AccessLevelIsNotInAcs="w_Error_AccessLevelIsNotInAcs";
-    importResult="Import Result";
-    w_Error_LoginFailed="Login Failed";
-    w_Import_RecordCount="Record Count";
+    w_Error_DuplicatePermissionTable="門禁組名稱已存在，請使用其他名稱";
+    cannotGetTokenFromSipass="無法連線至SiPass，請稍待一分鐘後重試";
+    accessLevelIsNotInSipass="SiPass無此門禁點";
+    w_Error_AccessLevelIsNotInAcs="於中介平台上建立的門禁組無此門禁";
+    importResult="匯入結果";
+    w_Error_LoginFailed="登入失敗";
+    w_Import_RecordCount="匯入資料筆數";
 }
