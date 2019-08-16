@@ -294,8 +294,8 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
         contractorCompanyName: "",
         contractorCompanyAddress: "",
         contractorCompanyEmail: "",
-        contractorCompanyContactPhone: '',
-        contractorCompanyFax: '',
+        contractorCompanyContactPhone: "",
+        contractorCompanyFax: "",
 
         // step3
         workPremisesUnit: "",
@@ -314,7 +314,7 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
         workEndDate: new Date(),
         workEndTime: new Date(),
         workContact: "",
-        workContactPhone: '',
+        workContactPhone: "",
 
         // step4
         checklist1: false,
@@ -356,15 +356,15 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
 
     initInputFormData() {
         if (
-                this.selectedDetail.company &&
-                this.selectedDetail.company.objectId
+            this.selectedDetail.company &&
+            this.selectedDetail.company.objectId
         ) {
             this.inputFormData.tenant = this.selectedDetail.company.objectId;
         }
 
         if (
-                this.selectedDetail.workCategory &&
-                this.selectedDetail.workCategory.objectId
+            this.selectedDetail.workCategory &&
+            this.selectedDetail.workCategory.objectId
         ) {
             this.inputFormData.workCategoryId = this.selectedDetail.workCategory.objectId;
         }
@@ -392,17 +392,17 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
         this.inputFormData.workType7 = this.selectedDetail.workType7;
         this.inputFormData.workType8 = this.selectedDetail.workType8;
         this.inputFormData.workStartDate = this.selectedDetail.workStartDate
-                ? this.selectedDetail.workStartDate
-                : new Date();
+            ? this.selectedDetail.workStartDate
+            : new Date();
         this.inputFormData.workStartTime = this.selectedDetail.workStartDate
-                ? this.selectedDetail.workStartDate
-                : new Date();
+            ? this.selectedDetail.workStartDate
+            : new Date();
         this.inputFormData.workEndDate = this.selectedDetail.workEndDate
-                ? this.selectedDetail.workEndDate
-                : new Date();
+            ? this.selectedDetail.workEndDate
+            : new Date();
         this.inputFormData.workEndTime = this.selectedDetail.workEndDate
-                ? this.selectedDetail.workEndDate
-                : new Date();
+            ? this.selectedDetail.workEndDate
+            : new Date();
         this.inputFormData.workContact = this.selectedDetail.workContact;
         this.inputFormData.workContactPhone = this.selectedDetail.workContactPhone;
 
@@ -430,31 +430,31 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
         let tempStartDate = new Date();
         let tempEndDate = new Date();
         if (
-                this.selectedDetail.workStartDate &&
-                this.selectedDetail.workStartTime
+            this.selectedDetail.workStartDate &&
+            this.selectedDetail.workStartTime
         ) {
             tempStartDate = new Date(
-                    `${Datetime.DateTime2String(
-                            new Date(this.selectedDetail.workStartDate),
-                            "YYYY-MM-DD"
-                    )} ${Datetime.DateTime2String(
-                            new Date(this.selectedDetail.workStartTime),
-                            "HH:mm:ss"
-                    )}`
+                `${Datetime.DateTime2String(
+                    new Date(this.selectedDetail.workStartDate),
+                    Datetime.NewDateFormat
+                )} ${Datetime.DateTime2String(
+                    new Date(this.selectedDetail.workStartTime),
+                    Datetime.NewTimeFormat
+                )}`
             );
         }
         if (
-                this.selectedDetail.workEndDate &&
-                this.selectedDetail.workEndTime
+            this.selectedDetail.workEndDate &&
+            this.selectedDetail.workEndTime
         ) {
             tempEndDate = new Date(
-                    `${Datetime.DateTime2String(
-                            new Date(this.selectedDetail.workEndDate),
-                            "YYYY-MM-DD"
-                    )} ${Datetime.DateTime2String(
-                            new Date(this.selectedDetail.workEndTime),
-                            "HH:mm:ss"
-                    )}`
+                `${Datetime.DateTime2String(
+                    new Date(this.selectedDetail.workEndDate),
+                    Datetime.NewDateFormat
+                )} ${Datetime.DateTime2String(
+                    new Date(this.selectedDetail.workEndTime),
+                    Datetime.NewTimeFormat
+                )}`
             );
         }
         this.inputFormData.workStartDate = tempStartDate;
@@ -466,16 +466,16 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
         this.inputFormData.attachments = [];
         for (let attachment of this.selectedDetail.attachments) {
             ImageBase64.urlToBase64(
-                    this.inputFormData,
-                    attachment.url,
-                    (item: any, base64: any) => {
-                        let tempAttachment = {
-                            name: attachment.name,
-                            type: attachment.type,
-                            base64: base64
-                        };
-                        item.attachments.push(tempAttachment);
-                    }
+                this.inputFormData,
+                attachment.url,
+                (item: any, base64: any) => {
+                    let tempAttachment = {
+                        name: attachment.name,
+                        type: attachment.type,
+                        base64: base64
+                    };
+                    item.attachments.push(tempAttachment);
+                }
             );
         }
     }

@@ -104,7 +104,7 @@
                 </template>
 
                 <template #contractorIsRequired>
-                    <span class="font-red col-md-12 mb-3 mt-5">{{ _('w_ViewPTW_Step_AsteriskIsRequired') }}</span>
+                    <span class="font-red col-md-12 mb-3 mt-5">* {{ _('w_ViewPTW_Step_AsteriskIsRequired') }}</span>
                 </template>
 
             </iv-form>
@@ -163,7 +163,9 @@ export class ViewStep7 extends Vue {
 
     personTable: any = {
         title: [],
-        tableDataFromApi: this.selectedDetail.persons ? this.selectedDetail.persons : []
+        tableDataFromApi: this.selectedDetail.persons
+            ? this.selectedDetail.persons
+            : []
     };
 
     inputFormData: IWorkPermitPerson = {
