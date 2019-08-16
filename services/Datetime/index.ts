@@ -4,8 +4,8 @@ enum DatetimeFormat {
     'default' = 'YYYY/MM/DD HH:mm:ss',
     date = 'DD-MM-YYYY',
     time = 'HH:mm:ss',
-    newDateTime = 'YYYY-MM-DD HH:mm:ss',
-    newDate = 'YYYY-MM-DD',
+    newDateTime = 'YYYY/MM/DD HH:mm:ss',
+    newDate = 'YYYY/MM/DD',
     newTime = 'HH:mm:ss',
 }
 
