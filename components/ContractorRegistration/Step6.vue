@@ -9,6 +9,12 @@
         <div class="col-md-12 mt-3"> {{ _('w_ViewPTW_Step6_5') }} </div>
         <div class="col-md-12 mt-3"> {{ _('w_ViewPTW_Step6_6') }} </div>
         <div class="col-md-12 mt-3"> {{ _('w_ViewPTW_Step6_7') }} </div>
+        <div class="col-md-12 mt-3"> {{ _('w_ViewPTW_Step6_8') }} </div>
+        <div class="col-md-12 mt-3"> {{ _('w_ViewPTW_Step6_9') }} </div>
+        <div class="col-md-12 mt-3"> {{ _('w_ViewPTW_Step6_10') }} </div>
+        <div class="col-md-12 mt-3"> {{ _('w_ViewPTW_Step6_11') }} </div>
+        <div class="col-md-12 mt-3"> {{ _('w_ViewPTW_Step6_12') }} </div>
+        <div class="col-md-12 mt-3"> {{ _('w_ViewPTW_Step6_13') }} </div>
 
         <div class="row justify-content-center align-items-center mt-3 font-weight-bold">
             <b-form-checkbox
