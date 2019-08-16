@@ -244,15 +244,10 @@ export default class LangObject {
     w_ViewPTW_Step6_7 = '7. A worker found urinating or defecating in areas other than a toilet designated by the landlord will be required to leave the building immediately.';
     w_ViewPTW_Step6_8 = '8. Electrical wiring must be installed by a qualified electrician and must comply with local regulations.';
     w_ViewPTW_Step6_9 = '9. Electrical equipment must be unplugged when not in use.';
-    w_ViewPTW_Step6_10 = '10. A Hot Work permit need to be submitted before any hot work being carried out. Dangerous or flammable\n' +
-        'materials must not be stored on site unless supervised by responsible personnel and in appropriate containers,\n' +
-        'the building management office (BMO) must be notified in advance if such materials are to be left on site\n' +
-        'overnight';
-    w_ViewPTW_Step6_11 = '11. If the tenant has arranged for works to be carried out overnight, the tenant or its authorized agents must notify\n' +
-        'the landlord in writing at least 2 days in advance.';
+    w_ViewPTW_Step6_10 = '10. A Hot Work permit need to be submitted before any hot work being carried out. Dangerous or flammable\n' + 'materials must not be stored on site unless supervised by responsible personnel and in appropriate containers,\n' + 'the building management office (BMO) must be notified in advance if such materials are to be left on site\n' + 'overnight';
+    w_ViewPTW_Step6_11 = '11. If the tenant has arranged for works to be carried out overnight, the tenant or its authorized agents must notify\n' + 'the landlord in writing at least 2 days in advance.';
     w_ViewPTW_Step6_12 = '12. All waste and rubbish must be removed from the building daily.';
-    w_ViewPTW_Step6_13 = '13. The contractor responsible person on site must check the workplace each day after the works are finished for\n' +
-        'signs of burning or smouldering before leaving the site.';
+    w_ViewPTW_Step6_13 = '13. The contractor responsible person on site must check the workplace each day after the works are finished for\n' + 'signs of burning or smouldering before leaving the site.';
 
     // step7
     w_ViewPTW_Step7_AddPerson = 'Add Person';
@@ -294,7 +289,7 @@ export default class LangObject {
 
     w_GeneralSettings_RemoveWorkerDaysCardTitle = 'Remove worker data days';
     w_GeneralSettings_RemoveWorkerDaysFormLabel = 'Remove Worker Data from Days';
-    w_GeneralSettings_UpdateSuccess = 'Update general setting is success';
+    w_GeneralSettings_UpdateSuccess = "Workers' data retention policy has been updated";
     w_GeneralSettings_PublicExternalIPFormLabel = 'External Address';
     w_GeneralSettings_PublicExternalNotURL = 'External Address please input URL';
 
