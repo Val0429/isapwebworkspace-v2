@@ -286,7 +286,7 @@ export class Step3 extends Vue {
                 this.inputFormData.workStartTime = data.value;
                 if (
                     !Datetime.checkDateStartToEnd(
-                        data.value,
+                        this.inputFormData.workStartDate,
                         this.inputFormData.workEndDate
                     )
                 ) {
@@ -295,8 +295,19 @@ export class Step3 extends Vue {
                 }
 
                 if (
+                    Datetime.DateStart(
+                        this.inputFormData.workStartDate
+                    ).getTime() <
+                    Datetime.DateEnd(this.inputFormData.workEndDate).getTime() -
+                        Datetime.oneDayTimestamp * 31
+                ) {
+                    Dialog.error(this._("w_Invitation_ErrorDateLower31Day"));
+                    return false;
+                }
+
+                if (
                     !Datetime.checkTimeStartToEnd(
-                        data.value,
+                        this.inputFormData.workStartTime,
                         this.inputFormData.workEndTime
                     )
                 ) {
@@ -304,14 +315,6 @@ export class Step3 extends Vue {
                     return false;
                 }
 
-                if (
-                    Datetime.DateStart(data.value).getTime() <
-                    Datetime.DateEnd(this.inputFormData.workEndDate).getTime() -
-                        Datetime.oneDayTimestamp * 31
-                ) {
-                    Dialog.error(this._("w_Invitation_ErrorDateLower31Day"));
-                    return false;
-                }
                 break;
             case "workEndDate":
                 this.inputFormData.workEndDate = data.value;
@@ -319,7 +322,7 @@ export class Step3 extends Vue {
                 if (
                     !Datetime.checkDateStartToEnd(
                         this.inputFormData.workStartDate,
-                        data.value
+                        this.inputFormData.workEndDate
                     )
                 ) {
                     Dialog.error(this._("w_Invitation_ErrorEndDateGreater"));
@@ -327,23 +330,23 @@ export class Step3 extends Vue {
                 }
 
                 if (
-                    !Datetime.checkTimeStartToEnd(
-                        this.inputFormData.workStartTime,
-                        data.value
-                    )
+                    Datetime.DateStart(
+                        this.inputFormData.workStartDate
+                    ).getTime() <
+                    Datetime.DateEnd(this.inputFormData.workEndDate).getTime() -
+                        Datetime.oneDayTimestamp * 31
                 ) {
-                    Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
+                    Dialog.error(this._("w_Invitation_ErrorDateLower31Day"));
                     return false;
                 }
 
                 if (
-                    Datetime.DateStart(
-                        this.inputFormData.workStartDate
-                    ).getTime() <
-                    Datetime.DateEnd(data.value).getTime() -
-                        Datetime.oneDayTimestamp * 31
+                    !Datetime.checkTimeStartToEnd(
+                        this.inputFormData.workStartTime,
+                        this.inputFormData.workEndTime
+                    )
                 ) {
-                    Dialog.error(this._("w_Invitation_ErrorDateLower31Day"));
+                    Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
                     return false;
                 }
                 break;
