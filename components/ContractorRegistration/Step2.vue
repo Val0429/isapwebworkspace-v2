@@ -35,8 +35,8 @@ import {
 import { toEnumInterface } from "@/../core";
 import { IStep2 } from ".";
 import ResponseFilter from "@/services/ResponseFilter";
-import RegexService from '@/services/RegexServices';
-import Dialog from '@/services/Dialog';
+import RegexService from "@/services/RegexServices";
+import Dialog from "@/services/Dialog";
 
 @Component({
     components: {}
@@ -91,10 +91,10 @@ export class Step2 extends Vue {
         contractorCompanyContactPhone: this.selectedDetail
             .contractorCompanyContactPhone
             ? this.selectedDetail.contractorCompanyContactPhone
-            : '',
+            : "",
         contractorCompanyFax: this.selectedDetail.contractorCompanyFax
             ? this.selectedDetail.contractorCompanyFax
-            : ''
+            : ""
     };
 
     created() {}
@@ -191,18 +191,20 @@ export class Step2 extends Vue {
                 this.inputFormData.contractorCompanyEmail = data.value;
                 break;
             case "contractorCompanyContactPhone":
-                if (!RegexService.number(data.value)) {
-                    Dialog.error(this._("w_ViewPTW_Step_ErrorPhone"));
-                    return false;
-                }
-                this.inputFormData.contractorCompanyContactPhone = data.value;
+                this.inputFormData.contractorCompanyContactPhone = RegexService.numberReplace(
+                    data.value
+                );
+                this.inputFormData.contractorCompanyContactPhone = RegexService.numberReplace(
+                    this.inputFormData.contractorCompanyContactPhone
+                );
                 break;
             case "contractorCompanyFax":
-                if (!RegexService.number(data.value)) {
-                    Dialog.error(this._("w_ViewPTW_Step_ErrorPhone"));
-                    return false;
-                }
-                this.inputFormData.contractorCompanyFax = data.value;
+                this.inputFormData.contractorCompanyFax = RegexService.numberReplace(
+                    data.value
+                );
+                this.inputFormData.contractorCompanyFax = RegexService.numberReplace(
+                    this.inputFormData.contractorCompanyFax
+                );
                 break;
         }
 

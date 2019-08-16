@@ -3,7 +3,7 @@ export class RegexService {
 
     regexItem: any = {
         url: /(ws|ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
-        number: /[^\d]/g,
+        number: /^[\d]*$/,
     };
 
     url(data: string): boolean {
@@ -12,6 +12,10 @@ export class RegexService {
 
     number(data: string): boolean {
         return this.regexItem.number.test(data);
+    }
+
+    numberReplace(data: string): string {
+        return data.replace(/[^\d]/, '');
     }
 }
 

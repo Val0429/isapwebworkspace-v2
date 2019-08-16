@@ -144,50 +144,52 @@ export class Step2AddUse extends Vue {
             });
     }
 
-    updateInputFormData(data) {
-        switch (data.key) {
-            // PTW Data
-            case "ptwId":
-                this.inputFormData.ptwId = data.value;
-                break;
-            case "tenant":
-                this.inputFormData.tenant = data.value;
-                break;
-            case "workCategoryId":
-                this.inputFormData.workCategoryId = data.value;
-                break;
+	updateInputFormData(data) {
+		switch (data.key) {
+			// PTW Data
+			case "ptwId":
+				this.inputFormData.ptwId = data.value;
+				break;
+			case "tenant":
+				this.inputFormData.tenant = data.value;
+				break;
+			case "workCategoryId":
+				this.inputFormData.workCategoryId = data.value;
+				break;
 
-            // Contractor Information
-            case "applicantName":
-                this.inputFormData.applicantName = data.value;
-                break;
-            case "contractorCompanyName":
-                this.inputFormData.contractorCompanyName = data.value;
-                break;
-            case "contractorCompanyAddress":
-                this.inputFormData.contractorCompanyAddress = data.value;
-                break;
-            case "contractorCompanyEmail":
-                this.inputFormData.contractorCompanyEmail = data.value;
-                break;
-            case "contractorCompanyContactPhone":
-                if (!RegexService.number(data.value)) {
-                    Dialog.error(this._("w_ViewPTW_Step_ErrorPhone"));
-                    return false;
-                }
-                this.inputFormData.contractorCompanyContactPhone = data.value;
-                break;
-            case "contractorCompanyFax":
-                if (!RegexService.number(data.value)) {
-                    Dialog.error(this._("w_ViewPTW_Step_ErrorPhone"));
-                    return false;
-                }
-                this.inputFormData.contractorCompanyFax = data.value;
-                break;
-        }
+			// Contractor Information
+			case "applicantName":
+				this.inputFormData.applicantName = data.value;
+				break;
+			case "contractorCompanyName":
+				this.inputFormData.contractorCompanyName = data.value;
+				break;
+			case "contractorCompanyAddress":
+				this.inputFormData.contractorCompanyAddress = data.value;
+				break;
+			case "contractorCompanyEmail":
+				this.inputFormData.contractorCompanyEmail = data.value;
+				break;
+			case "contractorCompanyContactPhone":
+				this.inputFormData.contractorCompanyContactPhone = RegexService.numberReplace(
+					data.value
+				);
+				this.inputFormData.contractorCompanyContactPhone = RegexService.numberReplace(
+					this.inputFormData.contractorCompanyContactPhone
+				);
+				break;
+			case "contractorCompanyFax":
+				this.inputFormData.contractorCompanyFax = RegexService.numberReplace(
+					data.value
+				);
+				this.inputFormData.contractorCompanyFax = RegexService.numberReplace(
+					this.inputFormData.contractorCompanyFax
+				);
+				break;
+		}
 
-        this.$emit("step2", this.inputFormData);
-    }
+		this.$emit("step2", this.inputFormData);
+	}
 
     IAddForm() {
         return `
