@@ -273,6 +273,7 @@ export default class LangObject {
     w_ViewPTW_ResultTitle = 'Registration Result';
     w_ViewPTW_ResultSuccessContent = 'Registration Success';
     w_ViewPTW_ResultFailedContent = 'Registration Failed';
+    w_ViewPTW_DoorPlaceHolder = 'Please select access area';
 
     /////////////////////// General Settings //////////////////////
 

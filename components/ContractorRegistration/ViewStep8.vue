@@ -185,6 +185,7 @@
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step8_AccessGroup")}
+                 * @uiPlaceHolder - ${this._("w_ViewPTW_DoorPlaceHolder")}
                  * @uiDisabled - true
                  */
                 accessGroupsForm?:  ${toEnumInterface(

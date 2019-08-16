@@ -227,6 +227,7 @@ export class Step8 extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step8_AccessGroup")}
+                 * @uiPlaceHolder - ${this._("w_ViewPTW_DoorPlaceHolder")}
                  */
                 accessGroupsForm?:  ${toEnumInterface(
                     this.accessGroupSelectItem as any,
