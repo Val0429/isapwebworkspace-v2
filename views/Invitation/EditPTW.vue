@@ -958,7 +958,7 @@ export class EditPTW extends Vue {
                         this,
                         response,
                         (response: any) => {
-                            Dialog.success(this._("w_Dialog_SuccessTitle"));
+                            Dialog.success(this._("w_PTW_EditPTWSuccess"));
                         },
                         this._("w_Dialog_ErrorTitle")
                     );

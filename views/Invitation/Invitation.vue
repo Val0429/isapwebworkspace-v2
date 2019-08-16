@@ -435,10 +435,10 @@ export default class Invitation extends Vue {
                 result = this._("w_Invitation_New");
                 break;
             case "approve":
-                result = this._("w_Invitation_PendingApproved");
+                result = this._("w_Invitation_Approved");
                 break;
             case "pendding":
-                result = this._("w_Invitation_Approved");
+                result = this._("w_Invitation_PendingApproved");
                 break;
             case "reject":
                 result = this._("w_Invitation_Rejected");
