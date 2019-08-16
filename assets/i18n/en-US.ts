@@ -142,6 +142,9 @@ export default class LangObject {
 
     w_ViewPTW_Step_AsteriskIsRequired = '* Asterisk is required.';
 
+    w_PTW_SubmitSuccess = 'Your PTW application has been successfully submitted';
+
+
     // step1
     w_ViewPTW_Step1_PDPAAgreement_Title = 'PDPA Agreement';
     w_ViewPTW_Step1_content = 'This Data Protection Notice (“Notice”) sets out the basis which  Hong Kong  Land  (“we”, “us”, or “our”) may collect, use, disclose or otherwise process personal data of our customers in accordance with the Personal Data Protection Act (“PDPA”). This Notice applies to personal data in our possession or under our control, including personal data in the possession of organizations which we have engaged to collect, use, disclose or process personal data for our purposes.';

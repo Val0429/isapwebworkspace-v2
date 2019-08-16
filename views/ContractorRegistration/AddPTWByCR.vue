@@ -907,7 +907,7 @@ export class AddPTWByCR extends Vue {
                             this,
                             response,
                             (response: any) => {
-                                Dialog.success(this._("w_Dialog_SuccessTitle"));
+                                Dialog.success(this._("w_PTW_SubmitSuccess"));
                                 this.transition.step = 2;
                             },
                             this._("w_Dialog_ErrorTitle")
