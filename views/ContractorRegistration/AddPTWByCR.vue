@@ -722,6 +722,40 @@ export class AddPTWByCR extends Vue {
             return false;
         }
 
+        if (
+            !Datetime.checkDateStartToEnd(
+                this.inputFormData.workStartDate,
+                this.inputFormData.workEndDate
+            )
+        ) {
+            Dialog.error(this._("w_Invitation_ErrorEndDateGreater"));
+            stepRef.currentStep = 2;
+            return false;
+        }
+
+        if (
+            Datetime.DateStart(
+                this.inputFormData.workStartDate
+            ).getTime() <
+            Datetime.DateEnd(this.inputFormData.workEndDate).getTime() -
+            Datetime.oneDayTimestamp * 31
+        ) {
+            Dialog.error(this._("w_Invitation_ErrorDateLower31Day"));
+            stepRef.currentStep = 2;
+            return false;
+        }
+
+        // if (
+        //     !Datetime.checkTimeStartToEnd(
+        //         this.inputFormData.workStartTime,
+        //         this.inputFormData.workEndTime
+        //     )
+        // ) {
+        //     Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
+        //     stepRef.currentStep = 2;
+        //     return false;
+        // }
+
         await this.tempSave();
     }
 
@@ -913,8 +947,10 @@ export class AddPTWByCR extends Vue {
             verify: this.inputFormData.verify
         };
 
-        await this.tempSave();
-
+        if(!await this.tempSave()){
+            return false;
+        }
+        
         await Dialog.confirm(
             this._("w_Save_SubmitChecked"),
             this._("w_Save_SubmitCheck"),
@@ -957,6 +993,7 @@ export class AddPTWByCR extends Vue {
 
     async tempSave() {
         this.isChange = false;
+        let result: boolean = false;
 
         const updateParam = {
             verify: this.inputFormData.verify,
@@ -1033,18 +1070,21 @@ export class AddPTWByCR extends Vue {
             updateParam.attachments.push(attachment.base64);
         }
 
-        let result = await this.$server
+        await this.$server
             .U("/flow1/crms/tenant", updateParam)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                });
+
+                result = true;
+                return result;
+            })
             .catch((e: any) => {
-                ResponseFilter.catchError(this, e);
-                throw e
+                return ResponseFilter.catchError(this, e);
             });
 
-        ResponseFilter.successCheck(
-            this,
-            result,
-            (response: any) => {}
-        );
+        return result;
+
     }
 }
 

@@ -670,6 +670,41 @@ export class EditPTW extends Vue {
             stepRef.currentStep = 3;
             return false;
         }
+
+        if (
+            !Datetime.checkDateStartToEnd(
+                this.inputFormData.workStartDate,
+                this.inputFormData.workEndDate
+            )
+        ) {
+            Dialog.error(this._("w_Invitation_ErrorEndDateGreater"));
+            stepRef.currentStep = 2;
+            return false;
+        }
+
+        if (
+            Datetime.DateStart(
+                this.inputFormData.workStartDate
+            ).getTime() <
+            Datetime.DateEnd(this.inputFormData.workEndDate).getTime() -
+            Datetime.oneDayTimestamp * 31
+        ) {
+            Dialog.error(this._("w_Invitation_ErrorDateLower31Day"));
+            stepRef.currentStep = 2;
+            return false;
+        }
+
+        // if (
+        //     !Datetime.checkTimeStartToEnd(
+        //         this.inputFormData.workStartTime,
+        //         this.inputFormData.workEndTime
+        //     )
+        // ) {
+        //     Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
+        //     stepRef.currentStep = 2;
+        //     return false;
+        // }
+
         await this.tempSave();
     }
 
@@ -811,6 +846,9 @@ export class EditPTW extends Vue {
 
     async tempSave() {
         this.isChange = false;
+        let stepRef: any = this.$refs.step;
+
+        let result: boolean = false;
 
         const updateParam = {
             // add PTW的參數
@@ -895,22 +933,61 @@ export class EditPTW extends Vue {
             updateParam.attachments.push(attachment.base64);
         }
 
+        if (
+            !Datetime.checkDateStartToEnd(
+                this.inputFormData.workStartDate,
+                this.inputFormData.workEndDate
+            )
+        ) {
+            Dialog.error(this._("w_Invitation_ErrorEndDateGreater"));
+            stepRef.currentStep = 8;
+            return false;
+        }
+
+        if (
+            Datetime.DateStart(
+                this.inputFormData.workStartDate
+            ).getTime() <
+            Datetime.DateEnd(this.inputFormData.workEndDate).getTime() -
+            Datetime.oneDayTimestamp * 31
+        ) {
+            Dialog.error(this._("w_Invitation_ErrorDateLower31Day"));
+            stepRef.currentStep = 8;
+            return false;
+        }
+
+        // if (
+        //     !Datetime.checkTimeStartToEnd(
+        //         this.inputFormData.workStartTime,
+        //         this.inputFormData.workEndTime
+        //     )
+        // ) {
+        //     Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
+        //     stepRef.currentStep = 2;
+        //     return false;
+        // }
+
         await this.$server
             .U("/flow1/crms", updateParam)
             .then((response: any) => {
-                ResponseFilter.successCheck(
-                    this,
-                    response,
-                    (response: any) => {}
-                );
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                });
+
+                result = true;
+                return result;
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
+
+        return result;
     }
 
     async doSubmit() {
-        await this.tempSave();
+
+        if(!await this.tempSave()){
+            return false;
+        }
 
         if (this.isChange) {
             Dialog.confirm(
@@ -926,6 +1003,7 @@ export class EditPTW extends Vue {
     }
 
     async doSubmitApi() {
+
         const doSubmitParam = {
             objectId: this.selectedDetail.objectId
         };

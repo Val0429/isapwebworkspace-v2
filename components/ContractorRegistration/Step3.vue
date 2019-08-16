@@ -284,6 +284,7 @@ export class Step3 extends Vue {
             case "workStartDate":
                 this.inputFormData.workStartDate = data.value;
                 this.inputFormData.workStartTime = data.value;
+                this.$emit("step3", this.inputFormData);
                 if (
                     !Datetime.checkDateStartToEnd(
                         this.inputFormData.workStartDate,
@@ -305,20 +306,21 @@ export class Step3 extends Vue {
                     return false;
                 }
 
-                if (
-                    !Datetime.checkTimeStartToEnd(
-                        this.inputFormData.workStartTime,
-                        this.inputFormData.workEndTime
-                    )
-                ) {
-                    Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
-                    return false;
-                }
+                // if (
+                //     !Datetime.checkTimeStartToEnd(
+                //         this.inputFormData.workStartTime,
+                //         this.inputFormData.workEndTime
+                //     )
+                // ) {
+                //     Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
+                //     return false;
+                // }
 
                 break;
             case "workEndDate":
                 this.inputFormData.workEndDate = data.value;
                 this.inputFormData.workEndTime = data.value;
+                this.$emit("step3", this.inputFormData);
                 if (
                     !Datetime.checkDateStartToEnd(
                         this.inputFormData.workStartDate,
@@ -340,15 +342,15 @@ export class Step3 extends Vue {
                     return false;
                 }
 
-                if (
-                    !Datetime.checkTimeStartToEnd(
-                        this.inputFormData.workStartTime,
-                        this.inputFormData.workEndTime
-                    )
-                ) {
-                    Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
-                    return false;
-                }
+                // if (
+                //     !Datetime.checkTimeStartToEnd(
+                //         this.inputFormData.workStartTime,
+                //         this.inputFormData.workEndTime
+                //     )
+                // ) {
+                //     Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
+                //     return false;
+                // }
                 break;
             case "workContact":
                 this.inputFormData.workContact = data.value;
