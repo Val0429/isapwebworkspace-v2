@@ -35,8 +35,8 @@ import {
 import { toEnumInterface } from "@/../core";
 import { IStep2 } from ".";
 import ResponseFilter from "@/services/ResponseFilter";
-import RegexService from '@/services/RegexServices';
-import Dialog from '@/services/Dialog';
+import RegexService from "@/services/RegexServices";
+import Dialog from "@/services/Dialog";
 
 @Component({
     components: {}
@@ -62,19 +62,39 @@ export class Step2AddUse extends Vue {
 
     inputFormData: IStep2 = {
         // PTW Data
-        ptwId: this.selectedDetail.ptwId ? this.selectedDetail.ptwId : '',
-        tenant: this.selectedDetail.company && this.selectedDetail.company.objectId ? this.selectedDetail.company.objectId : "",
-        workCategoryId: this.selectedDetail.workCategory && this.selectedDetail.workCategory.objectId ? this.selectedDetail.workCategory.objectId : '',
+        ptwId: this.selectedDetail.ptwId ? this.selectedDetail.ptwId : "",
+        tenant:
+            this.selectedDetail.company && this.selectedDetail.company.objectId
+                ? this.selectedDetail.company.objectId
+                : "",
+        workCategoryId:
+            this.selectedDetail.workCategory &&
+            this.selectedDetail.workCategory.objectId
+                ? this.selectedDetail.workCategory.objectId
+                : "",
 
         // Contractor Information
-        applicantName: this.selectedDetail.applicantName ? this.selectedDetail.applicantName : '',
+        applicantName: this.selectedDetail.applicantName
+            ? this.selectedDetail.applicantName
+            : "",
 
         // Company
-        contractorCompanyName: this.selectedDetail.contractorCompanyName ? this.selectedDetail.contractorCompanyName : "",
-        contractorCompanyAddress: this.selectedDetail.contractorCompanyAddress ? this.selectedDetail.contractorCompanyAddress : "",
-        contractorCompanyEmail: this.selectedDetail.contractorCompanyEmail ? this.selectedDetail.contractorCompanyEmail : "",
-        contractorCompanyContactPhone: this.selectedDetail.contractorCompanyContactPhone ? this.selectedDetail.contractorCompanyContactPhone : '',
-        contractorCompanyFax: this.selectedDetail.contractorCompanyFax ? this.selectedDetail.contractorCompanyFax : ''
+        contractorCompanyName: this.selectedDetail.contractorCompanyName
+            ? this.selectedDetail.contractorCompanyName
+            : "",
+        contractorCompanyAddress: this.selectedDetail.contractorCompanyAddress
+            ? this.selectedDetail.contractorCompanyAddress
+            : "",
+        contractorCompanyEmail: this.selectedDetail.contractorCompanyEmail
+            ? this.selectedDetail.contractorCompanyEmail
+            : "",
+        contractorCompanyContactPhone: this.selectedDetail
+            .contractorCompanyContactPhone
+            ? this.selectedDetail.contractorCompanyContactPhone
+            : "",
+        contractorCompanyFax: this.selectedDetail.contractorCompanyFax
+            ? this.selectedDetail.contractorCompanyFax
+            : ""
     };
 
     created() {}
@@ -144,52 +164,52 @@ export class Step2AddUse extends Vue {
             });
     }
 
-	updateInputFormData(data) {
-		switch (data.key) {
-			// PTW Data
-			case "ptwId":
-				this.inputFormData.ptwId = data.value;
-				break;
-			case "tenant":
-				this.inputFormData.tenant = data.value;
-				break;
-			case "workCategoryId":
-				this.inputFormData.workCategoryId = data.value;
-				break;
+    updateInputFormData(data) {
+        switch (data.key) {
+            // PTW Data
+            case "ptwId":
+                this.inputFormData.ptwId = data.value;
+                break;
+            case "tenant":
+                this.inputFormData.tenant = data.value;
+                break;
+            case "workCategoryId":
+                this.inputFormData.workCategoryId = data.value;
+                break;
 
-			// Contractor Information
-			case "applicantName":
-				this.inputFormData.applicantName = data.value;
-				break;
-			case "contractorCompanyName":
-				this.inputFormData.contractorCompanyName = data.value;
-				break;
-			case "contractorCompanyAddress":
-				this.inputFormData.contractorCompanyAddress = data.value;
-				break;
-			case "contractorCompanyEmail":
-				this.inputFormData.contractorCompanyEmail = data.value;
-				break;
-			case "contractorCompanyContactPhone":
-				this.inputFormData.contractorCompanyContactPhone = RegexService.numberReplace(
-					data.value
-				);
-				this.inputFormData.contractorCompanyContactPhone = RegexService.numberReplace(
-					this.inputFormData.contractorCompanyContactPhone
-				);
-				break;
-			case "contractorCompanyFax":
-				this.inputFormData.contractorCompanyFax = RegexService.numberReplace(
-					data.value
-				);
-				this.inputFormData.contractorCompanyFax = RegexService.numberReplace(
-					this.inputFormData.contractorCompanyFax
-				);
-				break;
-		}
+            // Contractor Information
+            case "applicantName":
+                this.inputFormData.applicantName = data.value;
+                break;
+            case "contractorCompanyName":
+                this.inputFormData.contractorCompanyName = data.value;
+                break;
+            case "contractorCompanyAddress":
+                this.inputFormData.contractorCompanyAddress = data.value;
+                break;
+            case "contractorCompanyEmail":
+                this.inputFormData.contractorCompanyEmail = data.value;
+                break;
+            case "contractorCompanyContactPhone":
+                this.inputFormData.contractorCompanyContactPhone = RegexService.numberReplace(
+                    data.value
+                );
+                this.inputFormData.contractorCompanyContactPhone = RegexService.numberReplace(
+                    this.inputFormData.contractorCompanyContactPhone
+                );
+                break;
+            case "contractorCompanyFax":
+                this.inputFormData.contractorCompanyFax = RegexService.numberReplace(
+                    data.value
+                );
+                this.inputFormData.contractorCompanyFax = RegexService.numberReplace(
+                    this.inputFormData.contractorCompanyFax
+                );
+                break;
+        }
 
-		this.$emit("step2", this.inputFormData);
-	}
+        this.$emit("step2", this.inputFormData);
+    }
 
     IAddForm() {
         return `
