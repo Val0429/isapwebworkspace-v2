@@ -12,10 +12,7 @@
             </div>
             <!--/col-->
             <div class="col-lg-4 col-sm-4 col-xs-1 col-xxs-1 awaitingApproval">
-                <span
-                    class="title"
-                    style="font-size:150%"
-                >{{_('w_Dashboard_AwaitingApproval')}}</span><br>
+                <span class="title">{{_('w_Dashboard_AwaitingApproval')}}</span><br>
                 <span class="value">{{data.awaitingApproval}}</span>
             </div>
             <!--/col-->
@@ -78,6 +75,7 @@ Vue.component("submitted-dashboard", SubmittedDashBoard);
         height: 30%;
         color: white;
         font-size: 300%;
+        height: 100px;
         text-align: left;
         display: inline-block;
         line-height: 50px;
@@ -87,6 +85,7 @@ Vue.component("submitted-dashboard", SubmittedDashBoard);
         font-size: 600%;
         text-align: center;
         display: block;
+        margin-top: -20px;
     }
 }
 
