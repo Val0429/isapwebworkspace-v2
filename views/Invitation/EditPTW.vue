@@ -167,7 +167,6 @@
                         <template #step7>
                             <step7
                                 :selectedDetail="selectedDetail"
-                                :permission="true"
                                 class="col-md-12"
                                 @step7="receiveStep7Data"
                             ></step7>
@@ -940,7 +939,7 @@ export class EditPTW extends Vue {
                         this,
                         response,
                         (response: any) => {
-                            Dialog.success(this._("w_Dialog_SuccessTitle"));
+                            Dialog.success(this._("w_PTW_EditPTWSuccess"));
                         },
                         this._("w_Dialog_ErrorTitle")
                     );
@@ -959,7 +958,7 @@ export class EditPTW extends Vue {
                         this,
                         response,
                         (response: any) => {
-                            Dialog.success(this._("w_Dialog_SuccessTitle"));
+                            Dialog.success(this._("w_PTW_EditPTWSuccess"));
                         },
                         this._("w_Dialog_ErrorTitle")
                     );

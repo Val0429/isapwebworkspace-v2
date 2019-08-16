@@ -649,6 +649,13 @@ export class AddPTWByCR extends Vue {
     async stepTo3() {
         let stepRef: any = this.$refs.step;
 
+        let regex = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/;
+        if (!regex.test(this.inputFormData.contractorCompanyEmail)) {
+            Dialog.error(this._("w_Invitation_EmadilError"));
+            stepRef.currentStep = 1;
+            return false;
+        }
+
         if (
             !this.inputFormData.applicantName ||
             !this.inputFormData.contractorCompanyName ||
@@ -680,14 +687,14 @@ export class AddPTWByCR extends Vue {
         this.inputFormData.workPremisesUnit = step3Date.workPremisesUnit;
         this.inputFormData.workLocation = step3Date.workLocation;
         this.inputFormData.workDescription = step3Date.workDescription;
-        this.inputFormData.workType1 = step3Date.workType1;
-        this.inputFormData.workType2 = step3Date.workType2;
-        this.inputFormData.workType3 = step3Date.workType3;
-        this.inputFormData.workType4 = step3Date.workType4;
-        this.inputFormData.workType5 = step3Date.workType5;
-        this.inputFormData.workType6 = step3Date.workType6;
-        this.inputFormData.workType7 = step3Date.workType7;
-        this.inputFormData.workType8 = step3Date.workType8;
+        this.inputFormData.workType1 = step3Date.workType1 ? step3Date.workType1 : false;
+        this.inputFormData.workType2 = step3Date.workType2 ? step3Date.workType2 : false;
+        this.inputFormData.workType3 = step3Date.workType3 ? step3Date.workType3 : false;
+        this.inputFormData.workType4 = step3Date.workType4 ? step3Date.workType4 : false;
+        this.inputFormData.workType5 = step3Date.workType5 ? step3Date.workType5 : false;
+        this.inputFormData.workType6 = step3Date.workType6 ? step3Date.workType6 : false;
+        this.inputFormData.workType7 = step3Date.workType7 ? step3Date.workType7 : false;
+        this.inputFormData.workType8 = step3Date.workType8 ? step3Date.workType8 : false;
         this.inputFormData.workStartDate = step3Date.workStartDate;
         this.inputFormData.workStartTime = step3Date.workStartTime;
         this.inputFormData.workEndDate = step3Date.workEndDate;
@@ -901,32 +908,42 @@ export class AddPTWByCR extends Vue {
         //     return false;
         // }
 
-        await this.tempSave();
 
         const doSubmitParam = {
             verify: this.inputFormData.verify
         };
 
-        Loading.show();
-        await this.$server
-            .U("/flow1/crms/status-pedding", doSubmitParam)
-            .then((response: any) => {
-                ResponseFilter.successCheck(
-                    this,
-                    response,
-                    (response: any) => {
-                        Dialog.success(this._("w_Dialog_SuccessTitle"));
+        await this.tempSave();
+
+        await Dialog.confirm(
+            this._("w_Save_SubmitChecked"),
+            this._("w_Save_SubmitCheck"),
+            () => {
+                Loading.show();
+                this.$server
+                    .U("/flow1/crms/status-pedding", doSubmitParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                Dialog.success(this._("w_PTW_SubmitSuccess"));
+                                this.transition.step = 2;
+                            },
+                            this._("w_Dialog_ErrorTitle")
+                        );
+                    })
+                    .catch((e: any) => {
+                        Loading.hide();
+                        Dialog.error(e.body);
+                        this.errorText = e.body;
                         this.transition.step = 2;
-                    },
-                    this._("w_Dialog_ErrorTitle")
-                );
-            })
-            .catch((e: any) => {
-                Loading.hide();
-                Dialog.error(e.body);
-                this.errorText = e.body;
-                this.transition.step = 2;
-            });
+                    });
+            }
+        );
+
+
+
     }
 
     IStep8() {
@@ -1016,18 +1033,18 @@ export class AddPTWByCR extends Vue {
             updateParam.attachments.push(attachment.base64);
         }
 
-        await this.$server
+        let result = await this.$server
             .U("/flow1/crms/tenant", updateParam)
-            .then((response: any) => {
-                ResponseFilter.successCheck(
-                    this,
-                    response,
-                    (response: any) => {}
-                );
-            })
             .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
+                ResponseFilter.catchError(this, e);
+                throw e
             });
+
+        ResponseFilter.successCheck(
+            this,
+            result,
+            (response: any) => {}
+        );
     }
 }
 

@@ -84,7 +84,7 @@ export class Step8 extends Vue {
         approval: false
     };
 
-    approval: boolean = false;
+    approval: boolean = null;
 
     qrCode: string = this.selectedDetail.qrcode
         ? this.selectedDetail.qrcode
@@ -161,12 +161,16 @@ export class Step8 extends Vue {
     updateInputFormData(data) {
         switch (data.key) {
             case "workStartDate":
-                this.inputFormData.workStartDate = data.value;
-                this.inputFormData.workStartTime = data.value;
+                if (data.value.getTime() > new Date().getTime()) {
+                    this.inputFormData.workStartDate = data.value;
+                    this.inputFormData.workStartTime = data.value;
+                } else {
+                    Dialog.error(this._("w_Invitation_StartDateError"));
+                }
                 break;
             case "workEndDate":
                 if (
-                    data.value.getTime() > new Date().getTime() ||
+                    data.value.getTime() > new Date().getTime() &&
                     data.value.getTime() >
                         this.inputFormData.workStartDate.getTime()
                 ) {
@@ -223,6 +227,7 @@ export class Step8 extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step8_AccessGroup")}
+                 * @uiPlaceHolder - ${this._("w_ViewPTW_DoorPlaceHolder")}
                  */
                 accessGroupsForm?:  ${toEnumInterface(
                     this.accessGroupSelectItem as any,

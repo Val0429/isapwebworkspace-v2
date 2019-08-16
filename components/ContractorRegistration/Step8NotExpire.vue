@@ -19,7 +19,7 @@
 
             <template #approval>
                 <b-form-radio-group
-                    v-model="inputFormData.approval"
+                    v-model="approval"
                     :options="options"
                     name="approval"
                     class="col-md-2 mb-2 mt-2"
@@ -32,138 +32,180 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
-    import { toEnumInterface } from "@/../core";
-    import { IWorkPermitAccessGroup } from '.';
-    import ResponseFilter from '@/services/ResponseFilter';
-    import Dialog from '@/services/Dialog';
+import {
+    Vue,
+    Component,
+    Prop,
+    Emit,
+    Model,
+    Watch
+} from "vue-property-decorator";
+import { toEnumInterface } from "@/../core";
+import { IWorkPermitAccessGroup } from ".";
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog";
 
-    @Component({
-        components: {}
+@Component({
+    components: {}
+})
+export class Step8NotExpire extends Vue {
+    // Prop
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: () => {}
     })
-    export class Step8NotExpire extends Vue {
-        // Prop
-        @Prop({
-            type: Object, // Boolean, Number, String, Array, Object
-            default: () => {}
-        })
-        selectedDetail: any;
+    selectedDetail: any;
 
-        accessGroupSelectItem: any = {};
+    accessGroupSelectItem: any = {};
 
-        options: any = [];
+    options: any = [];
 
-        inputFormData: any = {
-            workStartDate: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
-            workStartTime: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
-            workEndDate: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
-            workEndTime: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
-            accessGroups: this.selectedDetail.accessGroups != undefined ? this.selectedDetail.accessGroups : [] ,
-            accessGroupsForm: this.selectedDetail.accessGroups ? this.selectedDetail.accessGroups.map(item => item.doorId) : [],
-            approval: false
-        };
+    inputFormData: any = {
+        workStartDate: new Date(this.selectedDetail.workStartDate)
+            ? new Date(this.selectedDetail.workStartDate)
+            : new Date(),
+        workStartTime: new Date(this.selectedDetail.workStartDate)
+            ? new Date(this.selectedDetail.workStartDate)
+            : new Date(),
+        workEndDate: new Date(this.selectedDetail.workEndDate)
+            ? new Date(this.selectedDetail.workEndDate)
+            : new Date(),
+        workEndTime: new Date(this.selectedDetail.workEndDate)
+            ? new Date(this.selectedDetail.workEndDate)
+            : new Date(),
+        accessGroups:
+            this.selectedDetail.accessGroups != undefined
+                ? this.selectedDetail.accessGroups
+                : [],
+        accessGroupsForm: this.selectedDetail.accessGroups
+            ? this.selectedDetail.accessGroups.map(item => item.doorId)
+            : [],
+        approval: false
+    };
 
-        qrCode: string = this.selectedDetail.qrcode ? this.selectedDetail.qrcode : "";
-        ptwText: string = this.selectedDetail.ptwId ? this.selectedDetail.ptwId : "";
+    approval: boolean = null;
 
-        async created() {
-            this.initInputFormData();
-        }
+    qrCode: string = this.selectedDetail.qrcode
+        ? this.selectedDetail.qrcode
+        : "";
+    ptwText: string = this.selectedDetail.ptwId
+        ? this.selectedDetail.ptwId
+        : "";
 
-        mounted() {
-            this.initSelectItem();
-            this.initAccessGroupSelectItem();
-        }
+    async created() {
+        this.initInputFormData();
+    }
 
-        @Watch("selectedDetail", { deep: true })
-        private ptwIdChanged(newVal, oldVal) {
-            this.initInputFormData();
-        }
+    mounted() {
+        this.initSelectItem();
+        this.initAccessGroupSelectItem();
+    }
 
-        initInputFormData() {
+    @Watch("selectedDetail", { deep: true })
+    private ptwIdChanged(newVal, oldVal) {
+        this.initInputFormData();
+    }
 
-            this.inputFormData.workStartDate = new Date(this.selectedDetail.workStartDate);
-            this.inputFormData.workStartTime = new Date(this.selectedDetail.workStartDate);
-            this.inputFormData.workEndDate = new Date(this.selectedDetail.workEndDate);
-            this.inputFormData.workEndTime = new Date(this.selectedDetail.workEndDate);
-            this.inputFormData.accessGroups = this.selectedDetail.accessGroups;
+    initInputFormData() {
+        this.inputFormData.workStartDate = new Date(
+            this.selectedDetail.workStartDate
+        );
+        this.inputFormData.workStartTime = new Date(
+            this.selectedDetail.workStartDate
+        );
+        this.inputFormData.workEndDate = new Date(
+            this.selectedDetail.workEndDate
+        );
+        this.inputFormData.workEndTime = new Date(
+            this.selectedDetail.workEndDate
+        );
+        this.inputFormData.accessGroups = this.selectedDetail.accessGroups;
 
-            if (this.selectedDetail.accessGroups) {
-                for (const detail in this.selectedDetail.accessGroups) {
-                    this.inputFormData.accessGroupsForm.push(detail);
-                }
+        if (this.selectedDetail.accessGroups) {
+            for (const detail in this.selectedDetail.accessGroups) {
+                this.inputFormData.accessGroupsForm.push(detail);
             }
-
-            this.inputFormData.approval = this.selectedDetail.approval;
         }
 
-        initSelectItem() {
-            this.options = [
-                { value: true, text: this._("w_Invitation_Approve") },
-                { value: false, text: this._("w_Invitation_Reject") }
-            ];
-        }
+        this.inputFormData.approval = this.selectedDetail.approval;
+    }
 
-        async initAccessGroupSelectItem() {
+    initSelectItem() {
+        this.options = [
+            { value: true, text: this._("w_Invitation_Approve") },
+            { value: false, text: this._("w_Invitation_Reject") }
+        ];
+    }
 
-            this.accessGroupSelectItem = {};
-            let tempAccessGroupSelectItem = {};
+    async initAccessGroupSelectItem() {
+        this.accessGroupSelectItem = {};
+        let tempAccessGroupSelectItem = {};
 
-            await this.$server
-                .R("/flow1/crms/access-group")
-                .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        for (const returnValue of response) {
-                            tempAccessGroupSelectItem[returnValue.doorId] =
-                                returnValue.doorName;
-                        }
-                        this.accessGroupSelectItem = tempAccessGroupSelectItem;
-                    });
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
+        await this.$server
+            .R("/flow1/crms/access-group")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response) {
+                        tempAccessGroupSelectItem[returnValue.doorId] =
+                            returnValue.doorName;
+                    }
+                    this.accessGroupSelectItem = tempAccessGroupSelectItem;
                 });
-        }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+    }
 
-        updateInputFormData(data) {
-            switch (data.key) {
-                case "workStartDate":
+    updateInputFormData(data) {
+        switch (data.key) {
+            case "workStartDate":
+                if (data.value.getTime() > new Date().getTime()) {
                     this.inputFormData.workStartDate = data.value;
                     this.inputFormData.workStartTime = data.value;
-                    break;
-                case "workEndDate":
-                    if (data.value.getTime() > new Date().getTime() || data.value.getTime() > this.inputFormData.workStartDate.getTime()) {
-                        this.inputFormData.workEndDate = data.value;
-                        this.inputFormData.workEndTime = data.value;
-                    } else {
-                        Dialog.error(this._("w_Invitation_DateErrorCheck"));
-                    }
+                } else {
+                    Dialog.error(this._("w_Invitation_StartDateError"));
+                }
+                break;
+            case "workEndDate":
+                if (
+                    data.value.getTime() > new Date().getTime() &&
+                    data.value.getTime() >
+                        this.inputFormData.workStartDate.getTime()
+                ) {
+                    this.inputFormData.workEndDate = data.value;
+                    this.inputFormData.workEndTime = data.value;
+                } else {
+                    Dialog.error(this._("w_Invitation_DateErrorCheck"));
+                }
 
-                    break;
-                case "accessGroupsForm":
-                    this.inputFormData.accessGroupsForm = data.value;
-                    break;
-            }
+                break;
+            case "accessGroupsForm":
+                this.inputFormData.accessGroupsForm = data.value;
+                break;
+        }
 
-            this.inputFormData.accessGroups = [];
+        this.inputFormData.accessGroups = [];
 
-            for (const detail in this.accessGroupSelectItem) {
-                for (const id of this.inputFormData.accessGroupsForm) {
-                    if (detail === id) {
-                        let door = { doorId: detail, doorName: this.accessGroupSelectItem[detail] };
-                        this.inputFormData.accessGroups.push(door);
-                    }
+        for (const detail in this.accessGroupSelectItem) {
+            for (const id of this.inputFormData.accessGroupsForm) {
+                if (detail === id) {
+                    let door = {
+                        doorId: detail,
+                        doorName: this.accessGroupSelectItem[detail]
+                    };
+                    this.inputFormData.accessGroups.push(door);
                 }
             }
-
-            this.$emit("step8", this.inputFormData);
         }
 
-        changeApproval() {
-        }
+        this.$emit("step8", this.inputFormData);
+    }
 
-        IAddForm() {
-            return `
+    changeApproval() {}
+
+    IAddForm() {
+        return `
             interface {
 
                 /**
@@ -184,25 +226,26 @@
 
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step8_AccessGroup")}
+                 * @uiPlaceHolder - ${this._("w_ViewPTW_DoorPlaceHolder")}
                  */
                 accessGroupsForm?:  ${toEnumInterface(
-                this.accessGroupSelectItem as any,
-                true
-            )};
+                    this.accessGroupSelectItem as any,
+                    true
+                )};
 
                 qrCode?: any;
 
             }
         `;
-        }
     }
+}
 
-    export default Step8NotExpire;
-    Vue.component("step8-not-expire", Step8NotExpire);
+export default Step8NotExpire;
+Vue.component("step8-not-expire", Step8NotExpire);
 </script>
 
 <style lang="scss" scoped>
-    .font-red {
-        color: red;
-    }
+.font-red {
+    color: red;
+}
 </style>

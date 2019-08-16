@@ -164,7 +164,7 @@ export class AddPTW extends Vue {
                     this,
                     response,
                     (response: any) => {
-                        Dialog.success(this._("w_Dialog_SuccessTitle"));
+                        Dialog.success(this._("w_PTW_AddPTWSuccess"));
                         this.pageToList();
                     },
                     this._("w_Dialog_ErrorTitle")
