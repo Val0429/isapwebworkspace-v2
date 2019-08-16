@@ -143,7 +143,8 @@ export default class LangObject {
     w_ViewPTW_Step_AsteriskIsRequired = '* Asterisk is required.';
 
     w_PTW_SubmitSuccess = 'Your PTW application has been successfully submitted';
-
+    w_PTW_AddPTWSuccess = 'PTW has been succesfully added';
+    w_PTW_EditPTWSuccess = 'PTW has been succesfully updated';
 
     // step1
     w_ViewPTW_Step1_PDPAAgreement_Title = 'PDPA Agreement';

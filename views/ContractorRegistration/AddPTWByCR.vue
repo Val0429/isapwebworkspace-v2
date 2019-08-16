@@ -895,6 +895,13 @@ export class AddPTWByCR extends Vue {
         //     return false;
         // }
 
+
+        const doSubmitParam = {
+            verify: this.inputFormData.verify
+        };
+
+        await this.tempSave();
+
         await Dialog.confirm(
             this._("w_Save_SubmitChecked"),
             this._("w_Save_SubmitCheck"),
@@ -922,11 +929,6 @@ export class AddPTWByCR extends Vue {
             }
         );
 
-        await this.tempSave();
-
-        const doSubmitParam = {
-            verify: this.inputFormData.verify
-        };
 
 
     }

@@ -74,7 +74,7 @@ Vue.component("submitted-dashboard", SubmittedDashBoard);
     .title {
         height: 30%;
         color: white;
-        font-size: 300%;
+        font-size: 200%;
         height: 100px;
         text-align: left;
         display: inline-block;
@@ -82,10 +82,10 @@ Vue.component("submitted-dashboard", SubmittedDashBoard);
     }
     .value {
         color: white;
-        font-size: 600%;
+        font-size: 500%;
         text-align: center;
         display: block;
-        margin-top: -20px;
+        margin-top: -5px;
     }
 }
 
