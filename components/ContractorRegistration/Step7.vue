@@ -262,14 +262,13 @@ export class Step7 extends Vue {
         switch (data.key) {
 
             case "phone":
-                if (!RegexService.number(data.value)) {
-                    Dialog.error(this._("w_ViewPTW_Step_ErrorPhone"));
-                    data.value.replace(/[^0-9]/ig, "");
-                    return false;
-                }
-                this.inputFormData.phone = data.value;
+                this.inputFormData.phone = RegexService.numberReplace(
+                    data.value
+                );
+                this.inputFormData.phone = RegexService.numberReplace(
+                    this.inputFormData.phone
+                );
                 break;
-
         }
     }
 
