@@ -2,6 +2,11 @@ import Utility from '../Utility';
 
 enum DatetimeFormat {
     'default' = 'YYYY/MM/DD HH:mm:ss',
+    date = 'DD-MM-YYYY',
+    time = 'HH:mm:ss',
+    newDateTime = 'YYYY-MM-DD HH:mm:ss',
+    newDate = 'YYYY-MM-DD',
+    newTime = 'HH:mm:ss',
 }
 
 class Datetime {
@@ -14,6 +19,30 @@ class Datetime {
 
     get oneDayTimestamp() {
         return this._oneDayTimestamp;
+    }
+
+    get DateTimeFormat(): string {
+        return DatetimeFormat.default;
+    }
+
+    get DateFormat(): string {
+        return DatetimeFormat.date;
+    }
+
+    get TimeFormat(): string {
+        return DatetimeFormat.time;
+    }
+
+    get NewDateTimeFormat(): string {
+        return DatetimeFormat.newDateTime;
+    }
+
+    get NewDateFormat(): string {
+        return DatetimeFormat.newDate;
+    }
+
+    get NewTimeFormat(): string {
+        return DatetimeFormat.newTime;
     }
 
     /**

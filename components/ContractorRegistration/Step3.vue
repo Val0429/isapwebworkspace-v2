@@ -96,11 +96,11 @@
                     >
                         {{ _('w_ViewPTW_Step3_TypesOfWorkInvolved8') }}
                     </b-form-checkbox>
-           </div>
+                </div>
             </template>
 
             <template #contractorIsRequired>
-                <span class="font-red col-md-12 mb-3 mt-5">{{ _('w_ViewPTW_Step_AsteriskIsRequired') }}</span>
+                <span class="font-red col-md-12 mb-3 mt-5">* {{ _('w_ViewPTW_Step_AsteriskIsRequired') }}</span>
             </template>
 
         </iv-form>
@@ -108,10 +108,17 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
-import { IStep3 } from '.';
-import Dialog from '@/services/Dialog';
-import RegexService from '@/services/RegexServices';
+import {
+    Vue,
+    Component,
+    Prop,
+    Emit,
+    Model,
+    Watch
+} from "vue-property-decorator";
+import { IStep3 } from ".";
+import Dialog from "@/services/Dialog";
+import RegexService from "@/services/RegexServices";
 
 @Component({
     components: {}
@@ -127,23 +134,65 @@ export class Step3 extends Vue {
     typeOfWorkSelectItem: any = [];
 
     inputFormData: IStep3 = {
-        workPremisesUnit: this.selectedDetail.workPremisesUnit ? this.selectedDetail.workPremisesUnit : "",
-        workLocation: this.selectedDetail.workLocation ? this.selectedDetail.workLocation : "",
-        workDescription: this.selectedDetail.workDescription ? this.selectedDetail.workDescription : "",
-        workType1: this.selectedDetail.workType1 != undefined ? this.selectedDetail.workType1 :false,
-        workType2: this.selectedDetail.workType2 != undefined ? this.selectedDetail.workType2 :false,
-        workType3: this.selectedDetail.workType3 != undefined ? this.selectedDetail.workType3 :false,
-        workType4: this.selectedDetail.workType4 != undefined ? this.selectedDetail.workType4 :false,
-        workType5: this.selectedDetail.workType5 != undefined ? this.selectedDetail.workType5 :false,
-        workType6: this.selectedDetail.workType6 != undefined ? this.selectedDetail.workType6 :false,
-        workType7: this.selectedDetail.workType7 != undefined ? this.selectedDetail.workType7 :false,
-        workType8: this.selectedDetail.workType8 != undefined ? this.selectedDetail.workType8 :false,
-        workStartDate: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
-        workStartTime: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
-        workEndDate: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
-        workEndTime: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
-        workContact: this.selectedDetail.workContact ? this.selectedDetail.workContact : "",
-        workContactPhone: this.selectedDetail.workContactPhone ?  this.selectedDetail.workContactPhone : ''
+        workPremisesUnit: this.selectedDetail.workPremisesUnit
+            ? this.selectedDetail.workPremisesUnit
+            : "",
+        workLocation: this.selectedDetail.workLocation
+            ? this.selectedDetail.workLocation
+            : "",
+        workDescription: this.selectedDetail.workDescription
+            ? this.selectedDetail.workDescription
+            : "",
+        workType1:
+            this.selectedDetail.workType1 != undefined
+                ? this.selectedDetail.workType1
+                : false,
+        workType2:
+            this.selectedDetail.workType2 != undefined
+                ? this.selectedDetail.workType2
+                : false,
+        workType3:
+            this.selectedDetail.workType3 != undefined
+                ? this.selectedDetail.workType3
+                : false,
+        workType4:
+            this.selectedDetail.workType4 != undefined
+                ? this.selectedDetail.workType4
+                : false,
+        workType5:
+            this.selectedDetail.workType5 != undefined
+                ? this.selectedDetail.workType5
+                : false,
+        workType6:
+            this.selectedDetail.workType6 != undefined
+                ? this.selectedDetail.workType6
+                : false,
+        workType7:
+            this.selectedDetail.workType7 != undefined
+                ? this.selectedDetail.workType7
+                : false,
+        workType8:
+            this.selectedDetail.workType8 != undefined
+                ? this.selectedDetail.workType8
+                : false,
+        workStartDate: new Date(this.selectedDetail.workStartDate)
+            ? new Date(this.selectedDetail.workStartDate)
+            : new Date(),
+        workStartTime: new Date(this.selectedDetail.workStartDate)
+            ? new Date(this.selectedDetail.workStartDate)
+            : new Date(),
+        workEndDate: new Date(this.selectedDetail.workEndDate)
+            ? new Date(this.selectedDetail.workEndDate)
+            : new Date(),
+        workEndTime: new Date(this.selectedDetail.workEndDate)
+            ? new Date(this.selectedDetail.workEndDate)
+            : new Date(),
+        workContact: this.selectedDetail.workContact
+            ? this.selectedDetail.workContact
+            : "",
+        workContactPhone: this.selectedDetail.workContactPhone
+            ? this.selectedDetail.workContactPhone
+            : ""
     };
 
     created() {}
@@ -169,10 +218,18 @@ export class Step3 extends Vue {
         this.inputFormData.workType6 = this.selectedDetail.workType6;
         this.inputFormData.workType7 = this.selectedDetail.workType7;
         this.inputFormData.workType8 = this.selectedDetail.workType8;
-        this.inputFormData.workStartDate = new Date(this.selectedDetail.workStartDate);
-        this.inputFormData.workStartTime = new Date(this.selectedDetail.workStartDate);
-        this.inputFormData.workEndDate = new Date(this.selectedDetail.workEndDate);
-        this.inputFormData.workEndTime = new Date(this.selectedDetail.workEndDate);
+        this.inputFormData.workStartDate = new Date(
+            this.selectedDetail.workStartDate
+        );
+        this.inputFormData.workStartTime = new Date(
+            this.selectedDetail.workStartDate
+        );
+        this.inputFormData.workEndDate = new Date(
+            this.selectedDetail.workEndDate
+        );
+        this.inputFormData.workEndTime = new Date(
+            this.selectedDetail.workEndDate
+        );
         this.inputFormData.workContact = this.selectedDetail.workContact;
         this.inputFormData.workContactPhone = this.selectedDetail.workContactPhone;
     }
@@ -223,11 +280,19 @@ export class Step3 extends Vue {
                 this.inputFormData.workDescription = data.value;
                 break;
             case "workStartDate":
-                this.inputFormData.workStartDate = data.value;
-                this.inputFormData.workStartTime = data.value;
+                if (data.value.getTime() > new Date().getTime()) {
+                    this.inputFormData.workStartDate = data.value;
+                    this.inputFormData.workStartTime = data.value;
+                } else {
+                    Dialog.error(this._("w_Invitation_StartDateError"));
+                }
                 break;
             case "workEndDate":
-                if (data.value.getTime() > new Date().getTime() || data.value.getTime() > this.inputFormData.workStartDate.getTime()) {
+                if (
+                    data.value.getTime() > new Date().getTime() ||
+                    data.value.getTime() >
+                        this.inputFormData.workStartDate.getTime()
+                ) {
                     this.inputFormData.workEndDate = data.value;
                     this.inputFormData.workEndTime = data.value;
                 } else {

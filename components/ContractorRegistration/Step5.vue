@@ -58,7 +58,9 @@ export class Step5 extends Vue {
     permission: boolean;
 
     inputFormData: any = {
-        file: this.selectedDetail.attachments ? this.selectedDetail.attachments : null,
+        file: this.selectedDetail.attachments
+            ? this.selectedDetail.attachments
+            : null
     };
 
     created() {}
@@ -79,6 +81,7 @@ export class Step5 extends Vue {
                 * @uiLabel -  ${this._("w_ViewPTW_Step5_UploadFiles")}
                 * @uiPlaceHolder -   ${this._("w_ViewPTW_Step5_supported")}
                 * @uiType - iv-form-file
+                * @uiAttrs - { accept: "image/*, .pdf" }
                 */
                 file?:file
             }

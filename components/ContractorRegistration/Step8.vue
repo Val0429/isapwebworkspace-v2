@@ -32,12 +32,19 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
+import {
+    Vue,
+    Component,
+    Prop,
+    Emit,
+    Model,
+    Watch
+} from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import { IWorkPermitAccessGroup } from '.';
-import ResponseFilter from '@/services/ResponseFilter';
-import Datetime from '@/services/Datetime';
-import Dialog from '@/services/Dialog';
+import { IWorkPermitAccessGroup } from ".";
+import ResponseFilter from "@/services/ResponseFilter";
+import Datetime from "@/services/Datetime";
+import Dialog from "@/services/Dialog";
 
 @Component({
     components: {}
@@ -55,19 +62,36 @@ export class Step8 extends Vue {
     options: any = [];
 
     inputFormData: any = {
-        workStartDate: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
-        workStartTime: new Date(this.selectedDetail.workStartDate) ? new Date(this.selectedDetail.workStartDate) : new Date(),
-        workEndDate: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
-        workEndTime: new Date(this.selectedDetail.workEndDate) ? new Date(this.selectedDetail.workEndDate) : new Date(),
-        accessGroups: this.selectedDetail.accessGroups != undefined ? this.selectedDetail.accessGroups : [] ,
-        accessGroupsForm: this.selectedDetail.accessGroups ? this.selectedDetail.accessGroups.map(item => item.doorId) : [],
+        workStartDate: new Date(this.selectedDetail.workStartDate)
+            ? new Date(this.selectedDetail.workStartDate)
+            : new Date(),
+        workStartTime: new Date(this.selectedDetail.workStartDate)
+            ? new Date(this.selectedDetail.workStartDate)
+            : new Date(),
+        workEndDate: new Date(this.selectedDetail.workEndDate)
+            ? new Date(this.selectedDetail.workEndDate)
+            : new Date(),
+        workEndTime: new Date(this.selectedDetail.workEndDate)
+            ? new Date(this.selectedDetail.workEndDate)
+            : new Date(),
+        accessGroups:
+            this.selectedDetail.accessGroups != undefined
+                ? this.selectedDetail.accessGroups
+                : [],
+        accessGroupsForm: this.selectedDetail.accessGroups
+            ? this.selectedDetail.accessGroups.map(item => item.doorId)
+            : [],
         approval: false
     };
 
     approval: boolean = null;
 
-    qrCode: string = this.selectedDetail.qrcode ? this.selectedDetail.qrcode : "";
-    ptwText: string = this.selectedDetail.ptwId ? this.selectedDetail.ptwId : "";
+    qrCode: string = this.selectedDetail.qrcode
+        ? this.selectedDetail.qrcode
+        : "";
+    ptwText: string = this.selectedDetail.ptwId
+        ? this.selectedDetail.ptwId
+        : "";
 
     async created() {
         this.initInputFormData();
@@ -84,11 +108,18 @@ export class Step8 extends Vue {
     }
 
     initInputFormData() {
-
-        this.inputFormData.workStartDate = new Date(this.selectedDetail.workStartDate);
-        this.inputFormData.workStartTime = new Date(this.selectedDetail.workStartDate);
-        this.inputFormData.workEndDate = new Date(this.selectedDetail.workEndDate);
-        this.inputFormData.workEndTime = new Date(this.selectedDetail.workEndDate);
+        this.inputFormData.workStartDate = new Date(
+            this.selectedDetail.workStartDate
+        );
+        this.inputFormData.workStartTime = new Date(
+            this.selectedDetail.workStartDate
+        );
+        this.inputFormData.workEndDate = new Date(
+            this.selectedDetail.workEndDate
+        );
+        this.inputFormData.workEndTime = new Date(
+            this.selectedDetail.workEndDate
+        );
         this.inputFormData.accessGroups = this.selectedDetail.accessGroups;
 
         if (this.selectedDetail.accessGroups) {
@@ -108,7 +139,6 @@ export class Step8 extends Vue {
     }
 
     async initAccessGroupSelectItem() {
-
         this.accessGroupSelectItem = {};
         let tempAccessGroupSelectItem = {};
 
@@ -131,11 +161,19 @@ export class Step8 extends Vue {
     updateInputFormData(data) {
         switch (data.key) {
             case "workStartDate":
-                this.inputFormData.workStartDate = data.value;
-                this.inputFormData.workStartTime = data.value;
+                if (data.value.getTime() > new Date().getTime()) {
+                    this.inputFormData.workStartDate = data.value;
+                    this.inputFormData.workStartTime = data.value;
+                } else {
+                    Dialog.error(this._("w_Invitation_StartDateError"));
+                }
                 break;
             case "workEndDate":
-                if (data.value.getTime() > new Date().getTime() || data.value.getTime() > this.inputFormData.workStartDate.getTime()) {
+                if (
+                    data.value.getTime() > new Date().getTime() ||
+                    data.value.getTime() >
+                        this.inputFormData.workStartDate.getTime()
+                ) {
                     this.inputFormData.workEndDate = data.value;
                     this.inputFormData.workEndTime = data.value;
                 } else {
@@ -153,7 +191,10 @@ export class Step8 extends Vue {
         for (const detail in this.accessGroupSelectItem) {
             for (const id of this.inputFormData.accessGroupsForm) {
                 if (detail === id) {
-                    let door = { doorId: detail, doorName: this.accessGroupSelectItem[detail] };
+                    let door = {
+                        doorId: detail,
+                        doorName: this.accessGroupSelectItem[detail]
+                    };
                     this.inputFormData.accessGroups.push(door);
                 }
             }

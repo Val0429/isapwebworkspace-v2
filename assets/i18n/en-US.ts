@@ -121,6 +121,7 @@ export default class LangObject {
     w_Invitation_Rejected = 'Rejected';
 
     w_Invitation_DateError = 'End date must greater or equal than start date';
+    w_Invitation_StartDateError = 'Start date cannot be earlier than today';
     w_Invitation_DateErrorCheck = 'End date must greater than today';
     w_Invitation_EmadilError = 'Email format wrong';
 
@@ -135,12 +136,12 @@ export default class LangObject {
     w_Save = 'Save';
     w_SaveSuccess = 'Save Success';
 
-    w_ViewPTW_Step_ErrorTip = 'Please check the blank field';
-    w_ViewPTW_Step_ErrorTipYes = 'Please check the answer';
+    w_ViewPTW_Step_ErrorTip = 'All required fields must befilled out';
+    w_ViewPTW_Step_ErrorTipYes = 'All Selection Items must be marked "Yes" before continuing';
     w_ViewPTW_Step_ErrorTipPerson = 'Please add person';
     w_ViewPTW_Step_ErrorPhone = 'Number only';
 
-    w_ViewPTW_Step_AsteriskIsRequired = '* Asterisk is required.';
+    w_ViewPTW_Step_AsteriskIsRequired = 'Indicates required field.';
 
     w_PTW_SubmitSuccess = 'Your PTW application has been successfully submitted';
     w_PTW_AddPTWSuccess = 'PTW has been succesfully added';
@@ -183,7 +184,7 @@ export default class LangObject {
 
     w_ViewPTW_Step3_From = 'Expected Duration of Work – From :';
     w_ViewPTW_Step3_To = 'To';
-    w_ViewPTW_Step3_NameOfApplicant = 'Name of Applicant’s Service Provider(s) in the works :';
+    w_ViewPTW_Step3_NameOfApplicant = "Name of Applicant's Service Provider(s) in the works :";
     w_ViewPTW_Step3_HandPhoneContactNumber = 'Handphone Contact Number';
 
     // step4
@@ -252,7 +253,7 @@ export default class LangObject {
 
     w_ViewPTW_Step7_NRICFIN = 'NRIC / FIN';
 
-    w_ViewPTW_Step7_NRICFIN_PlaceHolder = 'NRIC / FIN Required 4 Word With English/Number';
+    w_ViewPTW_Step7_NRICFIN_PlaceHolder = 'Please fill in NRIC/FIN last 4 characters';
 
     w_ViewPTW_Step7_Day = 'Day';
     w_ViewPTW_Step7_Night = 'Night';

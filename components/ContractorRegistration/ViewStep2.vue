@@ -15,7 +15,7 @@
             </template>
 
             <template #contractorIsRequired>
-                <span class="font-red col-md-12 mb-3 mt-5">{{ _('w_ViewPTW_Step_AsteriskIsRequired') }}</span>
+                <span class="font-red col-md-12 mb-3 mt-5">* {{ _('w_ViewPTW_Step_AsteriskIsRequired') }}</span>
             </template>
 
         </iv-form>
@@ -82,10 +82,10 @@ export class ViewStep2 extends Vue {
         contractorCompanyContactPhone: this.selectedDetail
             .contractorCompanyContactPhone
             ? this.selectedDetail.contractorCompanyContactPhone
-            : '',
+            : "",
         contractorCompanyFax: this.selectedDetail.contractorCompanyFax
             ? this.selectedDetail.contractorCompanyFax
-            : ''
+            : ""
     };
 
     created() {}
@@ -253,7 +253,7 @@ export class ViewStep2 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_EmailAddress")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_EmailAddress")}
-                 * @uiType - iv-form-label
+                 * @uiType - ivc-form-email
                  */
                  contractorCompanyEmail: string;
 
