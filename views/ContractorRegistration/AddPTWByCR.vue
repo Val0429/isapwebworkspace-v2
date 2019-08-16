@@ -895,32 +895,40 @@ export class AddPTWByCR extends Vue {
         //     return false;
         // }
 
+        await Dialog.confirm(
+            this._("w_Save_SubmitChecked"),
+            this._("w_Save_SubmitCheck"),
+            () => {
+                Loading.show();
+                this.$server
+                    .U("/flow1/crms/status-pedding", doSubmitParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                Dialog.success(this._("w_Dialog_SuccessTitle"));
+                                this.transition.step = 2;
+                            },
+                            this._("w_Dialog_ErrorTitle")
+                        );
+                    })
+                    .catch((e: any) => {
+                        Loading.hide();
+                        Dialog.error(e.body);
+                        this.errorText = e.body;
+                        this.transition.step = 2;
+                    });
+            }
+        );
+
         await this.tempSave();
 
         const doSubmitParam = {
             verify: this.inputFormData.verify
         };
 
-        Loading.show();
-        await this.$server
-            .U("/flow1/crms/status-pedding", doSubmitParam)
-            .then((response: any) => {
-                ResponseFilter.successCheck(
-                    this,
-                    response,
-                    (response: any) => {
-                        Dialog.success(this._("w_Dialog_SuccessTitle"));
-                        this.transition.step = 2;
-                    },
-                    this._("w_Dialog_ErrorTitle")
-                );
-            })
-            .catch((e: any) => {
-                Loading.hide();
-                Dialog.error(e.body);
-                this.errorText = e.body;
-                this.transition.step = 2;
-            });
+
     }
 
     IStep8() {
