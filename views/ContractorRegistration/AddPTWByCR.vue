@@ -280,8 +280,8 @@ export class AddPTWByCR extends Vue {
         contractorCompanyName: "",
         contractorCompanyAddress: "",
         contractorCompanyEmail: "",
-	      contractorCompanyContactPhone: "",
-	      contractorCompanyFax: "",
+        contractorCompanyContactPhone: "",
+        contractorCompanyFax: "",
 
         // step3
         workPremisesUnit: "",
@@ -389,11 +389,14 @@ export class AddPTWByCR extends Vue {
                     this.selectedDetail.contractorCompanyEmail =
                         response.contractorCompanyEmail;
 
-	                  this.selectedDetail.contractorCompanyContactPhone = response.contractorCompanyContactPhone;
-	                  this.selectedDetail.contractorCompanyFax = response.contractorCompanyFax;
+                    this.selectedDetail.contractorCompanyContactPhone =
+                        response.contractorCompanyContactPhone;
+                    this.selectedDetail.contractorCompanyFax =
+                        response.contractorCompanyFax;
 
-	                  this.selectedDetail.workLocation = response.workLocation;
-                    this.selectedDetail.workDescription = response.workDescription;
+                    this.selectedDetail.workLocation = response.workLocation;
+                    this.selectedDetail.workDescription =
+                        response.workDescription;
                     this.selectedDetail.workType1 = response.workType1;
                     this.selectedDetail.workType2 = response.workType2;
                     this.selectedDetail.workType3 = response.workType3;
@@ -404,7 +407,8 @@ export class AddPTWByCR extends Vue {
                     this.selectedDetail.workType8 = response.workType8;
 
                     this.selectedDetail.workContact = response.workContact;
-                    this.selectedDetail.workContactPhone = response.workContactPhone;
+                    this.selectedDetail.workContactPhone =
+                        response.workContactPhone;
                     this.selectedDetail.checklist1 = response.checklist1;
                     this.selectedDetail.checklistRemark1 =
                         response.checklistRemark1;
@@ -439,10 +443,10 @@ export class AddPTWByCR extends Vue {
                         tempStartDate = new Date(
                             `${Datetime.DateTime2String(
                                 new Date(response.workStartDate),
-                                "YYYY-MM-DD"
+                                Datetime.NewDateFormat
                             )} ${Datetime.DateTime2String(
                                 new Date(response.workStartTime),
-                                "HH:mm:ss"
+                                Datetime.NewTimeFormat
                             )}`
                         );
                     }
@@ -450,10 +454,10 @@ export class AddPTWByCR extends Vue {
                         tempEndDate = new Date(
                             `${Datetime.DateTime2String(
                                 new Date(response.workEndDate),
-                                "YYYY-MM-DD"
+                                Datetime.NewDateFormat
                             )} ${Datetime.DateTime2String(
                                 new Date(response.workEndTime),
-                                "HH:mm:ss"
+                                Datetime.NewTimeFormat
                             )}`
                         );
                     }
@@ -505,8 +509,10 @@ export class AddPTWByCR extends Vue {
                         response.contractorCompanyAddress;
                     this.inputFormData.contractorCompanyEmail =
                         response.contractorCompanyEmail;
-                    this.inputFormData.contractorCompanyContactPhone = response.contractorCompanyContactPhone;
-                    this.inputFormData.contractorCompanyFax = response.contractorCompanyFax;
+                    this.inputFormData.contractorCompanyContactPhone =
+                        response.contractorCompanyContactPhone;
+                    this.inputFormData.contractorCompanyFax =
+                        response.contractorCompanyFax;
 
                     this.inputFormData.workLocation = response.workLocation;
                     this.inputFormData.workDescription =
@@ -532,7 +538,8 @@ export class AddPTWByCR extends Vue {
                         ? response.workEndTime
                         : new Date();
                     this.inputFormData.workContact = response.workContact;
-                    this.inputFormData.workContactPhone = response.workContactPhone;
+                    this.inputFormData.workContactPhone =
+                        response.workContactPhone;
 
                     this.inputFormData.checklist1 = response.checklist1;
                     this.inputFormData.checklistRemark1 =
@@ -687,7 +694,6 @@ export class AddPTWByCR extends Vue {
         this.inputFormData.workEndTime = step3Date.workEndTime;
         this.inputFormData.workContact = step3Date.workContact;
         this.inputFormData.workContactPhone = step3Date.workContactPhone;
-
     }
 
     async stepTo4() {
@@ -952,8 +958,9 @@ export class AddPTWByCR extends Vue {
             contractorCompanyAddress: this.inputFormData
                 .contractorCompanyAddress,
             contractorCompanyEmail: this.inputFormData.contractorCompanyEmail,
-	        contractorCompanyContactPhone: this.inputFormData.contractorCompanyContactPhone,
-	        contractorCompanyFax: this.inputFormData.contractorCompanyFax,
+            contractorCompanyContactPhone: this.inputFormData
+                .contractorCompanyContactPhone,
+            contractorCompanyFax: this.inputFormData.contractorCompanyFax,
 
             // step3
             workPremisesUnit: this.inputFormData.workPremisesUnit,
@@ -1000,7 +1007,9 @@ export class AddPTWByCR extends Vue {
             termsAccepted: this.inputFormData.termsAccepted,
 
             // step7
-            persons: this.inputFormData.persons ? this.inputFormData.persons : []
+            persons: this.inputFormData.persons
+                ? this.inputFormData.persons
+                : []
         };
 
         for (let attachment of this.inputFormData.attachments) {

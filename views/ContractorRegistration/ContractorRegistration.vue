@@ -111,10 +111,6 @@ export default class ContractorRegistration extends Vue {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
     }
-
-    dateToYYYY_MM_DD(value) {
-        return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
-    }
 }
 </script>
 

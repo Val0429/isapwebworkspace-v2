@@ -160,7 +160,9 @@ export class HighchartDashboard extends Vue {
         let sDate = this.startTime;
         let eDate = this.endTime;
         while (sDate.getTime() <= eDate.getTime()) {
-            categories.push(Datetime.DateTime2String(sDate, "YYYY-MM-DD"));
+            categories.push(
+                Datetime.DateTime2String(sDate, Datetime.DateFormat)
+            );
             sDate = new Date(sDate.getTime() + this.oneHour * 24);
         }
 

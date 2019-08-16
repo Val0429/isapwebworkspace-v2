@@ -141,8 +141,6 @@ export default class Dashboard extends Vue {
         total: 0
     };
 
-    dateEqualFormat = "YYYY-MM-DD";
-
     created() {
         this.initChartDate();
     }
@@ -253,11 +251,11 @@ export default class Dashboard extends Vue {
                             if (
                                 Datetime.DateTime2String(
                                     loopData.date,
-                                    this.dateEqualFormat
+                                    Datetime.DateFormat
                                 ) ==
                                 Datetime.DateTime2String(
                                     this.startTimeByDays,
-                                    this.dateEqualFormat
+                                    Datetime.DateFormat
                                 )
                             ) {
                                 this.chartDataByDays[0].data[0] +=
@@ -267,11 +265,11 @@ export default class Dashboard extends Vue {
                             if (
                                 Datetime.DateTime2String(
                                     loopData.date,
-                                    this.dateEqualFormat
+                                    Datetime.DateFormat
                                 ) ==
                                 Datetime.DateTime2String(
                                     this.endTimeByDays,
-                                    this.dateEqualFormat
+                                    Datetime.DateFormat
                                 )
                             ) {
                                 this.chartDataByDays[0].data[1] +=

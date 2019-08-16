@@ -200,8 +200,11 @@ export default class Invitation extends Vue {
         let tempDate = new Date(
             `${Datetime.DateTime2String(
                 new Date(date),
-                "YYYY-MM-DD"
-            )} ${Datetime.DateTime2String(new Date(time), "HH:mm:ss")}`
+                Datetime.NewDateFormat
+            )} ${Datetime.DateTime2String(
+                new Date(time),
+                Datetime.NewTimeFormat
+            )}`
         );
 
         if (tempDate && new Date(tempDate).getTime() < new Date().getTime()) {
@@ -222,10 +225,10 @@ export default class Invitation extends Vue {
                 tempStartDate = new Date(
                     `${Datetime.DateTime2String(
                         new Date(data.workStartDate),
-                        "YYYY-MM-DD"
+                        Datetime.NewDateFormat
                     )} ${Datetime.DateTime2String(
                         new Date(data.workStartTime),
-                        "HH:mm:ss"
+                        Datetime.NewTimeFormat
                     )}`
                 );
             } else {
@@ -235,10 +238,10 @@ export default class Invitation extends Vue {
                 tempEndDate = new Date(
                     `${Datetime.DateTime2String(
                         new Date(data.workEndDate),
-                        "YYYY-MM-DD"
+                        Datetime.NewDateFormat
                     )} ${Datetime.DateTime2String(
                         new Date(data.workEndTime),
-                        "HH:mm:ss"
+                        Datetime.NewTimeFormat
                     )}`
                 );
             } else {
@@ -422,7 +425,7 @@ export default class Invitation extends Vue {
     }
 
     dateToYYYY_MM_DD(value) {
-        return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
+        return Datetime.DateTime2String(new Date(value), Datetime.DateFormat);
     }
 
     tableShowStatus(status: number): string {

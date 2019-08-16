@@ -133,12 +133,12 @@ export default class LangObject {
     w_Save = 'Save';
     w_SaveSuccess = 'Save Success';
 
-    w_ViewPTW_Step_ErrorTip = 'Please check the blank field';
-    w_ViewPTW_Step_ErrorTipYes = 'Please check the answer';
+    w_ViewPTW_Step_ErrorTip = 'All required fields must befilled out';
+    w_ViewPTW_Step_ErrorTipYes = 'All Selection Items must be marked "Yes" before continuing';
     w_ViewPTW_Step_ErrorTipPerson = 'Please add person';
     w_ViewPTW_Step_ErrorPhone = 'Number only';
 
-    w_ViewPTW_Step_AsteriskIsRequired = '* Asterisk is required.';
+    w_ViewPTW_Step_AsteriskIsRequired = 'Indicates required field.';
 
     // step1
     w_ViewPTW_Step1_PDPAAgreement_Title = 'PDPA Agreement';
@@ -177,7 +177,7 @@ export default class LangObject {
 
     w_ViewPTW_Step3_From = 'Expected Duration of Work – From :';
     w_ViewPTW_Step3_To = 'To';
-    w_ViewPTW_Step3_NameOfApplicant = 'Name of Applicant’s Service Provider(s) in the works :';
+    w_ViewPTW_Step3_NameOfApplicant = "Name of Applicant's Service Provider(s) in the works :";
     w_ViewPTW_Step3_HandPhoneContactNumber = 'Handphone Contact Number';
 
     // step4
@@ -246,7 +246,7 @@ export default class LangObject {
 
     w_ViewPTW_Step7_NRICFIN = 'NRIC / FIN';
 
-    w_ViewPTW_Step7_NRICFIN_PlaceHolder = 'NRIC / FIN Required 4 Word With English/Number';
+    w_ViewPTW_Step7_NRICFIN_PlaceHolder = 'Please fill in NRIC/FIN last 4 characters';
 
     w_ViewPTW_Step7_Day = 'Day';
     w_ViewPTW_Step7_Night = 'Night';

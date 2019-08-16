@@ -105,7 +105,7 @@
                 </template>
 
                 <template #contractorIsRequired>
-                    <span class="font-red col-md-12 mb-3 mt-5">{{ _('w_ViewPTW_Step_AsteriskIsRequired') }}</span>
+                    <span class="font-red col-md-12 mb-3 mt-5">* {{ _('w_ViewPTW_Step_AsteriskIsRequired') }}</span>
                 </template>
 
             </iv-form>
@@ -262,14 +262,13 @@ export class Step7 extends Vue {
         switch (data.key) {
 
             case "phone":
-                if (!RegexService.number(data.value)) {
-                    Dialog.error(this._("w_ViewPTW_Step_ErrorPhone"));
-                    data.value.replace(/[^0-9]/ig, "");
-                    return false;
-                }
-                this.inputFormData.phone = data.value;
+                this.inputFormData.phone = RegexService.numberReplace(
+                    data.value
+                );
+                this.inputFormData.phone = RegexService.numberReplace(
+                    this.inputFormData.phone
+                );
                 break;
-
         }
     }
 
