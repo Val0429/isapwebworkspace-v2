@@ -161,25 +161,75 @@ export class Step8 extends Vue {
     updateInputFormData(data) {
         switch (data.key) {
             case "workStartDate":
-                if (data.value.getTime() > new Date().getTime()) {
-                    this.inputFormData.workStartDate = data.value;
-                    this.inputFormData.workStartTime = data.value;
-                } else {
-                    Dialog.error(this._("w_Invitation_StartDateError"));
-                }
-                break;
-            case "workEndDate":
+                this.inputFormData.workStartDate = data.value;
+                this.inputFormData.workStartTime = data.value;
+                this.$emit("step8", this.inputFormData);
                 if (
-                    data.value.getTime() > new Date().getTime() &&
-                    data.value.getTime() >
-                        this.inputFormData.workStartDate.getTime()
+                    !Datetime.checkDateStartToEnd(
+                        this.inputFormData.workStartDate,
+                        this.inputFormData.workEndDate
+                    )
                 ) {
-                    this.inputFormData.workEndDate = data.value;
-                    this.inputFormData.workEndTime = data.value;
-                } else {
-                    Dialog.error(this._("w_Invitation_DateErrorCheck"));
+                    Dialog.error(this._("w_Invitation_ErrorEndDateGreater"));
+                    return false;
                 }
 
+                if (
+                    Datetime.DateStart(
+                        this.inputFormData.workStartDate
+                    ).getTime() <
+                    Datetime.DateEnd(this.inputFormData.workEndDate).getTime() -
+                    Datetime.oneDayTimestamp * 31
+                ) {
+                    Dialog.error(this._("w_Invitation_ErrorDateLower31Day"));
+                    return false;
+                }
+
+                // if (
+                //     !Datetime.checkTimeStartToEnd(
+                //         this.inputFormData.workStartTime,
+                //         this.inputFormData.workEndTime
+                //     )
+                // ) {
+                //     Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
+                //     return false;
+                // }
+
+                break;
+            case "workEndDate":
+                this.inputFormData.workEndDate = data.value;
+                this.inputFormData.workEndTime = data.value;
+                this.$emit("step8", this.inputFormData);
+                if (
+                    !Datetime.checkDateStartToEnd(
+                        this.inputFormData.workStartDate,
+                        this.inputFormData.workEndDate
+                    )
+                ) {
+                    Dialog.error(this._("w_Invitation_ErrorEndDateGreater"));
+                    return false;
+                }
+
+                if (
+                    Datetime.DateStart(
+                        this.inputFormData.workStartDate
+                    ).getTime() <
+                    Datetime.DateEnd(this.inputFormData.workEndDate).getTime() -
+                    Datetime.oneDayTimestamp * 31
+                ) {
+                    Dialog.error(this._("w_Invitation_ErrorDateLower31Day"));
+                    return false;
+                }
+
+                // if (
+                //     !Datetime.checkTimeStartToEnd(
+                //         this.inputFormData.workStartTime,
+                //         this.inputFormData.workEndTime
+                //     )
+                // ) {
+                //     Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
+                //     return false;
+                // }
                 break;
             case "accessGroupsForm":
                 this.inputFormData.accessGroupsForm = data.value;

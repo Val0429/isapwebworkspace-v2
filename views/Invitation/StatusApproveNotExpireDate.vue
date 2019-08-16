@@ -809,7 +809,9 @@ export class StatusApproveNotExpireDate extends Vue {
         //     this.doSubmitApi();
         // }
 
-        await this.tempSave();
+        if(!await this.tempSave()){
+            return false;
+        }
 
         const doSubmitParam = {
             objectId: this.selectedDetail.objectId
@@ -882,8 +884,11 @@ export class StatusApproveNotExpireDate extends Vue {
 
     async tempSave() {
         this.isChange = false;
+        let stepRef: any = this.$refs.step;
 
-        const updateParam = {
+        let result: boolean = false;
+
+         const updateParam = {
             objectId: this.selectedDetail.objectId,
 
             workStartDate: this.inputFormData.workStartDate,
@@ -895,16 +900,55 @@ export class StatusApproveNotExpireDate extends Vue {
             accessGroups: this.inputFormData.accessGroups
         };
 
+        if (
+            !Datetime.checkDateStartToEnd(
+                this.inputFormData.workStartDate,
+                this.inputFormData.workEndDate
+            )
+        ) {
+            Dialog.error(this._("w_Invitation_ErrorEndDateGreater"));
+            stepRef.currentStep = 8;
+            return false;
+        }
+
+        if (
+            Datetime.DateStart(
+                this.inputFormData.workStartDate
+            ).getTime() <
+            Datetime.DateEnd(this.inputFormData.workEndDate).getTime() -
+            Datetime.oneDayTimestamp * 31
+        ) {
+            Dialog.error(this._("w_Invitation_ErrorDateLower31Day"));
+            stepRef.currentStep = 8;
+            return false;
+        }
+
+        // if (
+        //     !Datetime.checkTimeStartToEnd(
+        //         this.inputFormData.workStartTime,
+        //         this.inputFormData.workEndTime
+        //     )
+        // ) {
+        //     Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
+        //     stepRef.currentStep = 2;
+        //     return false;
+        // }
+
         await this.$server
             .U("/flow1/crms", updateParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    Dialog.success(this._("w_SaveSuccess"));
                 });
+
+                result = true;
+                return result;
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
+
+        return result;
+
     }
 }
 
