@@ -119,6 +119,7 @@ export default class LangObject {
     w_Invitation_Rejected = 'Rejected';
 
     w_Invitation_DateError = 'End date must greater or equal than start date';
+    w_Invitation_StartDateError = 'Start date cannot be earlier than today';
     w_Invitation_DateErrorCheck = 'End date must greater than today';
     w_Invitation_EmadilError = 'Email format wrong';
 

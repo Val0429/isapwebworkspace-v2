@@ -649,6 +649,13 @@ export class AddPTWByCR extends Vue {
     async stepTo3() {
         let stepRef: any = this.$refs.step;
 
+        let regex = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/;
+        if (!regex.test(this.inputFormData.contractorCompanyEmail)) {
+            Dialog.error(this._("w_Invitation_EmadilError"));
+            stepRef.currentStep = 1;
+            return false;
+        }
+
         if (
             !this.inputFormData.applicantName ||
             !this.inputFormData.contractorCompanyName ||
