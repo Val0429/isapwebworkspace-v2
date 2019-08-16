@@ -169,7 +169,7 @@ export class Step8NotExpire extends Vue {
                 break;
             case "workEndDate":
                 if (
-                    data.value.getTime() > new Date().getTime() ||
+                    data.value.getTime() > new Date().getTime() &&
                     data.value.getTime() >
                         this.inputFormData.workStartDate.getTime()
                 ) {
