@@ -238,13 +238,15 @@ export class Step3 extends Vue {
                 this.inputFormData.workContact = data.value;
                 break;
             case "workContactPhone":
-                if (!RegexService.number(data.value)) {
-                    Dialog.error(this._("w_ViewPTW_Step_ErrorPhone"));
-                    return false;
-                }
-
-                this.inputFormData.workContactPhone = data.value;
+                this.inputFormData.workContactPhone = RegexService.numberReplace(
+                    data.value
+                );
+                this.inputFormData.workContactPhone = RegexService.numberReplace(
+                    this.inputFormData.workContactPhone
+                );
+                
                 break;
+
         }
 
         this.$emit("step3", this.inputFormData);
