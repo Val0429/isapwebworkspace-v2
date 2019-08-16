@@ -46,7 +46,7 @@
                         @selected="selectedItem($event)"
                     >
                         <template #status="{$attrs}">
-                            {{ $attrs.value}} {{isExpired($attrs.row.workEndDate,$attrs.row.workEndTime, $attrs.value)}}
+                            {{ tableShowStatus($attrs.value)}} {{isExpired($attrs.row.workEndDate,$attrs.row.workEndTime, $attrs.value)}}
                         </template>
 
                         <template #workStartDate="{$attrs}">
@@ -428,19 +428,19 @@ export default class Invitation extends Vue {
         return Datetime.DateTime2String(new Date(value), Datetime.DateFormat);
     }
 
-    tableShowStatus(status: number): string {
+    tableShowStatus(status: string): string {
         let result = "";
         switch (status) {
-            case 1:
+            case "new":
                 result = this._("w_Invitation_New");
                 break;
-            case 2:
+            case "approve":
                 result = this._("w_Invitation_PendingApproved");
                 break;
-            case 3:
+            case "pendding":
                 result = this._("w_Invitation_Approved");
                 break;
-            case 4:
+            case "reject":
                 result = this._("w_Invitation_Rejected");
                 break;
         }
