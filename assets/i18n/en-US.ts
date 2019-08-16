@@ -288,7 +288,7 @@ export default class LangObject {
     w_Dashboard_Submitted = 'New';
     w_Dashboard_Approved = 'Approved';
     w_Dashboard_AwaitingApproval = 'Pending Approval';
-    w_Dashboard_Total = 'TOTAl';
+    w_Dashboard_Total = 'Total';
 
     //
     w_User_VisitorCannotLogin = '';
