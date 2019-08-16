@@ -65,8 +65,8 @@ export class SearchCondition extends Vue {
     workTypeSelectItem: any = {};
 
     inputFormData: any = {
-        startDate: new Date(),
-        endDate: new Date(),
+        startDate: null,
+        endDate: null,
         ptwStatus: "",
         ptwId: "",
         email: "",
@@ -137,25 +137,24 @@ export class SearchCondition extends Vue {
             });
     }
 
-
     async initWorkTypeSelectItem() {
         this.workTypeSelectItem = {
-            1: this._('w_ViewPTW_Step3_TypesOfWorkInvolved1'),
-            2: this._('w_ViewPTW_Step3_TypesOfWorkInvolved2'),
-            3: this._('w_ViewPTW_Step3_TypesOfWorkInvolved3'),
-            4: this._('w_ViewPTW_Step3_TypesOfWorkInvolved4'),
-            5: this._('w_ViewPTW_Step3_TypesOfWorkInvolved5'),
-            6: this._('w_ViewPTW_Step3_TypesOfWorkInvolved6'),
-            7: this._('w_ViewPTW_Step3_TypesOfWorkInvolved7'),
-            8: this._('w_ViewPTW_Step3_TypesOfWorkInvolved8'),
+            1: this._("w_ViewPTW_Step3_TypesOfWorkInvolved1"),
+            2: this._("w_ViewPTW_Step3_TypesOfWorkInvolved2"),
+            3: this._("w_ViewPTW_Step3_TypesOfWorkInvolved3"),
+            4: this._("w_ViewPTW_Step3_TypesOfWorkInvolved4"),
+            5: this._("w_ViewPTW_Step3_TypesOfWorkInvolved5"),
+            6: this._("w_ViewPTW_Step3_TypesOfWorkInvolved6"),
+            7: this._("w_ViewPTW_Step3_TypesOfWorkInvolved7"),
+            8: this._("w_ViewPTW_Step3_TypesOfWorkInvolved8")
         };
     }
 
     async doSubmit(data) {
         const doSubmitParam: {
             paging?: IPaging;
-            startDate: Date;
-            endDate: Date;
+            startDate?: Date;
+            endDate?: Date;
             status: string;
             ptwId: string;
             contactEmail: string;
@@ -167,12 +166,6 @@ export class SearchCondition extends Vue {
             workContact: string;
             contractorCompanyName: string;
         } = {
-            // paging: {
-            //     pageSize: 10,
-            //     page: 1
-            // },
-            startDate: Datetime.DateToZero(data.startDate),
-            endDate: Datetime.DateTo23595959(data.endDate),
             status: data.ptwStatus,
             ptwId: data.ptwId,
             contactEmail: data.email,
@@ -185,14 +178,22 @@ export class SearchCondition extends Vue {
             contractorCompanyName: data.workersName
         };
 
-        if (!Datetime.CheckDate(data.startDate, data.endDate)) {
+        if (
+            data.startDate &&
+            data.endDate &&
+            !Datetime.CheckDate(data.startDate, data.endDate)
+        ) {
             Dialog.error(this._("w_Invitation_DateError"));
-            this.inputFormData.startDate = new Date();
-            this.inputFormData.endDate = new Date();
             return false;
         }
 
-        console.log("doSubmitParam ~ ", doSubmitParam);
+        if (data.startDate) {
+            doSubmitParam.startDate = Datetime.DateToZero(data.startDate);
+        }
+
+        if (data.endDate) {
+            doSubmitParam.endDate = Datetime.DateTo23595959(data.endDate);
+        }
 
         this.$emit("submit-data", doSubmitParam);
     }
