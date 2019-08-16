@@ -265,6 +265,7 @@ export class Step2AddUse extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_EmailAddress")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_EmailAddress")}
+                 * @uiType - ivc-form-email
                  */
                  contractorCompanyEmail: string;
 

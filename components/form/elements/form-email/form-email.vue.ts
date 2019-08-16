@@ -10,19 +10,12 @@ const emailfilter = {
     bind: (el: any, a, b) => {
         el = el.getElementsByTagName('input')[0];
         let oldvalue = el.value;
-        el.addEventListener('input', (evt) => {
+        el.addEventListener('blur', (evt) => {
             let newvalue = el.value;
             let regex = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/;
             main: do {
                 if (!regex.test(newvalue)) break;
-                // let arytmp = newvalue.split('.');
-                // for (let part of arytmp) {
-                //     if (part.length === 0) continue;
-                //     let num = +part;
-                //     if (num < 0 || num > 255) break main;
-                // }
-
-                // oldvalue = newvalue;
+                oldvalue = newvalue;
                 return;
             } while (0);
 
