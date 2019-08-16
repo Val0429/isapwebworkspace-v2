@@ -35,8 +35,8 @@ import {
 import { toEnumInterface } from "@/../core";
 import { IStep2 } from ".";
 import ResponseFilter from "@/services/ResponseFilter";
-import RegexService from '@/services/RegexServices';
-import Dialog from '@/services/Dialog';
+import RegexService from "@/services/RegexServices";
+import Dialog from "@/services/Dialog";
 
 @Component({
     components: {}
@@ -91,10 +91,10 @@ export class Step2 extends Vue {
         contractorCompanyContactPhone: this.selectedDetail
             .contractorCompanyContactPhone
             ? this.selectedDetail.contractorCompanyContactPhone
-            : '',
+            : "",
         contractorCompanyFax: this.selectedDetail.contractorCompanyFax
             ? this.selectedDetail.contractorCompanyFax
-            : ''
+            : ""
     };
 
     created() {}
@@ -270,6 +270,7 @@ export class Step2 extends Vue {
                 /**
                  * @uiLabel - ${this._("w_ViewPTW_Step2_EmailAddress")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_Step2_EmailAddress")}
+                 * @uiType - ivc-form-email
                  */
                  contractorCompanyEmail: string;
 

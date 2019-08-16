@@ -6,8 +6,8 @@
         v-on:input="$emit('input', $event)"
         v-bind:placeholder="placeholder"
         :invalid="invalid"
-        v-ipfilter
-    />    
+        v-emailfilter
+    />
 </template>
 
 <script lang="ts" src="./form-email.vue.ts" />
