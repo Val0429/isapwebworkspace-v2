@@ -1,6 +1,7 @@
 <template>
     <div>
         <iv-form
+            ref="form"
             :interface="IAddForm()"
             :value="inputFormData"
             @update:*="updateInputFormData"
@@ -119,6 +120,7 @@ import {
 import { IStep3 } from ".";
 import Dialog from "@/services/Dialog";
 import RegexService from "@/services/RegexServices";
+import Datetime from "@/services/Datetime";
 
 @Component({
     components: {}
@@ -282,17 +284,67 @@ export class Step3 extends Vue {
             case "workStartDate":
                 this.inputFormData.workStartDate = data.value;
                 this.inputFormData.workStartTime = data.value;
+                if (
+                    !Datetime.checkDateStartToEnd(
+                        data.value,
+                        this.inputFormData.workEndDate
+                    )
+                ) {
+                    Dialog.error(this._("w_Invitation_ErrorEndDateGreater"));
+                    return false;
+                }
+
+                if (
+                    !Datetime.checkTimeStartToEnd(
+                        data.value,
+                        this.inputFormData.workEndTime
+                    )
+                ) {
+                    Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
+                    return false;
+                }
+
+                if (
+                    Datetime.DateStart(data.value).getTime() <
+                    Datetime.DateEnd(this.inputFormData.workEndDate).getTime() -
+                        Datetime.oneDayTimestamp * 31
+                ) {
+                    Dialog.error(this._("w_Invitation_ErrorDateLower31Day"));
+                    return false;
+                }
                 break;
             case "workEndDate":
+                this.inputFormData.workEndDate = data.value;
+                this.inputFormData.workEndTime = data.value;
                 if (
-                    data.value.getTime() > new Date().getTime() ||
-                    data.value.getTime() >
-                        this.inputFormData.workStartDate.getTime()
+                    !Datetime.checkDateStartToEnd(
+                        this.inputFormData.workStartDate,
+                        data.value
+                    )
                 ) {
-                    this.inputFormData.workEndDate = data.value;
-                    this.inputFormData.workEndTime = data.value;
-                } else {
-                    Dialog.error(this._("w_Invitation_DateError"));
+                    Dialog.error(this._("w_Invitation_ErrorEndDateGreater"));
+                    return false;
+                }
+
+                if (
+                    !Datetime.checkTimeStartToEnd(
+                        this.inputFormData.workStartTime,
+                        data.value
+                    )
+                ) {
+                    Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
+                    return false;
+                }
+
+                if (
+                    Datetime.DateStart(
+                        this.inputFormData.workStartDate
+                    ).getTime() <
+                    Datetime.DateEnd(data.value).getTime() -
+                        Datetime.oneDayTimestamp * 31
+                ) {
+                    Dialog.error(this._("w_Invitation_ErrorDateLower31Day"));
+                    return false;
                 }
                 break;
             case "workContact":

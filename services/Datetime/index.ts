@@ -743,6 +743,47 @@ class Datetime {
 
         return resultYearArray;
     }
+
+    checkDateStartToEnd(startDate: Date, endDate: Date, useSame = false): boolean {
+        let result = true;
+        let tempStartDate = this.DateStart(startDate);
+        let tempEndDate = this.DateStart(endDate);
+
+        if (useSame) {
+            if (tempStartDate.getTime() > tempEndDate.getTime()) {
+                result = false;
+            }
+        } else {
+            if (tempStartDate.getTime() >= tempEndDate.getTime()) {
+                result = false;
+            }
+        }
+
+        return result;
+    }
+
+    checkTimeStartToEnd(startTime: Date, endTime: Date, useSame = false): boolean {
+        let result = true;
+        let nowDate = new Date();
+        let tempStartTime = this.mergeDateTime(nowDate, startTime);
+        let tempEndTime = this.mergeDateTime(nowDate, endTime);
+
+        if (useSame) {
+            if (tempStartTime.getTime() > tempStartTime.getTime()) {
+                result = false;
+            }
+        } else {
+            if (tempEndTime.getTime() >= tempEndTime.getTime()) {
+                result = false;
+            }
+        }
+
+        return result;
+    }
+
+    mergeDateTime(date: Date, time: Date): Date {
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
+    }
 }
 
 export default new Datetime();
