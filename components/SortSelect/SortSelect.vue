@@ -310,7 +310,7 @@ export class SortSelect extends Vue {
     
     selectAllOption() {
         this.optionsSelected = [];
-        for (let option of this.optionsSelectItem) {
+        for (let option of this.optionsSelectItem.filter(x=>x.visible)) {
             this.optionsSelected.push(option.value);
         }
     }
