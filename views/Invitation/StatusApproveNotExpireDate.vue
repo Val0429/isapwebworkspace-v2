@@ -810,6 +810,17 @@ export class StatusApproveNotExpireDate extends Vue {
         //     this.doSubmitApi();
         // }
 
+        let stepRef: any = this.$refs.step;
+
+        if (
+            !this.inputFormData.accessGroups ||
+            this.inputFormData.accessGroups.length === 0
+        ) {
+            stepRef.currentStep = 8;
+            Dialog.error(this._("w_ViewPTW_Step_ErrorTip"));
+            return false;
+        }
+
         if (!(await this.tempSave())) {
             return false;
         }
@@ -902,7 +913,6 @@ export class StatusApproveNotExpireDate extends Vue {
         };
 
         if (!RegistrationService.checkWorkDate(this, this.inputFormData)) {
-            stepRef.currentStep = 8;
             return false;
         }
 

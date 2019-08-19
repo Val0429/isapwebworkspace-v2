@@ -618,6 +618,11 @@ export class EditPTW extends Vue {
             stepRef.currentStep = 2;
             return false;
         }
+
+        if (!RegistrationService.checkWorkDate(this, this.inputFormData)) {
+            return false;
+        }
+
         await this.tempSave();
     }
 
@@ -669,11 +674,6 @@ export class EditPTW extends Vue {
         ) {
             Dialog.error(this._("w_ViewPTW_Step_ErrorTipYes"));
             stepRef.currentStep = 3;
-            return false;
-        }
-
-        if (!RegistrationService.checkWorkDate(this, this.inputFormData)) {
-            stepRef.currentStep = 2;
             return false;
         }
 
@@ -805,7 +805,6 @@ export class EditPTW extends Vue {
 
     receiveStep8Data(step8Date, approval) {
         let stepRef: any = this.$refs.step;
-        console.log(" this.isApproval ~ ", this.isApproval);
 
         this.inputFormData.workStartDate = step8Date.workStartDate;
         this.inputFormData.workStartTime = step8Date.workStartTime;
@@ -908,11 +907,6 @@ export class EditPTW extends Vue {
             updateParam.attachments.push(attachment.base64);
         }
 
-        if (!RegistrationService.checkWorkDate(this, this.initInputFormData)) {
-            stepRef.currentStep = 8;
-            return false;
-        }
-
         await this.$server
             .U("/flow1/crms", updateParam)
             .then((response: any) => {
@@ -933,6 +927,18 @@ export class EditPTW extends Vue {
     }
 
     async doSubmit() {
+        let stepRef: any = this.$refs.step;
+
+        if (
+            this.isApproval === undefined ||
+            !this.inputFormData.accessGroups ||
+            this.inputFormData.accessGroups.length === 0
+        ) {
+            stepRef.currentStep = 8;
+            Dialog.error(this._("w_ViewPTW_Step_ErrorTip"));
+            return false;
+        }
+
         if (!(await this.tempSave())) {
             return false;
         }
