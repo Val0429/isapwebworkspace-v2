@@ -676,7 +676,7 @@ private async getFloorGroup() {
         if (!this.inputFormData.deviceTimeFormatOption || this.inputFormData.deviceTimeFormatOption === "0") {
             return false;
         }
-        if(!this.inputFormData.deviceAreaOption && (this.inputFormData.deviceType=="floorGroup" || this.inputFormData.deviceType=="elevator")){            
+        if(!this.inputFormData.elevatorAreaOption && (this.inputFormData.deviceType=="floorGroup" || this.inputFormData.deviceType=="elevator")){            
             return false;
         }   
         
