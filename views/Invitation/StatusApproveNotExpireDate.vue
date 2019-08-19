@@ -793,6 +793,7 @@ export class StatusApproveNotExpireDate extends Vue {
         this.inputFormData.workEndDate = step8Date.workEndDate;
         this.inputFormData.workEndTime = step8Date.workEndTime;
         this.inputFormData.accessGroups = step8Date.accessGroups;
+        console.log("this.accessGroups ~ ", this.inputFormData.accessGroups);
 
         this.isChange = true;
     }
@@ -813,7 +814,6 @@ export class StatusApproveNotExpireDate extends Vue {
         let stepRef: any = this.$refs.step;
 
         if (
-            !this.inputFormData.accessGroups ||
             this.inputFormData.accessGroups.length === 0
         ) {
             stepRef.currentStep = 8;

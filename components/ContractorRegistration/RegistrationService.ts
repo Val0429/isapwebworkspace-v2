@@ -13,6 +13,8 @@ class RegistrationServices {
             return true;
         }
 
+        // console.log('!!! check date', nowDate, nowDate.getTime(), inputFormData.workStartDate, inputFormData.workStartDate.getTime(), inputFormData.workEndDate, inputFormData.workEndDate.getTime(), nowDate.getTime() > inputFormData.workStartDate.getTime(), nowDate.getTime() > inputFormData.workEndDate.getTime());
+
         if (nowDate.getTime() > inputFormData.workStartDate.getTime() || nowDate.getTime() > inputFormData.workEndDate.getTime()) {
             Dialog.error(vue._('w_Invitation_ErrorWorkDateEarlierToday'));
             return false;

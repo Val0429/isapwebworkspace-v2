@@ -141,7 +141,7 @@ export class Step8NotExpire extends Vue {
     }
 
     async initAccessGroupSelectItem() {
-        this.accessGroupSelectItem = { '123': '123' };
+        this.accessGroupSelectItem = {};
         let tempAccessGroupSelectItem = {};
 
         await this.$server
@@ -185,6 +185,7 @@ export class Step8NotExpire extends Vue {
         }
 
         this.inputFormData.accessGroups = [];
+        //
 
         for (const detail in this.accessGroupSelectItem) {
             for (const id of this.inputFormData.accessGroupsForm) {
@@ -198,6 +199,7 @@ export class Step8NotExpire extends Vue {
             }
         }
 
+        // console.log(' ~ ',this.inputFormData.accessGroups )
         this.$emit("step8", this.inputFormData);
     }
 

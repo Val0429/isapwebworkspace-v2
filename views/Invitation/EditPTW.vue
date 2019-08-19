@@ -814,7 +814,7 @@ export class EditPTW extends Vue {
 
         this.isApproval = approval;
 
-        // console.log("this.inputFormData ~ ", this.inputFormData, this.isApproval);
+        console.log("this.accessGroups ~ ", this.inputFormData.accessGroups);
         this.isChange = true;
     }
 
@@ -929,9 +929,11 @@ export class EditPTW extends Vue {
     async doSubmit() {
         let stepRef: any = this.$refs.step;
 
+        // console.log('this.inputFormData.accessGroups.length ~ ', this.inputFormData.accessGroups.length)
+        // console.log('this.isApproval ~ ', this.isApproval)
+
         if (
             this.isApproval === undefined ||
-            !this.inputFormData.accessGroups ||
             this.inputFormData.accessGroups.length === 0
         ) {
             stepRef.currentStep = 8;
