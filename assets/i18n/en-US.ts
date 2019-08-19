@@ -128,6 +128,7 @@ export default class LangObject {
     w_Invitation_ErrorEndDateGreater = 'End date must greater or equal than start date';
     w_Invitation_ErrorEndTimeGreater = 'End time must greater than start time';
     w_Invitation_ErrorDateLower31Day = 'Ｍaximum approval date to be 31 Days';
+    w_Invitation_ErrorWorkDateEarlierToday = 'Duration From/To cannot be earlier than today';
 
     w_Invitation_CompanyAddPTW = 'Add PTW';
     w_Invitation_CompanyEmail = 'Company Email';

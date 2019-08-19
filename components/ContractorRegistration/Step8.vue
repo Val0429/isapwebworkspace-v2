@@ -45,6 +45,7 @@ import { IWorkPermitAccessGroup } from ".";
 import ResponseFilter from "@/services/ResponseFilter";
 import Datetime from "@/services/Datetime";
 import Dialog from "@/services/Dialog";
+import RegistrationServices from "@/components/ContractorRegistration/RegistrationService";
 
 @Component({
     components: {}
@@ -165,71 +166,26 @@ export class Step8 extends Vue {
                 this.inputFormData.workStartTime = data.value;
                 this.$emit("step8", this.inputFormData);
                 if (
-                    !Datetime.checkDateStartToEnd(
-                        this.inputFormData.workStartDate,
-                        this.inputFormData.workEndDate
+                    !RegistrationServices.checkWorkDate(
+                        this,
+                        this.inputFormData
                     )
                 ) {
-                    Dialog.error(this._("w_Invitation_ErrorEndDateGreater"));
                     return false;
                 }
-
-                if (
-                    Datetime.DateStart(
-                        this.inputFormData.workStartDate
-                    ).getTime() <
-                    Datetime.DateEnd(this.inputFormData.workEndDate).getTime() -
-                    Datetime.oneDayTimestamp * 31
-                ) {
-                    Dialog.error(this._("w_Invitation_ErrorDateLower31Day"));
-                    return false;
-                }
-
-                // if (
-                //     !Datetime.checkTimeStartToEnd(
-                //         this.inputFormData.workStartTime,
-                //         this.inputFormData.workEndTime
-                //     )
-                // ) {
-                //     Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
-                //     return false;
-                // }
-
                 break;
             case "workEndDate":
                 this.inputFormData.workEndDate = data.value;
                 this.inputFormData.workEndTime = data.value;
                 this.$emit("step8", this.inputFormData);
                 if (
-                    !Datetime.checkDateStartToEnd(
-                        this.inputFormData.workStartDate,
-                        this.inputFormData.workEndDate
+                    !RegistrationServices.checkWorkDate(
+                        this,
+                        this.inputFormData
                     )
                 ) {
-                    Dialog.error(this._("w_Invitation_ErrorEndDateGreater"));
                     return false;
                 }
-
-                if (
-                    Datetime.DateStart(
-                        this.inputFormData.workStartDate
-                    ).getTime() <
-                    Datetime.DateEnd(this.inputFormData.workEndDate).getTime() -
-                    Datetime.oneDayTimestamp * 31
-                ) {
-                    Dialog.error(this._("w_Invitation_ErrorDateLower31Day"));
-                    return false;
-                }
-
-                // if (
-                //     !Datetime.checkTimeStartToEnd(
-                //         this.inputFormData.workStartTime,
-                //         this.inputFormData.workEndTime
-                //     )
-                // ) {
-                //     Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
-                //     return false;
-                // }
                 break;
             case "accessGroupsForm":
                 this.inputFormData.accessGroupsForm = data.value;

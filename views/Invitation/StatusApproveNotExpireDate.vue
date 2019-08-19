@@ -240,6 +240,7 @@ import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 import ImageBase64 from "@/services/ImageBase64";
 import Datetime from "@/services/Datetime";
+import RegistrationService from "@/components/ContractorRegistration/RegistrationService";
 
 interface IStep
     extends IStep1,
@@ -809,7 +810,7 @@ export class StatusApproveNotExpireDate extends Vue {
         //     this.doSubmitApi();
         // }
 
-        if(!await this.tempSave()){
+        if (!(await this.tempSave())) {
             return false;
         }
 
@@ -888,7 +889,7 @@ export class StatusApproveNotExpireDate extends Vue {
 
         let result: boolean = false;
 
-         const updateParam = {
+        const updateParam = {
             objectId: this.selectedDetail.objectId,
 
             workStartDate: this.inputFormData.workStartDate,
@@ -900,45 +901,19 @@ export class StatusApproveNotExpireDate extends Vue {
             accessGroups: this.inputFormData.accessGroups
         };
 
-        if (
-            !Datetime.checkDateStartToEnd(
-                this.inputFormData.workStartDate,
-                this.inputFormData.workEndDate
-            )
-        ) {
-            Dialog.error(this._("w_Invitation_ErrorEndDateGreater"));
+        if (!RegistrationService.checkWorkDate(this, this.inputFormData)) {
             stepRef.currentStep = 8;
             return false;
         }
-
-        if (
-            Datetime.DateStart(
-                this.inputFormData.workStartDate
-            ).getTime() <
-            Datetime.DateEnd(this.inputFormData.workEndDate).getTime() -
-            Datetime.oneDayTimestamp * 31
-        ) {
-            Dialog.error(this._("w_Invitation_ErrorDateLower31Day"));
-            stepRef.currentStep = 8;
-            return false;
-        }
-
-        // if (
-        //     !Datetime.checkTimeStartToEnd(
-        //         this.inputFormData.workStartTime,
-        //         this.inputFormData.workEndTime
-        //     )
-        // ) {
-        //     Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
-        //     stepRef.currentStep = 2;
-        //     return false;
-        // }
 
         await this.$server
             .U("/flow1/crms", updateParam)
             .then((response: any) => {
-                ResponseFilter.successCheck(this, response, (response: any) => {
-                });
+                ResponseFilter.successCheck(
+                    this,
+                    response,
+                    (response: any) => {}
+                );
 
                 result = true;
                 return result;
@@ -948,7 +923,6 @@ export class StatusApproveNotExpireDate extends Vue {
             });
 
         return result;
-
     }
 }
 
