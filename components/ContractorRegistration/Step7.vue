@@ -259,16 +259,15 @@ export class Step7 extends Vue {
     }
 
     updateInputFormData(data) {
-        switch (data.key) {
+        this.inputFormData[data.key] = data.value;
 
-            case "phone":
-                this.inputFormData.phone = RegexService.numberReplace(
-                    data.value
-                );
-                this.inputFormData.phone = RegexService.numberReplace(
-                    this.inputFormData.phone
-                );
-                break;
+        if (data.key === "phone") {
+            this.inputFormData.phone = RegexService.numberReplace(
+                data.value
+            );
+            this.inputFormData.phone = RegexService.numberReplace(
+                this.inputFormData.phone
+            );
         }
     }
 
