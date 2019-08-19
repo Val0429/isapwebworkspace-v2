@@ -821,6 +821,13 @@ export class AddPTWByCR extends Vue {
 
     putStep5File(files) {
         for (let file of files) {
+            if (
+                file.type.indexOf("pdf") < 0 &&
+                file.type.indexOf("image") < 0
+            ) {
+                continue;
+            }
+
             if (file) {
                 ImageBase64.fileToBase64(file, (base64 = "") => {
                     if (base64 != "") {

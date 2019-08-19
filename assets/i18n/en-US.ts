@@ -52,15 +52,15 @@ export default class LangObject {
     w_Error_EmailServerError = 'Email server not set, please setup email server';
     w_Error_EmailServerErrorEnable = 'Email server must enable';
     w_Error_EmailSettingError = 'Email server setting error';
-    w_Save_SubmitChecked = 'Attention! Once a PTW is submitted , they cannot longer edit it';
-    w_Save_SubmitCheck = 'Submit Remind';
+    w_Save_SubmitChecked = "You're about to submit your application, you won't be able to add*edit any PTW data afterwards. Are you sure ?";
+    w_Save_SubmitCheck = 'SUBMIT APPLICATION';
 
     /////////////////////////////////////////////
 
     // Login
     w_Login_LoginTitle = 'Login';
     w_Login_ForgotPassword = 'Forgot password';
-    w_Login_RemeberMe = 'Remeber Me';
+    w_Login_RemeberMe = 'Remember Me';
 
     // failed to fetch
     w_FailedToFetch = "We can't connect to server, please try again!";
@@ -281,9 +281,9 @@ export default class LangObject {
     w_Invitation_Approve = 'Approve';
     w_Invitation_Reject = 'Reject';
 
-    w_ViewPTW_ResultTitle = 'Registration Result';
-    w_ViewPTW_ResultSuccessContent = 'Registration Success';
-    w_ViewPTW_ResultFailedContent = 'Registration Failed';
+    w_ViewPTW_ResultTitle = 'Submit Application Result';
+    w_ViewPTW_ResultSuccessContent = 'Submission Succesful!';
+    w_ViewPTW_ResultFailedContent = 'Submission Failed.';
     w_ViewPTW_DoorPlaceHolder = 'Please select access area';
 
     /////////////////////// General Settings //////////////////////
