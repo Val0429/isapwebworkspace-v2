@@ -224,6 +224,7 @@ import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 import ImageBase64 from "@/services/ImageBase64";
 import Datetime from "@/services/Datetime";
+import RegistrationService from "@/components/ContractorRegistration/RegistrationService";
 
 @Component({
     components: {
@@ -738,37 +739,10 @@ export class AddPTWByCR extends Vue {
             return false;
         }
 
-        if (
-            !Datetime.checkDateStartToEnd(
-                this.inputFormData.workStartDate,
-                this.inputFormData.workEndDate
-            )
-        ) {
-            Dialog.error(this._("w_Invitation_ErrorEndDateGreater"));
+        if (!RegistrationService.checkWorkDate(this, this.inputFormData)) {
             stepRef.currentStep = 2;
             return false;
         }
-
-        if (
-            Datetime.DateStart(this.inputFormData.workStartDate).getTime() <
-            Datetime.DateEnd(this.inputFormData.workEndDate).getTime() -
-                Datetime.oneDayTimestamp * 31
-        ) {
-            Dialog.error(this._("w_Invitation_ErrorDateLower31Day"));
-            stepRef.currentStep = 2;
-            return false;
-        }
-
-        // if (
-        //     !Datetime.checkTimeStartToEnd(
-        //         this.inputFormData.workStartTime,
-        //         this.inputFormData.workEndTime
-        //     )
-        // ) {
-        //     Dialog.error(this._("w_Invitation_ErrorEndTimeGreater"));
-        //     stepRef.currentStep = 2;
-        //     return false;
-        // }
 
         await this.tempSave();
     }
