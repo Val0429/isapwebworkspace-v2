@@ -26,16 +26,18 @@
 						</iv-form-string>
 					</template>
 
-
 					<template #isActive="{ $attrs, $listeners }">
 						<iv-form-selection
-                              :disabled="disabled"
-							v-bind="$attrs"
 							v-on="$listeners"
+							v-bind="$attrs"
 							v-model="inputFormData.isActive"
+							:options="isActiveSelectItem"
+							:multiple="false"
+							@input="updateActive"
 						>
 						</iv-form-selection>
 					</template>
+
 
 
 					<!-- run time -->
@@ -338,7 +340,7 @@
 			default: ""
 		})
         deviceMode: string;
-        
+
         @Prop({
 			type: Boolean,
 			default: false
@@ -462,6 +464,11 @@
 				yes: this._("w_yes"),
 				no: this._("w_no")
 			};
+
+			this.isActiveSelectItem = [
+				{ id: true, text: this._("w_yes") },
+				{ id: false, text: this._("w_no") },
+			];
 
 			this.anyTime = this._('w_RuleAndActions_anyTime');
 		}
@@ -775,9 +782,7 @@
 		updateActive(isActive: string) {
 			this.inputFormData.isActive = isActive;
 
-			this.inputFormData.isActive === EIncludedEmployee.no ? this.inputFormData.isActiveApi = false : true;
-
-			this.$emit('active', this.inputFormData.isActiveApi);
+			this.$emit('active', this.inputFormData.isActive);
 		}
 
 		updateTime(data) {
@@ -975,10 +980,7 @@
                  * @uiLabel - ${this._("w_RuleAndActions_Active")}
                  * @uiColumnGroup - row
                  */
-                isActive: ${toEnumInterface(
-                    this.isActiveSelectItem as any,
-                    false
-                )};
+                isActive: any;
 
 
                 /**

@@ -478,7 +478,7 @@ export default class RuleAndActionsOccupancy extends Vue {
     }
 
     receiveActive(active: string) {
-        this.inputFormData.active = active;
+        this.inputFormData.active = active === 'true';
         console.log("active ~ ", this.inputFormData.active);
     }
 
@@ -513,7 +513,7 @@ export default class RuleAndActionsOccupancy extends Vue {
 
         let stepRef: any = this.$refs.step;
 
-        if (!this.inputFormData.name || !this.inputFormData.active) {
+        if (!this.inputFormData.name || this.inputFormData.active === undefined) {
             Dialog.error(this._("w_RuleAndActions_ErrorTip"));
             stepRef.currentStep = 0;
             return false;

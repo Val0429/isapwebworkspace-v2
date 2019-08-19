@@ -10,6 +10,7 @@
 
         <template #notifyMethodSelect="{ $attrs, $listeners }">
 
+
             <b-form-checkbox
                 :disabled="disabled"
                 v-for="option in notifyMethodSelectItem"

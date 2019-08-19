@@ -454,8 +454,8 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
         console.log("time ~ ", this.inputFormData.time);
     }
 
-    receiveActive(active: boolean) {
-        this.inputFormData.active = active;
+    receiveActive(active: string) {
+        this.inputFormData.active = active === 'true';
         console.log("active ~ ", this.inputFormData.active);
     }
 
@@ -483,7 +483,7 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
 
         let stepRef: any = this.$refs.step;
 
-        if (!this.inputFormData.name || !this.inputFormData.active || this.inputFormData.siteIds.length === 0) {
+        if (!this.inputFormData.name || this.inputFormData.active === undefined || this.inputFormData.siteIds.length === 0) {
             Dialog.error(this._("w_RuleAndActions_ErrorTip"));
             stepRef.currentStep = 0;
             return false;

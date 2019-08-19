@@ -478,8 +478,8 @@ export default class RuleAndActionsTraffic extends Vue {
         console.log("name ~ ", this.inputFormData.name);
     }
 
-    receiveActive(active: boolean) {
-        this.inputFormData.active = active;
+    receiveActive(active: string) {
+        this.inputFormData.active = active === 'true';
         console.log("active ~ ", this.inputFormData.active);
     }
 
@@ -512,7 +512,8 @@ export default class RuleAndActionsTraffic extends Vue {
 
         let stepRef: any = this.$refs.step;
 
-        if (!this.inputFormData.name || !this.inputFormData.active) {
+        // if (!this.inputFormData.name || this.inputFormData.active !== undefined) {
+        if (!this.inputFormData.name || this.inputFormData.active === undefined) {
             Dialog.error(this._("w_RuleAndActions_ErrorTip"));
             stepRef.currentStep = 0;
             return false;
