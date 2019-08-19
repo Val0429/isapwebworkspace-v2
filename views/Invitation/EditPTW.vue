@@ -618,6 +618,12 @@ export class EditPTW extends Vue {
             stepRef.currentStep = 2;
             return false;
         }
+
+	    if (!RegistrationService.checkWorkDate(this, this.initInputFormData)) {
+		    stepRef.currentStep = 2;
+		    return false;
+	    }
+
         await this.tempSave();
     }
 
@@ -907,10 +913,10 @@ export class EditPTW extends Vue {
             updateParam.attachments.push(attachment.base64);
         }
 
-        if (!RegistrationService.checkWorkDate(this, this.initInputFormData)) {
-            stepRef.currentStep = 8;
-            return false;
-        }
+        // if (!RegistrationService.checkWorkDate(this, this.initInputFormData)) {
+        //     stepRef.currentStep = 8;
+        //     return false;
+        // }
 
         await this.$server
             .U("/flow1/crms", updateParam)
