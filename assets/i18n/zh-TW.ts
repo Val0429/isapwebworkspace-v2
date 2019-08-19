@@ -77,7 +77,7 @@ export default class LangObject implements ILang {
     w_FailedToFetch = '連接不到伺服器，請再試一次!';
 
     // 401
-    w_UserSession_Empty = '找不到使用者，請重新登入';
+    w_UserSession_Empty = '用戶名/密碼不正確';
 
     // 404
     w_APINotFind = '找不到API';

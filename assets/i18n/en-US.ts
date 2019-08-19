@@ -77,7 +77,7 @@ export default class LangObject {
     w_FailedToFetch = "We can't connect to server, please try again!";
 
     // 401
-    w_UserSession_Empty = 'Not find User, Please login again';
+    w_UserSession_Empty = 'Incorrect Username / Password';
 
     // 404
     w_APINotFind = 'API Not Find';
