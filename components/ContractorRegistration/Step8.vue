@@ -6,6 +6,16 @@
             @update:*="updateInputFormData"
         >
 
+            <template #approval>
+                <b-form-radio-group
+                    v-model="approval"
+                    :options="options"
+                    name="approval"
+                    class="col-md-12 mb-2 mt-2"
+                    @input="changeApproval"
+                ></b-form-radio-group>
+            </template>
+
             <template #qrCode>
                 <div v-if="qrCode">
                     <img
@@ -15,16 +25,6 @@
                     >
                     <p class="mt-0 ml-3 col-md-12">{{ _('w_Invitation_PTWID') }} : {{ ptwText }}</p>
                 </div>
-            </template>
-
-            <template #approval>
-                <b-form-radio-group
-                    v-model="approval"
-                    :options="options"
-                    name="approval"
-                    class="col-md-2 mb-2 mt-2"
-                    @input="changeApproval"
-                ></b-form-radio-group>
             </template>
 
         </iv-form>
@@ -95,11 +95,11 @@ export class Step8 extends Vue {
 
     async created() {
         this.initInputFormData();
+        this.initAccessGroupSelectItem();
     }
 
     mounted() {
         this.initSelectItem();
-        this.initAccessGroupSelectItem();
     }
 
     @Watch("selectedDetail", { deep: true })
@@ -279,7 +279,7 @@ export class Step8 extends Vue {
                  * @uiLabel - ${this._("w_ViewPTW_Step8_AccessGroup")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_DoorPlaceHolder")}
                  */
-                accessGroupsForm?:  ${toEnumInterface(
+                accessGroupsForm:  ${toEnumInterface(
                     this.accessGroupSelectItem as any,
                     true
                 )};

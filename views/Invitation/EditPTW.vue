@@ -349,7 +349,7 @@ export class EditPTW extends Vue {
         accessGroups: []
     };
 
-    isApproval: boolean = false;
+    isApproval: boolean = undefined;
 
     @Watch("selectedDetail", { deep: true })
     private ptwIdChanged(newVal, oldVal) {
@@ -832,6 +832,9 @@ export class EditPTW extends Vue {
     ////////////////////////////// step 8  //////////////////////////////
 
     receiveStep8Data(step8Date, approval) {
+        let stepRef: any = this.$refs.step;
+        console.log(' this.isApproval ~ ', this.isApproval )
+
         this.inputFormData.workStartDate = step8Date.workStartDate;
         this.inputFormData.workStartTime = step8Date.workStartTime;
         this.inputFormData.workEndDate = step8Date.workEndDate;
@@ -956,6 +959,7 @@ export class EditPTW extends Vue {
             return false;
         }
 
+
         // if (
         //     !Datetime.checkTimeStartToEnd(
         //         this.inputFormData.workStartTime,
@@ -984,6 +988,16 @@ export class EditPTW extends Vue {
     }
 
     async doSubmit() {
+        let stepRef: any = this.$refs.step;
+
+        if(
+            this.isApproval === undefined ||
+            !this.inputFormData.accessGroups
+        ) {
+            stepRef.currentStep = 8;
+            Dialog.error(this._('w_ViewPTW_Step_ErrorTip'));
+            return false;
+        }
 
         if(!await this.tempSave()){
             return false;
@@ -994,6 +1008,7 @@ export class EditPTW extends Vue {
                 this._("w_Save_Checked"),
                 this._("w_Save_Checked"),
                 () => {
+
                     this.doSubmitApi();
                 }
             );
@@ -1003,6 +1018,7 @@ export class EditPTW extends Vue {
     }
 
     async doSubmitApi() {
+        let stepRef: any = this.$refs.step;
 
         const doSubmitParam = {
             objectId: this.selectedDetail.objectId

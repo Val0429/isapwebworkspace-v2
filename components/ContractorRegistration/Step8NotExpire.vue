@@ -95,11 +95,12 @@ export class Step8NotExpire extends Vue {
 
     async created() {
         this.initInputFormData();
+        this.initAccessGroupSelectItem();
     }
 
     mounted() {
         this.initSelectItem();
-        this.initAccessGroupSelectItem();
+        // this.initAccessGroupSelectItem();
     }
 
     @Watch("selectedDetail", { deep: true })
@@ -281,7 +282,7 @@ export class Step8NotExpire extends Vue {
                  * @uiLabel - ${this._("w_ViewPTW_Step8_AccessGroup")}
                  * @uiPlaceHolder - ${this._("w_ViewPTW_DoorPlaceHolder")}
                  */
-                accessGroupsForm?:  ${toEnumInterface(
+                accessGroupsForm:  ${toEnumInterface(
                     this.accessGroupSelectItem as any,
                     true
                 )};
