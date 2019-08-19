@@ -201,10 +201,7 @@ export default class Invitation extends Vue {
             `${Datetime.DateTime2String(
                 new Date(date),
                 Datetime.NewDateFormat
-            )} ${Datetime.DateTime2String(
-                new Date(time),
-                Datetime.NewTimeFormat
-            )}`
+            )} ${time.substr(time.indexOf("T") + 1, 8)}`
         );
 
         if (tempDate && new Date(tempDate).getTime() < new Date().getTime()) {
