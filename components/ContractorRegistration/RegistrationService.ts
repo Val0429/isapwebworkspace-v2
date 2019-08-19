@@ -5,6 +5,14 @@ class RegistrationServices {
     checkWorkDate(vue: any, inputFormData: any) {
         let nowDate = new Date();
 
+        if (inputFormData.workStartDate == undefined) {
+            return true;
+        }
+
+        if (inputFormData.workEndDate == undefined) {
+            return true;
+        }
+
         if (nowDate.getTime() > inputFormData.workStartDate.getTime() || nowDate.getTime() > inputFormData.workEndDate.getTime()) {
             Dialog.error(vue._('w_Invitation_ErrorWorkDateEarlierToday'));
             return false;
