@@ -162,9 +162,9 @@ export class SearchCondition extends Vue {
             workCategoryId: string;
             workType: number;
             workPremisesUnit: string;
-            personName: string;
             workContact: string;
             contractorCompanyName: string;
+            personName: string;
         } = {
             status: data.ptwStatus,
             ptwId: data.ptwId,
@@ -173,9 +173,9 @@ export class SearchCondition extends Vue {
             workCategoryId: data.workCategory,
             workType: data.workType,
             workPremisesUnit: data.unit,
-            personName: data.contactPerson,
-            workContact: data.contractor,
-            contractorCompanyName: data.workersName
+            workContact: data.contactPerson,
+            contractorCompanyName: data.contractor,
+            personName: data.workersName
         };
 
         if (
