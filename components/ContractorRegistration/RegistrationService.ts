@@ -23,21 +23,11 @@ class RegistrationServices {
             return false;
         }
 
-        // form date <= to date
-        if (!Datetime.checkDateStartToEnd(inputFormData.workStartDate, inputFormData.workEndDate)) {
+        // form date <= to date, if from date == to date, from time < to time
+        if (Datetime.mergeDateTime(inputFormData.workStartDate, inputFormData.workStartTime).getTime() > Datetime.mergeDateTime(inputFormData.workEndDate, inputFormData.workEndTime).getTime()) {
             Dialog.error(vue._('w_Invitation_ErrorEndDateGreater'));
             return false;
         }
-
-        // if (
-        //     !Datetime.checkTimeStartToEnd(
-        //         inputFormData.workStartTime,
-        //         inputFormData.workEndTime
-        //     )
-        // ) {
-        //     Dialog.error(vue._("w_Invitation_ErrorEndTimeGreater"));
-        //     return false;
-        // }
 
         // 天數差小於 31 天
         if (Datetime.DateStart(inputFormData.workStartDate).getTime() < Datetime.DateEnd(inputFormData.workEndDate).getTime() - Datetime.oneDayTimestamp * 31) {
