@@ -139,7 +139,7 @@ export class Step8 extends Vue {
     }
 
     async initAccessGroupSelectItem() {
-        this.accessGroupSelectItem = {};
+        this.accessGroupSelectItem = { '123': '123' };
         let tempAccessGroupSelectItem = {};
 
         await this.$server
@@ -249,6 +249,9 @@ export class Step8 extends Vue {
                 }
             }
         }
+
+        this.$emit("step8", this.inputFormData);
+
     }
 
     changeApproval() {

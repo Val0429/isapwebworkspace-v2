@@ -140,7 +140,7 @@ export class Step8NotExpire extends Vue {
     }
 
     async initAccessGroupSelectItem() {
-        this.accessGroupSelectItem = {};
+        this.accessGroupSelectItem = { '123': '123' };
         let tempAccessGroupSelectItem = {};
 
         await this.$server

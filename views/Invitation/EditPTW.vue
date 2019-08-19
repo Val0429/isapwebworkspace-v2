@@ -833,7 +833,6 @@ export class EditPTW extends Vue {
 
     receiveStep8Data(step8Date, approval) {
         let stepRef: any = this.$refs.step;
-        console.log(' this.isApproval ~ ', this.isApproval )
 
         this.inputFormData.workStartDate = step8Date.workStartDate;
         this.inputFormData.workStartTime = step8Date.workStartTime;
@@ -992,7 +991,9 @@ export class EditPTW extends Vue {
 
         if(
             this.isApproval === undefined ||
-            !this.inputFormData.accessGroups
+            !this.inputFormData.accessGroups ||
+            this.inputFormData.accessGroups.length === 0
+
         ) {
             stepRef.currentStep = 8;
             Dialog.error(this._('w_ViewPTW_Step_ErrorTip'));
