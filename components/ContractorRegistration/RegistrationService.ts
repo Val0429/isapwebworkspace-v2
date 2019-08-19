@@ -18,7 +18,7 @@ class RegistrationServices {
         }
 
         // 不能早於今天
-        if (checkEarlyTody && (nowDate.getTime() > inputFormData.workStartDate.getTime() || nowDate.getTime() > inputFormData.workEndDate.getTime())) {
+        if (checkEarlyTody && (Datetime.DateStart(nowDate).getTime() > Datetime.DateEnd(inputFormData.workStartDate).getTime() || Datetime.DateStart(nowDate).getTime() > Datetime.DateEnd(inputFormData.workEndDate).getTime())) {
             Dialog.error(vue._('w_Invitation_ErrorWorkDateEarlierToday'));
             return false;
         }
