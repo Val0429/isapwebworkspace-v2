@@ -660,32 +660,32 @@ export default class RuleAndActionsTraffic extends Vue {
     ////////////////////  以下資料來自 step3 Actions   ////////////////////
     receiveEmail(email: boolean) {
         this.inputFormData.email = email;
-        console.log("email ~ ", this.inputFormData.email);
+        // console.log("email ~ ", this.inputFormData.email);
     }
 
     receiveStoreManager(storeManager: boolean) {
         this.inputFormData.storeManager = storeManager;
-        console.log("storeManager ~ ", this.inputFormData.storeManager);
+        // console.log("storeManager ~ ", this.inputFormData.storeManager);
     }
 
     receivePermissionOfStore(permissionOfStore: boolean) {
         this.inputFormData.permissionOfStore = permissionOfStore;
-        console.log("permissionOfStore ~ ", this.inputFormData.permissionOfStore);
+        // console.log("permissionOfStore ~ ", this.inputFormData.permissionOfStore);
     }
 
     receiveUserIds(userIds: object) {
         this.inputFormData.userIds = userIds;
-        console.log("userIds ~ ", this.inputFormData.userIds);
+        // console.log("userIds ~ ", this.inputFormData.userIds);
     }
 
     receiveUserGroupIds(userGroupIds: object) {
         this.inputFormData.userGroupIds = userGroupIds;
-        console.log("userGroupIds ~ ", this.inputFormData.userGroupIds);
+        // console.log("userGroupIds ~ ", this.inputFormData.userGroupIds);
     }
 
     receiveMinutes(minutes: number) {
         this.inputFormData.minutes = minutes;
-        console.log("minutes ~ ", this.inputFormData.minutes);
+        // console.log("minutes ~ ", this.inputFormData.minutes);
     }
 
     IStep3() {
@@ -700,6 +700,7 @@ export default class RuleAndActionsTraffic extends Vue {
     doSubmit(data) {
         console.log("data ~ ", data);
         console.log("this.inputFormData ~ ", this.inputFormData);
+        this.pageToList()
     }
 
     async doDelete() {

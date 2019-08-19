@@ -405,37 +405,37 @@ export default class RuleAndActionsVipBlacklist extends Vue {
     ////////////////////  Tina start  以下資料來自 step1 choose-metrics   ////////////////////
     receiveName(name: string) {
         this.inputFormData.name = name;
-        console.log("name ~ ", this.inputFormData.name);
+        // console.log("name ~ ", this.inputFormData.name);
     }
 
     receiveActive(active: string) {
         this.inputFormData.active = active === 'true';
-        console.log("active ~ ", this.inputFormData.active);
+        // console.log("active ~ ", this.inputFormData.active);
     }
 
     receiveTime(time: undefined | object) {
         this.inputFormData.time = time;
-        console.log("time ~ ", this.inputFormData.time);
+        // console.log("time ~ ", this.inputFormData.time);
     }
 
     receiveSiteIds(siteIds: object) {
         this.inputFormData.siteIds = siteIds;
-        console.log("siteIds ~ ", this.inputFormData.siteIds);
+        // console.log("siteIds ~ ", this.inputFormData.siteIds);
     }
 
     receiveAreaIds(areaIds: object) {
         this.inputFormData.areaIds = areaIds;
-        console.log("areaIds ~ ", this.inputFormData.areaIds);
+        // console.log("areaIds ~ ", this.inputFormData.areaIds);
     }
 
     receiveDeviceGroupIds(deviceGroupIds: object) {
         this.inputFormData.deviceGroupIds = deviceGroupIds;
-        console.log("deviceGroupIds ~ ", this.inputFormData.deviceGroupIds);
+        // console.log("deviceGroupIds ~ ", this.inputFormData.deviceGroupIds);
     }
 
     receiveDeviceIds(deviceIds: object) {
         this.inputFormData.deviceIds = deviceIds;
-        console.log("deviceIds ~ ", this.inputFormData.deviceIds);
+        // console.log("deviceIds ~ ", this.inputFormData.deviceIds);
     }
 
     stepTo2(data) {
@@ -607,6 +607,7 @@ export default class RuleAndActionsVipBlacklist extends Vue {
     doSubmit(data) {
         console.log("data ~ ", data);
         console.log("this.inputFormData ~ ", this.inputFormData);
+        this.pageToList()
     }
 
     async doDelete() {
