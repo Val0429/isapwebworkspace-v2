@@ -908,8 +908,7 @@ export class EditPTW extends Vue {
             updateParam.attachments.push(attachment.base64);
         }
 
-        if (!RegistrationService.checkWorkDate(this, this.initInputFormData)) {
-            stepRef.currentStep = 8;
+        if (!RegistrationService.checkWorkDate(this, this.inputFormData)) {
             return false;
         }
 

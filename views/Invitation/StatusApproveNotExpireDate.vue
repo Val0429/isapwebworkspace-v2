@@ -902,7 +902,6 @@ export class StatusApproveNotExpireDate extends Vue {
         };
 
         if (!RegistrationService.checkWorkDate(this, this.inputFormData)) {
-            stepRef.currentStep = 8;
             return false;
         }
 
