@@ -197,17 +197,9 @@ export default class Invitation extends Vue {
         if (status != EStatus.approve) {
             return "";
         }
-        let tempDate = new Date(
-            `${Datetime.DateTime2String(
-                new Date(date),
-                Datetime.NewDateFormat
-            )} ${time.substr(time.indexOf("T") + 1, 8)}`
-        );
-
-        if (tempDate && new Date(tempDate).getTime() < new Date().getTime()) {
+        let tempDate = Datetime.mergeDateTime(new Date(date), new Date(time));
+        if (tempDate.getTime() < new Date().getTime()) {
             return "(" + this._("w_Expired") + ")";
-        } else {
-            return "";
         }
     }
 
