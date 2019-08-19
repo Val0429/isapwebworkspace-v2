@@ -6,7 +6,7 @@ class RegistrationServices {
     // 2. form date <= to date
     // 3. if from date == to date, from time < to time
     // 4. 天數差小於 31 天
-    checkWorkDate(vue: any, inputFormData: any, checkEarilyTody = true) {
+    checkWorkDate(vue: any, inputFormData: any, checkEarlyTody = true) {
         let nowDate = new Date();
 
         if (inputFormData.workStartDate == undefined) {
@@ -18,7 +18,7 @@ class RegistrationServices {
         }
 
         // 不能早於今天
-        if (checkEarilyTody && (nowDate.getTime() > inputFormData.workStartDate.getTime() || nowDate.getTime() > inputFormData.workEndDate.getTime())) {
+        if (checkEarlyTody && (nowDate.getTime() > inputFormData.workStartDate.getTime() || nowDate.getTime() > inputFormData.workEndDate.getTime())) {
             Dialog.error(vue._('w_Invitation_ErrorWorkDateEarlierToday'));
             return false;
         }
