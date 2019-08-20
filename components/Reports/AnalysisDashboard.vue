@@ -2,9 +2,6 @@
     <div>
 
         <div class="row mt-4">
-            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
-            </div>
-            <!--/col-->
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
@@ -138,23 +135,8 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
-            </div>
-            <!--/col-->
-        </div>
-
-        <!-- /row -->
-
-        <div class="row">
-            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
-            </div>
-            <!--/col-->
-
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
-                <div
-                    class="box info-box-second"
-                    style="border-left: 0px"
-                >
+                <div class="box info-box">
                     <div :class="ePageType.repeatCustomer == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}}</span>
@@ -175,8 +157,18 @@
                 </div>
             </div>
             <!--/col-->
-            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-122">
-                <div class="box info-box-second">
+
+        </div>
+
+        <!-- /row -->
+
+        <div class="row">
+
+            <div class="col-lg-3 col-sm-6 col-xs-6 col-xxs-122">
+                <div
+                    class="box info-box-second"
+                    style="border-left: 0px"
+                >
                     <div :class="ePageType.revenue == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_Revenue")}}</span>
@@ -198,7 +190,7 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-3 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box-second">
                     <div :class="ePageType.transaction == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
@@ -221,7 +213,7 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-3 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box-second">
                     <div :class="ePageType.conversion == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
@@ -245,7 +237,7 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-3 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box-second">
                     <div :class="ePageType.asp == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
@@ -268,9 +260,6 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
-            </div>
-            <!--/col-->
         </div>
         <!-- /row -->
     </div>
