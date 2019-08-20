@@ -438,6 +438,8 @@ export class EditPTW extends Vue {
         this.inputFormData.termsAccepted = this.selectedDetail.termsAccepted;
         this.inputFormData.persons = this.selectedDetail.persons;
 
+        this.inputFormData.accessGroups = this.selectedDetail.accessGroups;
+
         // Work Date time
         let tempStartDate = new Date();
         let tempEndDate = new Date();

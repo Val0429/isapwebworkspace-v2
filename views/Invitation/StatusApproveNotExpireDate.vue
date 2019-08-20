@@ -430,6 +430,8 @@ export class StatusApproveNotExpireDate extends Vue {
         this.inputFormData.termsAccepted = this.selectedDetail.termsAccepted;
         this.inputFormData.persons = this.selectedDetail.persons;
 
+        this.inputFormData.accessGroups = this.selectedDetail.accessGroups;
+
         // Work Date time
         let tempStartDate = new Date();
         let tempEndDate = new Date();
@@ -799,6 +801,7 @@ export class StatusApproveNotExpireDate extends Vue {
     }
 
     async doSubmit() {
+
         // if (this.isChange) {
         //     Dialog.confirm(
         //         this._("w_Save_Checked"),
