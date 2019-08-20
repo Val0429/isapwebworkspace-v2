@@ -18,10 +18,6 @@ export default class LangObject {
     w_Cancelled = 'Cancelled';
     w_No = 'No';
 
-    w_ThisMonth = 'This Month';
-    w_ThisWeek = 'This Week';
-    w_Today = 'Today';
-
     // Status
     w_Status_Enable = 'Enable';
     w_Status_Enabled = 'Enabled';
@@ -49,11 +45,6 @@ export default class LangObject {
     w_Error_401 = 'Not find User, Please login again'; // 401
     w_Error_404 = 'API Not Find'; // 404
 
-    /////////////////////////////////////////////
-
-    w_DeleteConfirm = 'Delete Confirm';
-    w_DeleteFailed = 'Delete Failed';
-
     // Login & User
     w_Username = 'User Name';
     w_Name = 'Name';
@@ -70,10 +61,18 @@ export default class LangObject {
     w_Login_Login = 'Login';
     w_Login_LoginTitle = 'Login';
     w_Login_ForgotPassword = 'Forgot Password';
-    w_PasswordConfirm = 'Confirm Password';
 
     // Logout
     w_Logout = 'Logout';
+
+    /////////////////////////////////////////////
+
+    w_ThisMonth = 'This Month';
+    w_ThisWeek = 'This Week';
+    w_Today = 'Today';
+
+    w_DeleteConfirm = 'Delete Confirm';
+    w_DeleteFailed = 'Delete Failed';
 
     w_Error_Port = 'Port should be in 1~65535';
     w_Error_Phone = 'Please check Phone Format';

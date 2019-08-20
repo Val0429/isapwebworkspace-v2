@@ -1,7 +1,7 @@
 {
     "name": "visitor-management-service",
-    "version": "3.00.13",
-    "flow": "/flow1",
+    "version": "3.01.00",
+    "flow": "/flow2",
     "description": "Visitor Management Service",
     "scripts": {
         "start": "npm run start --prefix ../",

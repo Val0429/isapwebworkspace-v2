@@ -581,8 +581,8 @@ export default class SetupsKiosk extends Vue {
                 password: string;
 
                 /**
-                 * @uiLabel - ${this._("w_PasswordConfirm")}
-                 * @uiPlaceHolder - ${this._("w_PasswordConfirm")}
+                 * @uiLabel - ${this._("w_ConfirmPassword")}
+                 * @uiPlaceHolder - ${this._("w_ConfirmPassword")}
                  * @uiType - iv-form-password
                  * @uiColumnGroup - password
                  * @uiValidation - (value, all) => value === all.password
@@ -601,8 +601,8 @@ export default class SetupsKiosk extends Vue {
                 updatePassword?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_PasswordConfirm")}
-                 * @uiPlaceHolder - ${this._("w_PasswordConfirm")}
+                 * @uiLabel - ${this._("w_ConfirmPassword")}
+                 * @uiPlaceHolder - ${this._("w_ConfirmPassword")}
                  * @uiType - iv-form-password
                  * @uiColumnGroup - updatePassword
                  * @uiValidation - (value, all) => value === all.updatePassword
