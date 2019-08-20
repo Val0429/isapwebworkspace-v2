@@ -180,18 +180,17 @@ export class SearchCondition extends Vue {
 
         if (
             data.startDate &&
-            data.endDate &&
-            !Datetime.CheckDate(data.startDate, data.endDate)
+            data.startDate != null &&
+            data.startDate != "Invalid Date"
         ) {
-            Dialog.error(this._("w_Invitation_DateError"));
-            return false;
-        }
-
-        if (data.startDate) {
             doSubmitParam.startDate = Datetime.DateToZero(data.startDate);
         }
 
-        if (data.endDate) {
+        if (
+            data.endDate &&
+            data.endDate != null &&
+            data.endDate != "Invalid Date"
+        ) {
             doSubmitParam.endDate = Datetime.DateTo23595959(data.endDate);
         }
 
@@ -200,8 +199,8 @@ export class SearchCondition extends Vue {
 
     doReset() {
         this.inputFormData = {
-            startDate: new Date(),
-            endDate: new Date(),
+            startDate: null,
+            endDate: null,
             ptwStatus: "",
             ptwId: "",
             email: "",
