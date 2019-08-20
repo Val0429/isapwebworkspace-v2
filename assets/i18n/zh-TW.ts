@@ -145,6 +145,7 @@ export default class LangObject implements ILang {
     w_Direction = 'Direction';
     w_ServerId = 'Server Id';
     w_SourceId = 'Source Id';
+    w_FRSId = 'FRS Id';
     w_SourceIdAndLocation = 'Source Id and Location ';
     w_Location = 'Location';
     w_Areas = 'Area(s)';
