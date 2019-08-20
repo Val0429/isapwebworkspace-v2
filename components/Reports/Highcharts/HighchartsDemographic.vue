@@ -1628,7 +1628,15 @@ export class HighchartsDemographic extends Vue {
                     }
                 },
                 tooltip: { enabled: false },
-                series: series
+                series: series,
+                colors: [
+                    "#5CCFFB",
+                    "#5C94FB",
+                    "#8072E1",
+                    "#F1C244",
+                    "#92DE64",
+                    "#FD6893"
+                ]
             };
 
             this.mountChart.ageRange = true;
