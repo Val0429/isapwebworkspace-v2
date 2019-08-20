@@ -1,5 +1,5 @@
 <template>
-    <div class="animated fadeIn">
+    <div>
         <h2 v-if="dayXSiteX != eDayXSiteX.none">{{_('w_PeakHours')}}</h2>
         <table class="table-no-border">
             <thead>

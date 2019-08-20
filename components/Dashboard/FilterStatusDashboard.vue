@@ -1,5 +1,5 @@
 <template>
-    <div class="animated fadeIn">
+    <div>
 
         <div class="row mt-4">
             <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
