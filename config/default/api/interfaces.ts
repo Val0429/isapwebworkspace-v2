@@ -19,6 +19,12 @@ interface IConfigiSap {
     sourceid: string;
 }
 
+interface IConfigiSapFRSManager {
+	serverId: string;
+	frsId: string;
+	sourceId: string;
+}
+
 interface IVideoSourceDevice {
     areaId: string;
     groupIds: string[];
@@ -60,7 +66,7 @@ interface IFRSUserGroup {
     name: string;
 }
 
-export { IConfig, IPaging, IResponse, IObjectIdAndName, IAnalysis, IConfigiSap, IVideoSourceDevice, IFRSUserGroup };
+export { IConfig, IPaging, IResponse, IObjectIdAndName, IAnalysis, IConfigiSap, IVideoSourceDevice, IFRSUserGroup, IConfigiSapFRSManager };
 
 // User
 interface IUser {

@@ -75,34 +75,34 @@
                     <iv-toolbox-back @click="pageToList" />
                 </template>
 
-                <div class="font-weight-bold"> {{ _('w_iSap_Use') }}</div>
+<!--                <div class="font-weight-bold"> {{ _('w_iSap_Use') }}</div>-->
+
+<!--                <b-button-->
+<!--                    class="button mt-3 mb-1"-->
+<!--                    size="md"-->
+<!--                    variant="success"-->
+<!--                    type="button"-->
+<!--                    @click="pageToAddByiSapFRS(eAddStep.frs)"-->
+<!--                >-->
+<!--                    {{ _('w_iSapFRS') }}-->
+<!--                </b-button>-->
+
+<!--                <b-button-->
+<!--                    variant="link"-->
+<!--                    class="mt-4"-->
+<!--                    @click="goToSetFRSServer"-->
+<!--                >-->
+<!--                    {{ _('w_SetFRS') }}-->
+<!--                </b-button>-->
+
+<!--                <br>-->
 
                 <b-button
                     class="button mt-3 mb-1"
                     size="md"
                     variant="success"
                     type="button"
-                    @click="pageToAddByiSapFRS(eAddStep.isapFrs)"
-                >
-                    {{ _('w_iSapFRS') }}
-                </b-button>
-
-                <b-button
-                    variant="link"
-                    class="mt-4"
-                    @click="goToSetFRSServer"
-                >
-                    {{ _('w_SetFRS') }}
-                </b-button>
-
-                <br>
-
-                <b-button
-                    class="button mt-3 mb-1"
-                    size="md"
-                    variant="success"
-                    type="button"
-                    @click="pageToAddByiSapFRSManager(eAddStep.isapFrsManager)"
+                    @click="pageToAddByiSapFRSManager(eAddStep.frsManager)"
                 >
                     {{ _('w_iSapFRSManager') }}
                 </b-button>
@@ -262,7 +262,7 @@ import { toEnumInterface } from "@/../core";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 // API Interface
-import { IConfigiSap } from "@/config/default/api/interfaces";
+import { IConfigiSap, IConfigiSapFRSManager } from "@/config/default/api/interfaces";
 
 // Region Tree
 import {
@@ -296,8 +296,6 @@ enum EPageStep {
 enum EAddStep {
     select = "select",
     isap = "isap",
-    isapFrs = "isapFrs",
-    isapFrsManager = "isapFrsManager",
     frs = "frs",
     frsManager = "frsManager",
     none = "none"
@@ -334,6 +332,7 @@ export default class DwellTime extends Vue {
     serverIdSelectItem: any = {};
     sourceIdSelectItem: any = {};
     demographicIdSelectItem: any = {};
+	frsIdSelectItem: any = {};
 
     params: any = {
         mode: ECameraMode.dwellTime
@@ -358,8 +357,10 @@ export default class DwellTime extends Vue {
         direction: "",
         objectId: "",
         // FRS Manager
-        frsId: "",
-        sourceId: "",
+	    frsId: "",
+	    sourceId: "",
+	    model: '',
+	    brand: '',
     };
 
     created() {}
@@ -381,8 +382,10 @@ export default class DwellTime extends Vue {
             direction: "",
             objectId: "",
             // FRS Manager
-            frsId: "",
-            sourceId: "",
+	        frsId: "",
+	        sourceId: "",
+	        model: '',
+	        brand: '',
         };
     }
 
@@ -434,42 +437,43 @@ export default class DwellTime extends Vue {
             });
     }
 
-    async initSelectItemFRSServer() {
-        this.serverIdSelectItem = {};
+	async initSelectItemFRSServer() {
+		this.serverIdSelectItem = {};
 
-        if (this.addStep === EAddStep.isapFrs) {
-            await this.$server
-                .R("/partner/frs")
-                .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        for (const returnValue of response.results) {
-                            this.serverIdSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                    });
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
-        } else if (this.addStep === EAddStep.isapFrsManager) {
-            // TODO:
-            // await this.$server
-            //     .R("/partner/frs-manager")
-            //     .then((response: any) => {
-            //         ResponseFilter.successCheck(this, response, (response: any) => {
-            //             for (const returnValue of response.results) {
-            //                 this.serverIdSelectItem[returnValue.objectId] =
-            //                     returnValue.name;
-            //             }
-            //         });
-            //     })
-            //     .catch((e: any) => {
-            //         return ResponseFilter.catchError(this, e);
-            //     });
-        }
+		if (this.addStep === EAddStep.frs) {
+			await this.$server
+				.R("/partner/frs")
+				.then((response: any) => {
+					ResponseFilter.successCheck(this, response, (response: any) => {
+						for (const returnValue of response.results) {
+							this.serverIdSelectItem[returnValue.objectId] =
+								returnValue.name;
+						}
+					});
+				})
+				.catch((e: any) => {
+					return ResponseFilter.catchError(this, e);
+				});
+		} else if (this.addStep === EAddStep.frsManager) {
+			// TODO:
+			// await this.$server
+			//     .R("/partner/frs-manager")
+			//     .then((response: any) => {
+			//         ResponseFilter.successCheck(this, response, (response: any) => {
+			//             for (const returnValue of response.results) {
+			//                 this.serverIdSelectItem[returnValue.objectId] =
+			//                     returnValue.name;
+			//             }
+			//         });
+			//     })
+			//     .catch((e: any) => {
+			//         return ResponseFilter.catchError(this, e);
+			//     });
+		}
 
 
-    }
+	}
+
     async initSelectItemDemographicServer() {
         this.demographicIdSelectItem = {};
 
@@ -500,7 +504,8 @@ export default class DwellTime extends Vue {
             this.inputFormData = {
                 // objectId: param.objectId,
                 name: param.name,
-                model: param.model,
+	            model: param.model,
+	            brand: param.brand,
                 areaId:
                     param.area && param.area["objectId"]
                         ? param.area["objectId"]
@@ -560,29 +565,33 @@ export default class DwellTime extends Vue {
                         ? param.area["objectId"]
                         : "",
 
-                // TODO: wait Min
-                // frsId:
-                //     param.config && param.config.frsId
-                //         ? param.config.frsId
-                //         : "",
-                // frsIdView:
-                //     param.config && param.config.frsId
-                //         ? param.config.frsId
-                //         : "",
-                // sourceId:
-                //     param.config && param.config.sourceId
-                //         ? param.config.sourceId
-                //         : "",
-                // sourceIdView:
-                //     param.config && param.config.sourceIdView
-                //         ? param.config.sourceIdView
-                //         : "",
+                // TODO: check param
+                frsId:
+                    param.config && param.config.frsId
+                        ? param.config.frsId
+                        : "",
+                frsIdView:
+                    param.config && param.config.frsId
+                        ? param.config.frsId
+                        : "",
+                sourceId:
+                    param.config && param.config.sourceId
+                        ? param.config.sourceId
+                        : "",
+                sourceIdView:
+                    param.config && param.config.sourceIdView
+                        ? param.config.sourceIdView
+                        : "",
             };
         }
 
-        if (this.inputFormData.serverId !== "") {
-            this.selectSourceIdAndLocation(this.inputFormData.serverId);
-        }
+	    // if (this.inputFormData.serverId !== "") {
+	    //     this.selectSourceIdAndLocation(this.inputFormData.serverId);
+	    // }
+
+	    if (this.pageStep === EPageStep.edit) {
+		    this.selectSourceIdAndLocation(this.inputFormData.serverId);
+	    }
     }
 
     tempSaveInputData(data) {
@@ -614,6 +623,12 @@ export default class DwellTime extends Vue {
             case "siteId":
                 this.inputFormData.siteId = data.value;
                 break;
+	        case "sourceId":
+		        this.inputFormData.sourceId = data.value;
+		        break;
+	        case "frsId":
+		        this.inputFormData.frsId = data.value;
+		        break;
         }
 
         this.selecteds = [];
@@ -852,6 +867,7 @@ export default class DwellTime extends Vue {
     async pageToAdd(stepType: string) {
         this.clearInputData();
         await this.initSelectItemSite();
+        await this.initSelectItemDemographicServer();
         this.pageStep = EPageStep.add;
         this.addStep = EAddStep.select;
         this.transition.prevStep = this.transition.step;
@@ -864,13 +880,13 @@ export default class DwellTime extends Vue {
         this.pageStep = EPageStep.edit;
 
         if (this.inputFormData.model === EAddStep.frs) {
-            this.addStep = EAddStep.isapFrs;
+            this.addStep = EAddStep.frs;
             this.transition.prevStep = this.transition.step;
             this.transition.step = 3;
         }
 
         if (this.inputFormData.model === EAddStep.frsManager) {
-            this.addStep = EAddStep.isapFrsManager;
+            this.addStep = EAddStep.frsManager;
             this.transition.prevStep = this.transition.step;
             this.transition.step = 3;
         }
@@ -891,40 +907,38 @@ export default class DwellTime extends Vue {
     }
 
     pageToView() {
-        this.pageStep = EPageStep.view;
-        this.getInputData();
+	    this.pageStep = EPageStep.view;
+	    this.getInputData();
 
-        if (this.inputFormData.model === EAddStep.frs) {
-            this.addStep = EAddStep.isapFrs;
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 4;
-        }
+	    if (this.inputFormData.model === EAddStep.frs) {
+		    this.addStep = EAddStep.frs;
+		    this.transition.prevStep = this.transition.step;
+		    this.transition.step = 4;
+	    }
 
-        if (this.inputFormData.model === EAddStep.frsManager) {
-            this.addStep = EAddStep.isapFrsManager;
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 4;
-        }
+	    if (this.inputFormData.model === EAddStep.frsManager) {
+		    this.addStep = EAddStep.frsManager;
+		    this.transition.prevStep = this.transition.step;
+		    this.transition.step = 4;
+	    }
     }
 
-    async pageToAddByiSapFRS(brand: string) {
-        this.clearInputData();
-        await this.initSelectItemFRSServer();
-        await this.initSelectItemDemographicServer();
-        await this.initSelectItemSite();
-        this.addStep = EAddStep.isapFrs;
-        this.inputFormData.brand = brand;
+    async pageToAddByiSapFRS() {
+	    this.addStep = EAddStep.frs;
+	    this.clearInputData();
+	    await this.initSelectItemFRSServer();
+	    await this.initSelectItemDemographicServer();
+	    await this.initSelectItemSite();
         this.inputFormData.stepType = EPageStep.add;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
     }
 
-    async pageToAddByiSapFRSManager(brand: string) {
-        this.clearInputData();
-        await this.initSelectItemSite();
+    async pageToAddByiSapFRSManager() {
+	    this.addStep = EAddStep.frsManager;
+	    this.clearInputData();
 
-        this.addStep = EAddStep.isapFrsManager;
-        this.inputFormData.brand = brand;
+        await this.initSelectItemSite();
         this.inputFormData.stepType = EPageStep.add;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
@@ -1002,90 +1016,199 @@ export default class DwellTime extends Vue {
         this.$router.push("/server/frs_manager_server");
     }
 
-    async saveAddOrEditiSap(data) {
-        const configObject: IConfigiSap = {
-            serverId: data.serverId,
-            sourceid: data.sourceid
-        };
+	async saveAddOrEditiSap(data) {
 
-        if (this.inputFormData.brand === EAddStep.isapFrs) {
-            const datas: any = [
-                {
-                    customId: data.customId,
-                    name: data.name,
-                    demoServerId: data.demoServerId,
-                    areaId: data.areaId,
-                    direction: data.direction,
-                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                    config: configObject
-                }
-            ];
+		if (this.addStep === EAddStep.frs) {
 
-            const addParam = {
-                datas
-            };
-            Loading.show();
-            await this.$server
-                .C("/device/dwell-time", addParam)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(
-                        this,
-                        response,
-                        (response: any) => {
-                            Dialog.success(this._("w_VSDwellTime_AddSuccess"));
-                            this.pageToList();
-                        },
-                        this._("w_VSDwellTime_ADDFailed")
-                    );
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_VSDwellTime_ADDFailed")
-                    );
-                });
-        }
+			const configFRSServerObject: IConfigiSap = {
+				serverId: data.serverId,
+				sourceid: data.sourceid
+			};
 
-        if (this.inputFormData.stepType === EPageStep.edit) {
-            const datas: any = [
-                {
-                    objectId: data.objectId,
-                    name: data.name,
-                    demoServerId: data.demoServerId,
-                    areaId: data.areaId,
-                    direction: data.direction,
-                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                    config: configObject
-                }
-            ];
+			if (!this.inputFormData.objectId) {
 
-            const editParam = {
-                datas
-            };
-            Loading.show();
-            await this.$server
-                .U("/device/dwell-time", editParam)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(
-                        this,
-                        response,
-                        (response: any) => {
-                            Dialog.success(this._("w_VSDwellTime_EditSuccess"));
-                            this.pageToList();
-                        },
-                        this._("w_VSDwellTime_EditFailed")
-                    );
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_VSDwellTime_EditFailed")
-                    );
-                });
-        }
-    }
+				const datas: any = [
+					{
+						customId: data.customId,
+						brand: EAddStep.isap,
+						model: EAddStep.frs,
+						name: data.name,
+						direction: data.direction,
+						areaId: data.areaId,
+						demoServerId: data.demoServerId,
+						groupIds: data.groupIds !== undefined ? data.groupIds : [],
+						config: configFRSServerObject
+					}
+				];
+
+				const addParam = {
+					datas
+				};
+				Loading.show();
+				await this.$server
+					.C("/device/dwell-time", addParam)
+					.then((response: any) => {
+						ResponseFilter.successCheck(
+							this,
+							response,
+							(response: any) => {
+								Dialog.success(
+									this._("w_VSDwellTime_AddSuccess")
+								);
+								this.pageToList();
+							},
+							this._("w_VSDwellTime_ADDFailed")
+						);
+					})
+					.catch((e: any) => {
+						return ResponseFilter.catchError(
+							this,
+							e,
+							this._("w_VSDwellTime_ADDFailed")
+						);
+					});
+			} else {
+				const datas: any = [
+					{
+						objectId: data.objectId,
+						brand: EAddStep.isap,
+						model: EAddStep.frs,
+						name: data.name,
+						direction: data.direction,
+						areaId: data.areaId,
+						demoServerId: data.demoServerId,
+						groupIds: data.groupIds !== undefined ? data.groupIds : [],
+						config: configFRSServerObject
+					}
+				];
+
+				const editParam = {
+					datas
+				};
+				Loading.show();
+				await this.$server
+					.U("/device/dwell-time", editParam)
+					.then((response: any) => {
+						ResponseFilter.successCheck(
+							this,
+							response,
+							(response: any) => {
+								Dialog.success(
+									this._("w_VSDwellTime_EditSuccess")
+								);
+								this.pageToList();
+							},
+							this._("w_VSDwellTime_EditFailed")
+						);
+					})
+					.catch((e: any) => {
+						return ResponseFilter.catchError(
+							this,
+							e,
+							this._("w_VSDwellTime_EditFailed")
+						);
+					});
+			}
+
+		}
+
+
+		if (this.addStep === EAddStep.frsManager) {
+
+			const configFRSManagerObject: IConfigiSapFRSManager = {
+				serverId: data.serverId,
+				frsId: data.frsId,
+				sourceId: data.sourceId,
+			};
+
+			if (!this.inputFormData.objectId) {
+
+				const datas: any = [
+					{
+						customId: data.customId,
+						name: data.name,
+						brand: EAddStep.isap,
+						model: EAddStep.frs,
+						direction: data.direction,
+						areaId: data.areaId,
+						groupIds: data.groupIds !== undefined ? data.groupIds : [],
+						config: configFRSManagerObject
+					}
+				];
+
+				const addParam = {
+					datas
+				};
+
+				Loading.show();
+				await this.$server
+					.C("/device/dwell-time", addParam)
+					.then((response: any) => {
+						ResponseFilter.successCheck(
+							this,
+							response,
+							(response: any) => {
+								Dialog.success(
+									this._("w_VSDwellTime_AddSuccess")
+								);
+								this.pageToList();
+							},
+							this._("w_VSDwellTime_ADDFailed")
+						);
+					})
+					.catch((e: any) => {
+						return ResponseFilter.catchError(
+							this,
+							e,
+							this._("w_VSDwellTime_ADDFailed")
+						);
+					});
+			} else {
+				const datas: any = [
+					{
+						objectId: data.objectId,
+						name: data.name,
+						brand: EAddStep.isap,
+						model: EAddStep.frs,
+						direction: data.direction,
+						areaId: data.areaId,
+						groupIds: data.groupIds !== undefined ? data.groupIds : [],
+						config: configFRSManagerObject
+					}
+				];
+
+				const editParam = {
+					datas
+				};
+
+				Loading.show();
+				await this.$server
+					.U("/device/dwell-time", editParam)
+					.then((response: any) => {
+						ResponseFilter.successCheck(
+							this,
+							response,
+							(response: any) => {
+								Dialog.success(
+									this._("w_VSDwellTime_EditSuccess")
+								);
+								this.pageToList();
+							},
+							this._("w_VSDwellTime_EditFailed")
+						);
+					})
+					.catch((e: any) => {
+						return ResponseFilter.catchError(
+							this,
+							e,
+							this._("w_VSDwellTime_EditFailed")
+						);
+					});
+			}
+
+		}
+
+	}
 
     async doDelete() {
         await Dialog.confirm(
@@ -1158,28 +1281,28 @@ export default class DwellTime extends Vue {
     showLabelTitle(): string {
         if (
             this.pageStep === EPageStep.add &&
-            this.addStep === EAddStep.isapFrs
+            this.addStep === EAddStep.frs
         ) {
             return this._("w_VSDwellTime_AddisapUseFRS");
         }
 
         if (
             this.pageStep === EPageStep.add &&
-            this.addStep === EAddStep.isapFrsManager
+            this.addStep === EAddStep.frsManager
         ) {
             return this._("w_VSDwellTime_AddisapUseFRSManger");
         }
 
         if (
             this.pageStep === EPageStep.edit &&
-            this.addStep === EAddStep.isapFrs
+            this.addStep === EAddStep.frs
         ) {
             return this._("w_VSDwellTime_EditisapUseFRS");
         }
 
         if (
             this.pageStep === EPageStep.edit &&
-            this.addStep === EAddStep.isapFrsManager
+            this.addStep === EAddStep.frsManager
         ) {
             return this._("w_VSDwellTime_EditisapUseFRSManger");
         }
@@ -1265,9 +1388,6 @@ export default class DwellTime extends Vue {
                 /**
                  * @uiLabel - ${this._("w_VSDemographic_demoServerId")}
                  * @uiPlaceHolder - ${this._("w_VSDemographic_demoServerId")}
-                 * @uiHidden - ${
-                     this.addStep === EAddStep.isapFrsManager ? "true" : "false"
-                 }
                  */
                 demoServerId: ${toEnumInterface(
                     this.demographicIdSelectItem as any,
@@ -1275,30 +1395,52 @@ export default class DwellTime extends Vue {
                 )};
 
 
-                /**
+                 /**
                  * @uiLabel - ${this._("w_ServerId")}
                  * @uiPlaceHolder - ${this._("w_ServerId")}
-                 * @uiHidden - ${
-                     this.addStep === EAddStep.isapFrsManager ? "true" : "false"
-                 }
                  */
                 serverId: ${toEnumInterface(
-                    this.serverIdSelectItem as any,
-                    false
-                )};
+			        this.serverIdSelectItem as any,
+			        false
+		        )};
 
 
                 /**
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiPlaceHolder - ${this._("w_SourceId")}
                  * @uiHidden - ${
-                     this.addStep === EAddStep.isapFrsManager ? "true" : "false"
-                 }
+				        this.addStep === EAddStep.frsManager ? "true" : "false"
+			        }
                  */
                 sourceid: ${toEnumInterface(
-                    this.sourceIdSelectItem as any,
-                    false
-                )};
+			        this.sourceIdSelectItem as any,
+			        false
+		        )};
+
+
+               /**
+                 * @uiLabel - ${this._("w_FRSId")}
+                 * @uiPlaceHolder - ${this._("w_FRSId")}
+                 * @uiHidden - ${
+				        this.addStep === EAddStep.frs ? "true" : "false"
+			        }
+                 */
+                frsId: ${toEnumInterface(
+			        this.frsIdSelectItem as any,
+			        false
+		        )};
+
+               /**
+                 * @uiLabel - ${this._("w_SourceId")}
+                 * @uiPlaceHolder - ${this._("w_SourceId")}
+                 * @uiHidden - ${
+				        this.addStep === EAddStep.frs ? "true" : "false"
+			        }
+                 */
+                sourceId: ${toEnumInterface(
+			        this.sourceIdSelectItem as any,
+			        false
+		        )};
 
 
                 /**
@@ -1374,6 +1516,24 @@ export default class DwellTime extends Vue {
                  * @uiType - iv-form-label
                  */
                 sourceidView?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_FRSId")}
+                 * @uiType - iv-form-label
+                 * @uiHidden - ${ this.addStep === EAddStep.frs ? "true" : "false" }
+                 */
+                 */
+                frsIdView?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_SourceId")}
+                 * @uiType - iv-form-label
+                 * @uiHidden - ${ this.addStep === EAddStep.frs ? "true" : "false" }
+                 */
+                 */
+                sourceIdView?: string;
 
 
                 /**

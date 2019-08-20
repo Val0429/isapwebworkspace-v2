@@ -263,7 +263,7 @@ import { toEnumInterface } from "@/../core";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 // API Interface
-import { IConfigiSap } from "@/config/default/api/interfaces";
+import { IConfigiSap, IConfigiSapFRSManager } from "@/config/default/api/interfaces";
 
 // Region Tree
 import {
@@ -297,8 +297,6 @@ enum EPageStep {
 enum EAddStep {
     select = "select",
     isap = "isap",
-    isapFrs = "isapFrs",
-    isapFrsManager = "isapFrsManager",
     frs = "frs",
     frsManager = "frsManager",
     none = "none"
@@ -335,6 +333,7 @@ export default class Demographic extends Vue {
     serverIdSelectItem: any = {};
     demographicIdSelectItem: any = {};
     sourceIdSelectItem: any = {};
+    frsIdSelectItem: any = {};
 
     params: any = {
         mode: ECameraMode.demographic
@@ -360,6 +359,8 @@ export default class Demographic extends Vue {
         // FRS Manager
         frsId: "",
         sourceId: "",
+        model: '',
+        brand: '',
     };
 
     created() {}
@@ -378,7 +379,12 @@ export default class Demographic extends Vue {
             serverId: "",
             sourceid: "",
             location: "",
-            objectId: ""
+            objectId: "",
+            // FRS Manager
+            frsId: "",
+            sourceId: "",
+            model: '',
+            brand: '',
         };
     }
 
@@ -431,9 +437,11 @@ export default class Demographic extends Vue {
     }
 
     async initSelectItemFRSServer() {
+        console.log('initSelectItemFRSServer ~ ', )
+
         this.serverIdSelectItem = {};
 
-        if (this.addStep === EAddStep.isapFrs) {
+        if (this.addStep === EAddStep.frs) {
             await this.$server
                 .R("/partner/frs")
                 .then((response: any) => {
@@ -447,7 +455,7 @@ export default class Demographic extends Vue {
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
                 });
-        } else if (this.addStep === EAddStep.isapFrsManager) {
+        } else if (this.addStep === EAddStep.frsManager) {
             // TODO:
             // await this.$server
             //     .R("/partner/frs-manager")
@@ -498,6 +506,7 @@ export default class Demographic extends Vue {
                 // objectId: param.objectId,
                 name: param.name,
                 model: param.model,
+                brand: param.brand,
                 areaId:
                     param.area && param.area["objectId"]
                         ? param.area["objectId"]
@@ -556,23 +565,23 @@ export default class Demographic extends Vue {
                         ? param.area["objectId"]
                         : "",
 
-                // TODO: wait Min
-                // frsId:
-                //     param.config && param.config.frsId
-                //         ? param.config.frsId
-                //         : "",
-                // frsIdView:
-                //     param.config && param.config.frsId
-                //         ? param.config.frsId
-                //         : "",
-                // sourceId:
-                //     param.config && param.config.sourceId
-                //         ? param.config.sourceId
-                //         : "",
-                // sourceIdView:
-                //     param.config && param.config.sourceIdView
-                //         ? param.config.sourceIdView
-                //         : "",
+                // TODO: check param
+                frsId:
+                    param.config && param.config.frsId
+                        ? param.config.frsId
+                        : "",
+                frsIdView:
+                    param.config && param.config.frsId
+                        ? param.config.frsId
+                        : "",
+                sourceId:
+                    param.config && param.config.sourceId
+                        ? param.config.sourceId
+                        : "",
+                sourceIdView:
+                    param.config && param.config.sourceIdView
+                        ? param.config.sourceIdView
+                        : "",
             };
         }
 
@@ -610,6 +619,12 @@ export default class Demographic extends Vue {
                 break;
             case "siteId":
                 this.inputFormData.siteId = data.value;
+                break;
+            case "sourceId":
+                this.inputFormData.sourceId = data.value;
+                break;
+            case "frsId":
+                this.inputFormData.frsId = data.value;
                 break;
         }
 
@@ -861,16 +876,14 @@ export default class Demographic extends Vue {
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
 
-        console.log('this.inputFormData.model === EAddStep.frs ~ ', this.inputFormData.model === EAddStep.frs)
-
         if (this.inputFormData.model === EAddStep.frs) {
-            this.addStep = EAddStep.isapFrs;
+            this.addStep = EAddStep.frs;
             this.transition.prevStep = this.transition.step;
             this.transition.step = 3;
         }
 
         if (this.inputFormData.model === EAddStep.frsManager) {
-            this.addStep = EAddStep.isapFrsManager;
+            this.addStep = EAddStep.frsManager;
             this.transition.prevStep = this.transition.step;
             this.transition.step = 3;
         }
@@ -895,35 +908,32 @@ export default class Demographic extends Vue {
         this.getInputData();
 
         if (this.inputFormData.model === EAddStep.frs) {
-            this.addStep = EAddStep.isapFrs;
+            this.addStep = EAddStep.frs;
             this.transition.prevStep = this.transition.step;
             this.transition.step = 4;
         }
 
         if (this.inputFormData.model === EAddStep.frsManager) {
-            this.addStep = EAddStep.isapFrsManager;
+            this.addStep = EAddStep.frsManager;
             this.transition.prevStep = this.transition.step;
             this.transition.step = 4;
         }
     }
 
-    async pageToAddByiSapFRS(brand: string) {
+    async pageToAddByiSapFRS() {
+        this.addStep = EAddStep.frs;
         this.clearInputData();
         await this.initSelectItemFRSServer();
         await this.initSelectItemSite();
-        this.addStep = EAddStep.isapFrs;
-        this.inputFormData.brand = brand;
         this.inputFormData.stepType = EPageStep.add;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
     }
 
-    async pageToAddByiSapFRSManager(brand: string) {
+    async pageToAddByiSapFRSManager() {
+        this.addStep = EAddStep.frsManager;
         this.clearInputData();
         await this.initSelectItemSite();
-
-        this.addStep = EAddStep.isapFrsManager;
-        this.inputFormData.brand = brand;
         this.inputFormData.stepType = EPageStep.add;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
@@ -1002,90 +1012,196 @@ export default class Demographic extends Vue {
     }
 
     async saveAddOrEditiSap(data) {
-        const configObject: IConfigiSap = {
-            serverId: data.serverId,
-            sourceid: data.sourceid
-        };
 
-        if (this.inputFormData.brand === EAddStep.isapFrs) {
-            const datas: any = [
-                {
-                    customId: data.customId,
-                    name: data.name,
-                    areaId: data.areaId,
-                    demoServerId: data.demoServerId,
-                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                    config: configObject
-                }
-            ];
+        if (this.addStep === EAddStep.frs) {
 
-            const addParam = {
-                datas
+            const configFRSServerObject: IConfigiSap = {
+                serverId: data.serverId,
+                sourceid: data.sourceid
             };
-            Loading.show();
-            await this.$server
-                .C("/device/demographic", addParam)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(
-                        this,
-                        response,
-                        (response: any) => {
-                            Dialog.success(
-                                this._("w_VSDemographic_AddSuccess")
-                            );
-                            this.pageToList();
-                        },
-                        this._("w_VSDemographic_ADDFailed")
-                    );
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_VSDemographic_ADDFailed")
-                    );
-                });
+
+            if (!this.inputFormData.objectId) {
+
+                const datas: any = [
+                    {
+                        customId: data.customId,
+                        brand: EAddStep.isap,
+                        model: EAddStep.frs,
+                        name: data.name,
+                        areaId: data.areaId,
+                        demoServerId: data.demoServerId,
+                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        config: configFRSServerObject
+                    }
+                ];
+
+                const addParam = {
+                    datas
+                };
+                Loading.show();
+                await this.$server
+                    .C("/device/demographic", addParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                Dialog.success(
+                                    this._("w_VSDemographic_AddSuccess")
+                                );
+                                this.pageToList();
+                            },
+                            this._("w_VSDemographic_ADDFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(
+                            this,
+                            e,
+                            this._("w_VSDemographic_ADDFailed")
+                        );
+                    });
+            } else {
+                const datas: any = [
+                    {
+                        objectId: data.objectId,
+                        brand: EAddStep.isap,
+                        model: EAddStep.frs,
+                        name: data.name,
+                        areaId: data.areaId,
+                        demoServerId: data.demoServerId,
+                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        config: configFRSServerObject
+                    }
+                ];
+
+                const editParam = {
+                    datas
+                };
+                Loading.show();
+                await this.$server
+                    .U("/device/demographic", editParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                Dialog.success(
+                                    this._("w_VSDemographic_EditSuccess")
+                                );
+                                this.pageToList();
+                            },
+                            this._("w_VSDemographic_EditFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(
+                            this,
+                            e,
+                            this._("w_VSDemographic_EditFailed")
+                        );
+                    });
+            }
+
         }
 
-        if (this.inputFormData.stepType === EPageStep.edit) {
-            const datas: any = [
-                {
-                    objectId: data.objectId,
-                    name: data.name,
-                    areaId: data.areaId,
-                    demoServerId: data.demoServerId,
-                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                    config: configObject
-                }
-            ];
 
-            const editParam = {
-                datas
+        if (this.addStep === EAddStep.frsManager) {
+
+            const configFRSManagerObject: IConfigiSapFRSManager = {
+                serverId: data.serverId,
+                frsId: data.frsId,
+                sourceId: data.sourceId,
             };
-            Loading.show();
-            await this.$server
-                .U("/device/demographic", editParam)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(
-                        this,
-                        response,
-                        (response: any) => {
-                            Dialog.success(
-                                this._("w_VSDemographic_EditSuccess")
-                            );
-                            this.pageToList();
-                        },
-                        this._("w_VSDemographic_EditFailed")
-                    );
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_VSDemographic_EditFailed")
-                    );
-                });
+
+            if (!this.inputFormData.objectId) {
+
+                const datas: any = [
+                    {
+                        customId: data.customId,
+                        brand: EAddStep.isap,
+                        model: EAddStep.frsManager,
+                        name: data.name,
+                        areaId: data.areaId,
+                        demoServerId: data.demoServerId,
+                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        config: configFRSManagerObject
+                    }
+                ];
+
+                const addParam = {
+                    datas
+                };
+
+                Loading.show();
+                await this.$server
+                    .C("/device/demographic", addParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                Dialog.success(
+                                    this._("w_VSDemographic_AddSuccess")
+                                );
+                                this.pageToList();
+                            },
+                            this._("w_VSDemographic_ADDFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(
+                            this,
+                            e,
+                            this._("w_VSDemographic_ADDFailed")
+                        );
+                    });
+            } else {
+                const datas: any = [
+                    {
+                        objectId: data.objectId,
+                        customId: data.customId,
+                        brand: EAddStep.isap,
+                        model: EAddStep.frsManager,
+                        name: data.name,
+                        areaId: data.areaId,
+                        demoServerId: data.demoServerId,
+                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        config: configFRSManagerObject
+                    }
+                ];
+
+                const editParam = {
+                    datas
+                };
+
+                Loading.show();
+                await this.$server
+                    .U("/device/demographic", editParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                Dialog.success(
+                                    this._("w_VSDemographic_EditSuccess")
+                                );
+                                this.pageToList();
+                            },
+                            this._("w_VSDemographic_EditFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(
+                            this,
+                            e,
+                            this._("w_VSDemographic_EditFailed")
+                        );
+                    });
+            }
+
         }
+
     }
 
     async doDelete() {
@@ -1158,28 +1274,28 @@ export default class Demographic extends Vue {
     showLabelTitle(): string {
         if (
             this.pageStep === EPageStep.add &&
-            this.addStep === EAddStep.isapFrs
+            this.addStep === EAddStep.frs
         ) {
             return this._("w_VSDemographic_AddisapUseFRS");
         }
 
         if (
             this.pageStep === EPageStep.add &&
-            this.addStep === EAddStep.isapFrsManager
+            this.addStep === EAddStep.frsManager
         ) {
             return this._("w_VSDemographic_AddisapUseFRSManger");
         }
 
         if (
             this.pageStep === EPageStep.edit &&
-            this.addStep === EAddStep.isapFrs
+            this.addStep === EAddStep.frs
         ) {
             return this._("w_VSDemographic_EditisapUseFRS");
         }
 
         if (
             this.pageStep === EPageStep.edit &&
-            this.addStep === EAddStep.isapFrsManager
+            this.addStep === EAddStep.frsManager
         ) {
             return this._("w_VSDemographic_EditisapUseFRSManger");
         }
@@ -1265,9 +1381,6 @@ export default class Demographic extends Vue {
                 /**
                  * @uiLabel - ${this._("w_VSDemographic_demoServerId")}
                  * @uiPlaceHolder - ${this._("w_VSDemographic_demoServerId")}
-                 * @uiHidden - ${
-                     this.addStep === EAddStep.isapFrsManager ? "true" : "false"
-                 }
                  */
                 demoServerId: ${toEnumInterface(
                     this.demographicIdSelectItem as any,
@@ -1275,12 +1388,9 @@ export default class Demographic extends Vue {
                 )};
 
 
-                /**
+               /**
                  * @uiLabel - ${this._("w_ServerId")}
                  * @uiPlaceHolder - ${this._("w_ServerId")}
-                 * @uiHidden - ${
-                     this.addStep === EAddStep.isapFrsManager ? "true" : "false"
-                 }
                  */
                 serverId: ${toEnumInterface(
                     this.serverIdSelectItem as any,
@@ -1292,10 +1402,35 @@ export default class Demographic extends Vue {
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiPlaceHolder - ${this._("w_SourceId")}
                  * @uiHidden - ${
-                     this.addStep === EAddStep.isapFrsManager ? "true" : "false"
-                 }
+                        this.addStep === EAddStep.frsManager ? "true" : "false"
+                    }
                  */
                 sourceid: ${toEnumInterface(
+                    this.sourceIdSelectItem as any,
+                    false
+                )};
+
+
+               /**
+                 * @uiLabel - ${this._("w_FRSId")}
+                 * @uiPlaceHolder - ${this._("w_FRSId")}
+                 * @uiHidden - ${
+                    this.addStep === EAddStep.frs ? "true" : "false"
+                }
+                 */
+                frsId: ${toEnumInterface(
+                    this.frsIdSelectItem as any,
+                    false
+                )};
+
+               /**
+                 * @uiLabel - ${this._("w_SourceId")}
+                 * @uiPlaceHolder - ${this._("w_SourceId")}
+                 * @uiHidden - ${
+                        this.addStep === EAddStep.frs ? "true" : "false"
+                    }
+                 */
+                sourceId: ${toEnumInterface(
                     this.sourceIdSelectItem as any,
                     false
                 )};
@@ -1304,7 +1439,7 @@ export default class Demographic extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Sites")}
                  */
-                siteId?: ${toEnumInterface(this.sitesSelectItem as any, false)};
+                siteId: ${toEnumInterface(this.sitesSelectItem as any, false)};
 
                 selectTree?: any;
 
@@ -1312,7 +1447,7 @@ export default class Demographic extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Area")}
                  */
-                areaId?: ${toEnumInterface(this.areaSelectItem as any, false)};
+                areaId: ${toEnumInterface(this.areaSelectItem as any, false)};
 
 
                 /**
@@ -1350,7 +1485,7 @@ export default class Demographic extends Vue {
                  */
                 demoServerIdView?: string;
 
-                /**
+                 /**
                  * @uiLabel - ${this._("w_ServerId")}
                  * @uiType - iv-form-label
                  */
@@ -1362,6 +1497,24 @@ export default class Demographic extends Vue {
                  * @uiType - iv-form-label
                  */
                 sourceidView?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_FRSId")}
+                 * @uiType - iv-form-label
+                 * @uiHidden - ${ this.addStep === EAddStep.frs ? "true" : "false" }
+                 */
+                 */
+                frsIdView?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_SourceId")}
+                 * @uiType - iv-form-label
+                 * @uiHidden - ${ this.addStep === EAddStep.frs ? "true" : "false" }
+                 */
+                 */
+                sourceIdView?: string;
 
 
                 /**

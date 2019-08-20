@@ -384,7 +384,7 @@ import { toEnumInterface } from "@/../core";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 // API Interface
-import { IConfig, IConfigiSap } from "@/config/default/api/interfaces";
+import { IConfig, IConfigiSap, IConfigiSapFRSManager } from "@/config/default/api/interfaces";
 
 // Region Tree
 import {
@@ -689,23 +689,23 @@ export default class PeopleCounting extends Vue {
                         ? param.area["objectId"]
                         : "",
 
-                // TODO: wait Min
-                // frsId:
-                //     param.config && param.config.frsId
-                //         ? param.config.frsId
-                //         : "",
-                // frsIdView:
-                //     param.config && param.config.frsId
-                //         ? param.config.frsId
-                //         : "",
-                // sourceId:
-                //     param.config && param.config.sourceId
-                //         ? param.config.sourceId
-                //         : "",
-                // sourceIdView:
-                //     param.config && param.config.sourceIdView
-                //         ? param.config.sourceIdView
-                //         : "",
+                // TODO: check param
+                frsId:
+                    param.config && param.config.frsId
+                        ? param.config.frsId
+                        : "",
+                frsIdView:
+                    param.config && param.config.frsId
+                        ? param.config.frsId
+                        : "",
+                sourceId:
+                    param.config && param.config.sourceId
+                        ? param.config.sourceId
+                        : "",
+                sourceIdView:
+                    param.config && param.config.sourceIdView
+                        ? param.config.sourceIdView
+                        : "",
             };
         }
 
@@ -757,6 +757,12 @@ export default class PeopleCounting extends Vue {
                 break;
             case "siteId":
                 this.inputFormData.siteId = data.value;
+                break;
+            case "sourceId":
+                this.inputFormData.sourceId = data.value;
+                break;
+            case "frsId":
+                this.inputFormData.frsId = data.value;
                 break;
         }
 
@@ -1301,95 +1307,195 @@ export default class PeopleCounting extends Vue {
     }
 
     async saveAddOrEditiSap(data) {
-        const configObject: IConfigiSap = {
-            serverId: data.serverId,
-            sourceid: data.sourceid
-        };
 
-        if (this.addStep === EAddStep.frs && !this.inputFormData.objectId) {
-            const datas: any = [
-                {
-                    customId: data.customId,
-                    name: data.name,
-                    brand: EAddStep.isap,
-                    model: EAddStep.frs,
-                    areaId: data.areaId,
-                    direction: data.direction,
-                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                    config: configObject
-                }
-            ];
+        if (this.addStep === EAddStep.frs) {
 
-            const addParam = {
-                datas
+            const configFRSServerObject: IConfigiSap = {
+                serverId: data.serverId,
+                sourceid: data.sourceid
             };
 
-            Loading.show();
-            await this.$server
-                .C("/device/people-counting", addParam)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(
-                        this,
-                        response,
-                        (response: any) => {
-                            Dialog.success(
-                                this._("w_VSPeopleCounting_AddSuccess")
-                            );
-                            this.pageToList();
-                        },
-                        this._("w_VSPeopleCounting_ADDFailed")
-                    );
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_VSPeopleCounting_ADDFailed")
-                    );
-                });
+            if (!this.inputFormData.objectId) {
+
+                const datas: any = [
+                    {
+                        customId: data.customId,
+                        name: data.name,
+                        brand: EAddStep.isap,
+                        model: EAddStep.frs,
+                        areaId: data.areaId,
+                        direction: data.direction,
+                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        config: configFRSServerObject
+                    }
+                ];
+
+                const addParam = {
+                    datas
+                };
+
+                Loading.show();
+                await this.$server
+                    .C("/device/people-counting", addParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                Dialog.success(
+                                    this._("w_VSPeopleCounting_AddSuccess")
+                                );
+                                this.pageToList();
+                            },
+                            this._("w_VSPeopleCounting_ADDFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(
+                            this,
+                            e,
+                            this._("w_VSPeopleCounting_ADDFailed")
+                        );
+                    });
+            } else {
+                const datas: any = [
+                    {
+                        objectId: data.objectId,
+                        name: data.name,
+                        brand: EAddStep.isap,
+                        model: EAddStep.frs,
+                        areaId: data.areaId,
+                        direction: data.direction,
+                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        config: configFRSServerObject
+                    }
+                ];
+
+                const editParam = {
+                    datas
+                };
+
+                Loading.show();
+                await this.$server
+                    .U("/device/people-counting", editParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                Dialog.success(
+                                    this._("w_VSPeopleCounting_EditSuccess")
+                                );
+                                this.pageToList();
+                            },
+                            this._("w_VSPeopleCounting_EditFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(
+                            this,
+                            e,
+                            this._("w_VSPeopleCounting_EditFailed")
+                        );
+                    });
+            }
+
         }
 
-        if (this.addStep === EAddStep.frs && this.inputFormData.objectId) {
-            const datas: any = [
-                {
-                    objectId: data.objectId,
-                    name: data.name,
-                    brand: EAddStep.isap,
-                    model: EAddStep.frs,
-                    areaId: data.areaId,
-                    direction: data.direction,
-                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                    config: configObject
-                }
-            ];
 
-            const editParam = {
-                datas
+        if (this.addStep === EAddStep.frsManager) {
+
+            const configFRSManagerObject: IConfigiSapFRSManager = {
+                serverId: data.serverId,
+                frsId: data.frsId,
+                sourceId: data.sourceId,
             };
 
-            Loading.show();
-            await this.$server
-                .U("/device/people-counting", editParam)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(
-                        this,
-                        response,
-                        (response: any) => {
-                            Dialog.success(
-                                this._("w_VSPeopleCounting_EditSuccess")
-                            );
-                            this.pageToList();
-                        },
-                        this._("w_VSPeopleCounting_EditFailed")
-                    );
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_VSPeopleCounting_EditFailed")
-                    );
-                });
+            if (!this.inputFormData.objectId) {
+
+                const datas: any = [
+                    {
+                        customId: data.customId,
+                        name: data.name,
+                        brand: EAddStep.isap,
+                        model: EAddStep.frs,
+                        areaId: data.areaId,
+                        direction: data.direction,
+                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        config: configFRSManagerObject
+                    }
+                ];
+
+                const addParam = {
+                    datas
+                };
+
+                Loading.show();
+                await this.$server
+                    .C("/device/people-counting", addParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                Dialog.success(
+                                    this._("w_VSPeopleCounting_AddSuccess")
+                                );
+                                this.pageToList();
+                            },
+                            this._("w_VSPeopleCounting_ADDFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(
+                            this,
+                            e,
+                            this._("w_VSPeopleCounting_ADDFailed")
+                        );
+                    });
+            } else {
+                const datas: any = [
+                    {
+                        objectId: data.objectId,
+                        name: data.name,
+                        brand: EAddStep.isap,
+                        model: EAddStep.frs,
+                        areaId: data.areaId,
+                        direction: data.direction,
+                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        config: configFRSManagerObject
+                    }
+                ];
+
+                const editParam = {
+                    datas
+                };
+
+                Loading.show();
+                await this.$server
+                    .U("/device/people-counting", editParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                Dialog.success(
+                                    this._("w_VSPeopleCounting_EditSuccess")
+                                );
+                                this.pageToList();
+                            },
+                            this._("w_VSPeopleCounting_EditFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(
+                            this,
+                            e,
+                            this._("w_VSPeopleCounting_EditFailed")
+                        );
+                    });
+            }
+
         }
     }
 
@@ -1863,10 +1969,8 @@ export default class PeopleCounting extends Vue {
                 /**
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiType - iv-form-label
-                 * @uiHidden - ${ this.addStep === EAddStep.frs ? "true" : "false" }
                  */
-                 */
-                sourceIdView?: string;
+                sourceidView?: string;
 
 
                 /**
@@ -1881,8 +1985,11 @@ export default class PeopleCounting extends Vue {
                 /**
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiType - iv-form-label
+                 * @uiHidden - ${ this.addStep === EAddStep.frs ? "true" : "false" }
                  */
-                sourceidView?: string;
+                 */
+                sourceIdView?: string;
+
 
 
                 /**
