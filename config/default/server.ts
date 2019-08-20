@@ -199,6 +199,11 @@ interface RestfulRequest extends ApisRequestBase {
         '/report/campaign/multi-campaign-summary': [any, any, false];
         '/report/campaign/single-campaign-summary': [any, any, false];
         '/report/heatmap/summary': [any, any, false];
+
+        // FRS Manager
+        '/partner/frs-manager': [any, any, false];
+        '/partner/frs-manager/device': [any, any, false];
+        '/partner/frs-manager/user-group': [any, any, false];
     };
 
     // read
@@ -305,6 +310,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         //system
         '/setting/system': [any, any, false];
+
+        // FRS Manager
+        '/partner/frs-manager': [any, any, false];
     };
 
     // update
@@ -396,6 +404,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         //system
         '/setting/system': [any, any, false];
+
+        // FRS Manager
+        '/partner/frs-manager': [any, any, false];
     };
 
     // delete
@@ -454,6 +465,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         // report
         '/report/template': [any, any, false];
+
+        // FRS Manager
+        '/partner/frs-manager': [any, any, false];
     };
 
     // web socket

@@ -213,6 +213,7 @@ export default class LangObject implements ILang {
     w_ErrorReadData = 'Read data failed, please try again.';
     w_ErrorRecognize = 'Recognize failed, please try again.';
     w_ErrorConfig = 'Required IP, Port, WSPort, Protocol, Account and Password';
+    w_ErrorConfigFRSManager = 'Required IP, Port, Protocol, Account and Password';
     w_WrongConfig = 'Please check IP, Port, WSPort, Protocol, Account and Password again';
 
     w_PeakHours = 'PEAK HOURS';
@@ -1124,5 +1125,20 @@ export default class LangObject implements ILang {
     w_RuleAndActions_VipConditionText2 = "times in past";
     w_RuleAndActions_VipConditionText3 = "days";
 
-    w_RuleAndActions_ErrorTip = 'Rule Name, Active, Store(s) can not be empty'
+    w_RuleAndActions_ErrorTip = 'Rule Name, Active, Store(s) can not be empty';
+
+    // frs manager
+    w_ServerFRSManager_List = 'FRS Manager List';
+    w_ServerFRSManager_Add = 'Add FRS Manager';
+    w_ServerFRSManager_Edit = 'Edit FRS Manager';
+    w_ServerFRSManager_View = 'View FRS Manager';
+
+    w_ServerFRSManager_AddSuccess = 'FRS Manager add success.';
+    w_ServerFRSManager_ADDFailed = 'Add failed! Can not add the FRS Manager, please try again.';
+    w_ServerFRSManager_EditSuccess = 'FRS Manager edit success.';
+    w_ServerFRSManager_EditFailed = 'Edit failed! Can not edit the FRS Manager, please try again.';
+    w_ServerFRSManager_DeleteConfirm = 'Are you sure to delete selected FRS Manager(s)?';
+
+    w_FRSManager_UserGroup_success = 'Connect UserGroup Success';
+    w_FRSManager_UserGroup_failed = 'Connect UserGroup Failed';
 }

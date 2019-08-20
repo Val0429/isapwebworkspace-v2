@@ -363,6 +363,20 @@ interface IFRSServerReadUserGroup extends IAnalysis {
 
 export { IAddFRSServer, IEditFRSServer, IFRSServerResults, IFRSServerReadUserGroup };
 
+// FRS Manager
+interface IFRSManagerAdd extends IConfig {
+    customId?: string;
+    name: string;
+    userGroups?: IFRSUserGroup[];
+}
+
+interface IFRSManagerEdit extends IFRSManagerAdd {
+    objectId: string;
+}
+
+export { IFRSManagerAdd, IFRSManagerEdit };
+
+
 // Business Operation Campaign
 interface IBusinessOperationCampaign {
     type: string;

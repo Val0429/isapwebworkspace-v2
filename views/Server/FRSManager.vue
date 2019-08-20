@@ -10,7 +10,7 @@
             <iv-card
                 key="transition_1"
                 v-show="transition.step === 1"
-                :label=" _('w_ServerFRS_List') "
+                :label=" _('w_ServerFRSManager_List') "
             >
                 <template #toolbox>
 
@@ -35,7 +35,7 @@
                     ref="listTable"
                     :interface="ITableList()"
                     :multiple="tableMultiple"
-                    :server="{ path: '/partner/frs' }"
+                    :server="{ path: '/partner/frs-manager' }"
                     @selected="selectedItem($event)"
                 >
 
@@ -139,17 +139,17 @@ import Loading from "@/services/Loading";
 
 import {
     IFRSServerResults,
-    IAddFRSServer,
-    IEditFRSServer,
     IFRSServerReadUserGroup,
-    IFRSUserGroup
+    IFRSUserGroup,
+    IFRSManagerAdd,
+    IFRSManagerEdit
 } from "@/config/default/api/interfaces";
 
 // Transition
 import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
 
-interface IInputFormData extends IFRSServerResults {
+interface IInputFormData extends IFRSManagerAdd,  IFRSManagerEdit {
     employee?: string;
     employeeName?: string;
     vip?: string;
@@ -167,7 +167,7 @@ enum EUserGroup {
 @Component({
     components: {}
 })
-export default class FRSServer extends Vue {
+export default class FRSManager extends Vue {
     transition: ITransition = {
         type: Transition.type,
         prevStep: 1,
@@ -192,7 +192,6 @@ export default class FRSServer extends Vue {
         protocol: "http",
         ip: "",
         port: null,
-        wsport: null,
         account: "",
         password: "",
         employee: "",
@@ -212,7 +211,6 @@ export default class FRSServer extends Vue {
             protocol: "http",
             ip: "",
             port: null,
-            wsport: null,
             account: "",
             password: "",
             employee: "",
@@ -228,10 +226,9 @@ export default class FRSServer extends Vue {
     }
 
     async initUserGroupInFRS() {
-        const configObject: IFRSServerReadUserGroup = {
+        const configObject: any = {
             ip: this.inputFormData.ip,
             port: this.inputFormData.port,
-            wsport: this.inputFormData.wsport,
             protocol: this.inputFormData.protocol,
             account: this.inputFormData.account,
             password: this.inputFormData.password
@@ -243,7 +240,7 @@ export default class FRSServer extends Vue {
 
         Loading.show();
         let results = await this.$server
-            .C("/partner/frs/user-group", addParam)
+            .C("/partner/frs-manager/user-group", addParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(
                     this,
@@ -304,7 +301,6 @@ export default class FRSServer extends Vue {
                 name: param.name,
                 password: param.password,
                 port: param.port,
-                wsport: param.wsport,
                 protocol: param.protocol
             };
 
@@ -326,7 +322,6 @@ export default class FRSServer extends Vue {
                     }
                 });
             }
-
         }
     }
 
@@ -352,9 +347,6 @@ export default class FRSServer extends Vue {
                 break;
             case "password":
                 this.inputFormData.password = data.value;
-                break;
-            case "wsport":
-                this.inputFormData.wsport = data.value;
                 break;
         }
     }
@@ -391,16 +383,15 @@ export default class FRSServer extends Vue {
         if (
             !this.inputFormData.ip ||
             !this.inputFormData.port ||
-            !this.inputFormData.wsport ||
             !this.inputFormData.protocol ||
             !this.inputFormData.account ||
             !this.inputFormData.password
         ) {
-            Dialog.error(this._("w_ErrorConfig"));
+            Dialog.error(this._("w_ErrorConfigFRSManager"));
             return false;
         }
 
-        if (!this.groupData) {
+        if (this.groupData.length === 0) {
             await this.initUserGroupInFRS();
         }
     }
@@ -446,13 +437,12 @@ export default class FRSServer extends Vue {
 
         // add
         if (this.inputFormData.objectId == "") {
-            const datas: IAddFRSServer[] = [
+            const datas: IFRSManagerAdd[] = [
                 {
                     customId: data.customId,
                     name: data.name,
                     protocol: data.protocol,
                     ip: data.ip,
-                    wsport: data.wsport,
                     port: data.port,
                     account: data.account,
                     password: data.password,
@@ -465,34 +455,33 @@ export default class FRSServer extends Vue {
             };
             Loading.show();
             await this.$server
-                .C("/partner/frs", addParam)
+                .C("/partner/frs-manager", addParam)
                 .then((response: any) => {
                     ResponseFilter.successCheck(
                         this,
                         response,
                         (response: any) => {
-                            Dialog.success(this._("w_ServerFRS_AddSuccess"));
+                            Dialog.success(this._("w_ServerFRSManager_AddSuccess"));
                             this.pageToList();
                         },
-                        this._("w_ServerFRS_ADDFailed")
+                        this._("w_ServerFRSManager_ADDFailed")
                     );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
                         this,
                         e,
-                        this._("w_ServerFRS_ADDFailed")
+                        this._("w_ServerFRSManager_ADDFailed")
                     );
                 });
         } else {
             // edit
-            const datas: IEditFRSServer[] = [
+            const datas: IFRSManagerEdit[] = [
                 {
                     name: data.name,
                     protocol: data.protocol,
                     ip: data.ip,
                     port: data.port,
-                    wsport: data.wsport,
                     account: data.account,
                     password: data.password,
                     objectId: data.objectId,
@@ -505,23 +494,23 @@ export default class FRSServer extends Vue {
             };
             Loading.show();
             await this.$server
-                .U("/partner/frs", editParam)
+                .U("/partner/frs-manager", editParam)
                 .then((response: any) => {
                     ResponseFilter.successCheck(
                         this,
                         response,
                         (response: any) => {
-                            Dialog.success(this._("w_ServerFRS_EditSuccess"));
+                            Dialog.success(this._("w_ServerFRSManager_EditSuccess"));
                             this.pageToList();
                         },
-                        this._("w_ServerFRS_EditFailed")
+                        this._("w_ServerFRSManager_EditFailed")
                     );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
                         this,
                         e,
-                        this._("w_ServerFRS_EditFailed")
+                        this._("w_ServerFRSManager_EditFailed")
                     );
                 });
         }
@@ -529,7 +518,7 @@ export default class FRSServer extends Vue {
 
     async doDelete() {
         Dialog.confirm(
-            this._("w_ServerFRS_DeleteConfirm"),
+            this._("w_ServerFRSManager_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
 
@@ -545,7 +534,7 @@ export default class FRSServer extends Vue {
 
                 Loading.show();
                     this.$server
-                        .D("/partner/frs", deleteParam)
+                        .D("/partner/frs-manager", deleteParam)
                         .then((response: any) => {
                             ResponseFilter.successCheck(
                                 this,
@@ -662,13 +651,6 @@ export default class FRSServer extends Vue {
                 port: number;
 
 
-                /**
-                 * @uiLabel - ${this._("w_ServerFRS_wsport")}
-                 * @uiPlaceHolder - ${this._("w_Port_PlaceHolder")}
-                 * @uiAttrs - { max: 65535, min: 1}
-                 */
-                wsport: number;
-
                 setUserGroupFRS?: any;
 
                 /**
@@ -749,12 +731,6 @@ export default class FRSServer extends Vue {
              */
             port?: number;
 
-
-            /**
-             * @uiLabel - ${this._("w_ServerFRS_wsport")}
-             * @uiType - iv-form-label
-             */
-             wsport?: number;
 
             setUserGroupFRS?: any;
 
