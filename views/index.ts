@@ -33,6 +33,8 @@ import Verify from './Guest/Verify.vue';
 import MyProfile from './MyProfile/MyProfile.vue';
 
 // Dashboard
+import Overview from './Dashboard/Overview.vue';
+import Map from './Dashboard/Map.vue';
 
 // Analysis
 
@@ -130,7 +132,9 @@ $({ path: '/my_profile', name: 'MyProfile', icon: 'fa-twitter' })(MyProfile);
 // $({ path: '/demos/encrypt', name: 'SHA', permission: false })(DemoEncrypt);
 
 // // Dashboard
-// $({ path: '/dashboards', name: "_('w_Navigation_Dashboards')", icon: 'fa-question', redirect: '/login' })();
+$({ path: '/dashboards', name: "_('w_Navigation_Dashboards')", icon: 'fa-code', redirect: '/dashboards/overview' })();
+$({ path: '/dashboards/overview', name: "_('w_DashboardOverview_Overview')", icon: 'fa-code' })(Overview);
+$({ path: '/dashboards/map', name: "_('w_DashboardMap_Map')", icon: 'fa-code' })(Map);
 
 // // Analysis
 // $({ path: '/analysises', name: "_('w_Navigation_Analysises')", icon: 'fa-question', redirect: '/login' })();

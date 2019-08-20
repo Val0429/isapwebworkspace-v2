@@ -1124,6 +1124,9 @@ export default class LangObject implements ILang {
     w_RuleAndActions_VipConditionText2 = 'times in past';
     w_RuleAndActions_VipConditionText3 = 'days';
 
-    w_RuleAndActions_ErrorTip = 'Rule Name, Active, Store(s) can not be empty'
+    w_RuleAndActions_ErrorTip = 'Rule Name, Active, Store(s) can not be empty';
 
+    //Dashboard
+    w_DashboardMap_Map = 'Map';
+    w_DashboardOverview_Overview = 'Overview';
 }

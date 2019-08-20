@@ -1125,9 +1125,13 @@ export default class LangObject {
     w_RuleAndActions_RuleStatusVip = 'When a VIP visits';
     w_RuleAndActions_RuleStatusBlacklist = 'When a Blacklist visits';
 
-    w_RuleAndActions_VipConditionText1 = "When a repeat visitor visits";
-    w_RuleAndActions_VipConditionText2 = "times in past";
-    w_RuleAndActions_VipConditionText3 = "days";
+    w_RuleAndActions_VipConditionText1 = 'When a repeat visitor visits';
+    w_RuleAndActions_VipConditionText2 = 'times in past';
+    w_RuleAndActions_VipConditionText3 = 'days';
 
-    w_RuleAndActions_ErrorTip = 'Rule Name, Active, Store(s) can not be empty'
+    w_RuleAndActions_ErrorTip = 'Rule Name, Active, Store(s) can not be empty';
+
+    //Dashboard
+    w_DashboardMap_Map = 'Map';
+    w_DashboardOverview_Overview = 'Overview';
 }
