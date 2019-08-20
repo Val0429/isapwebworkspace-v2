@@ -149,7 +149,7 @@ export default class LangObject {
     w_ViewPTW_Step_AsteriskIsRequired = 'Indicates required field.';
 
     w_PTW_SubmitSuccess = 'Your PTW application has been successfully submitted';
-    w_PTW_AddPTWSuccess = 'PTW has been succesfully added';
+    w_PTW_AddPTWSuccess = 'A new PTW has been created, and the PTW link been sent';
     w_PTW_EditPTWSuccess = 'PTW has been succesfully updated';
 
     // step1

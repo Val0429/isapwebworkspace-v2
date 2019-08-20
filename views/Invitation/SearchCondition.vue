@@ -54,6 +54,22 @@ interface IPaging {
     page: number;
 }
 
+interface IFilterParam {
+    paging?: IPaging;
+    startDate?: Date;
+    endDate?: Date;
+    status?: EPTWStatus;
+    ptwId?: string;
+    contactEmail?: string;
+    companyId?: string;
+    workCategoryId?: string;
+    workType?: number;
+    workPremisesUnit?: string;
+    applicantName?: string;
+    contractorCompanyName?: string;
+    personName?: string;
+}
+
 @Component({
     components: {}
 })
