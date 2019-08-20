@@ -64,6 +64,7 @@ import CMSServer from './Server/CMSServer.vue';
 import FRSServer from './Server/FRSServer.vue';
 import DemographicServer from './Server/DemographicServer.vue';
 import HumanDetectionServer from './Server/HumanDetectionServer.vue';
+import FRSManager from './Server/FRSManager.vue';
 
 // Video Source
 import PeopleCounting from './VideoSource/PeopleCounting.vue';
@@ -165,7 +166,7 @@ $({ path: '/region', name: "_('w_Navigation_Region')" })(Region);
 // Server
 $({ path: '/server', name: "_('w_Navigation_Server')", icon: 'fa-code', redirect: '/server/cms_server' })();
 $({ path: '/server/cms_server', name: "_('w_Navigation_Server_CMSServer')", icon: 'fa-check' })(CMSServer);
-$({ path: '/server/frs_manager_server', name: "_('w_Navigation_Server_FRSManagerServer')", icon: 'fa-question', redirect: '/login' })();
+$({ path: '/server/frs_manager_server', name: "_('w_Navigation_Server_FRSManagerServer')", icon: 'fa-question' })(FRSManager);
 $({ path: '/server/frs_server', name: "_('w_Navigation_Server_FRSServer')", icon: 'fa-check' })(FRSServer);
 $({ path: '/server/demographic_server', name: "_('w_Navigation_Server_DemographicServer')", icon: 'fa-check' })(DemographicServer);
 $({ path: '/server/hd_server', name: "_('w_Navigation_Server_HDServer')", icon: 'fa-check' })(HumanDetectionServer);
