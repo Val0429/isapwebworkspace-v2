@@ -30,10 +30,6 @@
                 :multiple="tableMultiple"
             >
 
-                <template #establishment="{$attrs, $listeners}">
-                    {{$attrs.row.establishment ? showTime($attrs.row.establishment) : ""}}
-                </template>
-
                 <template #manager="{$attrs, $listeners}">
                     {{$attrs.row.manager ? $attrs.row.manager.name : ""}}
                 </template>
@@ -260,8 +256,10 @@ export class SiteList extends Vue {
 
                 /**
                 * @uiLabel - ${this._("w_Site_Establishment")}
+                * @uiType - iv-cell-date
+                * @uiAttrs - { format: "YYYY/MM/DD" }
                 */
-                establishment: any;
+                establishment: date;
 
                 /**
                 * @uiLabel - ${this._("w_Site_Manager")}
