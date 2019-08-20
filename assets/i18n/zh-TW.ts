@@ -670,4 +670,5 @@ export default class LangObject implements ILang {
     importResult="匯入結果";
     w_Error_LoginFailed="登入失敗";
     w_Import_RecordCount="匯入資料筆數";
+    humanresource="人事系統設定";
 }

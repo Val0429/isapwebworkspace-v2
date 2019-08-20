@@ -670,4 +670,5 @@ export default class LangObject {
     importResult="Import Result";
     w_Error_LoginFailed="Login Failed";
     w_Import_RecordCount="Record Count";
+    humanresource="humanresource";
 }

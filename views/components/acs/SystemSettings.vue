@@ -63,6 +63,18 @@
                 >
                 </iv-form>
          </iv-auto-card>
+         <iv-auto-card :label="_('humanresource')" v-show="currentConfig=='humanresource'">
+                <template #footer-before>
+                    <b-button size="lg" variant="secondary" @click="currentConfig='none'">{{ _("wb_Back") }}</b-button>
+                </template>
+                <iv-form
+                    :interface="humanresourceInf()"                    
+                    :value="humanresource"
+                                      
+                    @submit="submitConfig({humanresource:$event})"
+                >
+                </iv-form>
+         </iv-auto-card>
     </div>
 </template>
 
@@ -83,6 +95,7 @@ export default class SyncReceiver extends Vue {
     smtp:any={};
     sipassconnect:any={};
     sipassdb:any={};
+    humanresource:any={};
     sysSettings:any[]=[];
     fields=[];
   private async getConfigs() {
@@ -92,11 +105,13 @@ export default class SyncReceiver extends Vue {
     this.ccureconnect=Object.assign({},this.allConfig.ccureconnect);
     this.sipassconnect=Object.assign({},this.allConfig.sipassconnect);
     this.sipassdb=Object.assign({},this.allConfig.sipassdb);
+    this.humanresource=Object.assign({},this.allConfig.humanresource);
     this.sysSettings=[];
     this.sysSettings.push({name:"smtp", label:this._("smtp"), config:this.smtp});
     this.sysSettings.push({name:"ccureconnect", label:this._("ccureconnect"), config:this.ccureconnect});
     this.sysSettings.push({name:"sipassconnect", label:this._("sipassconnect"), config:this.sipassconnect});
     this.sysSettings.push({name:"sipassdb", label:this._("sipassdb"), config:this.sipassdb});
+    this.sysSettings.push({name:"humanresource", label:this._("humanresource"), config:this.humanresource});
   }
     
     async created(){
@@ -185,6 +200,21 @@ export default class SyncReceiver extends Vue {
                 *@uiType - iv-form-password
                 */
                 password: string;
+            }
+        `;
+    }
+    humanresourceInf(){
+        return `
+            interface {
+                server: string;
+                port: number;
+                user: string;
+                /***
+                *@uiType - iv-form-password
+                */
+                password: string;
+                database: string;
+                connectionTimeout?: number;
             }
         `;
     }
