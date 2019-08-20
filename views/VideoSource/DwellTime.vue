@@ -298,6 +298,8 @@ enum EAddStep {
     isap = "isap",
     isapFrs = "isapFrs",
     isapFrsManager = "isapFrsManager",
+    frs = "frs",
+    frsManager = "frsManager",
     none = "none"
 }
 
@@ -342,7 +344,23 @@ export default class DwellTime extends Vue {
     regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
 
-    inputFormData: any = {};
+    inputFormData: any = {
+        stepType: "",
+        customId: "",
+        areaId: "",
+        siteId: "",
+        groupIds: [],
+        name: "",
+        demoServerId: "",   // FRS 和 FRS Manager 共用
+        serverId: "",   // FRS 和 FRS Manager 共用
+        sourceid: "",
+        location: "",
+        direction: "",
+        objectId: "",
+        // FRS Manager
+        frsId: "",
+        sourceId: "",
+    };
 
     created() {}
 
@@ -361,7 +379,10 @@ export default class DwellTime extends Vue {
             sourceid: "",
             location: "",
             direction: "",
-            objectId: ""
+            objectId: "",
+            // FRS Manager
+            frsId: "",
+            sourceId: "",
         };
     }
 
@@ -416,21 +437,39 @@ export default class DwellTime extends Vue {
     async initSelectItemFRSServer() {
         this.serverIdSelectItem = {};
 
-        await this.$server
-            .R("/partner/frs")
-            .then((response: any) => {
-                ResponseFilter.successCheck(this, response, (response: any) => {
-                    for (const returnValue of response.results) {
-                        this.serverIdSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                    }
+        if (this.addStep === EAddStep.isapFrs) {
+            await this.$server
+                .R("/partner/frs")
+                .then((response: any) => {
+                    ResponseFilter.successCheck(this, response, (response: any) => {
+                        for (const returnValue of response.results) {
+                            this.serverIdSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                        }
+                    });
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(this, e);
                 });
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
-    }
+        } else if (this.addStep === EAddStep.isapFrsManager) {
+            // TODO:
+            // await this.$server
+            //     .R("/partner/frs-manager")
+            //     .then((response: any) => {
+            //         ResponseFilter.successCheck(this, response, (response: any) => {
+            //             for (const returnValue of response.results) {
+            //                 this.serverIdSelectItem[returnValue.objectId] =
+            //                     returnValue.name;
+            //             }
+            //         });
+            //     })
+            //     .catch((e: any) => {
+            //         return ResponseFilter.catchError(this, e);
+            //     });
+        }
 
+
+    }
     async initSelectItemDemographicServer() {
         this.demographicIdSelectItem = {};
 
@@ -461,6 +500,7 @@ export default class DwellTime extends Vue {
             this.inputFormData = {
                 // objectId: param.objectId,
                 name: param.name,
+                model: param.model,
                 areaId:
                     param.area && param.area["objectId"]
                         ? param.area["objectId"]
@@ -518,7 +558,25 @@ export default class DwellTime extends Vue {
                 tempAreaId:
                     param.area && param.area["objectId"]
                         ? param.area["objectId"]
-                        : ""
+                        : "",
+
+                // TODO: wait Min
+                // frsId:
+                //     param.config && param.config.frsId
+                //         ? param.config.frsId
+                //         : "",
+                // frsIdView:
+                //     param.config && param.config.frsId
+                //         ? param.config.frsId
+                //         : "",
+                // sourceId:
+                //     param.config && param.config.sourceId
+                //         ? param.config.sourceId
+                //         : "",
+                // sourceIdView:
+                //     param.config && param.config.sourceIdView
+                //         ? param.config.sourceIdView
+                //         : "",
             };
         }
 
@@ -804,6 +862,19 @@ export default class DwellTime extends Vue {
 
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
+
+        if (this.inputFormData.model === EAddStep.frs) {
+            this.addStep = EAddStep.isapFrs;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 3;
+        }
+
+        if (this.inputFormData.model === EAddStep.frsManager) {
+            this.addStep = EAddStep.isapFrsManager;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 3;
+        }
+
         await this.initSelectItemFRSServer();
         await this.initSelectItemSite();
         await this.initSelectItemDemographicServer();
@@ -817,19 +888,20 @@ export default class DwellTime extends Vue {
             )
         );
 
-        if (this.inputFormData.serverId !== "") {
-            this.addStep = EAddStep.isapFrs;
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 3;
-        }
     }
 
     pageToView() {
         this.pageStep = EPageStep.view;
         this.getInputData();
 
-        if (this.inputFormData.serverId !== "") {
+        if (this.inputFormData.model === EAddStep.frs) {
             this.addStep = EAddStep.isapFrs;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 4;
+        }
+
+        if (this.inputFormData.model === EAddStep.frsManager) {
+            this.addStep = EAddStep.isapFrsManager;
             this.transition.prevStep = this.transition.step;
             this.transition.step = 4;
         }

@@ -82,7 +82,7 @@
                     size="md"
                     variant="success"
                     type="button"
-                    @click="pageToAddByiSapFRS(eAddStep.isapFrs)"
+                    @click="pageToAddByiSapFRS(eAddStep.frs)"
                 >
                     {{ _('w_iSapFRS') }}
                 </b-button>
@@ -102,7 +102,7 @@
                     size="md"
                     variant="success"
                     type="button"
-                    @click="pageToAddByiSapFRSManager(eAddStep.isapFrsManager)"
+                    @click="pageToAddByiSapFRSManager(eAddStep.frsManager)"
                 >
                     {{ _('w_iSapFRSManager') }}
                 </b-button>
@@ -299,6 +299,8 @@ enum EAddStep {
     isap = "isap",
     isapFrs = "isapFrs",
     isapFrsManager = "isapFrsManager",
+    frs = "frs",
+    frsManager = "frsManager",
     none = "none"
 }
 
@@ -343,7 +345,22 @@ export default class Demographic extends Vue {
     regionTreeItem = new RegionTreeItem();
     selecteds: IRegionTreeSelected[] = [];
 
-    inputFormData: any = {};
+    inputFormData: any = {
+        stepType: "",
+        customId: "",
+        areaId: "",
+        siteId: "",
+        groupIds: [],
+        name: "",
+        demoServerId: "",   // FRS 和 FRS Manager 共用
+        serverId: "",   // FRS 和 FRS Manager 共用
+        sourceid: "",
+        location: "",
+        objectId: "",
+        // FRS Manager
+        frsId: "",
+        sourceId: "",
+    };
 
     created() {}
 
@@ -416,19 +433,38 @@ export default class Demographic extends Vue {
     async initSelectItemFRSServer() {
         this.serverIdSelectItem = {};
 
-        await this.$server
-            .R("/partner/frs")
-            .then((response: any) => {
-                ResponseFilter.successCheck(this, response, (response: any) => {
-                    for (const returnValue of response.results) {
-                        this.serverIdSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                    }
+        if (this.addStep === EAddStep.isapFrs) {
+            await this.$server
+                .R("/partner/frs")
+                .then((response: any) => {
+                    ResponseFilter.successCheck(this, response, (response: any) => {
+                        for (const returnValue of response.results) {
+                            this.serverIdSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                        }
+                    });
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(this, e);
                 });
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
+        } else if (this.addStep === EAddStep.isapFrsManager) {
+            // TODO:
+            // await this.$server
+            //     .R("/partner/frs-manager")
+            //     .then((response: any) => {
+            //         ResponseFilter.successCheck(this, response, (response: any) => {
+            //             for (const returnValue of response.results) {
+            //                 this.serverIdSelectItem[returnValue.objectId] =
+            //                     returnValue.name;
+            //             }
+            //         });
+            //     })
+            //     .catch((e: any) => {
+            //         return ResponseFilter.catchError(this, e);
+            //     });
+        }
+
+
     }
 
     async initSelectItemDemographicServer() {
@@ -461,6 +497,7 @@ export default class Demographic extends Vue {
             this.inputFormData = {
                 // objectId: param.objectId,
                 name: param.name,
+                model: param.model,
                 areaId:
                     param.area && param.area["objectId"]
                         ? param.area["objectId"]
@@ -517,11 +554,33 @@ export default class Demographic extends Vue {
                 tempAreaId:
                     param.area && param.area["objectId"]
                         ? param.area["objectId"]
-                        : ""
+                        : "",
+
+                // TODO: wait Min
+                // frsId:
+                //     param.config && param.config.frsId
+                //         ? param.config.frsId
+                //         : "",
+                // frsIdView:
+                //     param.config && param.config.frsId
+                //         ? param.config.frsId
+                //         : "",
+                // sourceId:
+                //     param.config && param.config.sourceId
+                //         ? param.config.sourceId
+                //         : "",
+                // sourceIdView:
+                //     param.config && param.config.sourceIdView
+                //         ? param.config.sourceIdView
+                //         : "",
             };
         }
 
-        if (this.inputFormData.serverId !== "") {
+        // if (this.inputFormData.serverId !== "") {
+        //     this.selectSourceIdAndLocation(this.inputFormData.serverId);
+        // }
+
+        if (this.pageStep === EPageStep.edit) {
             this.selectSourceIdAndLocation(this.inputFormData.serverId);
         }
     }
@@ -801,6 +860,21 @@ export default class Demographic extends Vue {
 
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
+
+        console.log('this.inputFormData.model === EAddStep.frs ~ ', this.inputFormData.model === EAddStep.frs)
+
+        if (this.inputFormData.model === EAddStep.frs) {
+            this.addStep = EAddStep.isapFrs;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 3;
+        }
+
+        if (this.inputFormData.model === EAddStep.frsManager) {
+            this.addStep = EAddStep.isapFrsManager;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 3;
+        }
+
         await this.initSelectItemFRSServer();
         await this.initSelectItemDemographicServer();
         await this.initSelectItemSite();
@@ -814,19 +888,20 @@ export default class Demographic extends Vue {
             )
         );
 
-        if (this.inputFormData.serverId !== "") {
-            this.addStep = EAddStep.isapFrs;
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 3;
-        }
     }
 
     pageToView() {
         this.pageStep = EPageStep.view;
         this.getInputData();
 
-        if (this.inputFormData.serverId !== "") {
+        if (this.inputFormData.model === EAddStep.frs) {
             this.addStep = EAddStep.isapFrs;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 4;
+        }
+
+        if (this.inputFormData.model === EAddStep.frsManager) {
+            this.addStep = EAddStep.isapFrsManager;
             this.transition.prevStep = this.transition.step;
             this.transition.step = 4;
         }
