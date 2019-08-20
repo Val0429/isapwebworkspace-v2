@@ -2,6 +2,9 @@
     <div>
 
         <div class="row mt-4">
+            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
+            </div>
+            <!--/col-->
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
@@ -135,8 +138,23 @@
             </div>
             <!--/col-->
 
+            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
+            </div>
+            <!--/col-->
+        </div>
+
+        <!-- /row -->
+
+        <div class="row">
+            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
+            </div>
+            <!--/col-->
+
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
-                <div class="box info-box">
+                <div
+                    class="box info-box-second"
+                    style="border-left: 0px"
+                >
                     <div :class="ePageType.repeatCustomer == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}}</span>
@@ -157,18 +175,8 @@
                 </div>
             </div>
             <!--/col-->
-
-        </div>
-
-        <!-- /row -->
-
-        <div class="row">
-
-            <div class="col-lg-3 col-sm-6 col-xs-6 col-xxs-122">
-                <div
-                    class="box info-box-second"
-                    style="border-left: 0px"
-                >
+            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-122">
+                <div class="box info-box-second">
                     <div :class="ePageType.revenue == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_Revenue")}}</span>
@@ -190,7 +198,7 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-3 col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box-second">
                     <div :class="ePageType.transaction == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
@@ -213,7 +221,7 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-3 col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box-second">
                     <div :class="ePageType.conversion == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
@@ -237,7 +245,7 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-3 col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box-second">
                     <div :class="ePageType.asp == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
@@ -260,6 +268,9 @@
             </div>
             <!--/col-->
 
+            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
+            </div>
+            <!--/col-->
         </div>
         <!-- /row -->
     </div>
@@ -280,14 +291,14 @@ import {
     ESign,
     ETimeMode
 } from "@/components/Reports";
-import { EWeather } from "./";
-import HighchartsService from "./models/HighchartsService";
+import { EWeather } from "@/components/Reports";
+import HighchartsService from "@/components/Reports/models/HighchartsService";
 import ResponseFilter from "@/services/ResponseFilter";
 
 @Component({
     components: {}
 })
-export class AnalysisDashboard extends Vue {
+export class FilterStatusDashboard extends Vue {
     // Prop
     @Prop({
         type: Date,
@@ -659,8 +670,8 @@ export class AnalysisDashboard extends Vue {
     }
 }
 
-export default AnalysisDashboard;
-Vue.component("anlysis-dashboard", AnalysisDashboard);
+export default FilterStatusDashboard;
+Vue.component("filter-status-dashboard", FilterStatusDashboard);
 </script>
 
 <style lang="scss" scoped>

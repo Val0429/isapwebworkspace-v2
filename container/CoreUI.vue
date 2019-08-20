@@ -31,10 +31,19 @@
                 <iv-permission :allow="['Admin', 'User']">
 
                     <!-- Dashboard -->
-                    <!-- <SidebarNavItem
+                    <SidebarNavItem
                         :label="_('w_Navigation_Dashboards')"
                         url="/dashboards"
-                    /> -->
+                    >
+                        <SidebarNavItem
+                            :label="_('w_DashboardOverview_Overview')"
+                            url="/dashboards/overview"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_DashboardMap_Map')"
+                            url="/dashboards/map"
+                        />
+                    </SidebarNavItem>
 
                     <!-- Analysis -->
                     <!-- <SidebarNavItem
