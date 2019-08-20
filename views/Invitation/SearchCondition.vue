@@ -3,11 +3,11 @@
 
         <iv-auto-card :label="_('w_Invitation_SearchCondition')">
             <iv-form
+                v-if="beMount"
                 :interface="IFilterConditionForm()"
                 :value="inputFormData"
                 @submit="doSubmit($event)"
             >
-
             </iv-form>
 
             <template #footer-before>
@@ -36,7 +36,7 @@
 
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import Datetime from "@/services/Datetime";
 import Dialog from "@/services/Dialog";
@@ -80,11 +80,7 @@ export class SearchCondition extends Vue {
     workCategorySelectItem: any = {};
     workTypeSelectItem: any = {};
 
-    @Prop({
-        type: Object, // Boolean, Number, String, Array, Object
-        default: () => {}
-    })
-    routeQuery: any;
+    beMount: boolean = true;
 
     inputFormData: any = {
         startDate: null,
@@ -101,27 +97,56 @@ export class SearchCondition extends Vue {
         workersName: ""
     };
 
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: () => {}
+    })
+    routeQuery: any;
+
+    @Watch("routeQuery", { deep: true })
+    private onRouteQueryChanged(newVal, oldVal) {
+        this.beMount = false;
+        this.initRouteQuery();
+    }
+
     created() {
         this.initSelectItem();
         this.initTenantSelectItem();
         this.initWorkCategorySelectItem();
         this.initWorkTypeSelectItem();
-        this.initRouteQuery();
     }
 
     mounted() {}
 
     initRouteQuery() {
+        let submitData: {
+            startDate?: Date;
+            endDate?: Date;
+            status?: string;
+        } = {};
         if (this.routeQuery.startDate) {
-            this.inputFormData.startDate = new Date(this.routeQuery.startDate);
+            let tempDate = new Date(this.routeQuery.startDate);
+            this.inputFormData.startDate = tempDate;
+            submitData.startDate = tempDate;
         }
         if (this.routeQuery.endDate) {
-            this.inputFormData.endDate = new Date(this.routeQuery.endDate);
+            let tempDate = new Date(this.routeQuery.endDate);
+            this.inputFormData.startDate = tempDate;
+            submitData.endDate = tempDate;
         }
         if (this.routeQuery.status) {
-            this.inputFormData.ptwStatus = new Date(this.routeQuery.ptwStatus);
+            this.inputFormData.ptwStatus = this.routeQuery.status;
+            submitData.status = this.routeQuery.status;
         }
-        this.$emit("submit-data", this.inputFormData);
+
+        if (
+            submitData.startDate != undefined ||
+            submitData.endDate != undefined ||
+            submitData.status != undefined
+        ) {
+            this.$emit("submit-data", submitData);
+        }
+        this.beMount = true;
     }
 
     initSelectItem() {
