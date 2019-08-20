@@ -80,6 +80,12 @@ export class SearchCondition extends Vue {
     workCategorySelectItem: any = {};
     workTypeSelectItem: any = {};
 
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: () => {}
+    })
+    routeQuery: any;
+
     inputFormData: any = {
         startDate: null,
         endDate: null,
@@ -100,9 +106,23 @@ export class SearchCondition extends Vue {
         this.initTenantSelectItem();
         this.initWorkCategorySelectItem();
         this.initWorkTypeSelectItem();
+        this.initRouteQuery();
     }
 
     mounted() {}
+
+    initRouteQuery() {
+        if (this.routeQuery.startDate) {
+            this.inputFormData.startDate = new Date(this.routeQuery.startDate);
+        }
+        if (this.routeQuery.endDate) {
+            this.inputFormData.endDate = new Date(this.routeQuery.endDate);
+        }
+        if (this.routeQuery.status) {
+            this.inputFormData.ptwStatus = new Date(this.routeQuery.ptwStatus);
+        }
+        this.$emit("submit-data", this.inputFormData);
+    }
 
     initSelectItem() {
         this.ptwStatusSelectItem = {

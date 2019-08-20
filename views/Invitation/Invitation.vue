@@ -17,7 +17,10 @@
                 v-show="transition.step === 1"
             >
 
-                <search-condition @submit-data="receiveSearchConditionData"></search-condition>
+                <search-condition
+                    :routeQuery="routeQuery"
+                    @submit-data="receiveSearchConditionData"
+                ></search-condition>
 
                 <iv-card
                     key="transition_1"
@@ -180,6 +183,12 @@ export default class Invitation extends Vue {
 
     workDescriptionSelectItem: any = {};
 
+    routeQuery = {
+        startDate: null,
+        endDate: null,
+        status: ""
+    };
+
     inputFormData: any = {
         objectId: "",
         contact: "",
@@ -191,7 +200,25 @@ export default class Invitation extends Vue {
         this.initWorkDescriptionSelectItem();
     }
 
-    mounted() {}
+    mounted() {
+        this.initQuery();
+        this.pageToList();
+    }
+
+    initQuery() {
+        let tempStartDate: string = this.$route.query.startDate as string;
+        let tempEndDate: string = this.$route.query.endDate as string;
+        let tempStatus: string = this.$route.query.status as string;
+        if (tempStartDate != undefined) {
+            this.routeQuery.startDate = new Date(tempStartDate);
+        }
+        if (tempEndDate != undefined) {
+            this.routeQuery.endDate = new Date(tempEndDate);
+        }
+        if (tempStatus != undefined) {
+            this.routeQuery.status = tempStatus;
+        }
+    }
 
     isExpired(date, time, status) {
         if (status != EStatus.approve) {
