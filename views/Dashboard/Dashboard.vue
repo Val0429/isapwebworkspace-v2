@@ -41,7 +41,10 @@
             >
                 <div class="row">
                     <div class="col-lg-6">
-                        <submitted-dashboard :data="dashboardData"></submitted-dashboard>
+                        <submitted-dashboard
+                            :data="dashboardData"
+                            :clickEvent="toInvitationPage"
+                        ></submitted-dashboard>
                     </div>
                     <div class="col-lg-6">
                         <highchart-dashboard
@@ -164,6 +167,18 @@ export default class Dashboard extends Vue {
 
     updateFilter(datas: any) {
         this.inputFilterData[datas.key] = datas.value;
+    }
+
+    toInvitationPage(data) {
+        let path =
+            "/invitation?" +
+            "startDate:" +
+            this.inputFilterData.startDate.toISOString() +
+            "&andDate:" +
+            this.inputFilterData.startDate.toISOString() +
+            "&status" +
+            data;
+        this.$router.push("path");
     }
 
     async doSubmit() {

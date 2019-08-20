@@ -1,17 +1,17 @@
 <template>
     <div class="dashboardDiv">
         <div class="row col-lg-12">
-            <div class="col-lg-4 col-sm-4 col-xs-1 col-xxs-1 submitted">
+            <div class="col-lg-4 col-sm-4 col-xs-1 col-xxs-1 submitted" @click="clickEvent('submitted')">
                 <span class="title">{{_('w_Dashboard_Submitted')}}</span><br>
                 <span class="value">{{data.submitted}}</span>
             </div>
             <!--/col-->
-            <div class="col-lg-4 col-sm-4 col-xs-1 col-xxs-1 approved">
+            <div class="col-lg-4 col-sm-4 col-xs-1 col-xxs-1 approved" @click="clickEvent('approved')">
                 <span class="title">{{_('w_Dashboard_Approved')}}</span><br>
                 <span class="value">{{data.approved}}</span>
             </div>
             <!--/col-->
-            <div class="col-lg-4 col-sm-4 col-xs-1 col-xxs-1 awaitingApproval">
+            <div class="col-lg-4 col-sm-4 col-xs-1 col-xxs-1 awaitingApproval" @click="clickEvent('awaitingApproval')">
                 <span class="title">{{_('w_Dashboard_AwaitingApproval')}}</span><br>
                 <span class="value">{{data.awaitingApproval}}</span>
             </div>
@@ -20,7 +20,7 @@
         <!-- /row -->
 
         <div class="row col-lg-12">
-            <div class="col-lg-12 col-sm-12 col-xs-4 col-xxs-4 total">
+            <div class="col-lg-12 col-sm-12 col-xs-4 col-xxs-4 total"  @click="clickEvent('')">
                 <span class="title">{{_('w_Dashboard_Total')}}</span><br>
                 <span class="value">{{data.total}}</span>
             </div>
@@ -61,6 +61,10 @@ export class SubmittedDashBoard extends Vue {
     created() {}
 
     mounted() {}
+
+    clickEvent(data){
+    this.$emit('clickEvent', data)
+    }
 }
 
 export default SubmittedDashBoard;
