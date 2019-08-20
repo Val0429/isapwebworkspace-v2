@@ -8,7 +8,7 @@ import { Config } from '@/../config/default/serverConfig';
 
 var config: Config = {
     ip: '172.16.10.21',
-    port: 6060,
+    port: 6066,
     ssl: false,
 
     prodPort: 6060,

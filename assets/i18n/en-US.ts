@@ -55,6 +55,7 @@ export default class LangObject {
     w_UserAdd = 'Add User';
     w_UserEdit = 'Edit User';
     w_ConfirmPassword = 'Confirm Password';
+    w_Login_RememberMe = 'Remember Me';
 
     // Login
     w_Login_Login = 'Login';
