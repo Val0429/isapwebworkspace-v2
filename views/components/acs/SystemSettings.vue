@@ -75,7 +75,11 @@
                 >
                 </iv-form>
          </iv-auto-card>
+         <div class="float-right">                
+            <b-button class="btn-filter" size="lg" :disabled="!syncEnabled" @click="manualSync()">{{_("w_ManualSync_HumanResource")}}</b-button>
+        </div>
     </div>
+    
 </template>
 
 
@@ -113,7 +117,20 @@ export default class SyncReceiver extends Vue {
     this.sysSettings.push({name:"sipassdb", label:this._("sipassdb"), config:this.sipassdb});
     this.sysSettings.push({name:"humanresource", label:this._("humanresource"), config:this.humanresource});
   }
-    
+  syncEnabled:boolean=true;
+    async manualSync(type:string="door"){
+        try{
+            this.syncEnabled=false;
+            await this.$server.R("/acs/hrsync" as any, {});
+        }
+        //let global error handle this
+        // catch(err){
+        //     console.error(err);
+        // }
+        finally{
+            this.syncEnabled=true;
+        }
+    }
     async created(){
       this.fields = [
             {
