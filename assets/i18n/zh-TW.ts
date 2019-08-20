@@ -666,7 +666,7 @@ export default class LangObject implements ILang {
     w_Error_DuplicatePermissionTable="門禁組名稱已存在，請使用其他名稱";
     cannotGetTokenFromSipass="無法連線至SiPass，請稍待一分鐘後重試";
     accessLevelIsNotInSipass="SiPass無此門禁點";
-    w_Error_AccessLevelIsNotInAcs="於中介平台上建立的門禁組無此門禁";
+    w_Error_AccessLevelIsNotInAcs="此門禁組權限與CCure上許可表不符，請修改CCure許可表或中介平台門禁組權限";
     importResult="匯入結果";
     w_Error_LoginFailed="登入失敗";
     w_Import_RecordCount="匯入資料筆數";
