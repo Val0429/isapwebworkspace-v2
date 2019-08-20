@@ -415,7 +415,12 @@ export class CurrentStatusDashboard extends Vue {
                     "font-weight: bold; font-size: 12px; margin: 0; padding: 0; display: flex; justify-content: center;"
             },
             subtitle: { text: null },
-            tooltip: { enabled: true },
+            tooltip: {
+                enabled: true,
+                pointFormat:
+                    '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/>' +
+                    "Area (square km): <b>{point.y}</b>"
+            },
             series: [
                 {
                     type: "pie",
