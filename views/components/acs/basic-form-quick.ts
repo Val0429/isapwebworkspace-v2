@@ -29,9 +29,12 @@ export class BasicFormQuick extends Vue {
             await this.$server.R((type=="door"? "/acs/doorsync" :"/acs/floorsync")as any, {});
             //refresh
             this.params={};
-        }catch(err){
-            console.error(err);
-        }finally{
+        }
+        //let global error handle this
+        // catch(err){
+        //     console.error(err);
+        // }
+        finally{
             this.syncEnabled=true;
         }
     }
