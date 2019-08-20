@@ -816,7 +816,6 @@ export class EditPTW extends Vue {
 
         this.isApproval = approval;
 
-        console.log("this.accessGroups ~ ", this.inputFormData.accessGroups);
         this.isChange = true;
     }
 
@@ -947,17 +946,14 @@ export class EditPTW extends Vue {
             return false;
         }
 
-        if (this.isChange) {
-            Dialog.confirm(
-                this._("w_Save_Checked"),
-                this._("w_Save_Checked"),
-                () => {
-                    this.doSubmitApi();
-                }
-            );
-        } else {
-            this.doSubmitApi();
-        }
+        Dialog.confirm(
+            this.isApproval ? this._("w_Save_Checked_ConfirmContentApprove") : this._('w_Save_Checked_ConfirmContentReject'),
+            this._("w_Save_Checked_Confirm"),
+            () => {
+                this.doSubmitApi();
+            }
+        );
+
     }
 
     async doSubmitApi() {
