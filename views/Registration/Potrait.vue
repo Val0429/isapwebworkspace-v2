@@ -158,7 +158,7 @@ export default class Potrait extends Vue {
                 return ResponseFilter.catchError(
                     this,
                     e,
-                    this._("w_FailedToFetch")
+                    this._("w_Error_FailedToFetch")
                 );
             });
     }

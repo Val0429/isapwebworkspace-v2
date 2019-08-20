@@ -99,8 +99,10 @@ interface IInputFormData {
     dailyTotalVisitor: number;
     dateRange: EDateRange;
     kioskIds: string[];
-    startDate: string;
-    endDate: string;
+    startDate: Date | null;
+    endDate: Date | null;
+    startDateString: string;
+    endDateString: string;
     statistic: number;
     exception: number;
     recurring: any;
@@ -126,8 +128,10 @@ export default class ReportsDashboard extends Vue {
         dailyTotalVisitor: 0,
         dateRange: EDateRange.month,
         kioskIds: [],
-        startDate: "",
-        endDate: "",
+        startDate: null,
+        endDate: null,
+        startDateString: "",
+        endDateString: "",
         statistic: 0,
         exception: 0,
         recurring: []
@@ -171,19 +175,19 @@ export default class ReportsDashboard extends Vue {
     async initDateRange() {
         switch (this.inputFormData.dateRange) {
             case EDateRange.month:
-                this.inputFormData.startDate = Datetime.ThisMonthStartDate();
-                this.inputFormData.endDate = Datetime.ThisMonthEndDate();
+                this.inputFormData.startDate = Datetime.MonthStart(new Date());
+                this.inputFormData.endDate = Datetime.MonthEnd(new Date());
                 break;
             case EDateRange.week:
-                this.inputFormData.startDate = Datetime.ThisWeekStartDate();
-                this.inputFormData.endDate = Datetime.ThisWeekEndDate();
+                this.inputFormData.startDate = Datetime.WeekStart(new Date());
+                this.inputFormData.endDate = Datetime.WeekEnd(new Date());
                 break;
             case EDateRange.today:
-                this.inputFormData.startDate = Datetime.DateTime2String(
+                this.inputFormData.startDateString = Datetime.DateTime2String(
                     new Date(),
                     "YYYY-MM-DD"
                 );
-                this.inputFormData.endDate = Datetime.DateTime2String(
+                this.inputFormData.endDateString = Datetime.DateTime2String(
                     new Date(),
                     "YYYY-MM-DD"
                 );

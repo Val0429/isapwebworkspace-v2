@@ -50,14 +50,16 @@ export default class Login extends Vue {
             RemeberMe.clearLogin();
         }
 
-        await this.$login(param)
+        await this.$login({
+            username: this.username,
+            password: this.password,
+        })
             .then(() => {
                 Loading.hide();
 
                 if (this.remeberMe == ERemeberMe.rememberMe) {
                     RemeberMe.saveLogin(param);
                 }
-
                 let userRole = '';
                 if (this.$user.user != undefined && this.$user.user.roles != undefined && this.$user.user.roles[0] != undefined && this.$user.user.roles[0].name != undefined) {
                     userRole = this.$user.user.roles[0].name;
@@ -85,16 +87,17 @@ export default class Login extends Vue {
                 Loading.hide();
                 console.log(e);
                 if (e.err != undefined && e.err == 'Failed to fetch') {
-                    Dialog.error(this._('w_FailedToFetch'));
+                    Dialog.error(this._('w_Error_FailedToFetch'));
                     return true;
                 }
                 if (e.res != undefined && e.res.statusCode != undefined && e.res.statusCode == 401) {
-                    Dialog.error(this._('w_UserSession_Empty'));
+                    Dialog.error(this._('w_Error_401'));
                 }
                 if (e.res != undefined && e.res.statusCode != undefined && e.res.statusCode == 400) {
-                    Dialog.error(this._('w_UserSession_Empty'));
+                    Dialog.error(this._('w_Error_404'));
                 }
             });
+        this.$router.push('/');
     }
 
     forgotPassword() {
