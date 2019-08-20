@@ -54,6 +54,9 @@ export default class LangObject {
     w_Error_EmailSettingError = 'Email server setting error';
     w_Save_SubmitChecked = "You're about to submit your application, you won't be able to add*edit any PTW data afterwards. Are you sure ?";
     w_Save_SubmitCheck = 'SUBMIT APPLICATION';
+    w_Save_Checked_Confirm = 'Submit Confirm';
+    w_Save_Checked_ConfirmContentApprove = 'You are about to Approve this application, this action cannot be undone.  Do you wish to continue?';
+    w_Save_Checked_ConfirmContentReject = 'You are about to Reject this application, this action cannot be undone.  Do you wish to continue?';
 
     /////////////////////////////////////////////
 
