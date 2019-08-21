@@ -4,7 +4,7 @@
             :label="_('w_Dashboard_Bottom5sites')"
         >
 
-            <select-time @time="receiveTime"></select-time>
+<!--            <select-time @time="receiveTime"></select-time>-->
 
         </iv-card>
     </div>

@@ -21,20 +21,33 @@
     import { toEnumInterface } from "../../../core";
     import Datetime from '@/services/Datetime';
 
+    enum ETime {
+        today = 'today',
+        yesterday = 'yesterday',
+        last7day = 'last7day',
+        last14day = 'last14day',
+        last28day = 'last28day',
+        last30day = 'last30day',
+        last60day = 'last60day',
+        last90day = 'last90day',
+        last180day = 'last180day',
+        thisYear = 'thisYear',
+    }
+
     @Component({
         components: {}
     })
     export class SelectTime extends Vue {
         // Prop
         @Prop({
-            type: String, // Boolean, Number, String, Array, Object
-            default: ""
+            type: Object, // Boolean, Number, String, Array, Object
+            default: () => {}
         })
-        label: string;
+        timeParam: any;
 
         timeSelectItem: any = {};
 
-        time: string = '';
+        time: string = 'today';
 
         created() {
             this.initSelectItem();
@@ -56,6 +69,57 @@
                 last180day: `${this._("w_Dashboard_Last180Day")} ( ${Datetime.CountDateNumber(-179)} ~ ${Datetime.CountDateNumber(0)} )`,
                 thisYear: `${this._("w_thisYear")} ( ${Datetime.ThisYearStartDate()} ~ ${Datetime.ThisYearEndDate()} )`
             };
+            this.numberOfDaysDifference(this.timeParam.startDate, this.timeParam.endDate);
+        }
+
+        numberOfDaysDifference(start_Date: Date, end_Date: Date) {
+            let result = 0;
+            let startDate = Datetime.DateToZero(new Date(start_Date)).getTime();
+            let endDate = Datetime.DateToZero(new Date(end_Date)).getTime();
+            let today = Datetime.DateToZero(new Date()).getTime();
+
+            if (startDate && endDate) {
+                result = (endDate - startDate) / (1000 * 60 * 60 * 24);
+            }
+
+            switch (result) {
+                case 0:
+                    if (startDate === today && endDate === today) {
+                        this.time = ETime.today;
+                    } else {
+                        this.time = ETime.yesterday;
+                    }
+                    break;
+                case 6:
+                    this.time = ETime.last7day;
+                    break;
+                case 13:
+                    this.time = ETime.last14day;
+                    break;
+                case 27:
+                    this.time = ETime.last28day;
+                    break;
+                case 29:
+                    this.time = ETime.last30day;
+                    break;
+                case 59:
+                    this.time = ETime.last60day;
+                    break;
+                case 89:
+                    this.time = ETime.last90day;
+                    break;
+                case 179:
+                    this.time = ETime.last180day;
+                    break;
+                case 364:
+                    this.time = ETime.thisYear;
+                    break;
+
+            }
+
+            console.log('numberOfDaysDifference ~ ', result);
+
+            return result;
         }
 
         updateTime(data) {
@@ -69,47 +133,48 @@
             };
 
             switch (data) {
-                case 'today':
+                case ETime.today:
                     submitParam.startDate = Datetime.DateToZero(new Date());
                     submitParam.endDate = Datetime.DateToZero(new Date());
                     break;
-                case 'yesterday':
+                case ETime.yesterday:
                     submitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-1)));
                     submitParam.endDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-1)));
                     break;
-                case 'last7day':
+                case ETime.last7day:
                     submitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-6)));
                     submitParam.endDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(0)));
                     break;
-                case 'last14day':
+                case ETime.last14day:
                     submitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-13)));
                     submitParam.endDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(0)));
                     break;
-                case 'last28day':
+                case ETime.last28day:
                     submitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-27)));
                     submitParam.endDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(0)));
                     break;
-                case 'last30day':
+                case ETime.last30day:
                     submitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-29)));
                     submitParam.endDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(0)));
                     break;
-                case 'last60day':
+                case ETime.last60day:
                     submitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-59)));
                     submitParam.endDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(0)));
                     break;
-                case 'last90day':
+                case ETime.last90day:
                     submitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-89)));
                     submitParam.endDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(0)));
                     break;
-                case 'last180day':
+                case ETime.last180day:
                     submitParam.startDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(-179)));
                     submitParam.endDate = Datetime.DateToZero(new Date(Datetime.CountDateNumber(0)));
                     break;
-                case 'thisYear':
+                case ETime.thisYear:
                     submitParam.startDate = Datetime.DateToZero(new Date(Datetime.ThisYearStartDate()));
                     submitParam.endDate = Datetime.DateToZero(new Date(Datetime.ThisYearEndDate()));
                     break;
             }
+
             this.$emit('time', submitParam)
         }
 

@@ -993,6 +993,7 @@ export default class LangObject implements ILang {
     w_ReportDashboard_AverageDwellTime = 'AVERAGE DWELL TIME(M)';
     w_ReportDashboard_Demographic = 'DEMOGRAPHIC';
     w_ReportDashboard_VIPBlacklist = 'VIP/BLACKLIST';
+    w_ReportDashboard_RepeatCustomer1 = 'Repeat Customer';
     w_ReportDashboard_RepeatCustomer = 'REPEAT CUSTOMER';
     w_ReportDashboard_Revenue = 'REVENUE';
     w_ReportDashboard_Transaction = 'TRANSACTION';
