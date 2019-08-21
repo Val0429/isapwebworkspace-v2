@@ -3,7 +3,11 @@
         <iv-card :label="_('w_DashboardOverview_CurrentStatus')">
 
             <template #toolbox>
-                <iv-toolbox-more @click="moreClick" />
+                <iv-toolbox-more @click="moreClick">
+                    <iv-toolbox-element-base>
+                        tsetse
+                    </iv-toolbox-element-base>
+                </iv-toolbox-more>
             </template>
 
             <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
@@ -402,7 +406,10 @@ export class CurrentStatusDashboard extends Vue {
             chart: { zoomType: "x", height: "130px" },
             exporting: { enabled: false },
             title: {
-                text: this._("w_ReportDashboard_Demographic") + " " + this._("w_DashboardOverview_Now"),
+                text:
+                    this._("w_ReportDashboard_Demographic") +
+                    " " +
+                    this._("w_DashboardOverview_Now"),
                 style:
                     "font-weight: bold; font-size: 12px; margin: 0; padding: 0; display: flex; justify-content: center;"
             },

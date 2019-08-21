@@ -770,13 +770,25 @@ export default class ReportTraffic extends Vue {
                                     ) {
                                         item1Count.value += summaryData.in;
                                         item1Count.valueRatio += ReportService.countRatio(
-                                            summaryData.in,
-                                            summaryData.prevIn
+                                            this.cheackedEmployee(
+                                                summaryData.in,
+                                                summaryData.inEmployee
+                                            ),
+                                            this.cheackedEmployee(
+                                                summaryData.prevIn,
+                                                summaryData.prevInEmployee
+                                            )
                                         );
                                         item2Count.value += summaryData.out;
                                         item2Count.valueRatio += ReportService.countRatio(
-                                            summaryData.out,
-                                            summaryData.prevOut
+                                            this.cheackedEmployee(
+                                                summaryData.out,
+                                                summaryData.outEmployee
+                                            ),
+                                            this.cheackedEmployee(
+                                                summaryData.prevOut,
+                                                summaryData.prevOutEmployee
+                                            )
                                         );
                                     }
                                 }
@@ -787,13 +799,25 @@ export default class ReportTraffic extends Vue {
                                 ) {
                                     item1Count.value += summaryData.in;
                                     item1Count.valueRatio += ReportService.countRatio(
-                                        summaryData.in,
-                                        summaryData.prevIn
+                                        this.cheackedEmployee(
+                                            summaryData.in,
+                                            summaryData.inEmployee
+                                        ),
+                                        this.cheackedEmployee(
+                                            summaryData.prevIn,
+                                            summaryData.prevInEmployee
+                                        )
                                     );
                                     item2Count.value += summaryData.out;
                                     item2Count.valueRatio += ReportService.countRatio(
-                                        summaryData.out,
-                                        summaryData.prevOut
+                                        this.cheackedEmployee(
+                                            summaryData.out,
+                                            summaryData.outEmployee
+                                        ),
+                                        this.cheackedEmployee(
+                                            summaryData.prevOut,
+                                            summaryData.prevOutEmployee
+                                        )
                                     );
                                 }
                             }
@@ -845,13 +869,25 @@ export default class ReportTraffic extends Vue {
                                     ) {
                                         item1Count.value += summaryData.in;
                                         item1Count.valueRatio += ReportService.countRatio(
-                                            summaryData.in,
-                                            summaryData.prevIn
+                                            this.cheackedEmployee(
+                                                summaryData.in,
+                                                summaryData.inEmployee
+                                            ),
+                                            this.cheackedEmployee(
+                                                summaryData.prevIn,
+                                                summaryData.prevInEmployee
+                                            )
                                         );
                                         item2Count.value += summaryData.out;
                                         item2Count.valueRatio += ReportService.countRatio(
-                                            summaryData.out,
-                                            summaryData.prevOut
+                                            this.cheackedEmployee(
+                                                summaryData.out,
+                                                summaryData.outEmployee
+                                            ),
+                                            this.cheackedEmployee(
+                                                summaryData.prevOut,
+                                                summaryData.prevOutEmployee
+                                            )
                                         );
                                     }
                                 }
@@ -862,13 +898,25 @@ export default class ReportTraffic extends Vue {
                                 ) {
                                     item1Count.value += summaryData.in;
                                     item1Count.valueRatio += ReportService.countRatio(
-                                        summaryData.in,
-                                        summaryData.prevIn
+                                        this.cheackedEmployee(
+                                            summaryData.in,
+                                            summaryData.inEmployee
+                                        ),
+                                        this.cheackedEmployee(
+                                            summaryData.prevIn,
+                                            summaryData.prevInEmployee
+                                        )
                                     );
                                     item2Count.value += summaryData.out;
                                     item2Count.valueRatio += ReportService.countRatio(
-                                        summaryData.out,
-                                        summaryData.prevOut
+                                        this.cheackedEmployee(
+                                            summaryData.out,
+                                            summaryData.outEmployee
+                                        ),
+                                        this.cheackedEmployee(
+                                            summaryData.prevOut,
+                                            summaryData.prevOutEmployee
+                                        )
                                     );
                                 }
                             }
@@ -890,6 +938,12 @@ export default class ReportTraffic extends Vue {
                 break;
         }
         this.rData.body = tempArray;
+    }
+
+    cheackedEmployee(all, employee) {
+        return this.inputFormData.isIncludedEmployee == EIncludedEmployee.no
+            ? all
+            : all - employee;
     }
 
     // Author: Ben
