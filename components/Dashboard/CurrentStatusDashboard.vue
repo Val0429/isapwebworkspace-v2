@@ -94,7 +94,6 @@
                         <div class="clearfix">
                             <highcharts
                                 class="demographic-div"
-                                ref="chartGender"
                                 :options="chartOptions.demographic"
                             ></highcharts>
                         </div>
@@ -146,7 +145,10 @@
                             <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}} {{_("w_DashboardOverview_Now")}}</span>
                         </div>
                         <div class="clearfix">
-                            <span class="date">{{anlysisData.repeatCustomer.total != null ? numberWithCommas(anlysisData.repeatCustomer.total) : "N/A"}}</span>
+                            <!-- <highcharts
+                                class="demographic-div"
+                                :options="chartOptions.repeatCustomer"
+                            ></highcharts> -->
                         </div>
                     </div>
                 </div>
@@ -194,8 +196,10 @@ export class CurrentStatusDashboard extends Vue {
     // chart options
     chartOptions: {
         demographic: object;
+        repeatCustomer: object;
     } = {
-        demographic: {}
+        demographic: {},
+        repeatCustomer: {}
     };
 
     currentStatus: {
@@ -442,7 +446,7 @@ export class CurrentStatusDashboard extends Vue {
         //         return ResponseFilter.catchError(this, e);
         //     });
 
-        let pieSeriesData = [
+        let demographicData = [
             {
                 name: "male",
                 y: 500
@@ -477,7 +481,7 @@ export class CurrentStatusDashboard extends Vue {
                     size: "140%",
                     innerSize: "60%",
                     label: { enabled: true },
-                    data: pieSeriesData
+                    data: demographicData
                 }
             ],
 
