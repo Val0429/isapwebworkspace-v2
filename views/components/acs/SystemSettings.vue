@@ -75,7 +75,7 @@
                 >
                 </iv-form>
          </iv-auto-card>
-         <div class="float-right">                
+         <div class="float-right" v-show="currentConfig=='none'">                
             <b-button class="btn-filter" size="lg" :disabled="!syncEnabled" @click="manualSync()">{{_("w_ManualSync_HumanResource")}}</b-button>
         </div>
     </div>
