@@ -1,17 +1,26 @@
 <template>
     <div class="dashboardDiv">
         <div class="row col-lg-12">
-            <div class="col-lg-4 col-sm-4 col-xs-1 col-xxs-1 submitted" @click="clickEvent('submitted')">
+            <div
+                class="col-lg-4 col-sm-4 col-xs-1 col-xxs-1 submitted"
+                @click="clickEvent('submitted')"
+            >
                 <span class="title">{{_('w_Dashboard_Submitted')}}</span><br>
                 <span class="value">{{data.submitted}}</span>
             </div>
             <!--/col-->
-            <div class="col-lg-4 col-sm-4 col-xs-1 col-xxs-1 approved" @click="clickEvent('approved')">
+            <div
+                class="col-lg-4 col-sm-4 col-xs-1 col-xxs-1 approved"
+                @click="clickEvent('approved')"
+            >
                 <span class="title">{{_('w_Dashboard_Approved')}}</span><br>
                 <span class="value">{{data.approved}}</span>
             </div>
             <!--/col-->
-            <div class="col-lg-4 col-sm-4 col-xs-1 col-xxs-1 awaitingApproval" @click="clickEvent('awaitingApproval')">
+            <div
+                class="col-lg-4 col-sm-4 col-xs-1 col-xxs-1 awaitingApproval"
+                @click="clickEvent('awaitingApproval')"
+            >
                 <span class="title">{{_('w_Dashboard_AwaitingApproval')}}</span><br>
                 <span class="value">{{data.awaitingApproval}}</span>
             </div>
@@ -20,7 +29,10 @@
         <!-- /row -->
 
         <div class="row col-lg-12">
-            <div class="col-lg-12 col-sm-12 col-xs-4 col-xxs-4 total"  @click="clickEvent('')">
+            <div
+                class="col-lg-12 col-sm-12 col-xs-4 col-xxs-4 total"
+                @click="clickEvent('')"
+            >
                 <span class="title">{{_('w_Dashboard_Total')}}</span><br>
                 <span class="value">{{data.total}}</span>
             </div>
@@ -62,8 +74,8 @@ export class SubmittedDashBoard extends Vue {
 
     mounted() {}
 
-    clickEvent(data){
-    this.$emit('clickEvent', data)
+    clickEvent(data) {
+        this.$emit("clickEvent", data);
     }
 }
 
@@ -95,21 +107,25 @@ Vue.component("submitted-dashboard", SubmittedDashBoard);
 
 .submitted {
     background-color: #b870b8;
+    cursor: pointer;
     height: 200px;
 }
 
 .approved {
     background-color: #6a6a6a;
+    cursor: pointer;
     height: 200px;
 }
 
 .awaitingApproval {
     background-color: #fabc78;
+    cursor: pointer;
     height: 200px;
 }
 
 .total {
     background-color: #1166a9;
+    cursor: pointer;
     height: 200px;
 }
 </style>

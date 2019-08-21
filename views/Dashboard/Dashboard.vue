@@ -43,7 +43,7 @@
                     <div class="col-lg-6">
                         <submitted-dashboard
                             :data="dashboardData"
-                            :clickEvent="toInvitationPage"
+                            @clickEvent="toInvitationPage"
                         ></submitted-dashboard>
                     </div>
                     <div class="col-lg-6">
@@ -170,16 +170,18 @@ export default class Dashboard extends Vue {
     }
 
     toInvitationPage(data) {
+        console.log("toInvitationPage", data);
         let path =
             "/invitation?" +
-            "startDate:" +
+            "startDate=" +
             this.inputFilterData.startDate.toISOString() +
-            "&andDate:" +
+            "&endDate=" +
             this.inputFilterData.startDate.toISOString();
 
         if (data) {
-            path += "&status:" + data;
+            path += "&status=" + data;
         }
+        console.log("path", path);
 
         this.$router.push(path);
     }
