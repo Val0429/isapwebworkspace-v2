@@ -116,9 +116,7 @@
                     break;
 
             }
-
-            console.log('numberOfDaysDifference ~ ', result);
-
+	        
             return result;
         }
 
