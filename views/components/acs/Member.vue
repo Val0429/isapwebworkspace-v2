@@ -105,7 +105,7 @@
           <iv-toolbox-more size="sm" :disabled="isSelected.length !== 1">
             <iv-toolbox-view @click="pageToView" />
             <iv-toolbox-edit v-show="canEdit" @click="pageToEdit()" />
-            <iv-toolbox-delete v-show="canDelete" @click="doDelete" />
+            <!-- <iv-toolbox-delete v-show="canDelete" @click="doDelete" /> -->
           </iv-toolbox-more>
         </template>
       </iv-table>
