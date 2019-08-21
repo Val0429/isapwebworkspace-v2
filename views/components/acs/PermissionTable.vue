@@ -453,11 +453,11 @@ export default class PermissionTable extends Vue {
 
     async initSelectItem() {
         
-        this.selectItem.timeSchedule = { "0": this._("w_Select") };
-        this.selectItem.doorDevice = { "0": this._("w_Select") };
-        this.selectItem.doorGroupDevice = { "0": this._("w_Select") };
-        this.selectItem.elevatorDevice = { "0": this._("w_Select") };
-        this.selectItem.floorGroupDevice = { "0": this._("w_Select") };
+        this.selectItem.timeSchedule = { "": this._("w_Select") };
+        this.selectItem.doorDevice = { "": this._("w_Select") };
+        this.selectItem.doorGroupDevice = { "": this._("w_Select") };
+        this.selectItem.elevatorDevice = { "": this._("w_Select") };
+        this.selectItem.floorGroupDevice = { "": this._("w_Select") };
 
         await Promise.all([
             this.getTimeSchedule(),
@@ -665,6 +665,13 @@ private async getFloorGroup() {
     
     clickAddDeviceInTable() {
         console.log("this.inputFormData", this.inputFormData);
+        
+
+        if(!this.inputFormData.deviceTimeFormatOption||
+            (!this.inputFormData.elevatorAreaOption && this.inputFormData.deviceType=="elevator" )|| 
+            (!this.inputFormData.floorGroupAreaOption && this.inputFormData.deviceType=="floorGroup")){            
+            return;
+        }   
         let deviceData: any = {
             objectId: "",
             deviceType: this.inputFormData.deviceType,
@@ -672,26 +679,18 @@ private async getFloorGroup() {
             area: { id: "", text: "" },
             timeFormat: { id: "", text: "" }
         };
-
-        if (!this.inputFormData.deviceTimeFormatOption || this.inputFormData.deviceTimeFormatOption === "0") {
-            return false;
-        }
-        if((!this.inputFormData.elevatorAreaOption && this.inputFormData.deviceType=="elevator" )|| 
-            (!this.inputFormData.floorGroupAreaOption && this.inputFormData.deviceType=="floorGroup")){            
-            return false;
-        }   
         
         deviceData.timeFormat.id = this.inputFormData.deviceTimeFormatOption;
         deviceData.timeFormat.text = this.selectItem.timeSchedule[deviceData.timeFormat.id];
 
         switch (this.deviceType) {
             case EDeviceType.door:
-                if (this.inputFormData.doorNameOption === "0") break;
+                if (!this.inputFormData.doorNameOption) return;
                 deviceData.deviceName.id = this.inputFormData.doorNameOption;
                 deviceData.deviceName.text = this.selectItem.doorDevice[deviceData.deviceName.id];
                 break;
             case EDeviceType.doorGroup:
-                if (this.inputFormData.doorGroupNameOption === "0") break;
+                if (!this.inputFormData.doorGroupNameOption) return;
                 deviceData.deviceName.id = this.inputFormData.doorGroupNameOption;
                 let doorgroup = this.selectItemOriginal.doorGroup.find(x=>x.objectId == deviceData.deviceName.id );                
                 if (doorgroup && doorgroup.area) {
@@ -701,24 +700,24 @@ private async getFloorGroup() {
                 deviceData.deviceName.text = this.selectItem.doorGroupDevice[deviceData.deviceName.id];
                 break;
             case EDeviceType.elevator:
-                if (this.inputFormData.elevatorNameOption === "0") break;
+                if (!this.inputFormData.elevatorNameOption) return;
                 deviceData.deviceName.id = this.inputFormData.elevatorNameOption;
-                if(this.inputFormData.elevatorAreaOption){
-                    let elevator = this.selectItemOriginal.elevator.find(x=>x.objectId == deviceData.deviceName.id );    
-                    console.log("elevator", elevator);
-                    if(elevator&&elevator.reader){
-                        deviceData.area.id = this.inputFormData.elevatorAreaOption;
-                        let floor = elevator.reader.find(x=>x.objectId == deviceData.area.id);
-                        if(floor)deviceData.area.text=floor.floorname;
-                    }                    
-                }       
+                if(!this.inputFormData.elevatorAreaOption) return;
+                let elevator = this.selectItemOriginal.elevator.find(x=>x.objectId == deviceData.deviceName.id );    
+                console.log("elevator", elevator);
+                if(elevator&&elevator.reader){
+                    deviceData.area.id = this.inputFormData.elevatorAreaOption;
+                    let floor = elevator.reader.find(x=>x.objectId == deviceData.area.id);
+                    if(floor)deviceData.area.text=floor.floorname;
+                }                    
+                       
                 deviceData.deviceName.text = this.selectItem.elevatorDevice[deviceData.deviceName.id];
                 break;
             case EDeviceType.floorGroup:
-                if (this.inputFormData.floorGroupNameOption === "0") break;
+                if (!this.inputFormData.floorGroupNameOption) return;
                 deviceData.deviceName.id = this.inputFormData.floorGroupNameOption; 
                 deviceData.deviceName.text = this.selectItem.elevatorDevice[deviceData.deviceName.id];
-                if (this.inputFormData.floorGroupAreaOption === "0") break;
+                if (!this.inputFormData.floorGroupAreaOption) return;
                 deviceData.area.id = this.inputFormData.floorGroupAreaOption;
                 deviceData.area.text = this.selectItem.floorGroupDevice[deviceData.area.id];
                 
@@ -730,15 +729,15 @@ private async getFloorGroup() {
     }
 
     clearDeviceSelection() {
-        this.inputFormData.deviceTimeFormatOption = "0";
-        this.inputFormData.doorNameOption = "0";
+        this.inputFormData.deviceTimeFormatOption = "";
+        this.inputFormData.doorNameOption = "";
         this.inputFormData.doorAreaOption = "";
-        this.inputFormData.doorGroupNameOption = "0";
+        this.inputFormData.doorGroupNameOption = "";
         this.inputFormData.doorGroupAreaOption = "";
-        this.inputFormData.elevatorNameOption = "0";
-        this.inputFormData.elevatorAreaOption = "0";
-        this.inputFormData.floorGroupAreaOption = "0";
-        this.inputFormData.floorGroupNameOption = "0";
+        this.inputFormData.elevatorNameOption = "";
+        this.inputFormData.elevatorAreaOption = "";
+        this.inputFormData.floorGroupAreaOption = "";
+        this.inputFormData.floorGroupNameOption = "";
     }
 
     async doSubDelete(index) {
