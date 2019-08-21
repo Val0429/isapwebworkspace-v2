@@ -421,7 +421,11 @@ export class CurrentStatusDashboard extends Vue {
                     label: { enabled: true },
                     data: pieSeriesData
                 }
-            ]
+            ],
+
+            credits: {
+                enabled: false
+            }
         };
     }
 
