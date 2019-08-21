@@ -268,6 +268,8 @@ export default class LangObject {
     w_ViewPTW_Step7_NRICFIN = 'NRIC / FIN';
 
     w_ViewPTW_Step7_NRICFIN_PlaceHolder = 'Please fill in NRIC/FIN last 4 characters';
+    w_ViewPTW_Step7_NameError = 'Duplicate name. Please check again.';
+    w_ViewPTW_Step7_NRICFINError = 'Duplicate NRIC/FIN. Please check again.';
 
     w_ViewPTW_Step7_Day = 'Day';
     w_ViewPTW_Step7_Night = 'Night';

@@ -309,6 +309,17 @@ export class Step7 extends Vue {
             return;
         }
 
+        for (const person of this.personTable.tableDataFromApi) {
+            if (person.name ===data.name) {
+                Dialog.error(this._("w_ViewPTW_Step7_NameError"));
+                return false;
+            }
+            if (person.nric ===data.nric) {
+                Dialog.error(this._("w_ViewPTW_Step7_NRICFINError"));
+                return false;
+            }
+        }
+
         this.personTable.tableDataFromApi.push(personObject);
         this.pageStep = EPageStep.list;
 
