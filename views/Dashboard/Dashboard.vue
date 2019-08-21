@@ -180,13 +180,13 @@ export default class Dashboard extends Vue {
         if (data) {
             path += "&status=" + data;
         }
-        console.log("path", path);
         this.$router.push(path);
     }
 
     async doSubmit() {
         // clear data
         this.visible = false;
+        this.chartDataByDays[0].name = null;
         this.chartDataByDays[0].data[0] = 0;
         this.chartDataByDays[0].data[1] = 0;
         this.chartDataByHours[0].data = [];
@@ -268,7 +268,7 @@ export default class Dashboard extends Vue {
 
                             if (
                                 Datetime.DateTime2String(
-                                    loopData.date,
+                                    new Date(loopData.date),
                                     Datetime.DateFormat
                                 ) ==
                                 Datetime.DateTime2String(
@@ -282,7 +282,7 @@ export default class Dashboard extends Vue {
 
                             if (
                                 Datetime.DateTime2String(
-                                    loopData.date,
+                                    new Date(loopData.date),
                                     Datetime.DateFormat
                                 ) ==
                                 Datetime.DateTime2String(
@@ -295,6 +295,8 @@ export default class Dashboard extends Vue {
                             }
                         }
                     }
+
+                    this.chartDataByDays[0].name = "all";
                 });
             })
             .catch((e: any) => {

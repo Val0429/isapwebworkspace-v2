@@ -84,13 +84,8 @@ export class HighchartDashboard extends Vue {
     })
     chartTitle: string;
 
-    @Watch("startTime", { deep: true })
-    private onstartTimeChanged() {
-        this.start();
-    }
-
-    @Watch("endTime", { deep: true })
-    private onendTimeChanged() {
+    @Watch("chartData", { deep: true })
+    private onchartDataChanged() {
         this.start();
     }
 
@@ -159,6 +154,7 @@ export class HighchartDashboard extends Vue {
 
         let sDate = this.startTime;
         let eDate = this.endTime;
+
         while (sDate.getTime() <= eDate.getTime()) {
             categories.push(
                 Datetime.DateTime2String(sDate, Datetime.DateFormat)
