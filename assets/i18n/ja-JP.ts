@@ -1133,6 +1133,7 @@ export default class LangObject implements ILang {
     w_DashboardOverview_Overview = 'Overview';
     w_DashboardOverview_CurrentStatus = 'Current Status';
     w_DashboardOverview_FilterStatus = 'Filter Status';
+    w_DashboardOverview_Now = 'Now';
 
     // frs manager
     w_ServerFRSManager_List = 'FRS Manager List';

@@ -10,7 +10,7 @@
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_Traffic")}}</span>
+                            <span class="title">{{_("w_ReportDashboard_Traffic")}} {{_("w_DashboardOverview_Now")}}</span>
                         </div>
                         <div class="clearfix">
                             <span class="date">{{anlysisData.traffic.total != null ? toPercent(anlysisData.traffic.total) : "N/A"}}</span>
@@ -24,7 +24,7 @@
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_AverageOccupancy")}}</span>
+                            <span class="title">{{_("w_ReportDashboard_AverageOccupancy")}} {{_("w_DashboardOverview_Now")}}</span>
                         </div>
                         <div class="clearfix">
                             <span class="date">{{anlysisData.averageOccupancy.total != null ? numberWithCommas(anlysisData.averageOccupancy.total) : "N/A"}}</span>
@@ -38,7 +38,7 @@
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_AverageDwellTime")}}</span>
+                            <span class="title">{{_("w_ReportDashboard_AverageDwellTime")}} {{_("w_DashboardOverview_Now")}}</span>
                         </div>
                         <div class="clearfix">
                             <span class="date">{{anlysisData.averageDwellTime.total != null ? numberWithCommas(anlysisData.averageDwellTime.total) : "N/A"}}</span>
@@ -52,7 +52,7 @@
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_Demographic")}}</span>
+                            <span class="title">{{_("w_ReportDashboard_Demographic")}} {{_("w_DashboardOverview_Now")}}</span>
                         </div>
                         <div class="clearfix">
                             <highcharts
@@ -70,7 +70,7 @@
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_VIPBlacklist")}}</span>
+                            <span class="title">{{_("w_ReportDashboard_VIPBlacklist")}} {{_("w_DashboardOverview_Now")}}</span>
                         </div>
                         <div class="row clearfix">
                             <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-6 vip-blackList-div">
@@ -100,7 +100,7 @@
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}}</span>
+                            <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}} {{_("w_DashboardOverview_Now")}}</span>
                         </div>
                         <div class="clearfix">
                             <span class="date">{{anlysisData.repeatCustomer.total != null ? numberWithCommas(anlysisData.repeatCustomer.total) : "N/A"}}</span>
@@ -402,7 +402,7 @@ export class CurrentStatusDashboard extends Vue {
             chart: { zoomType: "x", height: "130px" },
             exporting: { enabled: false },
             title: {
-                text: this._("w_ReportDashboard_Demographic"),
+                text: this._("w_ReportDashboard_Demographic") + " " + this._("w_DashboardOverview_Now"),
                 style:
                     "font-weight: bold; font-size: 12px; margin: 0; padding: 0; display: flex; justify-content: center;"
             },
