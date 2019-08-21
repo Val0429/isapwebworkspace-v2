@@ -5,13 +5,27 @@
             :step="transition.step"
             :type="transition.type"
         >
-
             <div
                 key="transition_1"
                 v-show="transition.step === 1"
                 :label="'Empty 1'"
+                class="row"
             >
-                <current-status-dashboard></current-status-dashboard>
+                <iv-card
+                    key="card_1"
+                    class="current-status-card"
+                    :label="_('w_DashboardOverview_CurrentStatus')"
+                >
+
+                    <current-status-dashboard></current-status-dashboard>
+
+                </iv-card>
+                <iv-card
+                    key="card_2"
+                    class="filter-status-card"
+                    :label="_('w_DashboardOverview_FilterStatus')"
+                >
+                </iv-card>
             </div>
 
             <div
@@ -54,6 +68,14 @@ export default class Overview extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.current-status-card {
+    width: 23%;
+    margin: 1%;
+}
+.filter-status-card {
+    width: 73%;
+    margin: 1%;
+}
 </style>
 
 
