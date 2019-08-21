@@ -1,15 +1,19 @@
 <template>
     <div>
-        <div class="row">
+        <iv-card :label="_('w_DashboardOverview_CurrentStatus')">
+
+            <template #toolbox>
+                <iv-toolbox-more @click="moreClick" />
+            </template>
 
             <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}}</span>
+                            <span class="title">{{_("w_ReportDashboard_Traffic")}}</span>
                         </div>
                         <div class="clearfix">
-                            <span class="date">{{anlysisData.repeatCustomer.total != null ? toPercent(anlysisData.repeatCustomer.total) : "N/A"}}</span>
+                            <span class="date">{{anlysisData.traffic.total != null ? toPercent(anlysisData.traffic.total) : "N/A"}}</span>
                         </div>
                     </div>
                 </div>
@@ -20,10 +24,24 @@
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_Revenue")}}</span>
+                            <span class="title">{{_("w_ReportDashboard_AverageOccupancy")}}</span>
                         </div>
                         <div class="clearfix">
-                            <span class="date">{{anlysisData.revenue.total != null ? numberWithCommas(anlysisData.revenue.total) : "N/A"}}</span>
+                            <span class="date">{{anlysisData.averageOccupancy.total != null ? numberWithCommas(anlysisData.averageOccupancy.total) : "N/A"}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/col-->
+
+            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+                <div class="box current-info-box">
+                    <div class="backgroundColor">
+                        <div class="clearfix">
+                            <span class="title">{{_("w_ReportDashboard_AverageDwellTime")}}</span>
+                        </div>
+                        <div class="clearfix">
+                            <span class="date">{{anlysisData.averageDwellTime.total != null ? numberWithCommas(anlysisData.averageDwellTime.total) : "N/A"}}</span>
                         </div>
                     </div>
                 </div>
@@ -55,17 +73,21 @@
                             <span class="title">{{_("w_ReportDashboard_VIPBlacklist")}}</span>
                         </div>
                         <div class="row clearfix">
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <img src="../../assets/images/vip.png">
-                                <div class="ratio">
-
-                                    <span>{{anlysisData.vipBlacklist.value != null ? numberWithCommas(anlysisData.vipBlacklist.value) : "N/A"}} </span>
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-6 vip-blackList-div">
+                                <div class="right">
+                                    <div>
+                                        <span>{{anlysisData.vipBlacklist.value != null ? numberWithCommas(anlysisData.vipBlacklist.value) : "N/A"}} </span>
+                                    </div>
+                                    <img src="../../assets/images/vip.png">
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <img src="../../assets/images/stranger.png">
-                                <div class="ratio">
-                                    <span>{{anlysisData.vipBlacklist.value2 != null ? numberWithCommas(anlysisData.vipBlacklist.value2) : "N/A"}} </span>
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-6 vip-blackList-div">
+                                <div class="left">
+
+                                    <div>
+                                        <span>{{anlysisData.vipBlacklist.value2 != null ? numberWithCommas(anlysisData.vipBlacklist.value2) : "N/A"}} </span>
+                                    </div>
+                                    <img src="../../assets/images/stranger.png">
                                 </div>
                             </div>
                         </div>
@@ -74,8 +96,22 @@
             </div>
             <!--/col-->
 
-        </div>
-        <!-- /row -->
+            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+                <div class="box current-info-box">
+                    <div class="backgroundColor">
+                        <div class="clearfix">
+                            <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}}</span>
+                        </div>
+                        <div class="clearfix">
+                            <span class="date">{{anlysisData.repeatCustomer.total != null ? numberWithCommas(anlysisData.repeatCustomer.total) : "N/A"}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/col-->
+
+        </iv-card>
+
     </div>
 </template>
 
@@ -110,52 +146,6 @@ import {
     components: {}
 })
 export class CurrentStatusDashboard extends Vue {
-    // Prop
-    @Prop({
-        type: Date,
-        default: function() {
-            return new Date();
-        }
-    })
-    startDate: Date;
-
-    @Prop({
-        type: Date,
-        default: function() {
-            return new Date();
-        }
-    })
-    endDate: Date;
-
-    @Prop({
-        type: Array,
-        default: function() {
-            return [];
-        }
-    })
-    siteIds: [];
-
-    @Prop({
-        type: Array,
-        default: function() {
-            return [];
-        }
-    })
-    tagIds: [];
-
-    @Watch("startDate", { deep: true })
-    private watchStartDate(newVal, oldVal) {}
-    @Watch("endDate", { deep: true })
-    private watchEndDate(newVal, oldVal) {}
-    @Watch("type", { deep: true })
-    private watchType(newVal, oldVal) {}
-    @Watch("siteIds", { deep: true })
-    private watchSiteIds(newVal, oldVal) {}
-    @Watch("tagIds", { deep: true })
-    private watchTagIds(newVal, oldVal) {}
-    @Watch("pageType", { deep: true })
-    private watchPageType(newVal, oldVal) {}
-
     anlysisData = new ReportDashboard();
 
     // chart options
@@ -167,8 +157,12 @@ export class CurrentStatusDashboard extends Vue {
 
     created() {}
 
-    async mounted() {
+    mounted() {
         this.initData();
+    }
+
+    moreClick() {
+        console.log("moreClick");
     }
 
     async initData() {
@@ -396,13 +390,11 @@ export class CurrentStatusDashboard extends Vue {
         let pieSeriesData = [
             {
                 name: "male",
-                y: 505370,
-                z: 92.9
+                y: 500
             },
             {
                 name: "female",
-                y: 551500,
-                z: 118.7
+                y: 600
             }
         ];
 
@@ -429,7 +421,11 @@ export class CurrentStatusDashboard extends Vue {
                     label: { enabled: true },
                     data: pieSeriesData
                 }
-            ]
+            ],
+
+            credits: {
+                enabled: false
+            }
         };
     }
 
@@ -496,15 +492,27 @@ Vue.component("current-status-dashboard", CurrentStatusDashboard);
     .date {
         font-weight: bold;
         font-size: 36px;
-        margin-top: -8px;
+        margin-top: 30px;
         padding: 0;
         display: flex;
         justify-content: center;
     }
 
+    .right {
+        float: right;
+    }
+
+    .left {
+        float: left;
+    }
+
     .demographic-div {
         margin-top: -20px;
         height: 200px;
+    }
+
+    .vip-blackList-div {
+        margin-top: 20px;
     }
 }
 </style>

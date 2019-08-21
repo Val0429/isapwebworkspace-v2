@@ -449,9 +449,6 @@ export class PeakTimeRange extends Vue {
             case 4:
                 return "hoursRange4";
                 break;
-            case 5:
-                return "hoursRange5";
-                break;
             default:
                 return "hoursRange0";
         }
@@ -468,7 +465,7 @@ Vue.component("peak-time-range", PeakTimeRange);
 
 <style lang="scss" scoped>
 .hoursRange0 {
-    background-color: #ffffff;
+    background-color: #f4f6f8;
     height: 47px;
 }
 .hoursRange1 {
@@ -479,15 +476,12 @@ Vue.component("peak-time-range", PeakTimeRange);
     background-color: #b9cafc;
     height: 47px;
 }
+
 .hoursRange3 {
-    background-color: #b9cafc;
-    height: 47px;
-}
-.hoursRange4 {
     background-color: #5780f8;
     height: 47px;
 }
-.hoursRange5 {
+.hoursRange4 {
     background-color: #265bf6;
     height: 47px;
 }

@@ -11,35 +11,16 @@
                 :label="'Empty 1'"
                 class="row"
             >
-                <iv-card
-                    key="card_1"
-                    class="current-status-card"
-                    :label="_('w_DashboardOverview_CurrentStatus')"
-                >
 
-                    <current-status-dashboard></current-status-dashboard>
+                <current-status-dashboard class="col-md-4"></current-status-dashboard>
 
+                <filter-status-dashboard class="col-md-8"></filter-status-dashboard>
 
-                </iv-card>
+                <top-5sites class="col-md-6"></top-5sites>
 
-                <iv-card
-                    key="card_2"
-                    class="filter-status-card"
-                    :label="_('w_DashboardOverview_FilterStatus')"
-                >
-                </iv-card>
+                <bottom-5sites class="col-md-6"></bottom-5sites>
 
-                <top-5sites
-                    class="col-md-6"
-                ></top-5sites>
-
-                <bottom-5sites
-                    class="col-md-6"
-                ></bottom-5sites>
-
-                <peak-hour
-                    class="col-md-12"
-                ></peak-hour>
+                <peak-hour class="col-md-12"></peak-hour>
 
             </div>
 
