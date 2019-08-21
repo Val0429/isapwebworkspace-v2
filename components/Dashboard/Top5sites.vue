@@ -37,13 +37,7 @@ import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
 Vue.use(HighchartsVue);
 
-enum EMode {
-    peopleCounting = "peopleCounting",
-    dwellTime = "dwellTime",
-    visitor = "visitor",
-    vip = "vip",
-    black = "black"
-}
+import { EMode } from '@/components/Dashboard/index'
 
 @Component({
     components: {}
@@ -93,29 +87,21 @@ export class Top5sites extends Vue {
 
     initCharts() {
         this.chartOptions = {
-            chart: {
-                type: "bar"
-            },
+            chart: { type: "bar" },
             exporting: { enabled: false },
             title: { text: null },
             subtitle: { text: null },
 
             xAxis: {
                 categories: ["Africa", "America", "Asia", "Europe", "Oceania"],
-                title: {
-                    text: null
-                }
+                title: null
             },
             yAxis: {
-                min: 0,
-                title: {
-                    text: null,
-                    align: "high"
-                },
+                title: null,
                 labels: false
             },
             tooltip: {
-                valueSuffix: " millions"
+                valueSuffix: null
             },
             credits: {
                 enabled: false
@@ -125,18 +111,6 @@ export class Top5sites extends Vue {
                     name: this._("w_ReportCampaign_Traffic"),
                     data: [107, 31, 635, 203, 2]
                 }
-                //     {
-                //     name: 'Year 1900',
-                //     data: [133, 156, 947, 408, 6]
-                // },
-                //     {
-                //     name: 'Year 2000',
-                //     data: [814, 841, 3714, 727, 31]
-                // },
-                //     {
-                //     name: 'Year 2016',
-                //     data: [1216, 1001, 4436, 738, 40]
-                // }
             ]
         };
     }

@@ -19,15 +19,7 @@
 <script lang="ts">
     import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
     import { toEnumInterface } from "../../../core";
-    import Datetime from '@/services/Datetime';
-
-    enum EMode {
-        peopleCounting = 'peopleCounting',
-        dwellTime = 'dwellTime',
-        visitor = 'visitor',
-        vip = 'vip',
-        black = 'black',
-    }
+    import { EMode } from '@/components/Dashboard/index'
 
     @Component({
         components: {}
