@@ -175,10 +175,13 @@ export default class Dashboard extends Vue {
             "startDate:" +
             this.inputFilterData.startDate.toISOString() +
             "&andDate:" +
-            this.inputFilterData.startDate.toISOString() +
-            "&status" +
-            data;
-        this.$router.push("path");
+            this.inputFilterData.startDate.toISOString();
+
+        if (data) {
+            path += "&status:" + data;
+        }
+
+        this.$router.push(path);
     }
 
     async doSubmit() {
