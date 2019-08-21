@@ -1,12 +1,9 @@
 <template>
     <div>
-        <iv-card
-            :label="_('w_Dashboard_Top5sites')"
-        >
+        <iv-card :label="_('w_Dashboard_Top5sites')">
             <highcharts
                 ref="highcharts"
                 :options="chartOptions"
-
             ></highcharts>
 
             <select-time @time="receiveTime"></select-time>
@@ -21,9 +18,9 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 /// install Highcharts
 import Highcharts from "highcharts";
 import HighchartsVue from "highcharts-vue";
-import Loading from '@/services/Loading';
-import ResponseFilter from '@/services/ResponseFilter';
-import Dialog from '@/services/Dialog';
+import Loading from "@/services/Loading";
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog";
 Vue.use(HighchartsVue);
 
 @Component({
@@ -41,8 +38,7 @@ export class Top5sites extends Vue {
 
     time: any = {};
 
-    created() {
-    }
+    created() {}
 
     mounted() {
         this.initCharts();
@@ -51,16 +47,17 @@ export class Top5sites extends Vue {
     initCharts() {
         this.chartOptions = {
             chart: {
-                type: 'bar'
+                type: "bar"
             },
             title: {
-                text: 'Historic World Population by Region'
+                text: "Historic World Population by Region"
             },
             subtitle: {
-                text: 'Source: <a href="https://en.wikipedia.org/wiki/World_population">Wikipedia.org</a>'
+                text:
+                    'Source: <a href="https://en.wikipedia.org/wiki/World_population">Wikipedia.org</a>'
             },
             xAxis: {
-                categories: ['Africa', 'America', 'Asia', 'Europe', 'Oceania'],
+                categories: ["Africa", "America", "Asia", "Europe", "Oceania"],
                 title: {
                     text: null
                 }
@@ -68,15 +65,15 @@ export class Top5sites extends Vue {
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'Population (millions)',
-                    align: 'high'
+                    text: "Population (millions)",
+                    align: "high"
                 },
                 labels: {
-                    overflow: 'justify'
+                    overflow: "justify"
                 }
             },
             tooltip: {
-                valueSuffix: ' millions'
+                valueSuffix: " millions"
             },
             plotOptions: {
                 bar: {
@@ -86,33 +83,38 @@ export class Top5sites extends Vue {
                 }
             },
             legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'top',
+                layout: "vertical",
+                align: "right",
+                verticalAlign: "top",
                 x: -40,
                 y: 80,
                 floating: true,
                 borderWidth: 1,
-                backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                // backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
                 shadow: true
             },
             credits: {
                 enabled: false
             },
-            series: [{
-                name: 'Year 1800',
-                data: [107, 31, 635, 203, 2]
-            }, {
-                name: 'Year 1900',
-                data: [133, 156, 947, 408, 6]
-            }, {
-                name: 'Year 2000',
-                data: [814, 841, 3714, 727, 31]
-            }, {
-                name: 'Year 2016',
-                data: [1216, 1001, 4436, 738, 40]
-            }]
-        }
+            series: [
+                {
+                    name: "Year 1800",
+                    data: [107, 31, 635, 203, 2]
+                },
+                {
+                    name: "Year 1900",
+                    data: [133, 156, 947, 408, 6]
+                },
+                {
+                    name: "Year 2000",
+                    data: [814, 841, 3714, 727, 31]
+                },
+                {
+                    name: "Year 2016",
+                    data: [1216, 1001, 4436, 738, 40]
+                }
+            ]
+        };
     }
 
     async receiveTime(time: object) {
@@ -139,7 +141,6 @@ export class Top5sites extends Vue {
         //         );
         //     });
     }
-
 }
 
 export default Top5sites;

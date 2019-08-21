@@ -3,14 +3,38 @@
         <iv-card :label="_('w_DashboardOverview_CurrentStatus')">
 
             <template #toolbox>
-                <iv-toolbox-more @click="moreClick">
-                    <iv-toolbox-element-base>
-                        tsetse
-                    </iv-toolbox-element-base>
+                <iv-toolbox-more>
+                    <iv-toolbox-dashboard-traffic
+                        :iconDisabled="currentStatus.isTraffic"
+                        @click="currentStatus.isTraffic = !currentStatus.isTraffic"
+                    />
+                    <iv-toolbox-dashboard-occupancy
+                        :iconDisabled="currentStatus.isOccupancy"
+                        @click="currentStatus.isOccupancy = !currentStatus.isOccupancy"
+                    />
+                    <iv-toolbox-dashboard-dwelltime
+                        :iconDisabled="currentStatus.isDwellTime"
+                        @click="currentStatus.isDwellTime = !currentStatus.isDwellTime"
+                    />
+                    <iv-toolbox-dashboard-demographic
+                        :iconDisabled="currentStatus.isDemographic"
+                        @click="currentStatus.isDemographic = !currentStatus.isDemographic"
+                    />
+                    <iv-toolbox-dashboard-vipblacklist
+                        :iconDisabled="currentStatus.isVipBlacklist"
+                        @click="currentStatus.isVipBlacklist = !currentStatus.isVipBlacklist"
+                    />
+                    <iv-toolbox-dashboard-repeatcustomer
+                        :iconDisabled="currentStatus.isRepeatCustomer"
+                        @click="currentStatus.isRepeatCustomer = !currentStatus.isRepeatCustomer"
+                    />
                 </iv-toolbox-more>
             </template>
 
-            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+            <div
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                :hidden="!currentStatus.isTraffic"
+            >
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
@@ -24,7 +48,10 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+            <div
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                :hidden="!currentStatus.isOccupancy"
+            >
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
@@ -38,7 +65,10 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+            <div
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                :hidden="!currentStatus.isDwellTime"
+            >
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
@@ -52,7 +82,10 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+            <div
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                :hidden="!currentStatus.isDemographic"
+            >
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
@@ -70,7 +103,10 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+            <div
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                :hidden="!currentStatus.isVipBlacklist"
+            >
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
@@ -100,7 +136,10 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+            <div
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                :hidden="!currentStatus.isRepeatCustomer"
+            >
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
@@ -159,14 +198,26 @@ export class CurrentStatusDashboard extends Vue {
         demographic: {}
     };
 
+    currentStatus: {
+        isTraffic: boolean;
+        isOccupancy: boolean;
+        isDwellTime: boolean;
+        isDemographic: boolean;
+        isVipBlacklist: boolean;
+        isRepeatCustomer: boolean;
+    } = {
+        isTraffic: true,
+        isOccupancy: true,
+        isDwellTime: true,
+        isDemographic: true,
+        isVipBlacklist: true,
+        isRepeatCustomer: true
+    };
+
     created() {}
 
     mounted() {
         this.initData();
-    }
-
-    moreClick() {
-        console.log("moreClick");
     }
 
     async initData() {
