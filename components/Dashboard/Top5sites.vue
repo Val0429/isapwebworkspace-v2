@@ -1,8 +1,6 @@
 <template>
     <div>
-        <iv-card
-            :label="_('w_Dashboard_Top5sites')"
-        >
+        <iv-card :label="_('w_Dashboard_Top5sites')">
             <h5 class="mb-3">{{ mode.modeTitle }}</h5>
 
             <highcharts
@@ -23,7 +21,6 @@
                 ></select-time>
             </b-row>
 
-
         </iv-card>
     </div>
 </template>
@@ -34,18 +31,18 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 /// install Highcharts
 import Highcharts from "highcharts";
 import HighchartsVue from "highcharts-vue";
-import Loading from '@/services/Loading';
-import ResponseFilter from '@/services/ResponseFilter';
-import Dialog from '@/services/Dialog';
-import Datetime from '@/services/Datetime';
+import Loading from "@/services/Loading";
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog";
+import Datetime from "@/services/Datetime";
 Vue.use(HighchartsVue);
 
 enum EMode {
-    peopleCounting = 'peopleCounting',
-    dwellTime = 'dwellTime',
-    visitor = 'visitor',
-    vip = 'vip',
-    black = 'black',
+    peopleCounting = "peopleCounting",
+    dwellTime = "dwellTime",
+    visitor = "visitor",
+    vip = "vip",
+    black = "black"
 }
 
 @Component({
@@ -63,12 +60,12 @@ export class Top5sites extends Vue {
 
     time: any = {
         startDate: new Date(),
-        endDate: new Date(),
+        endDate: new Date()
     };
 
     mode: any = {
-        type: '',
-        modeTitle: ''
+        type: "",
+        modeTitle: ""
     };
 
     created() {
@@ -76,13 +73,12 @@ export class Top5sites extends Vue {
         this.initData();
     }
 
-    mounted() {
-    }
+    mounted() {}
 
     initData() {
         this.mode = {
             type: EMode.peopleCounting,
-            modeTitle: this._("w_Navigation_RuleAndActions_Traffic"),
+            modeTitle: this._("w_Navigation_RuleAndActions_Traffic")
         };
 
         this.time = {
@@ -92,20 +88,20 @@ export class Top5sites extends Vue {
 
             // startDate: Datetime.DateToZero(new Date(Datetime.ThisYearStartDate())),
             // endDate: Datetime.DateToZero(new Date(Datetime.ThisYearEndDate()))
-        }
+        };
     }
 
     initCharts() {
         this.chartOptions = {
             chart: {
-                type: 'bar'
+                type: "bar"
             },
             exporting: { enabled: false },
             title: { text: null },
             subtitle: { text: null },
 
             xAxis: {
-                categories: ['Africa', 'America', 'Asia', 'Europe', 'Oceania'],
+                categories: ["Africa", "America", "Asia", "Europe", "Oceania"],
                 title: {
                     text: null
                 }
@@ -114,40 +110,40 @@ export class Top5sites extends Vue {
                 min: 0,
                 title: {
                     text: null,
-                    align: 'high'
+                    align: "high"
                 },
                 labels: false
             },
             tooltip: {
-                valueSuffix: ' millions'
+                valueSuffix: " millions"
             },
             credits: {
                 enabled: false
             },
             series: [
                 {
-                name: this._('w_ReportCampaign_Traffic'),
-                data: [107, 31, 635, 203, 2]
-            },
-            //     {
-            //     name: 'Year 1900',
-            //     data: [133, 156, 947, 408, 6]
-            // },
-            //     {
-            //     name: 'Year 2000',
-            //     data: [814, 841, 3714, 727, 31]
-            // },
-            //     {
-            //     name: 'Year 2016',
-            //     data: [1216, 1001, 4436, 738, 40]
-            // }
+                    name: this._("w_ReportCampaign_Traffic"),
+                    data: [107, 31, 635, 203, 2]
+                }
+                //     {
+                //     name: 'Year 1900',
+                //     data: [133, 156, 947, 408, 6]
+                // },
+                //     {
+                //     name: 'Year 2000',
+                //     data: [814, 841, 3714, 727, 31]
+                // },
+                //     {
+                //     name: 'Year 2016',
+                //     data: [1216, 1001, 4436, 738, 40]
+                // }
             ]
-        }
+        };
     }
 
     async receiveTime(time: object) {
         this.time = time;
-        let timeParam = JSON.parse(JSON.stringify(this.time))
+        let timeParam = JSON.parse(JSON.stringify(this.time));
 
         // TODO: wait api
         // Loading.show();
@@ -173,7 +169,7 @@ export class Top5sites extends Vue {
 
     async receiveMode(mode: object) {
         this.mode = mode;
-        console.log(' ~ ', this.mode)
+        console.log(" ~ ", this.mode);
 
         // TODO: wait api
         // Loading.show();
@@ -196,7 +192,6 @@ export class Top5sites extends Vue {
         //         );
         //     });
     }
-
 }
 
 export default Top5sites;

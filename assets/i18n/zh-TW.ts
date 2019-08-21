@@ -1134,6 +1134,7 @@ export default class LangObject implements ILang {
     w_DashboardOverview_Overview = 'Overview';
     w_DashboardOverview_CurrentStatus = 'Current Status';
     w_DashboardOverview_FilterStatus = 'Filter Status';
+    w_DashboardOverview_Now = 'Now';
 
     w_Dashboard_Top5sites = 'Top 5 sites';
     w_Dashboard_Bottom5sites = 'Bottom 5 sites';

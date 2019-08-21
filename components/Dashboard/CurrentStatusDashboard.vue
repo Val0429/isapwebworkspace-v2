@@ -3,14 +3,42 @@
         <iv-card :label="_('w_DashboardOverview_CurrentStatus')">
 
             <template #toolbox>
-                <iv-toolbox-more @click="moreClick" />
+                <iv-toolbox-more>
+                    <iv-toolbox-dashboard-traffic
+                        :iconDisabled="currentStatus.isTraffic"
+                        @click="currentStatus.isTraffic = !currentStatus.isTraffic"
+                    />
+                    <iv-toolbox-dashboard-occupancy
+                        :iconDisabled="currentStatus.isOccupancy"
+                        @click="currentStatus.isOccupancy = !currentStatus.isOccupancy"
+                    />
+                    <iv-toolbox-dashboard-dwelltime
+                        :iconDisabled="currentStatus.isDwellTime"
+                        @click="currentStatus.isDwellTime = !currentStatus.isDwellTime"
+                    />
+                    <iv-toolbox-dashboard-demographic
+                        :iconDisabled="currentStatus.isDemographic"
+                        @click="currentStatus.isDemographic = !currentStatus.isDemographic"
+                    />
+                    <iv-toolbox-dashboard-vipblacklist
+                        :iconDisabled="currentStatus.isVipBlacklist"
+                        @click="currentStatus.isVipBlacklist = !currentStatus.isVipBlacklist"
+                    />
+                    <iv-toolbox-dashboard-repeatcustomer
+                        :iconDisabled="currentStatus.isRepeatCustomer"
+                        @click="currentStatus.isRepeatCustomer = !currentStatus.isRepeatCustomer"
+                    />
+                </iv-toolbox-more>
             </template>
 
-            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+            <div
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                :hidden="!currentStatus.isTraffic"
+            >
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_Traffic")}}</span>
+                            <span class="title">{{_("w_ReportDashboard_Traffic")}} {{_("w_DashboardOverview_Now")}}</span>
                         </div>
                         <div class="clearfix">
                             <span class="date">{{anlysisData.traffic.total != null ? toPercent(anlysisData.traffic.total) : "N/A"}}</span>
@@ -20,11 +48,14 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+            <div
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                :hidden="!currentStatus.isOccupancy"
+            >
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_AverageOccupancy")}}</span>
+                            <span class="title">{{_("w_ReportDashboard_AverageOccupancy")}} {{_("w_DashboardOverview_Now")}}</span>
                         </div>
                         <div class="clearfix">
                             <span class="date">{{anlysisData.averageOccupancy.total != null ? numberWithCommas(anlysisData.averageOccupancy.total) : "N/A"}}</span>
@@ -34,11 +65,14 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+            <div
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                :hidden="!currentStatus.isDwellTime"
+            >
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_AverageDwellTime")}}</span>
+                            <span class="title">{{_("w_ReportDashboard_AverageDwellTime")}} {{_("w_DashboardOverview_Now")}}</span>
                         </div>
                         <div class="clearfix">
                             <span class="date">{{anlysisData.averageDwellTime.total != null ? numberWithCommas(anlysisData.averageDwellTime.total) : "N/A"}}</span>
@@ -48,11 +82,14 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+            <div
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                :hidden="!currentStatus.isDemographic"
+            >
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_Demographic")}}</span>
+                            <span class="title">{{_("w_ReportDashboard_Demographic")}} {{_("w_DashboardOverview_Now")}}</span>
                         </div>
                         <div class="clearfix">
                             <highcharts
@@ -66,11 +103,14 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+            <div
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                :hidden="!currentStatus.isVipBlacklist"
+            >
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_VIPBlacklist")}}</span>
+                            <span class="title">{{_("w_ReportDashboard_VIPBlacklist")}} {{_("w_DashboardOverview_Now")}}</span>
                         </div>
                         <div class="row clearfix">
                             <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-6 vip-blackList-div">
@@ -96,11 +136,14 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+            <div
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                :hidden="!currentStatus.isRepeatCustomer"
+            >
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}}</span>
+                            <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}} {{_("w_DashboardOverview_Now")}}</span>
                         </div>
                         <div class="clearfix">
                             <span class="date">{{anlysisData.repeatCustomer.total != null ? numberWithCommas(anlysisData.repeatCustomer.total) : "N/A"}}</span>
@@ -155,14 +198,26 @@ export class CurrentStatusDashboard extends Vue {
         demographic: {}
     };
 
+    currentStatus: {
+        isTraffic: boolean;
+        isOccupancy: boolean;
+        isDwellTime: boolean;
+        isDemographic: boolean;
+        isVipBlacklist: boolean;
+        isRepeatCustomer: boolean;
+    } = {
+        isTraffic: true,
+        isOccupancy: true,
+        isDwellTime: true,
+        isDemographic: true,
+        isVipBlacklist: true,
+        isRepeatCustomer: true
+    };
+
     created() {}
 
     mounted() {
         this.initData();
-    }
-
-    moreClick() {
-        console.log("moreClick");
     }
 
     async initData() {
@@ -402,7 +457,10 @@ export class CurrentStatusDashboard extends Vue {
             chart: { zoomType: "x", height: "130px" },
             exporting: { enabled: false },
             title: {
-                text: this._("w_ReportDashboard_Demographic"),
+                text:
+                    this._("w_ReportDashboard_Demographic") +
+                    " " +
+                    this._("w_DashboardOverview_Now"),
                 style:
                     "font-weight: bold; font-size: 12px; margin: 0; padding: 0; display: flex; justify-content: center;"
             },
