@@ -170,7 +170,6 @@ export default class Dashboard extends Vue {
     }
 
     toInvitationPage(data) {
-        console.log("toInvitationPage", data);
         let path =
             "/invitation?" +
             "startDate=" +
@@ -182,7 +181,6 @@ export default class Dashboard extends Vue {
             path += "&status=" + data;
         }
         console.log("path", path);
-
         this.$router.push(path);
     }
 
