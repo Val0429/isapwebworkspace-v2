@@ -1134,6 +1134,23 @@ export default class LangObject implements ILang {
     w_DashboardOverview_CurrentStatus = 'Current Status';
     w_DashboardOverview_FilterStatus = 'Filter Status';
 
+    w_Dashboard_Top5sites = 'Top 5 sites';
+    w_Dashboard_Bottom5sites = 'Bottom 5 sites';
+    w_Dashboard_PeakHour = 'Peak Hour';
+
+    w_Dashboard_SelectTime = 'Select Time';
+    w_Dashboard_Today = 'Today';
+    w_Dashboard_Yesterday = 'Yesterday';
+    w_Dashboard_LastDay = 'Last  Day';
+    w_Dashboard_Last7Day = 'Last 7 Day';
+    w_Dashboard_Last14Day = 'Last 14 Day';
+    w_Dashboard_Last28Day = 'Last 28 Day';
+    w_Dashboard_Last30Day = 'Last 30 Day';
+    w_Dashboard_Last60Day = 'Last 60 Day';
+    w_Dashboard_Last90Day = 'Last 90 Day';
+    w_Dashboard_Last180Day = 'Last 180 Day';
+    w_Dashboard_ThisYear = 'This year';
+
     // frs manager
     w_ServerFRSManager_List = 'FRS Manager List';
     w_ServerFRSManager_Add = 'Add FRS Manager';

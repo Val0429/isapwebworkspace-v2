@@ -19,13 +19,28 @@
 
                     <current-status-dashboard></current-status-dashboard>
 
+
                 </iv-card>
+
                 <iv-card
                     key="card_2"
                     class="filter-status-card"
                     :label="_('w_DashboardOverview_FilterStatus')"
                 >
                 </iv-card>
+
+                <top-5sites
+                    class="col-md-6"
+                ></top-5sites>
+
+                <bottom-5sites
+                    class="col-md-6"
+                ></bottom-5sites>
+
+                <peak-hour
+                    class="col-md-12"
+                ></peak-hour>
+
             </div>
 
             <div
