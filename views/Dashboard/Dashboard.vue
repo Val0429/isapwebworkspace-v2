@@ -175,7 +175,7 @@ export default class Dashboard extends Vue {
             "startDate=" +
             this.inputFilterData.startDate.toISOString() +
             "&endDate=" +
-            this.inputFilterData.startDate.toISOString();
+            this.inputFilterData.endDate.toISOString();
 
         if (data) {
             path += "&status=" + data;

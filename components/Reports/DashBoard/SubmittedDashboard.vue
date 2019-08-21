@@ -3,15 +3,16 @@
         <div class="row col-lg-12">
             <div
                 class="col-lg-4 col-sm-4 col-xs-1 col-xxs-1 submitted"
-                @click="clickEvent('submitted')"
+                @click="clickEvent('new')"
             >
+
                 <span class="title">{{_('w_Dashboard_Submitted')}}</span><br>
                 <span class="value">{{data.submitted}}</span>
             </div>
             <!--/col-->
             <div
                 class="col-lg-4 col-sm-4 col-xs-1 col-xxs-1 approved"
-                @click="clickEvent('approved')"
+                @click="clickEvent('approve')"
             >
                 <span class="title">{{_('w_Dashboard_Approved')}}</span><br>
                 <span class="value">{{data.approved}}</span>
@@ -19,7 +20,7 @@
             <!--/col-->
             <div
                 class="col-lg-4 col-sm-4 col-xs-1 col-xxs-1 awaitingApproval"
-                @click="clickEvent('awaitingApproval')"
+                @click="clickEvent('pendding')"
             >
                 <span class="title">{{_('w_Dashboard_AwaitingApproval')}}</span><br>
                 <span class="value">{{data.awaitingApproval}}</span>
@@ -31,7 +32,7 @@
         <div class="row col-lg-12">
             <div
                 class="col-lg-12 col-sm-12 col-xs-4 col-xxs-4 total"
-                @click="clickEvent('')"
+                @click="clickEvent()"
             >
                 <span class="title">{{_('w_Dashboard_Total')}}</span><br>
                 <span class="value">{{data.total}}</span>
@@ -59,6 +60,13 @@ interface IDashboardData {
     total: number;
 }
 
+enum EPTWStatus {
+    new = "new",
+    approve = "approve",
+    pendding = "pendding",
+    reject = "reject"
+}
+
 @Component({
     components: {}
 })
@@ -69,6 +77,8 @@ export class SubmittedDashBoard extends Vue {
         default: {}
     })
     data: IDashboardData;
+
+    ePTWStatus: EPTWStatus;
 
     created() {}
 
