@@ -1,12 +1,25 @@
 <template>
     <div>
         <iv-card :label="_('w_Dashboard_Top5sites')">
+            <h5 class="mb-3">{{ mode.modeTitle }}</h5>
+
             <highcharts
                 ref="highcharts"
                 :options="chartOptions"
             ></highcharts>
 
-            <select-time @time="receiveTime"></select-time>
+            <b-row>
+                <select-device-type
+                    class="col-md-6"
+                    :modeParam="mode"
+                    @mode="receiveMode"
+                ></select-device-type>
+                <select-time
+                    class="col-md-6"
+                    :timeParam="time"
+                    @time="receiveTime"
+                ></select-time>
+            </b-row>
 
         </iv-card>
     </div>
@@ -21,7 +34,16 @@ import HighchartsVue from "highcharts-vue";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
+import Datetime from "@/services/Datetime";
 Vue.use(HighchartsVue);
+
+enum EMode {
+    peopleCounting = "peopleCounting",
+    dwellTime = "dwellTime",
+    visitor = "visitor",
+    vip = "vip",
+    black = "black"
+}
 
 @Component({
     components: {}
@@ -36,12 +58,37 @@ export class Top5sites extends Vue {
 
     chartOptions: any = {};
 
-    time: any = {};
+    time: any = {
+        startDate: new Date(),
+        endDate: new Date()
+    };
 
-    created() {}
+    mode: any = {
+        type: "",
+        modeTitle: ""
+    };
 
-    mounted() {
+    created() {
         this.initCharts();
+        this.initData();
+    }
+
+    mounted() {}
+
+    initData() {
+        this.mode = {
+            type: EMode.peopleCounting,
+            modeTitle: this._("w_Navigation_RuleAndActions_Traffic")
+        };
+
+        this.time = {
+            // TODO: wait api
+            startDate: Datetime.DateToZero(new Date()),
+            endDate: Datetime.DateToZero(new Date())
+
+            // startDate: Datetime.DateToZero(new Date(Datetime.ThisYearStartDate())),
+            // endDate: Datetime.DateToZero(new Date(Datetime.ThisYearEndDate()))
+        };
     }
 
     initCharts() {
@@ -49,13 +96,10 @@ export class Top5sites extends Vue {
             chart: {
                 type: "bar"
             },
-            title: {
-                text: "Historic World Population by Region"
-            },
-            subtitle: {
-                text:
-                    'Source: <a href="https://en.wikipedia.org/wiki/World_population">Wikipedia.org</a>'
-            },
+            exporting: { enabled: false },
+            title: { text: null },
+            subtitle: { text: null },
+
             xAxis: {
                 categories: ["Africa", "America", "Asia", "Europe", "Oceania"],
                 title: {
@@ -65,60 +109,67 @@ export class Top5sites extends Vue {
             yAxis: {
                 min: 0,
                 title: {
-                    text: "Population (millions)",
+                    text: null,
                     align: "high"
                 },
-                labels: {
-                    overflow: "justify"
-                }
+                labels: false
             },
             tooltip: {
                 valueSuffix: " millions"
-            },
-            plotOptions: {
-                bar: {
-                    dataLabels: {
-                        enabled: true
-                    }
-                }
-            },
-            legend: {
-                layout: "vertical",
-                align: "right",
-                verticalAlign: "top",
-                x: -40,
-                y: 80,
-                floating: true,
-                borderWidth: 1,
-                // backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
-                shadow: true
             },
             credits: {
                 enabled: false
             },
             series: [
                 {
-                    name: "Year 1800",
+                    name: this._("w_ReportCampaign_Traffic"),
                     data: [107, 31, 635, 203, 2]
-                },
-                {
-                    name: "Year 1900",
-                    data: [133, 156, 947, 408, 6]
-                },
-                {
-                    name: "Year 2000",
-                    data: [814, 841, 3714, 727, 31]
-                },
-                {
-                    name: "Year 2016",
-                    data: [1216, 1001, 4436, 738, 40]
                 }
+                //     {
+                //     name: 'Year 1900',
+                //     data: [133, 156, 947, 408, 6]
+                // },
+                //     {
+                //     name: 'Year 2000',
+                //     data: [814, 841, 3714, 727, 31]
+                // },
+                //     {
+                //     name: 'Year 2016',
+                //     data: [1216, 1001, 4436, 738, 40]
+                // }
             ]
         };
     }
 
     async receiveTime(time: object) {
-        this.time = JSON.parse(JSON.stringify(time));
+        this.time = time;
+        let timeParam = JSON.parse(JSON.stringify(this.time));
+
+        // TODO: wait api
+        // Loading.show();
+        // await this.$server
+        //     .C("/", timeParam)
+        //     .then((response: any) => {
+        //         ResponseFilter.successCheck(
+        //             this,
+        //             response,
+        //             (response: any) => {
+        //             },
+        //             this._("w_Dialog_ErrorTitle")
+        //         );
+        //     })
+        //     .catch((e: any) => {
+        //         return ResponseFilter.catchError(
+        //             this,
+        //             e,
+        //             this._("w_Dialog_ErrorTitle")
+        //         );
+        //     });
+    }
+
+    async receiveMode(mode: object) {
+        this.mode = mode;
+        console.log(" ~ ", this.mode);
 
         // TODO: wait api
         // Loading.show();
