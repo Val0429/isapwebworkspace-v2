@@ -131,7 +131,7 @@ export class SearchCondition extends Vue {
         }
         if (this.routeQuery.endDate) {
             let tempDate = new Date(this.routeQuery.endDate);
-            this.inputFormData.startDate = tempDate;
+            this.inputFormData.endDate = tempDate;
             submitData.endDate = tempDate;
         }
         if (this.routeQuery.status) {
