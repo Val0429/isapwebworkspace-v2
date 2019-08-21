@@ -83,11 +83,11 @@
           @click="pageToEdit()"
         />
 
-        <iv-toolbox-delete
+        <!-- <iv-toolbox-delete
           v-show="canDelete"
           :disabled="isSelected.length === 0"
           @click="doDelete"
-        />
+        /> -->
         <iv-toolbox-divider />
         <iv-toolbox-add v-show="canAdd" @click="pageToAdd(ePageStep.add)" />
       </template>
