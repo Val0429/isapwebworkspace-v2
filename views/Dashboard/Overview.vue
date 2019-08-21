@@ -16,6 +16,12 @@
 
                 <filter-status-dashboard class="col-md-8"></filter-status-dashboard>
 
+                <top-5sites class="col-md-6"></top-5sites>
+
+                <bottom-5sites class="col-md-6"></bottom-5sites>
+
+                <peak-hour class="col-md-12"></peak-hour>
+
             </div>
 
             <div
