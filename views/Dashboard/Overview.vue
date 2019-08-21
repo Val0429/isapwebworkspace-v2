@@ -11,21 +11,11 @@
                 :label="'Empty 1'"
                 class="row"
             >
-                <iv-card
-                    key="card_1"
-                    class="current-status-card"
-                    :label="_('w_DashboardOverview_CurrentStatus')"
-                >
 
-                    <current-status-dashboard></current-status-dashboard>
+                <current-status-dashboard class="col-md-4"></current-status-dashboard>
 
-                </iv-card>
-                <iv-card
-                    key="card_2"
-                    class="filter-status-card"
-                    :label="_('w_DashboardOverview_FilterStatus')"
-                >
-                </iv-card>
+                <filter-status-dashboard class="col-md-8"></filter-status-dashboard>
+
             </div>
 
             <div

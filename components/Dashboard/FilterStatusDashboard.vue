@@ -1,135 +1,68 @@
 <template>
     <div>
 
-        <div class="row mt-4">
-            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
-            </div>
-            <!--/col-->
+        <iv-card :label="_('w_DashboardOverview_FilterStatus')">
 
-            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
-                <div class="box info-box">
-                    <div :class="ePageType.traffic == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+                <div class="box current-info-box">
+                    <div class="backgroundColor">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_Traffic")}}</span>
-                            <span
-                                v-if="eWeather.none != this.weather"
-                                v-html="showWeather()"
-                                class="weather"
-                            ></span>
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <span class="date">{{anlysisData.traffic.total != null ? numberWithCommas(anlysisData.traffic.total) : "N/A"}}</span>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <div :class="eSign.none != anlysisData.traffic.sign ? (eSign.positive == anlysisData.traffic.sign ?  'ratio green':'ratio red') : 'ratio'">
-                                    <span v-if="eSign.none != anlysisData.traffic.sign">{{eSign.positive == anlysisData.traffic.sign ? '▲':'▼'}}</span>
-                                    <span>{{anlysisData.traffic.value != null ? numberWithCommas(anlysisData.traffic.value) : "N/A"}} </span><br>
-                                    <span>{{anlysisData.traffic.valueRatio != null ? toPercent(anlysisData.traffic.valueRatio,1) : "N/A"}}</span>
-                                </div>
-                            </div>
+                        <div class="clearfix">
+                            <span class="date">{{anlysisData.traffic.total != null ? toPercent(anlysisData.traffic.total) : "N/A"}}</span>
                         </div>
                     </div>
                 </div>
             </div>
             <!--/col-->
 
-            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
-                <div class="box info-box">
-                    <div :class="ePageType.averageOccupancy == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+                <div class="box current-info-box">
+                    <div class="backgroundColor">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_AverageOccupancy")}}</span>
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <span class="date">{{anlysisData.averageOccupancy.total != null ? numberWithCommas(anlysisData.averageOccupancy.total) : "N/A"}}</span>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <div :class="eSign.none != anlysisData.averageOccupancy.sign ? (eSign.positive == anlysisData.averageOccupancy.sign ?  'ratio green':'ratio red') : 'ratio'">
-                                    <span v-if="eSign.none != anlysisData.averageOccupancy.sign">{{eSign.positive == anlysisData.averageOccupancy.sign ? '▲':'▼'}}</span>
-                                    <span>{{anlysisData.averageOccupancy.value != null ? numberWithCommas(anlysisData.averageOccupancy.value) : "N/A"}} </span><br>
-                                    <span>{{anlysisData.averageOccupancy.valueRatio != null ? toPercent(anlysisData.averageOccupancy.valueRatio,1) : "N/A"}}</span>
-                                </div>
-                            </div>
+                        <div class="clearfix">
+                            <span class="date">{{anlysisData.averageOccupancy.total != null ? numberWithCommas(anlysisData.averageOccupancy.total) : "N/A"}}</span>
                         </div>
                     </div>
                 </div>
             </div>
             <!--/col-->
 
-            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
-                <div class="box info-box">
-                    <div :class="ePageType.averageDwellTime == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+                <div class="box current-info-box">
+                    <div class="backgroundColor">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_AverageDwellTime")}}</span>
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <span class="date">{{anlysisData.averageDwellTime.total != null ? numberWithCommas(anlysisData.averageDwellTime.total) : "N/A"}}</span>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <div :class="eSign.none != anlysisData.averageDwellTime.sign ? (eSign.positive == anlysisData.averageDwellTime.sign ?  'ratio green':'ratio red') : 'ratio'">
-                                    <span v-if="eSign.none != anlysisData.averageDwellTime.sign">{{eSign.positive == anlysisData.averageDwellTime.sign ? '▲':'▼'}}</span>
-                                    <span>{{anlysisData.averageDwellTime.value != null ? numberWithCommas(anlysisData.averageDwellTime.value) : "N/A"}} </span><br>
-                                    <span>{{anlysisData.averageDwellTime.valueRatio != null ? toPercent(anlysisData.averageDwellTime.valueRatio,1) : "N/A"}}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--/col-->
-
-            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
-                <div class="box info-box">
-                    <div :class="ePageType.demographic == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_Demographic")}}</span>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <img src="../../assets/images/men.png">
-                                <div :class="eSign.none != anlysisData.demographic.sign ? (eSign.positive == anlysisData.demographic.sign ?  'ratio green':'ratio red') : 'ratio'">
-                                    <span v-if="eSign.none != anlysisData.demographic.sign">{{eSign.positive == anlysisData.demographic.sign ? '▲':'▼'}}</span>
-                                    <span>{{anlysisData.demographic.value != null ? numberWithCommas(anlysisData.demographic.value) : "N/A"}} </span><br>
-                                    <span>{{anlysisData.demographic.valueRatio != null ? toPercent(anlysisData.demographic.valueRatio,1) : "N/A"}}</span>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <img src="../../assets/images/women.png">
-                                <div :class="eSign.none != anlysisData.demographic.sign2 ? (eSign.positive == anlysisData.demographic.sign2 ?  'ratio green':'ratio red') : 'ratio'">
-                                    <span v-if="eSign.none != anlysisData.demographic.sign2">{{eSign.positive == anlysisData.demographic.sign2 ? '▲':'▼'}}</span>
-                                    <span>{{anlysisData.demographic.value2 != null ? numberWithCommas(anlysisData.demographic.value2): "N/A"}} </span><br>
-                                    <span>{{anlysisData.demographic.valueRatio2 != null ? toPercent(anlysisData.demographic.valueRatio2,1) : "N/A"}}</span>
-                                </div>
-                            </div>
+                            <span class="date">{{anlysisData.averageDwellTime.total != null ? numberWithCommas(anlysisData.averageDwellTime.total) : "N/A"}}</span>
                         </div>
                     </div>
                 </div>
             </div>
             <!--/col-->
 
-            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
-                <div class="box info-box">
-                    <div :class="ePageType.vipBlacklist == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+                <div class="box current-info-box">
+                    <div class="backgroundColor">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_VIPBlacklist")}}</span>
                         </div>
                         <div class="row clearfix">
                             <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
                                 <img src="../../assets/images/vip.png">
-                                <div :class="eSign.none != anlysisData.vipBlacklist.sign ? (eSign.positive == anlysisData.vipBlacklist.sign ?  'ratio green':'ratio red') : 'ratio'">
-                                    <span v-if="eSign.none != anlysisData.vipBlacklist.sign">{{eSign.positive == anlysisData.vipBlacklist.sign ? '▲':'▼'}}</span>
-                                    <span>{{anlysisData.vipBlacklist.value != null ? numberWithCommas(anlysisData.vipBlacklist.value) : "N/A"}} </span><br>
-                                    <span>{{anlysisData.vipBlacklist.valueRatio != null ? toPercent(anlysisData.vipBlacklist.valueRatio,1) : "N/A"}}</span>
+                                <div class="ratio">
+
+                                    <span>{{anlysisData.vipBlacklist.value != null ? numberWithCommas(anlysisData.vipBlacklist.value) : "N/A"}} </span>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
                                 <img src="../../assets/images/stranger.png">
-                                <div :class="eSign.none != anlysisData.vipBlacklist.sign2 ? (eSign.positive == anlysisData.vipBlacklist.sign2 ?  'ratio green':'ratio red') : 'ratio'">
-                                    <span v-if="eSign.none != anlysisData.vipBlacklist.sign2">{{eSign.positive == anlysisData.vipBlacklist.sign2 ? '▲':'▼'}}</span>
-                                    <span>{{anlysisData.vipBlacklist.value2 != null ? numberWithCommas(anlysisData.vipBlacklist.value2) : "N/A"}} </span><br>
-                                    <span>{{anlysisData.vipBlacklist.valueRatio2 != null ? toPercent(anlysisData.vipBlacklist.valueRatio2,1) : "N/A"}}</span>
+                                <div class="ratio">
+                                    <span>{{anlysisData.vipBlacklist.value2 != null ? numberWithCommas(anlysisData.vipBlacklist.value2) : "N/A"}} </span>
                                 </div>
                             </div>
                         </div>
@@ -138,141 +71,20 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
-            </div>
-            <!--/col-->
-        </div>
-
-        <!-- /row -->
-
-        <div class="row">
-            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
-            </div>
-            <!--/col-->
-
-            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
-                <div
-                    class="box info-box-second"
-                    style="border-left: 0px"
-                >
-                    <div :class="ePageType.repeatCustomer == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+                <div class="box current-info-box">
+                    <div class="backgroundColor">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}}</span>
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <span class="date">{{anlysisData.repeatCustomer.total != null ? toPercent(anlysisData.repeatCustomer.total) : "N/A"}}</span>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <div :class="eSign.none != anlysisData.repeatCustomer.sign ? (eSign.positive == anlysisData.repeatCustomer.sign ?  'ratio green':'ratio red') : 'ratio'">
-                                    <span v-if="eSign.none != anlysisData.repeatCustomer.sign">{{eSign.positive == anlysisData.repeatCustomer.sign ? '▲':'▼'}}</span>
-                                    <span>{{anlysisData.repeatCustomer.value != null ? numberWithCommas(anlysisData.repeatCustomer.value) : "N/A"}} </span><br>
-                                    <span>{{anlysisData.repeatCustomer.valueRatio != null ? toPercent(anlysisData.repeatCustomer.valueRatio,1) : "N/A"}}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--/col-->
-            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-122">
-                <div class="box info-box-second">
-                    <div :class="ePageType.revenue == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_Revenue")}}</span>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <span :class="eSign.none != anlysisData.revenue.sign ? 'date-sm':'date'">{{anlysisData.revenue.total != null ? numberWithCommas(anlysisData.revenue.total) : "N/A"}}</span>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <div :class="eSign.none != anlysisData.revenue.sign ? (eSign.positive == anlysisData.revenue.sign ?  'ratio green':'ratio red') : 'ratio'">
-                                    <span v-if="eSign.none != anlysisData.revenue.sign">{{eSign.positive == anlysisData.revenue.sign ? '▲':'▼'}}</span>
-                                    <span>{{anlysisData.revenue.value != null ? numberWithCommas(anlysisData.revenue.value) : "N/A"}} </span><br>
-                                    <span>{{anlysisData.revenue.valueRatio != null ? toPercent(anlysisData.revenue.valueRatio,1) : "N/A"}}</span>
-                                </div>
-                            </div>
+                            <span class="date">{{anlysisData.repeatCustomer.total != null ? numberWithCommas(anlysisData.repeatCustomer.total) : "N/A"}}</span>
                         </div>
                     </div>
                 </div>
             </div>
             <!--/col-->
-
-            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
-                <div class="box info-box-second">
-                    <div :class="ePageType.transaction == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
-                        <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_Transaction")}}</span>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <span class="date">{{anlysisData.transaction.total != null ? numberWithCommas(anlysisData.transaction.total) : "N/A"}}</span>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <div :class="eSign.none != anlysisData.transaction.sign ? (eSign.positive == anlysisData.transaction.sign ?  'ratio green':'ratio red') : 'ratio'">
-                                    <span v-if="eSign.none != anlysisData.transaction.sign">{{eSign.positive == anlysisData.transaction.sign ? '▲':'▼'}}</span>
-                                    <span>{{anlysisData.transaction.value != null ? numberWithCommas(anlysisData.transaction.value) : "N/A"}} </span><br>
-                                    <span>{{anlysisData.transaction.valueRatio != null ? toPercent(anlysisData.transaction.valueRatio,1) : "N/A"}}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--/col-->
-
-            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
-                <div class="box info-box-second">
-                    <div :class="ePageType.conversion == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
-                        <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_Conversion")}}</span>
-                        </div>
-
-                        <div class="row clearfix">
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <span class="date">{{anlysisData.conversion.total != null ? toPercent(anlysisData.conversion.total,0) : "N/A"}}</span>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <div :class="eSign.none != anlysisData.conversion.sign ? (eSign.positive == anlysisData.conversion.sign ?  'ratio green':'ratio red') : 'ratio'">
-                                    <span v-if="eSign.none != anlysisData.conversion.sign">{{eSign.positive == anlysisData.conversion.sign ? '▲':'▼'}}</span>
-                                    <span>{{anlysisData.conversion.value != null ? numberWithCommas(anlysisData.conversion.value) : "N/A"}} </span><br>
-                                    <span>{{anlysisData.conversion.valueRatio != null ? toPercent(anlysisData.conversion.valueRatio,1) : "N/A"}}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--/col-->
-
-            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
-                <div class="box info-box-second">
-                    <div :class="ePageType.asp == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
-                        <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_ASP")}}</span>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <span class="date">{{anlysisData.asp.total != null ? numberWithCommas(anlysisData.asp.total) : "N/A"}}</span>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <div :class="eSign.none != anlysisData.asp.sign ? (eSign.positive == anlysisData.asp.sign ?  'ratio green':'ratio red') : 'ratio'">
-                                    <span v-if="eSign.none != anlysisData.asp.sign">{{eSign.positive == anlysisData.asp.sign ? '▲':'▼'}}</span>
-                                    <span>{{anlysisData.asp.value != null ? numberWithCommas(anlysisData.asp.value) : "N/A"}} </span><br>
-                                    <span>{{anlysisData.asp.valueRatio != null ? toPercent(anlysisData.asp.valueRatio,1) : "N/A"}}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--/col-->
-
-            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
-            </div>
-            <!--/col-->
-        </div>
-        <!-- /row -->
+        </iv-card>
     </div>
 </template>
 

@@ -1,15 +1,19 @@
 <template>
     <div>
-        <div class="row">
+        <iv-card :label="_('w_DashboardOverview_CurrentStatus')">
+
+            <template #toolbox>
+                <iv-toolbox-more @click="clickBack" />
+            </template>
 
             <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}}</span>
+                            <span class="title">{{_("w_ReportDashboard_Traffic")}}</span>
                         </div>
                         <div class="clearfix">
-                            <span class="date">{{anlysisData.repeatCustomer.total != null ? toPercent(anlysisData.repeatCustomer.total) : "N/A"}}</span>
+                            <span class="date">{{anlysisData.traffic.total != null ? toPercent(anlysisData.traffic.total) : "N/A"}}</span>
                         </div>
                     </div>
                 </div>
@@ -20,10 +24,24 @@
                 <div class="box current-info-box">
                     <div class="backgroundColor">
                         <div class="clearfix">
-                            <span class="title">{{_("w_ReportDashboard_Revenue")}}</span>
+                            <span class="title">{{_("w_ReportDashboard_AverageOccupancy")}}</span>
                         </div>
                         <div class="clearfix">
-                            <span class="date">{{anlysisData.revenue.total != null ? numberWithCommas(anlysisData.revenue.total) : "N/A"}}</span>
+                            <span class="date">{{anlysisData.averageOccupancy.total != null ? numberWithCommas(anlysisData.averageOccupancy.total) : "N/A"}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/col-->
+
+            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+                <div class="box current-info-box">
+                    <div class="backgroundColor">
+                        <div class="clearfix">
+                            <span class="title">{{_("w_ReportDashboard_AverageDwellTime")}}</span>
+                        </div>
+                        <div class="clearfix">
+                            <span class="date">{{anlysisData.averageDwellTime.total != null ? numberWithCommas(anlysisData.averageDwellTime.total) : "N/A"}}</span>
                         </div>
                     </div>
                 </div>
@@ -74,8 +92,22 @@
             </div>
             <!--/col-->
 
-        </div>
-        <!-- /row -->
+            <div class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12">
+                <div class="box current-info-box">
+                    <div class="backgroundColor">
+                        <div class="clearfix">
+                            <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}}</span>
+                        </div>
+                        <div class="clearfix">
+                            <span class="date">{{anlysisData.repeatCustomer.total != null ? numberWithCommas(anlysisData.repeatCustomer.total) : "N/A"}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/col-->
+
+        </iv-card>
+
     </div>
 </template>
 
@@ -496,7 +528,7 @@ Vue.component("current-status-dashboard", CurrentStatusDashboard);
     .date {
         font-weight: bold;
         font-size: 36px;
-        margin-top: -8px;
+        margin-top: 30px;
         padding: 0;
         display: flex;
         justify-content: center;
