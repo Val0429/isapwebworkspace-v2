@@ -20,6 +20,8 @@ import exportingInit from "highcharts/modules/exporting";
 exportingInit(Highcharts);
 Vue.use(HighchartsVue);
 
+import { EMode } from '@/components/Dashboard/index'
+
 @Component({
     components: {}
 })
