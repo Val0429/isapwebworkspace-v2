@@ -284,7 +284,7 @@ export class SearchCondition extends Vue {
             interface {
 
                 /**
-                * @uiLabel - ${this._("w_Invitation_DateFrom")}
+                * @uiLabel - Work ${this._("w_Invitation_DateFrom")}
                 * @uiPlaceHolder - ${this._("w_Invitation_DateFrom")}
                 * @uiType - iv-form-date
                 * @uiColumnGroup - row1
@@ -293,7 +293,7 @@ export class SearchCondition extends Vue {
 
 
                 /**
-                * @uiLabel - ${this._("w_Invitation_DateTo")}
+                * @uiLabel - Work ${this._("w_Invitation_DateTo")}
                 * @uiPlaceHolder - ${this._("w_Invitation_DateTo")}
                 * @uiType - iv-form-date
                 * @uiColumnGroup - row1

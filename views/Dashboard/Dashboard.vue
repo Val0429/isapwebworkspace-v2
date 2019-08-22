@@ -308,14 +308,14 @@ export default class Dashboard extends Vue {
         return `
             interface {
                 /**
-                 * @uiLabel - ${this._("w_Startdate")}
+                 * @uiLabel - Work ${this._("w_Startdate")}
                  * @uiColumnGroup - timeGroup
                  * @uiType - iv-form-date
                  */
                 startDate?: Date;
 
                   /**
-                 * @uiLabel - ${this._("w_Enddate")}
+                 * @uiLabel - Work ${this._("w_Enddate")}
                  * @uiColumnGroup - timeGroup
                  * @uiType - iv-form-date
                  */
