@@ -1,6 +1,6 @@
 {
     "name": "contractor-management-system",
-    "version": "1.00.15",
+    "version": "1.00.16",
     "flow": "/flow1",
     "description": "Contractor Management System",
     "scripts": {
