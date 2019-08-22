@@ -94,6 +94,25 @@
                         />
                     </SidebarNavItem>
 
+                    <!-- Tools -->
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Tools')"
+                        url="/tools"
+                    >
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Tools_Traffic')"
+                            url="/tools/toolTraffic"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Tools_Demographic')"
+                            url="/tools/toolRepeatVisitor"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Tools_RepeatVisitor')"
+                            url="/tools/toolDemographic"
+                        />
+                    </SidebarNavItem>
+
                 </iv-permission>
 
                 <iv-permission :allow="['SuperAdministrator', 'Admin']">

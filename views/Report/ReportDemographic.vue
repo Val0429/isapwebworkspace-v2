@@ -355,7 +355,14 @@ export default class ReportDemographic extends Vue {
 		}
 
 
-		// Ben //
+        // Ben //
+                checkedEmployee(all, employee) {
+        return this.inputFormData.isIncludedEmployee == EIncludedEmployee.yes
+            ? all
+            : all - employee;
+    }
+
+        
 		reportTableBack() {
 			this.tableStep = this.lastTableStep;
 			this.lastTableStep = ETableStep.mainTable;
@@ -470,15 +477,33 @@ export default class ReportDemographic extends Vue {
 							    	tempArray[index].group.objectId ==
 							    	deviceGroup.objectId
 							    ) {
-							    	item1Count.value += summaryData.maleTotal;
+							    	item1Count.value +=  this.checkedEmployee(
+                                    summaryData.maleTotal,
+                                    summaryData.maleEmployeeTotal
+                                );
 							    	item1Count.valueRatio += ReportService.countRatio(
-							    		summaryData.maleTotal,
-							    		summaryData.prevMaleTotal
+							    	 this.checkedEmployee(
+                                    summaryData.maleTotal,
+                                    summaryData.maleEmployeeTotal
+                                ),
+                                 this.checkedEmployee(
+                                    summaryData.prevMaleTotal,
+                                    summaryData.prevMaleEmployeeTotal
+                                )
 							    	);
-							    	item2Count.value += summaryData.femaleTotal;
+							    	item2Count.value += this.checkedEmployee(
+                                    summaryData.femaleTotal,
+                                    summaryData.femaleEmployeeTotal
+                                );
 							    	item2Count.valueRatio += ReportService.countRatio(
-							    		summaryData.femaleTotal,
-							    		summaryData.prevFemaleTotal
+							    		 this.checkedEmployee(
+                                    summaryData.femaleTotal,
+                                    summaryData.femaleEmployeeTotal
+                                ),
+                                 this.checkedEmployee(
+                                    summaryData.prevfeMaleTotal,
+                                    summaryData.prevfeMaleEmployeeTotal
+                                )
 							    	);
                                 }
                             }
@@ -487,15 +512,33 @@ export default class ReportDemographic extends Vue {
 								tempArray[index].area.objectId ==
 								summaryData.area.objectId
 							) {
-								item1Count.value += summaryData.maleTotal;
+								item1Count.value += this.checkedEmployee(
+                                    summaryData.maleTotal,
+                                    summaryData.maleEmployeeTotal
+                                );
 								item1Count.valueRatio += ReportService.countRatio(
-									summaryData.maleTotal,
-									summaryData.prevMaleTotal
+									 this.checkedEmployee(
+                                    summaryData.maleTotal,
+                                    summaryData.maleEmployeeTotal
+                                ),
+                                 this.checkedEmployee(
+                                    summaryData.prevMaleTotal,
+                                    summaryData.prevMaleEmployeeTotal
+                                )
 								);
-								item2Count.value += summaryData.femaleTotal;
+								item2Count.value +=  this.checkedEmployee(
+                                    summaryData.femaleTotal,
+                                    summaryData.femaleEmployeeTotal
+                                );
 								item2Count.valueRatio += ReportService.countRatio(
-									summaryData.femaleTotal,
-									summaryData.prevFemaleTotal
+									 this.checkedEmployee(
+                                    summaryData.femaleTotal,
+                                    summaryData.femaleEmployeeTotal
+                                ),
+                                 this.checkedEmployee(
+                                    summaryData.prevfeMaleTotal,
+                                    summaryData.prevfeMaleEmployeeTotal
+                                )
 								);
 							}
 						}
@@ -642,38 +685,74 @@ export default class ReportDemographic extends Vue {
 								}
 									if (tempArray[index].group != null) {
                                         for (let deviceGroup of summaryData.deviceGroups) {
-										    if (
+										   if (
 										    	tempArray[index].group.objectId ==
 										    	deviceGroup.objectId
 										    ) {
-										    	item1Count.value += summaryData.maleTotal;
+										    	item1Count.value += this.checkedEmployee(
+                                                    summaryData.maleTotal,
+                                                    summaryData.maleEmployeeTotal
+                                                );
 										    	item1Count.valueRatio += ReportService.countRatio(
-										    		summaryData.maleTotal,
-										    		summaryData.prevMaleTotal
-										    	);
-										    	item2Count.value +=
-										    		summaryData.femaleTotal;
-										    	item2Count.valueRatio += ReportService.countRatio(
-										    		summaryData.femaleTotal,
-										    		summaryData.prevFemaleTotal
+										    		this.checkedEmployee(
+                                                    summaryData.maleTotal,
+                                                    summaryData.maleEmployeeTotal
+                                                    ),
+                                                     this.checkedEmployee(
+                                                        summaryData.prevMaleTotal,
+                                                        summaryData.prevMaleEmployeeTotal
+                                                    )
+								                     );
+								                     item2Count.value +=
+								                      this.checkedEmployee(
+                                                        summaryData.femaleTotal,
+                                                        summaryData.femaleEmployeeTotal
+                                                    );
+								                        item2Count.valueRatio += ReportService.countRatio(
+								                        this.checkedEmployee(
+                                                        summaryData.femaleTotal,
+                                                        summaryData.femaleEmployeeTotal
+                                                    ),
+                                                     this.checkedEmployee(
+                                                        summaryData.prevfeMaleTotal,
+                                                        summaryData.prevfeMaleEmployeeTotal
+                                                    )
 										    	);
                                             }
                                         }
 									} else {
-										if (
+									if (
 											tempArray[index].area.objectId ==
 											summaryData.area.objectId
 										) {
-											item1Count.value += summaryData.maleTotal;
+											item1Count.value += this.checkedEmployee(
+                                                    summaryData.maleTotal,
+                                                    summaryData.maleEmployeeTotal
+                                            );
 											item1Count.valueRatio += ReportService.countRatio(
-												summaryData.maleTotal,
-												summaryData.prevMaleTotal
+											this.checkedEmployee(
+                                                    summaryData.maleTotal,
+                                                    summaryData.maleEmployeeTotal
+                                                    ),
+                                                     this.checkedEmployee(
+                                                        summaryData.prevMaleTotal,
+                                                        summaryData.prevMaleEmployeeTotal
+                                                    )
 											);
 											item2Count.value +=
-												summaryData.femaleTotal;
+											  this.checkedEmployee(
+                                                        summaryData.femaleTotal,
+                                                        summaryData.femaleEmployeeTotal
+                                                    );
 											item2Count.valueRatio += ReportService.countRatio(
-												summaryData.femaleTotal,
-												summaryData.prevFemaleTotal
+											 this.checkedEmployee(
+                                                        summaryData.femaleTotal,
+                                                        summaryData.femaleEmployeeTotal
+                                                    ),
+                                                     this.checkedEmployee(
+                                                        summaryData.prevfeMaleTotal,
+                                                        summaryData.prevfeMaleEmployeeTotal
+                                                    )
 											);
 										}
 									}
@@ -707,39 +786,75 @@ export default class ReportDemographic extends Vue {
 
 									if (tempArray[index].group != null) {
                                         for (let deviceGroup of summaryData.deviceGroups) {
-										    if (
+										   if (
 										    	tempArray[index].group.objectId ==
 										    	deviceGroup.objectId
 										    ) {
-										    	item1Count.value += summaryData.maleTotal;
+										    	item1Count.value += this.checkedEmployee(
+                                                    summaryData.maleTotal,
+                                                    summaryData.maleEmployeeTotal
+                                            );
 										    	item1Count.valueRatio += ReportService.countRatio(
-										    		summaryData.maleTotal,
-										    		summaryData.prevMaleTotal
+										    	this.checkedEmployee(
+                                                    summaryData.maleTotal,
+                                                    summaryData.maleEmployeeTotal
+                                                    ),
+                                                     this.checkedEmployee(
+                                                        summaryData.prevMaleTotal,
+                                                        summaryData.prevMaleEmployeeTotal
+                                                    )
 										    	);
 										    	item2Count.value +=
-										    		summaryData.femaleTotal;
+										    	 this.checkedEmployee(
+                                                        summaryData.femaleTotal,
+                                                        summaryData.femaleEmployeeTotal
+                                                    );
 										    	item2Count.valueRatio += ReportService.countRatio(
-										    		summaryData.femaleTotal,
-										    		summaryData.prevFemaleTotal
+										    	 this.checkedEmployee(
+                                                        summaryData.femaleTotal,
+                                                        summaryData.femaleEmployeeTotal
+                                                    ),
+                                                     this.checkedEmployee(
+                                                        summaryData.prevfeMaleTotal,
+                                                        summaryData.prevfeMaleEmployeeTotal
+                                                    )
 										    	);
                                             }
                                         }
 									} else {
-										if (
+									if (
 											tempArray[index].area.objectId ==
 											summaryData.area.objectId
 										) {
-											item1Count.value += summaryData.maleTotal;
+											item1Count.value += this.checkedEmployee(
+                                                    summaryData.maleTotal,
+                                                    summaryData.maleEmployeeTotal
+                                            );
 											item1Count.valueRatio += ReportService.countRatio(
-												summaryData.maleTotal,
-												summaryData.prevMaleTotal
+											this.checkedEmployee(
+                                                    summaryData.maleTotal,
+                                                    summaryData.maleEmployeeTotal
+                                                    ),
+                                                     this.checkedEmployee(
+                                                        summaryData.prevMaleTotal,
+                                                        summaryData.prevMaleEmployeeTotal
+                                                    )
 											);
 											item2Count.value +=
-												summaryData.femaleTotal;
+												 this.checkedEmployee(
+                                                        summaryData.femaleTotal,
+                                                        summaryData.femaleEmployeeTotal
+                                                    );
 											item2Count.valueRatio += ReportService.countRatio(
-												summaryData.femaleTotal,
-												summaryData.prevFemaleTotal
-											);
+											 this.checkedEmployee(
+                                                        summaryData.femaleTotal,
+                                                        summaryData.femaleEmployeeTotal
+                                                    ),
+                                                     this.checkedEmployee(
+                                                        summaryData.prevfeMaleTotal,
+                                                        summaryData.prevfeMaleEmployeeTotal
+                                                    )
+										    	);
 										}
 									}
 							}
@@ -1817,7 +1932,8 @@ export default class ReportDemographic extends Vue {
 
 				await this.initSelectItemArea();
 				await this.initSelectItemDeviceGroup();
-				await this.initSelectItemDevice();
+                await this.initSelectItemDevice();
+                this.initReportTable();
 
 				this.inputFormData.areaId = "all";
 				this.inputFormData.groupId = "all";

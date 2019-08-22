@@ -49,6 +49,11 @@ import ReportRepeatVisitor from './Report/ReportRepeatVisitor.vue';
 import ReportVIPTracking from './Report/ReportVIPTracking.vue';
 import ReportCampaign from './Report/ReportCampaign.vue';
 
+// Report
+import ToolTraffic from './Tools/ToolTraffic.vue';
+import ToolRepeatVisitor from './Tools/ToolRepeatVisitor.vue';
+import ToolDemographic from './Tools/ToolDemographic.vue';
+
 // Users
 import User from './Users/User.vue';
 import UserGroup from './Users/UserGroup.vue';
@@ -151,6 +156,12 @@ $({ path: '/reports/vip_black_list', name: "_('w_Navigation_Report_VIPBlackList'
 $({ path: '/reports/repeat_visitor', name: "_('w_Navigation_Report_RepeatVisitor')", icon: 'fa-check' })(ReportRepeatVisitor);
 $({ path: '/reports/campaign', name: "_('w_Navigation_Report_Campaign')", icon: 'fa-check' })(ReportCampaign);
 $({ path: '/reports/report_template', name: "_('w_Navigation_Report_ReportTemplate')", icon: 'fa-check' })(ReportTemplate);
+
+//  Tool
+$({ path: '/tools', name: "_('w_Navigation_Tools')", icon: 'fa-code', redirect: '/tools/toolTraffic' })();
+$({ path: '/tools/toolTraffic', name: "_('w_Navigation_Tools_Traffic')", icon: 'fa-code' })(ToolTraffic);
+$({ path: '/tools/toolRepeatVisitor', name: "_('w_Navigation_Tools_Demographic')", icon: 'fa-code' })(ToolRepeatVisitor);
+$({ path: '/tools/toolDemographic', name: "_('w_Navigation_Tools_RepeatVisitor')", icon: 'fa-code' })(ToolDemographic);
 
 // Users
 $({ path: '/users', name: "_('w_Navigation_Users')", redirect: '/users/user' })();

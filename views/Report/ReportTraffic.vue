@@ -573,15 +573,33 @@ export default class ReportTraffic extends Vue {
                                 tempArray[index].group.objectId ==
                                 deviceGroup.objectId
                             ) {
-                                item1Count.value += summaryData.in;
-                                item1Count.valueRatio += ReportService.countRatio(
+                                item1Count.value += this.checkedEmployee(
                                     summaryData.in,
-                                    summaryData.prevIn
+                                    summaryData.inEmployee
                                 );
-                                item2Count.value += summaryData.out;
-                                item2Count.valueRatio += ReportService.countRatio(
+                                item1Count.valueRatio += ReportService.countRatio(
+                                    this.checkedEmployee(
+                                        summaryData.in,
+                                        summaryData.inEmployee
+                                    ),
+                                    this.checkedEmployee(
+                                        summaryData.prevIn,
+                                        summaryData.prevInEmployee
+                                    )
+                                );
+                                item2Count.value += this.checkedEmployee(
                                     summaryData.out,
-                                    summaryData.prevOut
+                                    summaryData.outEmployee
+                                );
+                                item2Count.valueRatio += ReportService.countRatio(
+                                    this.checkedEmployee(
+                                        summaryData.out,
+                                        summaryData.outEmployee
+                                    ),
+                                    this.checkedEmployee(
+                                        summaryData.prevOut,
+                                        summaryData.prevOutEmployee
+                                    )
                                 );
                             }
                         }
@@ -590,15 +608,33 @@ export default class ReportTraffic extends Vue {
                             tempArray[index].area.objectId ==
                             summaryData.area.objectId
                         ) {
-                            item1Count.value += summaryData.in;
-                            item1Count.valueRatio += ReportService.countRatio(
+                            item1Count.value += this.checkedEmployee(
                                 summaryData.in,
-                                summaryData.prevIn
+                                summaryData.inEmployee
                             );
-                            item2Count.value += summaryData.out;
-                            item2Count.valueRatio += ReportService.countRatio(
+                            item1Count.valueRatio += ReportService.countRatio(
+                                this.checkedEmployee(
+                                    summaryData.in,
+                                    summaryData.inEmployee
+                                ),
+                                this.checkedEmployee(
+                                    summaryData.prevIn,
+                                    summaryData.prevInEmployee
+                                )
+                            );
+                            item2Count.value += this.checkedEmployee(
                                 summaryData.out,
-                                summaryData.prevOut
+                                summaryData.outEmployee
+                            );
+                            item2Count.valueRatio += ReportService.countRatio(
+                                this.checkedEmployee(
+                                    summaryData.out,
+                                    summaryData.outEmployee
+                                ),
+                                this.checkedEmployee(
+                                    summaryData.prevOut,
+                                    summaryData.prevOutEmployee
+                                )
                             );
                         }
                     }
@@ -768,24 +804,30 @@ export default class ReportTraffic extends Vue {
                                         tempArray[index].group.objectId ==
                                         deviceGroup.objectId
                                     ) {
-                                        item1Count.value += summaryData.in;
+                                        item1Count.value += this.checkedEmployee(
+                                            summaryData.in,
+                                            summaryData.inEmployee
+                                        );
                                         item1Count.valueRatio += ReportService.countRatio(
-                                            this.cheackedEmployee(
+                                            this.checkedEmployee(
                                                 summaryData.in,
                                                 summaryData.inEmployee
                                             ),
-                                            this.cheackedEmployee(
+                                            this.checkedEmployee(
                                                 summaryData.prevIn,
                                                 summaryData.prevInEmployee
                                             )
                                         );
-                                        item2Count.value += summaryData.out;
+                                        item2Count.value += this.checkedEmployee(
+                                            summaryData.out,
+                                            summaryData.outEmployee
+                                        );
                                         item2Count.valueRatio += ReportService.countRatio(
-                                            this.cheackedEmployee(
+                                            this.checkedEmployee(
                                                 summaryData.out,
                                                 summaryData.outEmployee
                                             ),
-                                            this.cheackedEmployee(
+                                            this.checkedEmployee(
                                                 summaryData.prevOut,
                                                 summaryData.prevOutEmployee
                                             )
@@ -797,24 +839,30 @@ export default class ReportTraffic extends Vue {
                                     tempArray[index].area.objectId ==
                                     summaryData.area.objectId
                                 ) {
-                                    item1Count.value += summaryData.in;
+                                    item1Count.value += this.checkedEmployee(
+                                        summaryData.in,
+                                        summaryData.inEmployee
+                                    );
                                     item1Count.valueRatio += ReportService.countRatio(
-                                        this.cheackedEmployee(
+                                        this.checkedEmployee(
                                             summaryData.in,
                                             summaryData.inEmployee
                                         ),
-                                        this.cheackedEmployee(
+                                        this.checkedEmployee(
                                             summaryData.prevIn,
                                             summaryData.prevInEmployee
                                         )
                                     );
-                                    item2Count.value += summaryData.out;
+                                    item2Count.value += this.checkedEmployee(
+                                        summaryData.out,
+                                        summaryData.outEmployee
+                                    );
                                     item2Count.valueRatio += ReportService.countRatio(
-                                        this.cheackedEmployee(
+                                        this.checkedEmployee(
                                             summaryData.out,
                                             summaryData.outEmployee
                                         ),
-                                        this.cheackedEmployee(
+                                        this.checkedEmployee(
                                             summaryData.prevOut,
                                             summaryData.prevOutEmployee
                                         )
@@ -867,24 +915,30 @@ export default class ReportTraffic extends Vue {
                                         tempArray[index].group.objectId ==
                                         deviceGroup.objectId
                                     ) {
-                                        item1Count.value += summaryData.in;
+                                        item1Count.value += this.checkedEmployee(
+                                            summaryData.in,
+                                            summaryData.inEmployee
+                                        );
                                         item1Count.valueRatio += ReportService.countRatio(
-                                            this.cheackedEmployee(
+                                            this.checkedEmployee(
                                                 summaryData.in,
                                                 summaryData.inEmployee
                                             ),
-                                            this.cheackedEmployee(
+                                            this.checkedEmployee(
                                                 summaryData.prevIn,
                                                 summaryData.prevInEmployee
                                             )
                                         );
-                                        item2Count.value += summaryData.out;
+                                        item2Count.value += this.checkedEmployee(
+                                            summaryData.out,
+                                            summaryData.outEmployee
+                                        );
                                         item2Count.valueRatio += ReportService.countRatio(
-                                            this.cheackedEmployee(
+                                            this.checkedEmployee(
                                                 summaryData.out,
                                                 summaryData.outEmployee
                                             ),
-                                            this.cheackedEmployee(
+                                            this.checkedEmployee(
                                                 summaryData.prevOut,
                                                 summaryData.prevOutEmployee
                                             )
@@ -896,24 +950,30 @@ export default class ReportTraffic extends Vue {
                                     tempArray[index].area.objectId ==
                                     summaryData.area.objectId
                                 ) {
-                                    item1Count.value += summaryData.in;
+                                    item1Count.value += this.checkedEmployee(
+                                        summaryData.in,
+                                        summaryData.inEmployee
+                                    );
                                     item1Count.valueRatio += ReportService.countRatio(
-                                        this.cheackedEmployee(
+                                        this.checkedEmployee(
                                             summaryData.in,
                                             summaryData.inEmployee
                                         ),
-                                        this.cheackedEmployee(
+                                        this.checkedEmployee(
                                             summaryData.prevIn,
                                             summaryData.prevInEmployee
                                         )
                                     );
-                                    item2Count.value += summaryData.out;
+                                    item2Count.value += this.checkedEmployee(
+                                        summaryData.out,
+                                        summaryData.outEmployee
+                                    );
                                     item2Count.valueRatio += ReportService.countRatio(
-                                        this.cheackedEmployee(
+                                        this.checkedEmployee(
                                             summaryData.out,
                                             summaryData.outEmployee
                                         ),
-                                        this.cheackedEmployee(
+                                        this.checkedEmployee(
                                             summaryData.prevOut,
                                             summaryData.prevOutEmployee
                                         )
@@ -940,8 +1000,8 @@ export default class ReportTraffic extends Vue {
         this.rData.body = tempArray;
     }
 
-    cheackedEmployee(all, employee) {
-        return this.inputFormData.isIncludedEmployee == EIncludedEmployee.no
+    checkedEmployee(all, employee) {
+        return this.inputFormData.isIncludedEmployee == EIncludedEmployee.yes
             ? all
             : all - employee;
     }
@@ -1889,6 +1949,8 @@ export default class ReportTraffic extends Vue {
             await this.initSelectItemArea();
             await this.initSelectItemDeviceGroup();
             await this.initSelectItemDevice();
+
+            this.initReportTable();
 
             this.inputFormData.areaId = "all";
             this.inputFormData.groupId = "all";
