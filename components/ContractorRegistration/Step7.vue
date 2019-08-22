@@ -299,7 +299,7 @@ export class Step7 extends Vue {
             nric: data.nric,
             occupation: data.occupation,
             unitNo: data.unitNo,
-            vehicle: data.vehicle,
+            vehicle: data.vehicle ? data.vehicle : '',
             companyName: data.companyName,
             shift: data.shift
         };
