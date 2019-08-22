@@ -252,6 +252,8 @@ export default class LangObject implements ILang {
     w_Navigation_Dashboards = 'Dashboards';
     w_Navigation_Analysises = 'Analysises';
     w_Navigation_Reports = 'Reports';
+
+    w_Navigation_Tools = 'Tools';
     w_Navigation_Users = 'Users';
     w_Navigation_Users_User = 'User';
     w_Navigation_Users_UserGroup = 'User Group';
@@ -311,6 +313,11 @@ export default class LangObject implements ILang {
     w_Navigation_Report_Campaign = 'Campaign';
     w_Navigation_Report_HeatmapLegend = 'Heatmap Legend';
     w_Navigation_Report_AlphaRange = 'Alpha Range';
+
+    //Tools
+    w_Navigation_Tools_Traffic = 'Traffic';
+    w_Navigation_Tools_RepeatVisitor = 'Dwell Time';
+    w_Navigation_Tools_Demographic = 'Demographic';
 
     // failed to fetch
     w_FailedToFetch = "We can't connect to server, please try again!";
