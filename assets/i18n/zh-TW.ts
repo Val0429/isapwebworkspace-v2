@@ -1152,6 +1152,7 @@ export default class LangObject implements ILang {
     w_Dashboard_Last90Day = 'Last 90 Day';
     w_Dashboard_Last180Day = 'Last 180 Day';
     w_Dashboard_ThisYear = 'This year';
+	w_Dashboard_Minutes = 'Minutes';
 
     // frs manager
     w_ServerFRSManager_List = 'FRS Manager List';

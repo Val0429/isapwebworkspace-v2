@@ -86,12 +86,24 @@ export class Top5sites extends Vue {
     }
 
     initCharts() {
+
+        // 整理 xAxis（y軸）的 site
+        let tempCategories: string[] = [];
+        let tempData: number[] = [];
+        let tempName: string = '';
+
+
+        if (this.mode.type === EMode.dwellTime) {
+            tempName = this._('w_Dashboard_Minutes');
+        } else {
+            tempName = this._('w_ReportCampaign_Traffic');
+        }
+
         this.chartOptions = {
             chart: { type: "bar" },
             exporting: { enabled: false },
             title: { text: null },
             subtitle: { text: null },
-
             xAxis: {
                 categories: ["Africa", "America", "Asia", "Europe", "Oceania"],
                 title: null
@@ -100,15 +112,12 @@ export class Top5sites extends Vue {
                 title: null,
                 labels: false
             },
-            tooltip: {
-                valueSuffix: null
-            },
             credits: {
                 enabled: false
             },
             series: [
                 {
-                    name: this._("w_ReportCampaign_Traffic"),
+                    name: tempName,
                     data: [107, 31, 635, 203, 2]
                 }
             ]
@@ -143,7 +152,7 @@ export class Top5sites extends Vue {
 
     async receiveMode(mode: object) {
         this.mode = mode;
-        console.log(" ~ ", this.mode);
+        // console.log(" ~ ", this.mode);
 
         // TODO: wait api
         // Loading.show();
@@ -165,6 +174,8 @@ export class Top5sites extends Vue {
         //             this._("w_Dialog_ErrorTitle")
         //         );
         //     });
+
+        this.initCharts();
     }
 }
 
