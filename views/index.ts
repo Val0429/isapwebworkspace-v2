@@ -6,6 +6,10 @@ import packageJson from '@/package.json';
 // Home
 $({ path: '/', name: 'Home', redirect: '/login' })();
 
+// Guest
+import ForgotPassword from './Guest/ForgotPassword.vue';
+$({ path: '/forgot_password', name: 'ForgotPassword', disableContainer: true, permission: false })(ForgotPassword);
+
 // Visitor Registration
 import Potrait from './Registration/Potrait.vue';
 $({ path: '/registration/potrait', name: "_('w_Navigation_Registration_Potrait')", icon: 'fa-code', disableContainer: true, permission: false })(Potrait);

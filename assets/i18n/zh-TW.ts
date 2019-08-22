@@ -70,6 +70,9 @@ export default class LangObject implements LangObject {
     // Logout
     w_Logout = '登出';
 
+    // Forgot Password
+    w_ForgotPassword = 'Forgot Password';
+
     /////////////////////////////////////////////
 
     w_ThisMonth = '這個月';

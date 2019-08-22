@@ -65,6 +65,9 @@ export default class LangObject {
     // Logout
     w_Logout = 'Logout';
 
+    // Forgot Password
+    w_ForgotPassword = 'Forgot Password';
+
     /////////////////////////////////////////////
 
     w_ThisMonth = 'This Month';
