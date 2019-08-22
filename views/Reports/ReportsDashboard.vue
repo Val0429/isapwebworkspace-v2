@@ -452,23 +452,23 @@ export default class ReportsDashboard extends Vue {
         return result;
     }
 
-    changeDateRange() {
-        this.initDateRange();
-        this.initRecurring();
-        this.initStatistic();
-        this.initException();
-        this.initStatisticChart();
+    async changeDateRange() {
+        await this.initDateRange();
+        await this.initRecurring();
+        await this.initStatistic();
+        await this.initException();
+        await this.initStatisticChart();
     }
 
-    updateForm(data: any) {
+    async updateForm(data: any) {
         switch (data.key) {
             case "kioskIds":
                 this.inputFormData.kioskIds = data.value;
                 break;
         }
-        this.initStatistic();
-        this.initException();
-        this.initStatisticChart();
+        await this.initStatistic();
+        await this.initException();
+        await this.initStatisticChart();
     }
 
     filterInterface() {

@@ -464,9 +464,7 @@ export default class SetupsLicense extends Vue {
                  */
                 mac?: ${toEnumInterface(this.macSelectItem as any)};
 
-
                 title?: any;
-
 
                /**
                 * @uiLabel - ${this._("w_License_UploadOfflineKey")}

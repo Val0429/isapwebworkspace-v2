@@ -111,7 +111,6 @@
 
                         <div class="col-md-12 mb-2">* {{ _('w_Company_ContactNumber') }}</div>
 
-
                         <iv-form-string
                             class="col-md-11"
                             v-model="inputFormData.contactNumber"
@@ -157,9 +156,7 @@
 
                     </template>
 
-
                 </iv-form>
-
 
                 <template #footer-before>
                     <b-button
@@ -178,320 +175,311 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Watch } from "vue-property-decorator";
-    import { toEnumInterface } from "@/../core";
+import { Vue, Component, Watch } from "vue-property-decorator";
+import { toEnumInterface } from "@/../core";
 
-    // Service
-    import ResponseFilter from "@/services/ResponseFilter";
-    import Dialog from "@/services/Dialog";
-    import Loading from "@/services/Loading";
+// Service
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
 
-    // Transition
-    import Transition from "@/services/Transition";
-    import { ITransition } from "@/services/Transition";
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
 
-    @Component({
-        components: {}
-    })
-    export default class SetupsCompany extends Vue {
-        transition: ITransition = {
-            type: Transition.type,
-            prevStep: 1,
-            step: 1
-        };
+@Component({
+    components: {}
+})
+export default class SetupsCompany extends Vue {
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
 
-        isSelected: any = [];
-        tableMultiple: boolean = true;
+    isSelected: any = [];
+    tableMultiple: boolean = true;
 
-        selectedDetail: any = [];
+    selectedDetail: any = [];
 
-        inputFormData: any = {
+    inputFormData: any = {
+        objectId: "",
+        name: "",
+        contactPerson: "",
+        unitNumber: "",
+        contactNumber: "",
+        contactNumbers: [],
+        floor: [],
+
+        floorView: "",
+        contactNumberView: ""
+    };
+
+    // select
+    floorsSelectItem: any = {};
+
+    created() {}
+
+    mounted() {
+        this.initSelectItemFloor();
+    }
+
+    async initSelectItemFloor() {
+        this.floorsSelectItem = {};
+        let tempFloorSelectItem = {};
+
+        await this.$server
+            .R("/flow1/floors")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response.results) {
+                        tempFloorSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                    this.floorsSelectItem = tempFloorSelectItem;
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+    }
+
+    clearInputData() {
+        this.inputFormData = {
             objectId: "",
             name: "",
             contactPerson: "",
             unitNumber: "",
-            contactNumber: '',
+            contactNumber: "",
             contactNumbers: [],
             floor: [],
 
-            floorView: '',
-            contactNumberView: '',
+            floorView: "",
+            contactNumberView: ""
+        };
+    }
+
+    selectedItem(data) {
+        this.isSelected = data;
+        this.selectedDetail = [];
+        this.selectedDetail = data;
+    }
+
+    getInputData() {
+        this.clearInputData();
+        for (const param of this.selectedDetail) {
+            this.inputFormData = {
+                objectId: param.objectId,
+                name: param.name,
+                contactPerson: param.contactPerson,
+                unitNumber: param.unitNumber,
+                contactNumbers: param.contactNumber,
+                floor: param.floor,
+
+                floorView: this.ViewFloorString(param.floor),
+                contactNumberView: this.ViewPhoneString(param.contactNumber)
+            };
+        }
+    }
+
+    updateInputFormData(data) {
+        this.inputFormData[data.key] = data.value;
+    }
+
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+    }
+
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.getInputData();
+    }
+
+    pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearInputData();
+    }
+
+    pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.getInputData();
+
+        this.inputFormData.floor
+            ? (this.inputFormData.floor = JSON.parse(
+                  JSON.stringify(
+                      this.inputFormData.floor.map(item => item.objectId)
+                  )
+              ))
+            : "";
+    }
+
+    addContactNumber() {
+        if (!this.inputFormData.contactNumber) {
+            return false;
+        }
+
+        const tempContactNumber = JSON.parse(
+            JSON.stringify(this.inputFormData.contactNumber)
+        );
+        this.inputFormData.contactNumbers.push(tempContactNumber);
+        this.inputFormData.contactNumber = "";
+    }
+
+    removeContactNumber(index: number) {
+        this.inputFormData.contactNumbers.splice(index, 1);
+    }
+
+    contactNumbersText(index: number): string {
+        let result: string = "";
+        result += this.inputFormData.contactNumbers[index];
+        return result;
+    }
+
+    async saveAddOrEdit(data) {
+        let param: any = {
+            name: data.name,
+            contactPerson: data.contactPerson,
+            unitNumber: data.unitNumber,
+            contactNumber: data.contactNumbers,
+            floor: data.floor
         };
 
-        // select
-        floorsSelectItem: any = {};
-        floorsDetailItem: any = {};
-
-        created() {}
-
-        mounted() {
-            this.initSelectItemFloor();
-        }
-
-        async initSelectItemFloor() {
-            this.floorsSelectItem = {};
-            let tempFloorSelectItem = {};
-
+        // add
+        if (!this.inputFormData.objectId) {
+            Loading.show();
             await this.$server
-                .R("/flow1/floors")
+                .C("/flow1/companies", param)
                 .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        for (const returnValue of response.results) {
-                            tempFloorSelectItem[returnValue.objectId] =
-                                returnValue.name;
-                        }
-                        this.floorsSelectItem = tempFloorSelectItem;
-                        this.floorsDetailItem = response.results;
-                    });
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(this._("w_Company_AddSuccess"));
+                            this.pageToList();
+                        },
+                        this._("w_Company_ADDFailed")
+                    );
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_Company_ADDFailed")
+                    );
+                });
+        } else {
+            param.objectId = data.objectId;
+
+            Loading.show();
+            await this.$server
+                .U("/flow1/companies", param)
+                .then((response: any) => {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            Dialog.success(this._("w_Company_EditSuccess"));
+                            this.pageToList();
+                        },
+                        this._("w_Company_EditFailed")
+                    );
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_Company_EditFailed")
+                    );
                 });
         }
+    }
 
+    async doDelete() {
+        Dialog.confirm(
+            this._("w_Company_DeleteConfirm"),
+            this._("w_DeleteConfirm"),
+            () => {
+                for (const param of this.selectedDetail) {
+                    let deleteParam: {
+                        objectId: string;
+                    } = {
+                        objectId: param.objectId
+                    };
 
-        clearInputData() {
-            this.inputFormData = {
-                objectId: "",
-                name: "",
-                contactPerson: "",
-                unitNumber: "",
-                contactNumber: '',
-                contactNumbers: [],
-                floor: [],
+                    Loading.show();
+                    this.$server
+                        .D("/flow1/companies", deleteParam)
+                        .then((response: any) => {
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
+                                    this.pageToList();
+                                },
+                                this._("w_DeleteFailed")
+                            );
+                        })
+                        .catch((e: any) => {
+                            return ResponseFilter.catchError(this, e);
+                        });
 
-                floorView: '',
-                contactNumberView: '',
-            };
-        }
-
-        selectedItem(data) {
-            this.isSelected = data;
-            this.selectedDetail = [];
-            this.selectedDetail = data;
-        }
-
-        getInputData() {
-            this.clearInputData();
-            for (const param of this.selectedDetail) {
-                this.inputFormData = {
-
-                    objectId: param.objectId,
-                    name: param.name,
-                    contactPerson: param.contactPerson,
-                    unitNumber: param.unitNumber,
-                    contactNumbers: param.contactNumber,
-                    floor: param.floor,
-
-                    floorView: this.ViewFloorString(param.floor),
-                    contactNumberView: this.ViewPhoneString(param.contactNumber),
-
-                };
-            }
-        }
-
-        updateInputFormData(data) {
-            this.inputFormData[data.key] = data.value;
-
-        }
-
-        pageToList() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 1;
-            (this.$refs.listTable as any).reload();
-        }
-
-        pageToView() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 2;
-            this.getInputData();
-        }
-
-        pageToAdd() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 3;
-            this.clearInputData();
-        }
-
-        pageToEdit() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 3;
-            this.getInputData();
-
-            this.inputFormData.floor ? this.inputFormData.floor = JSON.parse(JSON.stringify(this.inputFormData.floor.map(item => item.objectId))) : "";
-
-        }
-
-        addContactNumber() {
-            if (!this.inputFormData.contactNumber) {
-                return false;
-            }
-
-            const tempContactNumber = JSON.parse(JSON.stringify(this.inputFormData.contactNumber));
-            this.inputFormData.contactNumbers.push(tempContactNumber);
-            this.inputFormData.contactNumber = '';
-        }
-
-        removeContactNumber(index: number) {
-            this.inputFormData.contactNumbers.splice(index, 1);
-        }
-
-        contactNumbersText(index: number): string {
-            let result: string = "";
-            result += this.inputFormData.contactNumbers[index];
-            return result;
-        }
-
-
-        async saveAddOrEdit(data) {
-
-            let param: any = {
-                name: data.name,
-                contactPerson: data.contactPerson,
-                unitNumber: data.unitNumber,
-                contactNumber: data.contactNumbers,
-                floor: data.floor,
-            };
-
-            // add
-            if (!this.inputFormData.objectId) {
-
-                Loading.show();
-                await this.$server
-                    .C("/flow1/companies", param)
-                    .then((response: any) => {
-                        ResponseFilter.successCheck(
-                            this,
-                            response,
-                            (response: any) => {
-                                Dialog.success(this._("w_Company_AddSuccess"));
-                                this.pageToList();
-                            },
-                            this._("w_Company_ADDFailed")
-                        );
-                    })
-                    .catch((e: any) => {
-                        return ResponseFilter.catchError(
-                            this,
-                            e,
-                            this._("w_Company_ADDFailed")
-                        );
-                    });
-            } else {
-
-                param.objectId = data.objectId;
-
-                Loading.show();
-                await this.$server
-                    .U("/flow1/companies", param)
-                    .then((response: any) => {
-                        ResponseFilter.successCheck(
-                            this,
-                            response,
-                            (response: any) => {
-                                Dialog.success(this._("w_Company_EditSuccess"));
-                                this.pageToList();
-                            },
-                            this._("w_Company_EditFailed")
-                        );
-                    })
-                    .catch((e: any) => {
-                        return ResponseFilter.catchError(
-                            this,
-                            e,
-                            this._("w_Company_EditFailed")
-                        );
-                    });
-            }
-        }
-
-        async doDelete() {
-            Dialog.confirm(
-                this._("w_Company_DeleteConfirm"),
-                this._("w_DeleteConfirm"),
-                () => {
-
-
-
-                    for (const param of this.selectedDetail) {
-                        let deleteParam: {
-                            objectId: string;
-                        } = {
-                            objectId: param.objectId
-                        };
-
-                        Loading.show();
-                        this.$server
-                            .D("/flow1/companies", deleteParam)
-                            .then((response: any) => {
-                                ResponseFilter.successCheck(
-                                    this,
-                                    response,
-                                    (response: any) => {
-                                        this.pageToList();
-                                    },
-                                    this._("w_DeleteFailed")
-                                );
-                            })
-                            .catch((e: any) => {
-                                return ResponseFilter.catchError(this, e);
-                            });
-
-                        Loading.hide();
-
-                    }
-
-
-                }
-            );
-        }
-
-        tableFloorString(datas: any): string {
-            let result: string = "";
-            result += "<ul>";
-            if (datas != undefined) {
-                for (let loopData of datas) {
-                    let tempText = loopData.name;
-                    result += `<li>${tempText}</li>`;
+                    Loading.hide();
                 }
             }
-            result += "</ul>";
-            return result;
-        }
+        );
+    }
 
-        tablePhoneString(datas: any): string {
-            let result: string = "";
-            result += "<ul>";
-            if (datas != undefined) {
-                for (let loopData of datas) {
-                    let tempText = loopData;
-                    result += `<li>${tempText}</li>`;
-                }
+    tableFloorString(datas: any): string {
+        let result: string = "";
+        result += "<ul>";
+        if (datas != undefined) {
+            for (let loopData of datas) {
+                let tempText = loopData.name;
+                result += `<li>${tempText}</li>`;
             }
-            result += "</ul>";
-            return result;
         }
+        result += "</ul>";
+        return result;
+    }
 
-        ViewFloorString(value: any): string {
-            let result = "";
-            for (let val of value) {
-                result += val.name + ", ";
+    tablePhoneString(datas: any): string {
+        let result: string = "";
+        result += "<ul>";
+        if (datas != undefined) {
+            for (let loopData of datas) {
+                let tempText = loopData;
+                result += `<li>${tempText}</li>`;
             }
-            result = result.substring(0, result.length - 2);
-            return result;
         }
+        result += "</ul>";
+        return result;
+    }
 
-        ViewPhoneString(value: any): string {
-            let result = "";
-            for (let val of value) {
-                result += val + ", ";
-            }
-            result = result.substring(0, result.length - 2);
-            return result;
+    ViewFloorString(value: any): string {
+        let result = "";
+        for (let val of value) {
+            result += val.name + ", ";
         }
+        result = result.substring(0, result.length - 2);
+        return result;
+    }
 
-        ITableList() {
-            return `
+    ViewPhoneString(value: any): string {
+        let result = "";
+        for (let val of value) {
+            result += val + ", ";
+        }
+        result = result.substring(0, result.length - 2);
+        return result;
+    }
+
+    ITableList() {
+        return `
             interface {
 
                 /**
@@ -535,10 +523,10 @@
 
             }
         `;
-        }
+    }
 
-        IAddAndEditForm() {
-            return `
+    IAddAndEditForm() {
+        return `
             interface {
 
 
@@ -577,10 +565,10 @@
 
             }
         `;
-        }
+    }
 
-        IViewForm() {
-            return `
+    IViewForm() {
+        return `
             interface {
 
 
@@ -620,8 +608,8 @@
 
             }
         `;
-        }
     }
+}
 </script>
 
 <style lang="scss" scoped>
