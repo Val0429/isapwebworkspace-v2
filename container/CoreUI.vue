@@ -49,10 +49,6 @@
 
                     </SidebarNavItem>
 
-                </iv-permission>
-
-                <iv-permission :allow="['SystemAdministrator', 'Administrator', 'TenantAdministrator']">
-
                     <SidebarNavItem
                         :label="_('w_Navigation_Setups')"
                         url="/setups"
@@ -90,46 +86,42 @@
                             url="/setups/account"
                         />
 
-                        <iv-permission :allow="['SystemAdministrator', 'Administrator']">
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Setups_License')"
+                            url="/setups/license"
+                        />
 
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Setups_FRS')"
+                            url="/setups/frs"
+                        />
+
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Setups_Email')"
+                            url="/setups/email"
+                        />
+
+                        <iv-permission url="/flow1">
                             <SidebarNavItem
-                                :label="_('w_Navigation_Setups_License')"
-                                url="/setups/license"
+                                :label="_('w_Navigation_Setups_SMS')"
+                                url="/setups/sms"
                             />
 
                             <SidebarNavItem
-                                :label="_('w_Navigation_Setups_FRS')"
-                                url="/setups/frs"
+                                :label="_('w_Navigation_Setups_SMSOnline')"
+                                url="/setups/sms_online"
                             />
 
                             <SidebarNavItem
-                                :label="_('w_Navigation_Setups_Email')"
-                                url="/setups/email"
+                                :label="_('w_Navigation_Setups_VisitorCard')"
+                                url="/setups/visitor_card"
                             />
-
-                            <iv-permission url="/flow1">
-                                <SidebarNavItem
-                                    :label="_('w_Navigation_Setups_SMS')"
-                                    url="/setups/sms"
-                                />
-
-                                <SidebarNavItem
-                                    :label="_('w_Navigation_Setups_SMSOnline')"
-                                    url="/setups/sms_online"
-                                />
-
-                                <SidebarNavItem
-                                    :label="_('w_Navigation_Setups_VisitorCard')"
-                                    url="/setups/visitor_card"
-                                />
-                            </iv-permission>
-
-                            <SidebarNavItem
-                                :label="_('w_Navigation_Setups_Purposes')"
-                                url="/setups/purposes"
-                            />
-
                         </iv-permission>
+
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Setups_Purposes')"
+                            url="/setups/purposes"
+                        />
 
                     </SidebarNavItem>
 
@@ -142,6 +134,13 @@
                         </iv-permission>
                     </iv-permission>
 
+                </iv-permission>
+
+                <iv-permission :allow="['TenantAdministrator']">
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setups_Account')"
+                        url="/setups/account"
+                    />
                 </iv-permission>
 
                 <iv-permission url="/flow2">
