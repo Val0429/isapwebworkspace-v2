@@ -16,21 +16,18 @@
                         :disabled="selectedDetail.length !== 1"
                         @click="pageToView"
                     />
-                    <iv-permission :allow="['SystemAdministrator', 'Administrator']">
-                        <iv-toolbox-edit
-                            :disabled="selectedDetail.length !== 1"
-                            @click="pageToEdit()"
-                        />
-                        <iv-toolbox-delete
-                            :disabled="selectedDetail.length === 0"
-                            @click="doDelete"
-                        />
-                    </iv-permission>
+
+                    <iv-toolbox-edit
+                        :disabled="selectedDetail.length !== 1"
+                        @click="pageToEdit()"
+                    />
+                    <iv-toolbox-delete
+                        :disabled="selectedDetail.length === 0"
+                        @click="doDelete"
+                    />
 
                     <iv-toolbox-divider />
-                    <iv-permission :allow="['SystemAdministrator', 'Administrator']">
-                        <iv-toolbox-add @click="pageToAdd()" />
-                    </iv-permission>
+                    <iv-toolbox-add @click="pageToAdd()" />
                 </template>
 
                 <iv-table
@@ -47,14 +44,8 @@
                             :disabled="selectedDetail.length !== 1"
                         >
                             <iv-toolbox-view @click="pageToView" />
-                            <iv-toolbox-edit
-                                v-if="haveSystemAdministrator() || haveAdministrator()"
-                                @click="pageToEdit"
-                            />
-                            <iv-toolbox-delete
-                                v-if="haveSystemAdministrator() || haveAdministrator()"
-                                @click="doDelete"
-                            />
+                            <iv-toolbox-edit @click="pageToEdit" />
+                            <iv-toolbox-delete @click="doDelete" />
 
                         </iv-toolbox-more>
                     </template>
@@ -130,25 +121,6 @@
                 </template>
 
             </iv-auto-card>
-
-            <!-- Modify Password -->
-            <!-- <iv-auto-card
-                key="transition_3_1"
-                v-if="inputFormData.objectId != ''"
-                v-show="transition.step === 3"
-                :visible="true"
-                :label="_('w_User_EditPassword')"
-            >
-
-                <iv-form
-                    :interface="IPasswordForm()"
-                    :value="inputFormData"
-                    @update:*="updateModifyForm"
-                    @submit="savePasswordForm($event)"
-                >
-                </iv-form>
-
-            </iv-auto-card> -->
 
         </iv-auto-transition>
 
@@ -365,7 +337,7 @@ export default class SetupsAccount extends Vue {
         }
 
         if (RoleService.haveAdministrator(this)) {
-            // settingRole.TenantAdministrator = true;
+            settingRole.TenantAdministrator = true;
         }
 
         if (RoleService.haveTenantAdministrator(this)) {
@@ -401,7 +373,7 @@ export default class SetupsAccount extends Vue {
     async initSelectItemCompany() {
         let param: any = { paging: { all: true } };
         await this.$server
-            .R("/flow1/companies", param)
+            .R("/flow2/companies", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     if (
@@ -431,7 +403,7 @@ export default class SetupsAccount extends Vue {
     async initSelectItemFloor() {
         let param: any = { paging: { all: true } };
         await this.$server
-            .R("/flow1/floors", param)
+            .R("/flow2/floors", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     if (

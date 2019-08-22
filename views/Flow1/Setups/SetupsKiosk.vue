@@ -99,7 +99,7 @@
                 </template>
 
                 <iv-form
-                    :interface="IAddAndEditForm()"
+                    :interface="IModifyForm()"
                     :value="inputFormData"
                     @update:*="updateInputFormData"
                     @submit="saveAddOrEdit($event)"
@@ -544,7 +544,7 @@ export default class SetupsKiosk extends Vue {
         `;
     }
 
-    IAddAndEditForm() {
+    IModifyForm() {
         return `
             interface {
 

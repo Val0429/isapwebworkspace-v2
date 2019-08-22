@@ -100,6 +100,7 @@ export default class LangObject {
     w_Navigation_Reports_Investigation = 'Investigation';
 
     w_Navigation_Setups = 'Setup';
+    w_Navigation_Setups_Buildings = 'Building Management';
     w_Navigation_Setups_Floor = 'Floor Management';
     w_Navigation_Setups_Company = 'Company Management';
     w_Navigation_Setups_Account = 'Account Management';
@@ -111,12 +112,15 @@ export default class LangObject {
     w_Navigation_Setups_SMSOnline = 'Online SMS Provider (SG only)';
     w_Navigation_Setups_VisitorCard = 'Visitor Card';
     w_Navigation_Setups_Purposes = 'Purposes';
+    w_Navigation_Setups_Other = 'Other';
 
     w_Navigation_Tenants = 'Tenant';
     w_Navigation_Tenants_Invitation = 'Invitation';
     w_Navigation_Tenants_Visitor = 'Visitor';
 
     w_Navigation_Registration_Potrait = 'Potrait';
+
+    w_Navigation_Logs = 'Logs';
 
     ////////////////// Dashboard //////////////////
     w_Dashboard_VisitorOnSite = 'Visitor On Site';
@@ -316,6 +320,19 @@ export default class LangObject {
     w_Tenants_VisitorList = 'Visitor List';
 
     ////////////////// Floor  //////////////////
+    w_Buildings_Building = 'Building';
+    w_Buildings_List = 'Building List';
+    w_Buildings_BuildingName = 'Building Name';
+    w_Buildings_View = 'View Building';
+    w_Buildings_Add = 'Add Building';
+    w_Buildings_Edit = 'Edit Building';
+    w_Buildings_AddSuccess = 'Building add success';
+    w_Buildings_ADDFailed = 'Building add failed, please try again';
+    w_Buildings_EditSuccess = 'Building edit success';
+    w_Buildings_EditFailed = 'Building edit failed, please try again';
+    w_Buildings_DeleteConfirm = 'Are you sure to delete selected Building(s)?';
+
+    ////////////////// Floor  //////////////////
     w_Floor_List = 'Floor List';
     w_Floor_Add = 'Add Floor';
     w_Floor_Edit = 'Edit Floor';
@@ -351,4 +368,11 @@ export default class LangObject {
     w_Potrait_SuccessTitle = 'Registration Completed!';
     w_Potrait_SuccessContent_1 = 'Please take note of the PIN CODE sent to you for your Check-In';
     w_Potrait_SuccessContent_2 = 'kindly proceed to the Check-in Kiosk and Click "Check-in"';
+
+    // Logs
+    w_Logs_List = 'Log List';
+    w_Logs_EventType = 'Event Type';
+    w_Logs_CreatedAt = 'Event Time';
+    w_Logs_SearchCondition = 'Search Condition';
+    w_Logs_Summary = 'Summary';
 }

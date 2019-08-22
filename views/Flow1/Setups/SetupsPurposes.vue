@@ -10,7 +10,7 @@
             <iv-card
                 key="transition_1"
                 v-show="transition.step === 1"
-                :label=" _('w_Floor_List') "
+                :label=" _('w_Purposes_List') "
             >
                 <template #toolbox>
 
@@ -35,9 +35,12 @@
                     ref="listTable"
                     :interface="ITableList()"
                     :multiple="tableMultiple"
-                    :server="{ path: '/flow1/floors' }"
+                    :server="{ path: '/flow1/purposes' }"
                     @selected="selectedItem($event)"
                 >
+
+                    <template #status="{$attrs, $listeners}">
+                    </template>
 
                     <template #Actions="{$attrs, $listeners}">
 
@@ -56,7 +59,7 @@
                 key="transition_2"
                 v-show="transition.step === 2"
                 :visible="true"
-                :label=" _('w_Floor_View') "
+                :label=" _('w_Purposes_View') "
             >
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
@@ -85,7 +88,7 @@
                 key="transition_3"
                 v-show="transition.step === 3"
                 :visible="true"
-                :label="inputFormData.objectId == '' ? _('w_Floor_Add') :  _('w_Floor_Edit')"
+                :label="inputFormData.objectId == '' ? _('w_Purposes_Add') :  _('w_Purposes_Edit')"
             >
                 <template #toolbox>
 
@@ -94,7 +97,7 @@
                 </template>
 
                 <iv-form
-                    :interface="IAddAndEditForm()"
+                    :interface="IModifyForm()"
                     :value="inputFormData"
                     @update:*="updateInputFormData"
                     @submit="saveAddOrEdit($event)"
@@ -121,22 +124,21 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import { Ws } from "@/services/WebSocket/Ws";
+
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
 
 // Service
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
-
-// Transition
-import Transition from "@/services/Transition";
-import { ITransition } from "@/services/Transition";
 import ServerConfig from "@/services/ServerConfig";
 
 @Component({
     components: {}
 })
-export default class SetupsFloor extends Vue {
+export default class SetupsPurposes extends Vue {
     transition: ITransition = {
         type: Transition.type,
         prevStep: 1,
@@ -150,19 +152,17 @@ export default class SetupsFloor extends Vue {
 
     inputFormData: any = {
         objectId: "",
-        name: "",
-        floor: 0
+        name: ""
     };
 
-    async created() {}
+    created() {}
 
     mounted() {}
 
     clearInputData() {
         this.inputFormData = {
             objectId: "",
-            name: "",
-            floor: 0
+            name: ""
         };
     }
 
@@ -177,8 +177,7 @@ export default class SetupsFloor extends Vue {
         for (const param of this.selectedDetail) {
             this.inputFormData = {
                 objectId: param.objectId,
-                name: param.name,
-                floor: param.floor
+                name: param.name
             };
         }
     }
@@ -213,31 +212,30 @@ export default class SetupsFloor extends Vue {
 
     async saveAddOrEdit(data) {
         let param: any = {
-            name: data.name,
-            floor: data.floor
+            name: data.name
         };
 
         // add
         if (!this.inputFormData.objectId) {
             Loading.show();
             await this.$server
-                .C("/flow1/floors", param)
+                .C("/flow1/purposes", param)
                 .then((response: any) => {
                     ResponseFilter.successCheck(
                         this,
                         response,
                         (response: any) => {
-                            Dialog.success(this._("w_Floor_AddSuccess"));
+                            Dialog.success(this._("w_Purposes_AddSuccess"));
                             this.pageToList();
                         },
-                        this._("w_Floor_ADDFailed")
+                        this._("w_Purposes_ADDFailed")
                     );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
                         this,
                         e,
-                        this._("w_Floor_ADDFailed")
+                        this._("w_Purposes_ADDFailed")
                     );
                 });
         } else {
@@ -245,23 +243,23 @@ export default class SetupsFloor extends Vue {
 
             Loading.show();
             await this.$server
-                .U("/flow1/floors", param)
+                .U("/flow1/purposes", param)
                 .then((response: any) => {
                     ResponseFilter.successCheck(
                         this,
                         response,
                         (response: any) => {
-                            Dialog.success(this._("w_Floor_EditSuccess"));
+                            Dialog.success(this._("w_Purposes_EditSuccess"));
                             this.pageToList();
                         },
-                        this._("w_Floor_EditFailed")
+                        this._("w_Purposes_EditFailed")
                     );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(
                         this,
                         e,
-                        this._("w_Floor_EditFailed")
+                        this._("w_Purposes_EditFailed")
                     );
                 });
         }
@@ -276,7 +274,7 @@ export default class SetupsFloor extends Vue {
 
     async doDelete() {
         Dialog.confirm(
-            this._("w_Floor_DeleteConfirm"),
+            this._("w_Purposes_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
                 for (const param of this.selectedDetail) {
@@ -288,7 +286,7 @@ export default class SetupsFloor extends Vue {
 
                     Loading.show();
                     this.$server
-                        .D("/flow1/floors", deleteParam)
+                        .D("/flow1/purposes", deleteParam)
                         .then((response: any) => {
                             ResponseFilter.successCheck(
                                 this,
@@ -321,15 +319,9 @@ export default class SetupsFloor extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Floor_FloorName")}
+                 * @uiLabel - ${this._("w_Kiosk_Username")}
                  */
                 name: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Floor_Floor")}
-                 */
-                floor: number;
 
 
                 Actions: any
@@ -338,24 +330,15 @@ export default class SetupsFloor extends Vue {
         `;
     }
 
-    IAddAndEditForm() {
+    IModifyForm() {
         return `
             interface {
 
-
                 /**
-                 * @uiLabel - ${this._("w_Floor_FloorName")}
-                 * @uiPlaceHolder - ${this._("w_Floor_FloorName")}
+                 * @uiLabel - ${this._("w_Purposes_Name")}
+                 * @uiPlaceHolder - ${this._("w_Purposes_Name")}
                  */
                 name: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Floor_Floor")}
-                 * @uiPlaceHolder - ${this._("w_Floor_Floor")}
-                 * @uiAttrs - { min: 1 }
-                 */
-                floor: number;
 
             }
         `;
@@ -365,19 +348,11 @@ export default class SetupsFloor extends Vue {
         return `
             interface {
 
-
             /**
-             * @uiLabel - ${this._("w_Floor_FloorName")}
+             * @uiLabel - ${this._("w_Purposes_Name")}
              * @uiType - iv-form-label
              */
             name: string;
-
-
-            /**
-             * @uiLabel - ${this._("w_Floor_Floor")}
-             * @uiType - iv-form-label
-             */
-            floor: number;
 
 
             }

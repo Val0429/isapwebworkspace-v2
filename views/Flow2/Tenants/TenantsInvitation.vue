@@ -28,12 +28,24 @@
                     ref="listTable"
                     :interface="ITableList()"
                     :multiple="tableMultiple"
-                    :server="{ path: '/flow1/visitors/invites' }"
+                    :server="{ path: '/flow2/visitors/invites' }"
                     @selected="selectedItem($event)"
                 >
 
-                    <template #visitor.status="{$attrs}">
-                        <div>{{$attrs.row.cancelled ? _('w_Cancelled') : $attrs.row.visitor.status}}</div>
+                    <template #phone="{$attrs}">
+                        <div>{{$attrs.row.visitors[0] != undefined && $attrs.row.visitors[0].phone != undefined ? $attrs.row.visitors[0].phone : ''}}</div>
+                    </template>
+
+                    <template #name="{$attrs}">
+                        <div>{{$attrs.row.visitors[0] != undefined && $attrs.row.visitors[0].name != undefined ? $attrs.row.visitors[0].name : ''}}</div>
+                    </template>
+
+                    <template #email="{$attrs}">
+                        <div>{{$attrs.row.visitors[0] != undefined && $attrs.row.visitors[0].email != undefined ? $attrs.row.visitors[0].email : ''}}</div>
+                    </template>
+
+                    <template #status="{$attrs}">
+                        <div>{{$attrs.row.cancelled ? _('w_Cancelled') : $attrs.row.visitors[0].status}}</div>
                     </template>
 
                     <template #startDate="{$attrs}">
@@ -167,7 +179,6 @@ export default class TenantsInvitation extends Vue {
         startDate: new Date(),
         endDate: new Date(),
         purpose: "",
-        notify: {},
         startString: "",
         endString: ""
     };
@@ -212,10 +223,9 @@ export default class TenantsInvitation extends Vue {
         const readParam: {} = {};
 
         await this.$server
-            .R("/flow1/purposes", readParam)
+            .R("/flow2/purposes", readParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    console.log("successCheck", response);
                     for (const returnValue of response.results) {
                         let item = {
                             id: returnValue.objectId,
@@ -238,7 +248,7 @@ export default class TenantsInvitation extends Vue {
             };
 
             await this.$server
-                .U("/flow1/visitors/invites", deleteParam)
+                .U("/flow2/visitors/invites", deleteParam)
                 .then((response: any) => {
                     ResponseFilter.successCheck(
                         this,
@@ -264,7 +274,6 @@ export default class TenantsInvitation extends Vue {
             startDate: new Date(),
             endDate: new Date(),
             purpose: "",
-            notify: {},
             startString: "",
             endString: ""
         };
@@ -275,6 +284,7 @@ export default class TenantsInvitation extends Vue {
     }
 
     resolveDatetimeStartDate(dateStringList: any): Date {
+        
         let result = new Date();
         let dataIndex = 0;
         if (
@@ -299,6 +309,7 @@ export default class TenantsInvitation extends Vue {
     }
 
     resolveDatetimeStart(dateStringList: any): string {
+        console.log("!!! resolveDatetimeStartDate ");
         let result = "";
         let dataIndex = 0;
         if (
@@ -330,16 +341,20 @@ export default class TenantsInvitation extends Vue {
 
     getInputData() {
         for (const param of this.selectedDetail) {
+            let visitorMobile = param.visitors != undefined && param.visitors[0] != undefined && param.visitors[0].phone != undefined ? param.visitors[0].phone : "";
+            let visitorName = param.visitors != undefined && param.visitors[0] != undefined && param.visitors[0].name != undefined ? param.visitors[0].name : "";
+            let visitorEmail = param.visitors != undefined && param.visitors[0] != undefined && param.visitors[0].email != undefined ? param.visitors[0].email : "";
+            let visitorStatus = param.visitors != undefined && param.visitors[0] != undefined && param.visitors[0].status != undefined ? param.visitors[0].status : "";
+            
             this.inputFormData = {
                 objectId: param.objectId,
-                mobile: param.visitor.phone,
-                name: param.visitor.name,
-                email: param.visitor.email,
-                status: param.visitor.status,
+                mobile: visitorMobile,
+                name: visitorName,
+                email: visitorEmail,
+                status: visitorStatus,
                 startDate: this.resolveDatetimeStartDate(param.dates),
                 endDate: this.resolveDatetimeEndDate(param.dates),
                 purpose: param.purpose.name,
-                notify: param.notify,
                 startString: this.resolveDatetimeStart(param.dates),
                 endString: this.resolveDatetimeEnd(param.dates)
             };
@@ -365,27 +380,21 @@ export default class TenantsInvitation extends Vue {
             dates.push(date);
         }
 
-        this.inputFormData.startDate;
-
         //post api
         const createParam = {
-            visitor: {
-                name: this.inputFormData.name,
-                phone: this.inputFormData.mobile,
-                email: this.inputFormData.email
-            },
-            purpose: this.inputFormData.purpose,
-            notify: {
-                visitor: {
-                    email: this.inputFormData["notify.visitor.email"],
-                    phone: this.inputFormData["notify.visitor.phone"]
+            visitors: [
+                {
+                    name: this.inputFormData.name,
+                    phone: this.inputFormData.mobile,
+                    email: this.inputFormData.email
                 }
-            },
+            ],
+            purpose: this.inputFormData.purpose,
             dates: dates
         };
 
         await this.$server
-            .C("/flow1/visitors/invites", createParam)
+            .C("/flow2/visitors/invites", createParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     this.pageToList();
@@ -407,28 +416,25 @@ export default class TenantsInvitation extends Vue {
                  */
                 no: string;
 
-                visitor: interface {
-                    /**
-                     * @uiLabel - ${this._("w_Tenants_MobileNumber")}
-                     */
-                    phone: string;
+                /**
+                 * @uiLabel - ${this._("w_Tenants_MobileNumber")}
+                 */
+                phone: any;
 
-                    /**
-                     * @uiLabel - ${this._("w_Tenants_Name")}
-                     */
-                    name: string;
+                /**
+                 * @uiLabel - ${this._("w_Tenants_Name")}
+                 */
+                name: any;
 
-                    /**
-                     * @uiLabel - ${this._("w_Tenants_Email")}
-                     */
-                    email: string;
+                /**
+                 * @uiLabel - ${this._("w_Tenants_Email")}
+                 */
+                email: any;
 
-                    /**
-                     * @uiLabel - ${this._("w_Tenants_Status")}
-                     */
-                    status: string;
-
-                };
+                /**
+                 * @uiLabel - ${this._("w_Tenants_Status")}
+                 */
+                status: any;
 
                 /**
                  * @uiLabel - ${this._("w_Tenants_StartDate")}
@@ -445,20 +451,6 @@ export default class TenantsInvitation extends Vue {
                      * @uiLabel - ${this._("w_Tenants_Purpose")}
                      */
                     name: string;
-                };
-
-                notify: interface {
-                    visitor:  interface {
-                    /**
-                     * @uiLabel - ${this._("w_Tenants_Email")}
-                     */
-                    email: boolean;
-
-                    /**
-                     * @uiLabel - ${this._("w_Tenants_Phone")}
-                     */
-                    phone: boolean;
-                    };
                 };
 
                 Actions: any;
@@ -513,23 +505,6 @@ export default class TenantsInvitation extends Vue {
                  * @uiType - iv-form-label
                  */
                 purpose?: string;
-
-                notify: interface {
-                    visitor:  interface {
-                    /**
-                     * @uiLabel - ${this._("w_Tenants_Email")}
-                     * @uiDisabled - true
-                     */
-                    email?: boolean;
-
-                    /**
-                     * @uiLabel - ${this._("w_Tenants_Phone")}
-                    * @uiDisabled - true
-                     */
-                    phone?: boolean;
-                    };
-                };
-
             }
         `;
     }
@@ -575,20 +550,6 @@ export default class TenantsInvitation extends Vue {
                     this.selectItem.purposes as any,
                     false
                 )};
-
-              notify: interface {
-                    visitor:  interface {
-                    /**
-                     * @uiLabel - ${this._("w_Tenants_Email")}
-                     */
-                    email?: boolean;
-
-                    /**
-                     * @uiLabel - ${this._("w_Tenants_Phone")}
-                     */
-                    phone?: boolean;
-                    };
-                };
             }
         `;
     }

@@ -148,6 +148,23 @@ export default class MyProfile extends Vue {
         this.initUserDetail();
     }
 
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        this.initUserDetail();
+    }
+
+    pageToChangePassword() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+    }
+
+    pageToAbout() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 4;
+        this.initAPIs();
+    }
+
     clearInputData() {
         this.inputMyProfile = {
             objectId: "",
@@ -164,30 +181,12 @@ export default class MyProfile extends Vue {
     }
 
     initUserDetail() {
-        console.log(this.$user.user);
         this.inputMyProfile = {
             objectId: this.$user.user.objectId,
             userName: this.$user.user.username,
             email: this.$user.user.publicEmailAddress,
-            companyName: this.$user.user.data.company
+            companyName: this.$user.user.data.company.name
         };
-    }
-
-    pageToView() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 1;
-        this.initUserDetail();
-    }
-
-    pageToChangePassword() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-    }
-
-    pageToAbout() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 4;
-        this.initAPIs();
     }
 
     async initAPIs() {
@@ -241,63 +240,62 @@ export default class MyProfile extends Vue {
             });
     }
 
-    IEditFormPassword() {
+    IViewForm() {
         return `
-                interface {
+            interface {
 
-                    /**
-                     * @uiLabel - ${this._("w_MyProfile_OldPassword")}
-                     * @uiPlaceHolder - ${this._("w_MyProfile_OldPassword")}
-                     * @uiType - iv-form-password
-                     */
-                    oldPassword: string;
+                /**
+                 * @uiLabel - ${this._("w_User_UserName")}
+                 * @uiType - iv-form-label
+                 */
+                userName?: string;
 
-                    /**
-                     * @uiLabel - ${this._("w_MyProfile_NewPassword")}
-                     * @uiPlaceHolder - ${this._("w_MyProfile_NewPassword")}
-                     * @uiType - iv-form-password
-                     * @uiColumnGroup - password
-                     */
-                    newPassword: string;
+                /**
+                 * @uiLabel - ${this._("w_Email")}
+                 * @uiType - iv-form-label
+                 */
+                email?: string;
 
-                    /**
-                     * @uiLabel - ${this._("w_MyProfile_ConfirmPassword")}
-                     * @uiPlaceHolder - ${this._("w_MyProfile_ConfirmPassword")}
-                     * @uiType - iv-form-password
-                     * @uiColumnGroup - password
-                     * @uiValidation - (value, all) => value === all.newPassword
-                     * @uiInvalidMessage - ${this._(
-                         "w_MyProfile_ErrorPasswordNotSame"
-                     )}
-                     */
-                    confirmPassword: string;
+                /**
+                 * @uiLabel - ${this._("w_User_CompanyName")}
+                 * @uiType - iv-form-label
+                 */
+                companyName?: string;
 
             }
         `;
     }
 
-    IViewForm() {
+    IEditFormPassword() {
         return `
-                interface {
+            interface {
+                
+                /**
+                 *  @uiLabel - ${this._("w_MyProfile_OldPassword")}
+                 * @uiPlaceHolder - ${this._("w_MyProfile_OldPassword")}
+                 * @uiType - iv-form-password
+                 */
+                oldPassword: string;
 
-                    /**
-                     * @uiLabel - ${this._("w_User_UserName")}
-                     * @uiType - iv-form-label
-                     */
-                    userName?: string;
+                /**
+                 * @uiLabel - ${this._("w_MyProfile_NewPassword")}
+                 * @uiPlaceHolder - ${this._("w_MyProfile_NewPassword")}
+                 * @uiType - iv-form-password
+                 * @uiColumnGroup - password
+                 */
+                newPassword: string;
 
-
-                    /**
-                     * @uiLabel - ${this._("w_Email")}
-                     * @uiType - iv-form-label
-                     */
-                    email?: string;
-
-                    /**
-                     * @uiLabel - ${this._("w_User_CompanyName")}
-                     * @uiType - iv-form-label
-                     */
-                    companyName?: string;
+                /**
+                 * @uiLabel - ${this._("w_MyProfile_ConfirmPassword")}
+                 * @uiPlaceHolder - ${this._("w_MyProfile_ConfirmPassword")}
+                 * @uiType - iv-form-password
+                 * @uiColumnGroup - password
+                 * @uiValidation - (value, all) => value === all.newPassword
+                 * @uiInvalidMessage - ${this._(
+                     "w_MyProfile_ErrorPasswordNotSame"
+                 )}
+                */
+                confirmPassword: string;
 
             }
         `;

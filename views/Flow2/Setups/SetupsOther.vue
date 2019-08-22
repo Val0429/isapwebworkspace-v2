@@ -6,19 +6,19 @@
             :type="transition.type"
         >
 
-            <iv-card
+            <div
                 key="transition_1"
                 v-show="transition.step === 1"
             >
                 Empty 1
-            </iv-card>
+            </div>
 
-            <iv-card
+            <div
                 key="transition_2"
                 v-show="transition.step === 2"
             >
                 Empty 2
-            </iv-card>
+            </div>
 
         </iv-auto-transition>
 
@@ -38,7 +38,7 @@ import Dialog from "@/services/Dialog";
 @Component({
     components: {}
 })
-export default class Empty extends Vue {
+export default class SetupsOther extends Vue {
     transition: ITransition = {
         type: Transition.type,
         prevStep: 1,

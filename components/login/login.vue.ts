@@ -64,19 +64,18 @@ export default class Login extends Vue {
                 if (this.$user.user != undefined && this.$user.user.roles != undefined && this.$user.user.roles[0] != undefined && this.$user.user.roles[0].name != undefined) {
                     userRole = this.$user.user.roles[0].name;
                 }
-
                 switch (userRole) {
                     case EUserRole.SystemAdministrator:
-                        this.$router.push('/reports/dashboard');
+                        setTimeout(() => this.$router.push(`/reports/dashboard`), 100);
                         break;
                     case EUserRole.Administrator:
-                        this.$router.push('/reports/dashboard');
+                        setTimeout(() => this.$router.push(`/reports/dashboard`), 100);
                         break;
                     case EUserRole.TenantAdministrator:
-                        this.$router.push('/setups/account');
+                        setTimeout(() => this.$router.push(`/setups/account`), 100);
                         break;
                     case EUserRole.TenantUser:
-                        this.$router.push('/tenants/invitation');
+                        setTimeout(() => this.$router.push(`/tenants/invitation`), 100);
                         break;
                     case EUserRole.Visitor:
                         Dialog.error(this._('w_User_VisitorCannotLogin'));
