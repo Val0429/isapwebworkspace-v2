@@ -1,5 +1,8 @@
 <template>
     <div class="animated fadeIn">
+
+        <tool-repeat-visitor-filter></tool-repeat-visitor-filter>
+
         <iv-card
             :visible="!visible"
             label="search card"

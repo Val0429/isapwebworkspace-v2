@@ -321,7 +321,7 @@ export default class LangObject {
 
     //Tools
     w_Navigation_Tools_Traffic = 'Traffic';
-    w_Navigation_Tools_RepeatVisitor = 'Dwell Time';
+    w_Navigation_Tools_RepeatVisitor = 'Repeat Visitor';
     w_Navigation_Tools_Demographic = 'Demographic';
 
     // failed to fetch
