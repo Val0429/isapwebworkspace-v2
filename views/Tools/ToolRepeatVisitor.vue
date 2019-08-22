@@ -17,7 +17,6 @@
                 <b-button
                     class="reset"
                     size="lg"
-                    @click="doReset"
                 >
                     {{ _('wb_Reset') }}
                 </b-button>
