@@ -934,6 +934,11 @@ private async checkDuplication(permtable:any):Promise<boolean>{
         let messages = this.createPermTableMessage({permissionTableName:this.inputFormData.permissionName, devices:Object.assign([], this.savedAccessLevels)});           
         Dialog.error(this._("w_Error_AccessLevelIsNotInCCure")+"<br/>"+messages);
     }    
+    else if(response.errors.find(x=>x.type=="errorFromSipass")){
+        let sipassError = response.errors.find(x=>x.type=="errorFromSipass").message;
+        let messages = `${sipassError.Message}`;
+        Dialog.error(this._("errorFromSipass")+"<br/>"+messages);
+    }
     else{
         this.pageToList();
     }

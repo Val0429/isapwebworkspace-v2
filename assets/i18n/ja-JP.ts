@@ -666,4 +666,5 @@ export default class LangObject implements ILang {
     w_Import_RecordCount="Record Count";
     humanresource="humanresource";
     w_ManualSync_HumanResource = "Manual Sync Human Resource";
+    errorFromSipass="errorFromSipass";
 }

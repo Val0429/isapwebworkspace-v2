@@ -672,4 +672,5 @@ export default class LangObject implements ILang {
     w_Import_RecordCount="匯入資料筆數";
     humanresource="人事系統設定";
     w_ManualSync_HumanResource = "手動同步人事系統設定";
+    errorFromSipass="SiPass錯誤訊息";
 }
