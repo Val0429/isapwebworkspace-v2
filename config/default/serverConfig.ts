@@ -11,7 +11,7 @@ var config: Config = {
     // ip: '172.16.10.122',
 
     // QA Tina server
-    ip: '172.16.10.51',
+    ip: '172.16.10.175',
 
     // Rebaca server
     // ip: '172.16.10.194',
