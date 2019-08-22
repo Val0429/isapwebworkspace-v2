@@ -11,7 +11,10 @@
                 v-show="transition.step === 1"
                 :label="_('w_Tenants_InvitationList')"
             >
-                <template #toolbox>
+                <template
+                    #toolbox
+                    v-if="showModifyTool()"
+                >
                     <iv-toolbox-view
                         :disabled="selectedDetail.length !== 1"
                         @click="pageToView"
@@ -29,6 +32,7 @@
                     :interface="ITableList()"
                     :multiple="tableMultiple"
                     :server="{ path: '/flow2/visitors/invites' }"
+                    :selectable="showModifyTool()"
                     @selected="selectedItem($event)"
                 >
 
@@ -56,7 +60,10 @@
                         <div>{{ resolveDatetimeEnd($attrs.row.dates) }}</div>
                     </template>
 
-                    <template #Actions="{$attrs, $listeners}">
+                    <template
+                        #Actions="{$attrs, $listeners}"
+                        v-if="showModifyTool()"
+                    >
                         <iv-toolbox-more
                             size="sm"
                             :disabled="selectedDetail.length !== 1"
@@ -156,6 +163,7 @@ import { ITransition } from "@/services/Transition";
 import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
 import ResponseFilter from "@/services/ResponseFilter";
+import RoleService from "../../../services/Role/RoleService";
 
 @Component({
     components: {}
@@ -217,6 +225,13 @@ export default class TenantsInvitation extends Vue {
     pageToEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
+    }
+
+    showModifyTool(): boolean {
+        let result = false;
+        result = RoleService.haveTenantUser(this);
+        console.log("!!! showModifyTool");
+        return result;
     }
 
     async initSelectItemPurpose() {
@@ -465,7 +480,7 @@ export default class TenantsInvitation extends Vue {
                     name: string;
                 };
 
-                Actions: any;
+                ${this.showModifyTool() ? "Actions: any;" : ""} 
             }
         `;
     }

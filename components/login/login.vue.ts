@@ -5,6 +5,7 @@ import { EUserRole } from '@/services/Role';
 import Dialog from '@/services/Dialog';
 import Loading from '@/services/Loading';
 import RemeberMe from '@/services/RemeberMe';
+import PackeageJSON from '@/package.json';
 
 enum ERemeberMe {
     rememberMe = 'rememberMe',
@@ -24,10 +25,26 @@ export default class Login extends Vue {
     private remeberMe: string = ERemeberMe.noRemeberMe;
     private eRemeberMe: any = ERemeberMe;
 
-    created() {}
+    created() {
+        this.showProject();
+    }
 
     mounted() {
         this.initLoginInfo();
+    }
+
+    showForgotPassword() {
+        let result = false;
+        switch (PackeageJSON.flow) {
+            case '/flow2':
+                result = true;
+                break;
+        }
+        return result;
+    }
+
+    showProject() {
+        console.log(`Project: ${PackeageJSON.project}`);
     }
 
     initLoginInfo() {

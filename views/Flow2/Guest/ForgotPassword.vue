@@ -110,7 +110,21 @@ export default class ForgetPassword extends Vue {
         this.$router.push("/login");
     }
 
-    sendEmail() {
+    async sendEmail() {
+        let param = { email: this.inputForgetPassword.email };
+
+        Loading.show();
+        await this.$server
+            .C("/flow2/users/forget-password", param)
+            .then((response: any) => {
+                Loading.hide();
+                Dialog.success(this._("w_ForgotPassword_Success"));
+            })
+            .catch((e: any) => {
+                Loading.hide();
+                Dialog.error(this._("w_ForgotPassword_Failed"));
+            });
+
         console.log("Send email");
     }
 }

@@ -67,6 +67,8 @@ export default class LangObject {
 
     // Forgot Password
     w_ForgotPassword = 'Forgot Password';
+    w_ForgotPassword_Success = 'Send new Password to E-mail';
+    w_ForgotPassword_Failed = 'Not find User, Please try again';
 
     /////////////////////////////////////////////
 

@@ -9,6 +9,9 @@ interface RestfulRequest extends ApisRequestBase {
         '/users/logout': [UserLogout.Input, any, false];
         '/users': [any, any, false];
 
+        // Forgot password
+        '/flow2/users/forget-password': [any, any, false];
+
         // License
         '/license': [any, any, false];
 

@@ -79,6 +79,7 @@
 
                                             <!-- forgot password -->
                                             <b-button
+                                                v-if="showForgotPassword()"
                                                 variant="link"
                                                 class="px-0"
                                                 @click="forgotPassword"

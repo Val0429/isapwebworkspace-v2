@@ -7,8 +7,8 @@ import packageJson from '@/package.json';
 $({ path: '/', name: 'Home', redirect: '/login' })();
 
 // Guest
-import ForgotPassword from './Guest/ForgotPassword.vue';
-$({ path: '/forgot_password', name: 'ForgotPassword', disableContainer: true, permission: false })(ForgotPassword);
+import Flow2ForgotPassword from './Flow2/Guest/ForgotPassword.vue';
+$({ path: '/forgot_password', name: 'ForgotPassword', disableContainer: true, permission: false })(Flow2ForgotPassword);
 
 // Visitor Registration
 import Potrait from './Registration/Potrait.vue';

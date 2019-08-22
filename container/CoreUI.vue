@@ -143,20 +143,20 @@
 
                 </iv-permission>
 
-                <iv-permission :allow="['TenantAdministrator']">
-                    <SidebarNavItem
-                        :label="_('w_Navigation_Setups_Account')"
-                        url="/setups/account"
-                    />
-                </iv-permission>
-
                 <iv-permission url="/flow2">
-                    <iv-permission :allow="['TenantUser']">
+                    <iv-permission :allow="['TenantAdministrator', 'TenantUser']">
                         <SidebarNavItem
                             :label="_('w_Navigation_Tenants_Invitation')"
                             url="/tenants/invitation"
                         />
                     </iv-permission>
+                </iv-permission>
+
+                <iv-permission :allow="['TenantAdministrator']">
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Setups_Account')"
+                        url="/setups/account"
+                    />
                 </iv-permission>
 
             </SidebarNav>
