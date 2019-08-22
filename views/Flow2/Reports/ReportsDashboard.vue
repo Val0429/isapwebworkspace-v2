@@ -301,7 +301,6 @@ export default class ReportsDashboard extends Vue {
                 end: this.inputFormData.endDate.toISOString(),
                 kioskIds: this.kioskIdString()
             };
-            console.log("!!!initStatistic", param);
             await this.$server
                 .R("/flow2/reports/statistic", param)
                 .then((response: any) => {

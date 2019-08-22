@@ -123,6 +123,13 @@
                             url="/setups/purposes"
                         />
 
+                        <iv-permission url="/flow2">
+                            <SidebarNavItem
+                                :label="_('w_Navigation_Setups_Other')"
+                                url="/setups/other"
+                            />
+                        </iv-permission>
+
                     </SidebarNavItem>
 
                     <iv-permission url="/flow2">

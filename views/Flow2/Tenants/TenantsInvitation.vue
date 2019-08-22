@@ -284,7 +284,6 @@ export default class TenantsInvitation extends Vue {
     }
 
     resolveDatetimeStartDate(dateStringList: any): Date {
-        
         let result = new Date();
         let dataIndex = 0;
         if (
@@ -309,7 +308,6 @@ export default class TenantsInvitation extends Vue {
     }
 
     resolveDatetimeStart(dateStringList: any): string {
-        console.log("!!! resolveDatetimeStartDate ");
         let result = "";
         let dataIndex = 0;
         if (
@@ -341,11 +339,31 @@ export default class TenantsInvitation extends Vue {
 
     getInputData() {
         for (const param of this.selectedDetail) {
-            let visitorMobile = param.visitors != undefined && param.visitors[0] != undefined && param.visitors[0].phone != undefined ? param.visitors[0].phone : "";
-            let visitorName = param.visitors != undefined && param.visitors[0] != undefined && param.visitors[0].name != undefined ? param.visitors[0].name : "";
-            let visitorEmail = param.visitors != undefined && param.visitors[0] != undefined && param.visitors[0].email != undefined ? param.visitors[0].email : "";
-            let visitorStatus = param.visitors != undefined && param.visitors[0] != undefined && param.visitors[0].status != undefined ? param.visitors[0].status : "";
-            
+            let visitorMobile =
+                param.visitors != undefined &&
+                param.visitors[0] != undefined &&
+                param.visitors[0].phone != undefined
+                    ? param.visitors[0].phone
+                    : "";
+            let visitorName =
+                param.visitors != undefined &&
+                param.visitors[0] != undefined &&
+                param.visitors[0].name != undefined
+                    ? param.visitors[0].name
+                    : "";
+            let visitorEmail =
+                param.visitors != undefined &&
+                param.visitors[0] != undefined &&
+                param.visitors[0].email != undefined
+                    ? param.visitors[0].email
+                    : "";
+            let visitorStatus =
+                param.visitors != undefined &&
+                param.visitors[0] != undefined &&
+                param.visitors[0].status != undefined
+                    ? param.visitors[0].status
+                    : "";
+
             this.inputFormData = {
                 objectId: param.objectId,
                 mobile: visitorMobile,
@@ -367,18 +385,12 @@ export default class TenantsInvitation extends Vue {
 
     async saveModifyForm() {
         //dates
-        let dates = [];
-        let sTime = this.inputFormData.startDate;
-        let eTime = this.inputFormData.endDate;
-        while (sTime.getTime() < eTime.getTime()) {
-            let date = {
-                start: JSON.parse(JSON.stringify(sTime)),
-                end: JSON.parse(
-                    JSON.stringify(sTime.setDate(sTime.getDate() + 1))
-                )
-            };
-            dates.push(date);
-        }
+        let dates = [
+            {
+                start: Datetime.DateStart(this.inputFormData.startDate),
+                end: Datetime.DateEnd(this.inputFormData.endDate)
+            }
+        ];
 
         //post api
         const createParam = {

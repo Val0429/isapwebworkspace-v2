@@ -705,10 +705,6 @@ export default class SetupsAccount extends Vue {
         }
     }
 
-    // savePasswordForm(event: any) {
-    //     console.log("!!! savePasswordForm", this.inputFormData);
-    // }
-
     ITableList() {
         return `
             interface {

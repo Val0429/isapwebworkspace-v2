@@ -24,9 +24,10 @@
                         :selectable="false"
                         :server="{ path: '/flow2/logs' }"
                     >
-                        <template #summary="{$attrs}">
-                            {{ JSON.stringify($attrs.row) }}
+                        <template #entity="{$attrs}">
+                            {{ JSON.stringify($attrs.row.entity) }}
                         </template>
+
                     </iv-table>
                 </iv-card>
 
@@ -108,10 +109,17 @@ export default class Logs extends Vue {
                  */
                 action: string;
 
-                 /**
-                 * @uiLabel - ${this._("w_Logs_Summary")}
+                owner: interface {
+                    /**
+                     * @uiLabel - ${this._("w_Logs_Owner")}
+                     */
+                    username: string;
+                };
+
+                /**
+                 * @uiLabel - ${this._("w_Logs_Entity")}
                  */
-                summary: any;
+                entity: any;
 
                 /**
                  * @uiLabel - ${this._("w_Logs_CreatedAt")}

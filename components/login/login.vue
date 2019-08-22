@@ -55,7 +55,7 @@
                                             :value="eRemeberMe.rememberMe"
                                             :unchecked-value="eRemeberMe.noRemeberMe"
                                         >
-                                            {{ _('w_Login_RememberMe') }}
+                                            {{ _('w_RememberMe') }}
                                         </b-form-checkbox>
                                     </div>
 

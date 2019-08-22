@@ -55,7 +55,7 @@ export default class LangObject {
     w_UserAdd = 'Add User';
     w_UserEdit = 'Edit User';
     w_ConfirmPassword = 'Confirm Password';
-    w_Login_RememberMe = 'Remember Me';
+    w_RememberMe = 'Remember Me';
 
     // Login
     w_Login_Login = 'Login';
@@ -91,8 +91,8 @@ export default class LangObject {
     w_Website_title = 'iSAP Visitor Management System';
 
     ////////////////// Navigation //////////////////
-    w_Navigation_MyProfile = 'My Profile';
 
+    w_Navigation_MyProfile = 'My Profile';
     w_Navigation_About = 'About';
 
     w_Navigation_Reports = 'Report';
@@ -286,6 +286,7 @@ export default class LangObject {
     w_Company_Floor = 'Floor';
 
     ////////////////// Kiosk //////////////////
+
     w_Kiosk_List = 'Kiosk List';
     w_Kiosk_Add = 'Add Kiosk';
     w_Kiosk_Edit = 'Edit Kiosk';
@@ -303,6 +304,7 @@ export default class LangObject {
     w_Kiosk_Status = 'Status';
 
     ////////////////// Tenants Invitation //////////////////
+
     w_Tenants_InvitationList = 'Invitation List';
     w_Tenants_MobileNumber = 'Mobile number';
     w_Tenants_Name = 'Name';
@@ -317,9 +319,11 @@ export default class LangObject {
     w_Tenants_EditInvitation = 'Edit Invitation';
 
     ////////////////// Tenants Visitor //////////////////
+
     w_Tenants_VisitorList = 'Visitor List';
 
-    ////////////////// Floor  //////////////////
+    ////////////////// Building  //////////////////
+
     w_Buildings_Building = 'Building';
     w_Buildings_List = 'Building List';
     w_Buildings_BuildingName = 'Building Name';
@@ -333,6 +337,7 @@ export default class LangObject {
     w_Buildings_DeleteConfirm = 'Are you sure to delete selected Building(s)?';
 
     ////////////////// Floor  //////////////////
+
     w_Floor_List = 'Floor List';
     w_Floor_Add = 'Add Floor';
     w_Floor_Edit = 'Edit Floor';
@@ -347,7 +352,8 @@ export default class LangObject {
     w_Floor_FloorName = 'Floor Name';
     w_Floor_Floor = 'Floor';
 
-    //purposes
+    ////////////////// purposes  //////////////////
+
     w_Purposes_Name = 'Purposes Name';
 
     w_Purposes_List = 'Purposes List';
@@ -360,6 +366,13 @@ export default class LangObject {
     w_Purposes_EditSuccess = 'Purposes edit success';
     w_Purposes_EditFailed = 'Purposes edit failed, please try again';
     w_Purposes_DeleteConfirm = 'Are you sure to delete selected Purposes(s)?';
+
+    ////////////////// other  //////////////////
+    w_SetupsOther_PublicExternalNotURL = 'Public External Not URL';
+    w_SetupsOther_UpdateSuccess = 'Update Success';
+    w_SetupsOther_RemoveWorkerDaysFormLabel = 'Remove Worker Days';
+    w_SetupsOther_PublicExternalIPFormLabel = 'Public External IP';
+    w_GeneralSettings_RemoveWorkerDaysCardTitle = 'Remove Worker Days';
 
     ////////////////// Potrait //////////////////
     w_Potrait_Photo = 'Your Photo';
@@ -375,4 +388,6 @@ export default class LangObject {
     w_Logs_CreatedAt = 'Event Time';
     w_Logs_SearchCondition = 'Search Condition';
     w_Logs_Summary = 'Summary';
+    w_Logs_Owner = 'Owner';
+    w_Logs_Entity = 'Entity';
 }

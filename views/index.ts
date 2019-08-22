@@ -15,11 +15,11 @@ import Flow1MyProfile from './Flow1/MyProfile/MyProfile.vue';
 import Flow2MyProfile from './Flow2/MyProfile/MyProfile.vue';
 switch (packageJson.flow) {
     case '/flow2':
-        $({ path: '/my_profile', name: "_('w_Navigation_MyProfile')", icon: 'fa-check' })(Flow2MyProfile);
+        $({ path: '/my_profile', name: "_('w_Navigation_MyProfile')", icon: 'fa-user' })(Flow2MyProfile);
         break;
     case '/flow1':
     default:
-        $({ path: '/my_profile', name: "_('w_Navigation_MyProfile')", icon: 'fa-check' })(Flow1MyProfile);
+        $({ path: '/my_profile', name: "_('w_Navigation_MyProfile')", icon: 'fa-user' })(Flow1MyProfile);
         break;
 }
 
@@ -33,7 +33,7 @@ import Flow1ReportsInversigation from './Flow1/Reports/ReportsInversigation.vue'
 import Flow2ReportsDashboard from './Flow2/Reports/ReportsDashboard.vue';
 import Flow2ReportsInversigation from './Flow2/Reports/ReportsInversigation.vue';
 
-$({ path: '/reports', name: "_('w_Navigation_Reports')", icon: 'fa-cog', redirect: `/reports/dashboard${packageJson.flow}` })();
+$({ path: '/reports', name: "_('w_Navigation_Reports')", icon: 'fa-flag', redirect: `/reports/dashboard${packageJson.flow}` })();
 switch (packageJson.flow) {
     case '/flow2':
         $({ path: '/reports/dashboard', name: "_('w_Navigation_Reports_Dashboard')", icon: 'fa-tachometer' })(Flow2ReportsDashboard);
@@ -71,7 +71,6 @@ import Flow2SetupsKiosk from './Flow2/Setups/SetupsKiosk.vue';
 import Flow2SetupsOther from './Flow2/Setups/SetupsOther.vue';
 
 $({ path: '/setups', name: "_('w_Navigation_Setups')", icon: 'fa-cog', redirect: `/setups/account${packageJson.flow}` })();
-
 $({ path: '/setups/license', name: "_('w_Navigation_Setups_License')", icon: 'fa-certificate' })(SetupsLicense);
 $({ path: '/setups/frs', name: "_('w_Navigation_Setups_FRS')", icon: 'fa-server' })(SetupsFRS);
 $({ path: '/setups/email', name: "_('w_Navigation_Setups_Email')", icon: 'fa-inbox' })(SetupsEmail);
@@ -82,17 +81,17 @@ switch (packageJson.flow) {
     case '/flow2':
         $({ path: '/setups/account', name: "_('w_Navigation_Setups_Account')", icon: 'fa-user' })(Flow2SetupsAccount);
         $({ path: '/setups/purposes', name: "_('w_Navigation_Setups_Purposes')", icon: 'fa-tag' })(Flow2SetupsPurposes);
-        $({ path: '/setups/buildings', name: "_('w_Navigation_Setups_Buildings')", icon: 'fa-tag' })(Flow2SetupsBuilding);
-        $({ path: '/setups/floor', name: "_('w_Navigation_Setups_Floor')", icon: 'fa-building' })(Flow2SetupsFloor);
+        $({ path: '/setups/buildings', name: "_('w_Navigation_Setups_Buildings')", icon: 'fa-building' })(Flow2SetupsBuilding);
+        $({ path: '/setups/floor', name: "_('w_Navigation_Setups_Floor')", icon: 'fa-level-up' })(Flow2SetupsFloor);
         $({ path: '/setups/company', name: "_('w_Navigation_Setups_Company')", icon: 'fa-industry' })(Flow2SetupsCompany);
         $({ path: '/setups/kiosk', name: "_('w_Navigation_Setups_Kiosk')", icon: 'fa-barcode' })(Flow2SetupsKiosk);
-        $({ path: '/setups/other', name: "_('w_Navigation_Setups_Other')", icon: 'fa-industry' })(Flow2SetupsOther);
+        $({ path: '/setups/other', name: "_('w_Navigation_Setups_Other')", icon: 'fa-file' })(Flow2SetupsOther);
         break;
     case '/flow1':
     default:
         $({ path: '/setups/account', name: "_('w_Navigation_Setups_Account')", icon: 'fa-user' })(Flow1SetupsAccount);
         $({ path: '/setups/purposes', name: "_('w_Navigation_Setups_Purposes')", icon: 'fa-tag' })(Flow1SetupsPurposes);
-        $({ path: '/setups/floor', name: "_('w_Navigation_Setups_Floor')", icon: 'fa-building' })(Flow1SetupsFloor);
+        $({ path: '/setups/floor', name: "_('w_Navigation_Setups_Floor')", icon: 'fa-level-up' })(Flow1SetupsFloor);
         $({ path: '/setups/company', name: "_('w_Navigation_Setups_Company')", icon: 'fa-industry' })(Flow1SetupsCompany);
         $({ path: '/setups/kiosk', name: "_('w_Navigation_Setups_Kiosk')", icon: 'fa-barcode' })(Flow1SetupsKiosk);
         $({ path: '/setups/visitor_card', name: "_('w_Navigation_Setups_VisitorCard')", icon: 'fa-id-card' })(Flow1SetupsVisitorCard);
@@ -101,7 +100,7 @@ switch (packageJson.flow) {
 
 // Logs
 import Flow2Logs from './Flow2/Logs/Logs.vue';
-$({ path: '/logs', name: "_('w_Navigation_Logs')", icon: 'fa-user' })(Flow2Logs);
+$({ path: '/logs', name: "_('w_Navigation_Logs')", icon: 'fa-clipboard' })(Flow2Logs);
 
 // Tenants
 import Flow2TenantsInvitation from './Flow2/Tenants/TenantsInvitation.vue';

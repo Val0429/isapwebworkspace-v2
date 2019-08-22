@@ -257,7 +257,6 @@ export default class SetupsKiosk extends Vue {
                             data.instance.objectId != undefined &&
                             status.objectId == data.instance.objectId
                         ) {
-                            console.log("!!! data.alive", data.alive);
                             this.kioskStatus[i].status =
                                 data.alive == 1
                                     ? EStatus.Online
