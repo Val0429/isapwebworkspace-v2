@@ -39,13 +39,16 @@
                     @selected="selectedItem($event)"
                 >
 
+                    <template #strictMode="{$attrs, $listeners}">
+                        {{ $attrs.row.data.strictMode ? _('w_Status_Yes') : _('w_Status_No') }}
+                    </template>
+
                     <template #status="{$attrs, $listeners}">
                         <!--                        {{ checkKioskIdSame($attrs && $attrs.row && $attrs.row.data && $attrs.row.data.kioskId, wsData) ? 'Online' : status}}-->
                         {{ resolveStatus($attrs) }}
                     </template>
 
                     <template #Actions="{$attrs, $listeners}">
-
                         <iv-toolbox-more :disabled="selectedDetail.length !== 1">
                             <iv-toolbox-view @click="pageToView" />
                             <iv-toolbox-edit @click="pageToEdit()" />
@@ -183,7 +186,8 @@ export default class SetupsKiosk extends Vue {
         password: "",
         confirmPassword: "",
         updatePassword: "",
-        updateConfirmPassword: ""
+        updateConfirmPassword: "",
+        strictMode: false
     };
 
     kioskStatus: IKioskStatus[] = [];
@@ -242,6 +246,7 @@ export default class SetupsKiosk extends Vue {
     pageToEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
+        this.clearInputData();
         this.getInputData();
     }
 
@@ -362,7 +367,8 @@ export default class SetupsKiosk extends Vue {
             password: "",
             confirmPassword: "",
             updatePassword: "",
-            updateConfirmPassword: ""
+            updateConfirmPassword: "",
+            strictMode: false
         };
     }
 
@@ -379,22 +385,26 @@ export default class SetupsKiosk extends Vue {
                 building: param.data.building.objectId,
                 buildingName: param.data.building.name,
                 kioskId: param.data.kioskId,
-                kioskName: param.data.kioskName
+                kioskName: param.data.kioskName,
+                strictMode: param.data.strictMode ? true : false
             };
         }
     }
 
     updateInputFormData(data) {
+        console.log(data.key, data.value);
         this.inputFormData[data.key] = data.value;
     }
 
     async saveAddOrEdit(data) {
+        
         let param: any = {
             username: data.username,
             data: {
                 kioskId: data.kioskId,
                 kioskName: data.kioskName,
-                building: data.building
+                building: data.building,
+                strictMode: data.strictMode
             },
             roles: ["Kiosk"]
         };
@@ -533,6 +543,11 @@ export default class SetupsKiosk extends Vue {
                 };
 
                 /**
+                 * @uiLabel - ${this._("w_Kiosk_StrictMode")}
+                 */
+                strictMode: any;
+
+                /**
                  * @uiLabel - ${this._("w_Kiosk_Status")}
                  */
                 status: string;
@@ -608,6 +623,12 @@ export default class SetupsKiosk extends Vue {
                     this.selectionItem.building as any,
                     false
                 )};
+
+                /**
+                 * @uiLabel - ${this._("w_Kiosk_StrictMode")}
+                 * @uiType - iv-form-switch
+                 */
+                strictMode?: boolean;
 
                 /**
                   * @uiLabel - ${this._("w_Password")}

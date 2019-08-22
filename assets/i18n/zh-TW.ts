@@ -2,11 +2,6 @@ import { RegisterLanguage } from '@/../core/i18n';
 
 @RegisterLanguage('zh-TW', '正體中文')
 export default class LangObject implements LangObject {
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-
     // Common
     w_Value = '值';
     w_Options = '選擇';
@@ -22,6 +17,8 @@ export default class LangObject implements LangObject {
     w_Confirm = '確認';
     w_Cancelled = '已取消';
     w_No = '編號';
+    w_Next = 'Next';
+    w_Prev = 'Previos';
 
     // Status
     w_Status_Enable = 'Enable';
@@ -299,17 +296,16 @@ export default class LangObject implements LangObject {
     w_Kiosk_Add = '新增設備';
     w_Kiosk_Edit = '修改設備';
     w_Kiosk_View = '瀏覽設備';
-
     w_Kiosk_AddSuccess = '設備新增成功';
     w_Kiosk_ADDFailed = '設備新增失敗, 請重試';
     w_Kiosk_EditSuccess = '設備修改成功';
     w_Kiosk_EditFailed = '設備修改失敗, 請重試';
     w_Kiosk_DeleteConfirm = '確定刪除選取設備?';
-
     w_Kiosk_Username = '用戶名稱';
     w_Kiosk_Id = '設備編號';
     w_Kiosk_KioskName = '設備名稱';
     w_Kiosk_Status = '狀態';
+    w_Kiosk_StrictMode = '增強模式';
 
     ////////////////// Tenants Invitation //////////////////
     w_Tenants_InvitationList = '邀請清單';
@@ -324,6 +320,18 @@ export default class LangObject implements LangObject {
     w_Tenants_sms = 'SMS';
     w_Tenants_AddInvitation = '新增邀請';
     w_Tenants_EditInvitation = '編輯邀請';
+    w_TenantsInvitation_ErrorFileType = 'Please upload xlsx';
+    w_TenantsInvitation_ErrorFileResolve = 'File resolve error';
+
+    w_TenantsInvitation_CardTitle = 'Batch create invitation';
+    w_TenantsInvitation_Step1 = 'Download Example xlsx';
+    w_TenantsInvitation_Step2 = 'Upload xlsx';
+    w_TenantsInvitation_Step3 = 'Check resolve value';
+    w_TenantsInvitation_Step4 = 'Upload result';
+    w_TenantsInvitation_ApiMessage = 'API Message';
+    w_TenantsInvitation_Download = 'Download .xlsx';
+    w_TenantsInvitation_ErrorNoData = 'No Data';
+    w_TenantsInvitation_UploadSuccess = 'Upload Success';
 
     ////////////////// Tenants Visitor //////////////////
     w_Tenants_VisitorList = '訪客清單';

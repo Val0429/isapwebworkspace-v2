@@ -124,8 +124,6 @@ export default class ForgetPassword extends Vue {
                 Loading.hide();
                 Dialog.error(this._("w_ForgotPassword_Failed"));
             });
-
-        console.log("Send email");
     }
 }
 </script>

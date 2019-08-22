@@ -17,6 +17,8 @@ export default class LangObject {
     w_Confirm = 'Confirm';
     w_Cancelled = 'Cancelled';
     w_No = 'No';
+    w_Next = 'Next';
+    w_Prev = 'Previos';
 
     // Status
     w_Status_Enable = 'Enable';
@@ -92,6 +94,7 @@ export default class LangObject {
     w_Delete_ConfirmContent = 'Please confirm delete choose';
 
     w_ExportPDF = 'Export PDF';
+    w_UploadCSV = 'Upload CSV';
 
     w_Website_title = 'iSAP Visitor Management System';
 
@@ -296,17 +299,16 @@ export default class LangObject {
     w_Kiosk_Add = 'Add Kiosk';
     w_Kiosk_Edit = 'Edit Kiosk';
     w_Kiosk_View = 'View Kiosk';
-
     w_Kiosk_AddSuccess = 'Kiosk add success';
     w_Kiosk_ADDFailed = 'Kiosk add failed, please try again';
     w_Kiosk_EditSuccess = 'Kiosk edit success';
     w_Kiosk_EditFailed = 'Kiosk edit failed, please try again';
     w_Kiosk_DeleteConfirm = 'Are you sure to delete selected Kiosk(s)?';
-
     w_Kiosk_Username = 'Username';
     w_Kiosk_Id = 'Kiosk Id';
     w_Kiosk_KioskName = 'Kiosk Name';
     w_Kiosk_Status = 'Status';
+    w_Kiosk_StrictMode = 'Strict Mode';
 
     ////////////////// Tenants Invitation //////////////////
 
@@ -322,6 +324,18 @@ export default class LangObject {
     w_Tenants_sms = 'SMS';
     w_Tenants_AddInvitation = 'Add Invitation';
     w_Tenants_EditInvitation = 'Edit Invitation';
+    w_TenantsInvitation_ErrorFileType = 'Please upload xlsx';
+    w_TenantsInvitation_ErrorFileResolve = 'File resolve error';
+
+    w_TenantsInvitation_CardTitle = 'Batch create invitation';
+    w_TenantsInvitation_Step1 = 'Download Example xlsx';
+    w_TenantsInvitation_Step2 = 'Upload xlsx';
+    w_TenantsInvitation_Step3 = 'Check resolve value';
+    w_TenantsInvitation_Step4 = 'Upload result';
+    w_TenantsInvitation_ApiMessage = 'API Message';
+    w_TenantsInvitation_Download = 'Download .xlsx';
+    w_TenantsInvitation_ErrorNoData = 'No Data';
+    w_TenantsInvitation_UploadSuccess = 'Upload Success';
 
     ////////////////// Tenants Visitor //////////////////
 
