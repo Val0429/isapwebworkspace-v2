@@ -501,8 +501,8 @@ export default class ReportDemographic extends Vue {
                                     summaryData.femaleEmployeeTotal
                                 ),
                                  this.checkedEmployee(
-                                    summaryData.prevfeMaleTotal,
-                                    summaryData.prevfeMaleEmployeeTotal
+                                    summaryData.prevFemaleTotal,
+                                    summaryData.prevFemaleEmployeeTotal
                                 )
 							    	);
                                 }
@@ -536,8 +536,8 @@ export default class ReportDemographic extends Vue {
                                     summaryData.femaleEmployeeTotal
                                 ),
                                  this.checkedEmployee(
-                                    summaryData.prevfeMaleTotal,
-                                    summaryData.prevfeMaleEmployeeTotal
+                                    summaryData.prevFemaleTotal,
+                                    summaryData.prevFemaleEmployeeTotal
                                 )
 								);
 							}
@@ -714,8 +714,8 @@ export default class ReportDemographic extends Vue {
                                                         summaryData.femaleEmployeeTotal
                                                     ),
                                                      this.checkedEmployee(
-                                                        summaryData.prevfeMaleTotal,
-                                                        summaryData.prevfeMaleEmployeeTotal
+                                                        summaryData.prevFemaleTotal,
+                                                        summaryData.prevFemaleEmployeeTotal
                                                     )
 										    	);
                                             }
@@ -750,8 +750,8 @@ export default class ReportDemographic extends Vue {
                                                         summaryData.femaleEmployeeTotal
                                                     ),
                                                      this.checkedEmployee(
-                                                        summaryData.prevfeMaleTotal,
-                                                        summaryData.prevfeMaleEmployeeTotal
+                                                        summaryData.prevFemaleTotal,
+                                                        summaryData.prevFemaleEmployeeTotal
                                                     )
 											);
 										}
@@ -815,8 +815,8 @@ export default class ReportDemographic extends Vue {
                                                         summaryData.femaleEmployeeTotal
                                                     ),
                                                      this.checkedEmployee(
-                                                        summaryData.prevfeMaleTotal,
-                                                        summaryData.prevfeMaleEmployeeTotal
+                                                        summaryData.prevFemaleTotal,
+                                                        summaryData.prevFemaleEmployeeTotal
                                                     )
 										    	);
                                             }
@@ -851,8 +851,8 @@ export default class ReportDemographic extends Vue {
                                                         summaryData.femaleEmployeeTotal
                                                     ),
                                                      this.checkedEmployee(
-                                                        summaryData.prevfeMaleTotal,
-                                                        summaryData.prevfeMaleEmployeeTotal
+                                                        summaryData.prevFemaleTotal,
+                                                        summaryData.prevFemaleEmployeeTotal
                                                     )
 										    	);
 										}
