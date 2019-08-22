@@ -145,10 +145,12 @@
                             <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}} {{_("w_DashboardOverview_Now")}}</span>
                         </div>
                         <div class="clearfix">
-                            <!-- <highcharts
-                                class="demographic-div"
+                            <apexchart
+                                type=radialBar
+                                height=200
                                 :options="chartOptions.repeatCustomer"
-                            ></highcharts> -->
+                                :series="chartOptions.repeatCustomer.series"
+                            />
                         </div>
                     </div>
                 </div>
@@ -176,6 +178,9 @@ import HighchartsVue from "highcharts-vue";
 import exportingInit from "highcharts/modules/exporting";
 exportingInit(Highcharts);
 Vue.use(HighchartsVue);
+
+import VueApexCharts from "vue-apexcharts";
+Vue.component("apexchart", VueApexCharts);
 
 import HighchartsService from "@/components/Reports/models/HighchartsService";
 import ResponseFilter from "@/services/ResponseFilter";
@@ -488,6 +493,50 @@ export class CurrentStatusDashboard extends Vue {
             credits: {
                 enabled: false
             }
+        };
+
+        this.chartOptions.repeatCustomer = {
+            series: [76],
+            plotOptions: {
+                radialBar: {
+                    startAngle: -90,
+                    endAngle: 90,
+                    track: {
+                        background: "#e7e7e7",
+                        strokeWidth: "97%",
+                        margin: 5, // margin is in pixels
+                        shadow: {
+                            enabled: true,
+                            top: 2,
+                            left: 0,
+                            color: "#999",
+                            opacity: 1,
+                            blur: 2
+                        }
+                    },
+                    dataLabels: {
+                        name: {
+                            show: false
+                        },
+                        value: {
+                            offsetY: 15,
+                            fontSize: "22px"
+                        }
+                    }
+                }
+            },
+            fill: {
+                type: "gradient",
+                gradient: {
+                    shade: "light",
+                    shadeIntensity: 0.4,
+                    inverseColors: false,
+                    opacityFrom: 1,
+                    opacityTo: 1,
+                    stops: [0, 50, 53, 91]
+                }
+            },
+            labels: ["Average Results"]
         };
     }
 
