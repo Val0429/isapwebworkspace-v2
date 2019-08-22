@@ -223,7 +223,7 @@ export class SearchCondition extends Vue {
             workCategoryId: string;
             workType: number;
             workPremisesUnit: string;
-            workContact: string;
+            applicantName: string;
             contractorCompanyName: string;
             personName: string;
         } = {
@@ -234,7 +234,7 @@ export class SearchCondition extends Vue {
             workCategoryId: data.workCategory,
             workType: data.workType,
             workPremisesUnit: data.unit,
-            workContact: data.contactPerson,
+            applicantName: data.contactPerson,
             contractorCompanyName: data.contractor,
             personName: data.workersName
         };
