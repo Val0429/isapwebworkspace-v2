@@ -69,7 +69,7 @@ enum EPageType {
     averageDwellTime = 'averageDwellTime',
     demographic = 'demographic',
     vipBlacklist = 'vipBlacklist',
-    repeatCustomer = 'repeatCustomer',
+    repeatVisitor = 'repeatVisitor',
     revenue = 'revenue',
     transaction = 'transaction',
     conversion = 'conversion',

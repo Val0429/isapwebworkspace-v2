@@ -78,7 +78,7 @@
                             <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}}</span>
                         </div>
                         <div class="clearfix">
-                            <span class="date">{{anlysisData.repeatCustomer.total != null ? numberWithCommas(anlysisData.repeatCustomer.total) : "N/A"}}</span>
+                            <span class="date">{{anlysisData.repeatVisitor.total != null ? numberWithCommas(anlysisData.repeatVisitor.total) : "N/A"}}</span>
                         </div>
                     </div>
                 </div>
@@ -317,21 +317,21 @@ export class FilterStatusDashboard extends Vue {
                     }
 
                     // repeat Customer
-                    if (response.repeatCustomer) {
-                        this.anlysisData.repeatCustomer = {
+                    if (response.repeatVisitor) {
+                        this.anlysisData.repeatVisitor = {
                             sign:
-                                response.repeatCustomer.variety == null ||
-                                response.repeatCustomer.variety == 0
+                                response.repeatVisitor.variety == null ||
+                                response.repeatVisitor.variety == 0
                                     ? ESign.none
-                                    : response.repeatCustomer.variety > 0
+                                    : response.repeatVisitor.variety > 0
                                     ? ESign.positive
                                     : ESign.negative,
-                            total: response.repeatCustomer.value,
-                            valueRatio: response.repeatCustomer.variety
-                                ? response.repeatCustomer.variety /
-                                  response.repeatCustomer.value
+                            total: response.repeatVisitor.value,
+                            valueRatio: response.repeatVisitor.variety
+                                ? response.repeatVisitor.variety /
+                                  response.repeatVisitor.value
                                 : null,
-                            value: response.repeatCustomer.variety
+                            value: response.repeatVisitor.variety
                         };
                     }
 
