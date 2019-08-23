@@ -467,6 +467,11 @@ class Datetime {
     CheckSameDate(startDate: string, endDate: string): boolean {
         return Date.parse(endDate) === Date.parse(startDate);
     }
+
+    // Excel time format to JS Date
+    excelDateToDate(excelDate: number): Date {
+        return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
+    }
 }
 
 export default new Datetime();

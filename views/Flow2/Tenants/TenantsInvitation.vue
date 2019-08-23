@@ -810,8 +810,8 @@ export default class TenantsInvitation extends Vue {
                 tempDateArray.length < 3 &&
                 !isNaN(parseInt(tempDateArray[0]))
             ) {
-                let tempDate: Date = new Date(
-                    (parseInt(tempDateArray[0]) - (25567 + 2)) * 86400 * 1000
+                let tempDate: Date = Datetime.excelDateToDate(
+                    parseInt(tempDateArray[0])
                 );
                 if (!isNaN(tempDate.getTime())) {
                     if (toStart) {
