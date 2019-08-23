@@ -673,4 +673,8 @@ export default class LangObject {
     humanresource="humanresource";
     w_ManualSync_HumanResource = "Manual Sync Human Resource";
     errorFromSipass="errorFromSipass";
+    create = "Create";
+    update = "Update";
+    delete = "Delete";
+    ClassName = "ClassName";
 }

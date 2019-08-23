@@ -14,6 +14,12 @@
                     :server="{ path: '/acs/systemlog' }"
                     :params="filter"
                 >
+                <template #title="{$attrs, $listeners}">
+                        {{$attrs.value ? _($attrs.value) : ""}}
+                    </template>
+                <template #type="{$attrs, $listeners}">
+                        {{$attrs.value ? _("w_"+$attrs.value) : ""}}
+                    </template>
                     <template #date="{$attrs, $listeners}">
                         {{momento($attrs.row.createdAt).format("YYYY-MM-DD")}}
                     </template>
@@ -77,6 +83,10 @@ export default class QueryPermission extends Vue {
                  * @uiLabel - ${this._("w_log_title")}
                  */
                 title?: string;
+                /**
+                 * @uiLabel - ${this._("ClassName")}
+                 */
+                type?: string;
                 /**
                  * @uiLabel - ${this._("w_log_message")}
                  */

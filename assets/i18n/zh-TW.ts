@@ -673,4 +673,8 @@ export default class LangObject implements ILang {
     humanresource="人事系統設定";
     w_ManualSync_HumanResource = "手動同步人事系統設定";
     errorFromSipass="SiPass錯誤訊息";
+    update = "修改";
+    delete = "刪除";
+    ClassName = "項目";
+    create = "新增";
 }
