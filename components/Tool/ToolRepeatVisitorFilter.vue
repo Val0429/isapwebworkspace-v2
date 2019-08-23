@@ -39,6 +39,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 import ResponseFilter from '@/services/ResponseFilter';
+import { toEnumInterface } from "../../../core";
 
 @Component({
     components: {}
@@ -82,6 +83,71 @@ export class ToolRepeatVisitorFilter extends Vue {
                 return ResponseFilter.catchError(this, e);
             });
     }
+
+    // IFilterConditionForm() {
+    //     return `
+    //         interface {
+    //
+    //
+    //             /**
+    //              * @uiLabel - ${this._("w_Sites")}
+    //              * @uiHidden - ${this.isAdmin}
+    //              */
+    //             siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
+    //
+    //
+    //             /**
+    //             * @uiLabel - ${this._("w_BOCampaign_StartDate")}
+    //             * @uiPlaceHolder - ${this._("w_BOCampaign_StartDate")}
+    //             * @uiType - iv-form-date
+    //             * @uiColumnGroup - date
+    //             * @uiHidden - ${
+    //         this.selectPeriodAddWay === EAddPeriodSelect.designation
+    //             ? "true"
+    //             : "false"
+    //     }
+    //              */
+    //             startDate?: any;
+    //
+    //
+    //             /**
+    //             * @uiLabel - ${this._("w_BOCampaign_FinishDate")}
+    //             * @uiPlaceHolder - ${this._("w_BOCampaign_FinishDate")}
+    //             * @uiType - iv-form-date
+    //             * @uiColumnGroup - date
+    //             * @uiHidden - ${
+    //         this.selectPeriodAddWay === EAddPeriodSelect.designation
+    //             ? "true"
+    //             : "false"
+    //     }
+    //              */
+    //             endDate?: any;
+    //
+    //
+    //             /**
+    //              * @uiLabel - ${this._("w_ReportTemplate_Fixed_Interval")}
+    //              * @uiColumnGroup - period
+    //              * @uiHidden - ${
+    //         this.selectPeriodAddWay === EAddPeriodSelect.period
+    //             ? "true"
+    //             : "false"
+    //     }
+    //              */
+    //             designationPeriod?: ${toEnumInterface(
+    //         this.designationPeriodSelectItem as any,
+    //         false
+    //     )};
+    //
+    //
+    //             /**
+    //              * @uiLabel - ${this._("w_Tag")}
+    //              * @uiColumnGroup - tag
+    //              */
+    //             tagIds?: ${toEnumInterface(this.tagSelectItem as any, true)};
+    //
+    //         }
+    //     `;
+    // }
 
 }
 

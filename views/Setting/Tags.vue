@@ -556,6 +556,7 @@ export default class Tags extends Vue {
                         response,
                         (response: any) => {
                             Dialog.success(this._("w_Tag_EditTagSuccess"));
+                            this.pageToList();
                         },
                         this._("w_Tag_EditTagFailed")
                     );

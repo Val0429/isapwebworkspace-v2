@@ -760,7 +760,7 @@ export class FilterCondition extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Tag")}
+                 * @uiLabel - ${this._("w_Tag1")}
                  * @uiColumnGroup - tag
                  */
                 tagIds?: ${toEnumInterface(this.tagSelectItem as any, true)};
