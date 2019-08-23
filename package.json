@@ -2,7 +2,10 @@
     "name": "visitor-management-service",
     "version": "3.01.01",
     "flow": "/flow2",
-    "project": "Suntec",
+    "project": {
+        "/flow1": "Suntec",
+        "/flow2": "Suntec"
+    },
     "description": "Visitor Management Service",
     "scripts": {
         "start": "npm run start --prefix ../",

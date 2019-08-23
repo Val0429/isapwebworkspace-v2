@@ -28,31 +28,10 @@ export default class Login extends Vue {
 
     created() {
         this.showProject();
-        this.testingRegex();
     }
 
     mounted() {
         this.initLoginInfo();
-    }
-
-    testingRegex() {
-        let testingItem = [
-            {
-                a: 234234,
-                b: true,
-                c: '#G$#Gbag wer4 4eg ',
-                d: new Date(),
-                e: ERemeberMe,
-                f: function() {
-                    let a = 1;
-                    let b = 2;
-                    return a + b;
-                },
-                g: null,
-            },
-        ];
-        testingItem = RegexServices.trim(testingItem);
-        console.log(testingItem);
     }
 
     showForgotPassword() {
@@ -66,7 +45,7 @@ export default class Login extends Vue {
     }
 
     showProject() {
-        console.log(`Project: ${PackeageJSON.project}`);
+        console.log(`Project: ${PackeageJSON.project[PackeageJSON.flow]}`);
     }
 
     initLoginInfo() {
