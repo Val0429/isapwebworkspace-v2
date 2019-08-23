@@ -1,7 +1,6 @@
 <template>
     <div>
         <iv-card :label="_('w_DashboardOverview_CurrentStatus')">
-
             <template #toolbox>
                 <iv-toolbox-more>
                     <iv-toolbox-dashboard-traffic

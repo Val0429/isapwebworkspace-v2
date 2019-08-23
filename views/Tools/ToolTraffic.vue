@@ -1,6 +1,8 @@
 <template>
     <div class="animated fadeIn">
 
+        <tool-traffic-filter></tool-traffic-filter>
+
         <iv-card
             :visible="visible"
             :label="_('w_Tool_FilterData')"

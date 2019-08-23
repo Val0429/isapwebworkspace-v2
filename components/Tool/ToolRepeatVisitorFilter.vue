@@ -67,27 +67,6 @@ export class ToolRepeatVisitorFilter extends Vue {
     mounted() {
     }
 
-    updateInputFormData(data) {
-        switch (data.key) {
-            case 'startDate':
-                if (!Datetime.CheckDate(data.value, new Date(this.inputFormData.endDate))) {
-                    Dialog.error(this._("w_ReportDateError"));
-                    this.inputFormData.startDate = new Date();
-                    this.inputFormData.endDate = new Date();
-                    return false;
-                }
-                break;
-            case 'endDate':
-                if (!Datetime.CheckDate(new Date(this.inputFormData.endDate), data.value)) {
-                    Dialog.error(this._("w_ReportDateError"));
-                    this.inputFormData.startDate = new Date();
-                    this.inputFormData.endDate = new Date();
-                    return false;
-                }
-                break;
-        }
-    }
-
     async initSelectItemSite() {
 
         this.siteSelectItem = {};
@@ -112,6 +91,27 @@ export class ToolRepeatVisitorFilter extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
+    }
+
+    updateInputFormData(data) {
+        switch (data.key) {
+            case 'startDate':
+                if (!Datetime.CheckDate(data.value, new Date(this.inputFormData.endDate))) {
+                    Dialog.error(this._("w_ReportDateError"));
+                    this.inputFormData.startDate = new Date();
+                    this.inputFormData.endDate = new Date();
+                    return false;
+                }
+                break;
+            case 'endDate':
+                if (!Datetime.CheckDate(new Date(this.inputFormData.endDate), data.value)) {
+                    Dialog.error(this._("w_ReportDateError"));
+                    this.inputFormData.startDate = new Date();
+                    this.inputFormData.endDate = new Date();
+                    return false;
+                }
+                break;
+        }
     }
 
     async doSubmit(data) {

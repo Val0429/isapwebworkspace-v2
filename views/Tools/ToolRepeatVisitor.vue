@@ -27,7 +27,7 @@
         <!-- 點擊彈出 detail -->
         <b-modal
             hide-footer
-            size="lg"
+            size="xl"
             :title="_('w_Tool_RepeatVisitorDetail')"
             v-model="modalShow"
         >
@@ -130,6 +130,12 @@ export default class ToolRepeatVisitor extends Vue {
                  * @uiType - iv-cell-auto-index
                  */
                 no: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Snapshot")}
+                 */
+                snapshot: string;
 
 
                 /**
