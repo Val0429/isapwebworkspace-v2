@@ -126,13 +126,7 @@ class ReportService {
         if (prevValue == 0) {
             return 0;
         }
-        if (value > prevValue) {
-            return prevValue / value;
-        } else if (value < prevValue) {
-            return -(value / prevValue);
-        } else {
-            return 1;
-        }
+        return value / prevValue - 1;
     }
 
     FormatNumber(str: string): string {
