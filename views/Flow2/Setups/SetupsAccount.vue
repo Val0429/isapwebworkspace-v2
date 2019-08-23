@@ -187,6 +187,8 @@ export default class SetupsAccount extends Vue {
         floor: {}
     };
 
+    companies = [];
+
     created() {}
 
     mounted() {}
@@ -284,22 +286,12 @@ export default class SetupsAccount extends Vue {
                 await this.initSelectItemCompany();
                 haveRequest.company = true;
             }
-
-            if (!haveRequest.floor) {
-                await this.initSelectItemFloor();
-                haveRequest.floor = true;
-            }
         }
 
         if (RoleService.haveTenantAdministrator(this)) {
             if (!haveRequest.role) {
                 await this.initSelectItemRole();
                 haveRequest.role = true;
-            }
-
-            if (!haveRequest.floor) {
-                await this.initSelectItemFloor();
-                haveRequest.floor = true;
             }
         }
     }
@@ -385,6 +377,9 @@ export default class SetupsAccount extends Vue {
                         response.results != undefined &&
                         response.results.length > 0
                     ) {
+                        this.companies = JSON.parse(
+                            JSON.stringify(response.results)
+                        );
                         for (let ret of response.results) {
                             if (
                                 ret.objectId != undefined &&
@@ -392,36 +387,6 @@ export default class SetupsAccount extends Vue {
                             ) {
                                 this.$set(
                                     this.selectItem.company,
-                                    ret.objectId,
-                                    ret.name
-                                );
-                            }
-                        }
-                    }
-                });
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
-    }
-
-    async initSelectItemFloor() {
-        let param: any = { paging: { all: true } };
-        await this.$server
-            .R("/flow2/floors", param)
-            .then((response: any) => {
-                ResponseFilter.successCheck(this, response, (response: any) => {
-                    if (
-                        response.results != undefined &&
-                        response.results.length > 0
-                    ) {
-                        for (let ret of response.results) {
-                            if (
-                                ret.objectId != undefined &&
-                                ret.name != undefined
-                            ) {
-                                this.$set(
-                                    this.selectItem.floor,
                                     ret.objectId,
                                     ret.name
                                 );
@@ -625,6 +590,21 @@ export default class SetupsAccount extends Vue {
             if (datas.value == EUserRole.Visitor) {
                 this.inputFormData.useCompany = false;
                 this.inputFormData.useFloor = false;
+            }
+        }
+        if (datas.key == "companies") {
+            this.selectItem.floor = {};
+            for (let company of this.companies) {
+                if (datas.value == company.objectId) {
+                    for (let floor of company.floor) {
+                        this.$set(
+                            this.selectItem.floor,
+                            floor.objectId,
+                            floor.name
+                        );
+                    }
+                    break;
+                }
             }
         }
         this.inputFormData[datas.key] = datas.value;

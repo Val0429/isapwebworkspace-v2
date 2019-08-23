@@ -57,7 +57,6 @@
                         <iv-permission :allow="['Administrator']">
 
                             <iv-permission url="/flow2">
-
                                 <SidebarNavItem
                                     :label="_('w_Navigation_Setups_Buildings')"
                                     url="/setups/buildings"
