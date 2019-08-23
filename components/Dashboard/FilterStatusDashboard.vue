@@ -504,7 +504,7 @@ export class FilterStatusDashboard extends Vue {
             },
             series: [
                 {
-                    name: "name",
+                    name: "traffic",
                     data: [40, 30, 50, 20, 60]
                 }
             ]
