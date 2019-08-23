@@ -95,6 +95,7 @@ export class SiteDeviceGroupList extends Vue {
     }
 
     async deleteGroupDevice() {
+        console.log("deleteGroupDevice", this.deviceGroup);
         Dialog.confirm(this._("w_DeleteConfirm"), this._("w_Confirm"), () => {
             const body: {
                 objectId: string;
@@ -110,8 +111,9 @@ export class SiteDeviceGroupList extends Vue {
                         this,
                         response,
                         (response: any) => {
-                            for (const returnValue of response) {
+                            for (const returnValue of response.datas) {
                                 if (returnValue.statusCode === 200) {
+                                    Dialog.success(this._("w_Success"));
                                     (this.$refs
                                         .deviceGroupTable as any).reload();
                                 }
@@ -157,7 +159,7 @@ export class SiteDeviceGroupList extends Vue {
     selectedDeviceGroup(data) {
         this.isSelectDeviceGroup = false;
         if (data && data.objectId) {
-            this.isSelectDeviceGroup = data;
+            this.deviceGroup = this.isSelectDeviceGroup = data;
         }
         this.$emit("selectedDeviceGroup", data);
     }
