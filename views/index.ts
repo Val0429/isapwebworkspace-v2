@@ -159,9 +159,9 @@ $({ path: '/reports/report_template', name: "_('w_Navigation_Report_ReportTempla
 
 //  Tool
 $({ path: '/tools', name: "_('w_Navigation_Tools')", icon: 'fa-code', redirect: '/tools/toolTraffic' })();
-$({ path: '/tools/toolTraffic', name: "_('w_Navigation_Tools_Traffic')", icon: 'fa-code' })(ToolTraffic);
-$({ path: '/tools/toolRepeatVisitor', name: "_('w_Navigation_Tools_Demographic')", icon: 'fa-code' })(ToolRepeatVisitor);
-$({ path: '/tools/toolDemographic', name: "_('w_Navigation_Tools_RepeatVisitor')", icon: 'fa-code' })(ToolDemographic);
+$({ path: '/tools/tool_traffic', name: "_('w_Navigation_Tools_Traffic')", icon: 'fa-code' })(ToolTraffic);
+$({ path: '/tools/tool_demographic', name: "_('w_Navigation_Tools_Demographic')", icon: 'fa-code' })(ToolDemographic);
+$({ path: '/tools/tool_repeatVisitor', name: "_('w_Navigation_Tools_RepeatVisitor')", icon: 'fa-code' })(ToolRepeatVisitor);
 
 // Users
 $({ path: '/users', name: "_('w_Navigation_Users')", redirect: '/users/user' })();

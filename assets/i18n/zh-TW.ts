@@ -1175,4 +1175,9 @@ export default class LangObject implements ILang {
 
     w_FRSManager_UserGroup_success = 'Connect UserGroup Success';
     w_FRSManager_UserGroup_failed = 'Connect UserGroup Failed';
+
+    // tool
+    w_Tool_FilterData = 'Filter Data';
+    w_Tool_RepeatVisitorDetail = 'Repeat Visitor Detail Data';
+    w_Tool_VisitTime = 'Visit time';
 }

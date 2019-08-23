@@ -1,32 +1,10 @@
 <template>
     <div class="animated fadeIn">
-        <iv-card
-            :visible="!visible"
-            label="search card"
-        >
 
-            <template #footer>
-                <b-button
-                    class="submit"
-                    size="lg"
-                    @click="visible = !visible"
-                >
-                    {{ _('wb_Submit') }}
-                </b-button>
-
-                <b-button
-                    class="reset"
-                    size="lg"
-                >
-                    {{ _('wb_Reset') }}
-                </b-button>
-            </template>
-
-        </iv-card>
 
         <iv-card
             :visible="visible"
-            label="table card"
+            :label="_('w_Tool_FilterData')"
         >
         </iv-card>
 

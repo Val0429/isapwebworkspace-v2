@@ -6,31 +6,30 @@
         >
             <iv-form
                 :interface="IFilterConditionForm()"
-                @update:*="tempSaveInputData($event)"
+                :value="inputFormData"
+                @update:*="updateInputFormData($event)"
                 @submit="doSubmit($event)"
             >
 
-
-
             </iv-form>
 
-            <template #footer>
-                <b-button
-                    class="submit"
-                    size="lg"
-                    @click="doSubmit"
-                >
-                    {{ _('wb_Submit') }}
-                </b-button>
+<!--            <template #footer>-->
+<!--                <b-button-->
+<!--                    class="submit"-->
+<!--                    size="lg"-->
+<!--                    @click="doSubmit"-->
+<!--                >-->
+<!--                    {{ _('wb_Submit') }}-->
+<!--                </b-button>-->
 
-                <b-button
-                    class="reset"
-                    size="lg"
-                    @click="doReset"
-                >
-                    {{ _('wb_Reset') }}
-                </b-button>
-            </template>
+<!--                <b-button-->
+<!--                    class="reset"-->
+<!--                    size="lg"-->
+<!--                    @click="doReset"-->
+<!--                >-->
+<!--                    {{ _('wb_Reset') }}-->
+<!--                </b-button>-->
+<!--            </template>-->
 
         </iv-auto-card>
     </div>
@@ -38,8 +37,12 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
-import ResponseFilter from '@/services/ResponseFilter';
 import { toEnumInterface } from "../../../core";
+import Loading from '@/services/Loading';
+import ResponseFilter from '@/services/ResponseFilter';
+import Dialog from '@/services/Dialog';
+import { IRepeatVisitorFilter } from './ITool';
+import Datetime from '@/services/Datetime';
 
 @Component({
     components: {}
@@ -51,11 +54,38 @@ export class ToolRepeatVisitorFilter extends Vue {
     // 收合card控制
     visible: boolean = true;
 
+    inputFormData: IRepeatVisitorFilter = {
+        siteIds: [],
+        startDate: new Date(),
+        endDate: new Date(),
+    };
+
     created() {
         this.initSelectItemSite();
     }
 
     mounted() {
+    }
+
+    updateInputFormData(data) {
+        switch (data.key) {
+            case 'startDate':
+                if (!Datetime.CheckDate(data.value, new Date(this.inputFormData.endDate))) {
+                    Dialog.error(this._("w_ReportDateError"));
+                    this.inputFormData.startDate = new Date();
+                    this.inputFormData.endDate = new Date();
+                    return false;
+                }
+                break;
+            case 'endDate':
+                if (!Datetime.CheckDate(new Date(this.inputFormData.endDate), data.value)) {
+                    Dialog.error(this._("w_ReportDateError"));
+                    this.inputFormData.startDate = new Date();
+                    this.inputFormData.endDate = new Date();
+                    return false;
+                }
+                break;
+        }
     }
 
     async initSelectItemSite() {
@@ -84,70 +114,80 @@ export class ToolRepeatVisitorFilter extends Vue {
             });
     }
 
-    // IFilterConditionForm() {
-    //     return `
-    //         interface {
-    //
-    //
-    //             /**
-    //              * @uiLabel - ${this._("w_Sites")}
-    //              * @uiHidden - ${this.isAdmin}
-    //              */
-    //             siteIds?: ${toEnumInterface(this.sitesSelectItem as any, true)};
-    //
-    //
-    //             /**
-    //             * @uiLabel - ${this._("w_BOCampaign_StartDate")}
-    //             * @uiPlaceHolder - ${this._("w_BOCampaign_StartDate")}
-    //             * @uiType - iv-form-date
-    //             * @uiColumnGroup - date
-    //             * @uiHidden - ${
-    //         this.selectPeriodAddWay === EAddPeriodSelect.designation
-    //             ? "true"
-    //             : "false"
-    //     }
-    //              */
-    //             startDate?: any;
-    //
-    //
-    //             /**
-    //             * @uiLabel - ${this._("w_BOCampaign_FinishDate")}
-    //             * @uiPlaceHolder - ${this._("w_BOCampaign_FinishDate")}
-    //             * @uiType - iv-form-date
-    //             * @uiColumnGroup - date
-    //             * @uiHidden - ${
-    //         this.selectPeriodAddWay === EAddPeriodSelect.designation
-    //             ? "true"
-    //             : "false"
-    //     }
-    //              */
-    //             endDate?: any;
-    //
-    //
-    //             /**
-    //              * @uiLabel - ${this._("w_ReportTemplate_Fixed_Interval")}
-    //              * @uiColumnGroup - period
-    //              * @uiHidden - ${
-    //         this.selectPeriodAddWay === EAddPeriodSelect.period
-    //             ? "true"
-    //             : "false"
-    //     }
-    //              */
-    //             designationPeriod?: ${toEnumInterface(
-    //         this.designationPeriodSelectItem as any,
-    //         false
-    //     )};
-    //
-    //
-    //             /**
-    //              * @uiLabel - ${this._("w_Tag")}
-    //              * @uiColumnGroup - tag
-    //              */
-    //             tagIds?: ${toEnumInterface(this.tagSelectItem as any, true)};
-    //
-    //         }
-    //     `;
-    // }
+    async doSubmit(data) {
+
+        const submitParam: IRepeatVisitorFilter = {
+            siteIds: data.siteIds,
+            startDate: data.startDate,
+            endDate: data.endDate,
+        };
+
+        if (!Datetime.CheckDate(data.startDate, data.endDate)) {
+            Dialog.error(this._("w_ReportDateError"));
+            this.inputFormData.startDate = new Date();
+            this.inputFormData.endDate = new Date();
+            return false;
+        } else {
+            submitParam.startDate = Datetime.DateToZero(data.startDate).toISOString();
+            submitParam.endDate = Datetime.DateToZero(data.endDate).toISOString();
+        }
+
+        // Todo: wait api
+        // Loading.show();
+        // await this.$server
+        //     .C("/", submitParam)
+        //     .then((response: any) => {
+        //         ResponseFilter.successCheck(
+        //             this,
+        //             response,
+        //             (response: any) => {},
+        //         );
+        //     })
+        //     .catch((e: any) => {
+        //         return ResponseFilter.catchError(
+        //             this,
+        //             e,
+        //             this._("w_Dialog_ErrorTitle")
+        //         );
+        //     });
+
+        this.visible = false;
+        this.$emit('filter')
+    }
+
+    IFilterConditionForm() {
+        return `
+            interface {
+
+
+                /**
+                 * @uiLabel - ${this._("w_Sites")}
+                * @uiColumnGroup - row1
+                 */
+                siteIds: ${toEnumInterface(this.siteSelectItem as any, true)};
+
+
+                /**
+                * @uiLabel - ${this._("w_Startdate")}
+                * @uiPlaceHolder - ${this._("w_Startdate")}
+                * @uiType - iv-form-date
+                * @uiColumnGroup - row1
+
+                 */
+                startDate: any;
+
+
+                /**
+                * @uiLabel - ${this._("w_Enddate")}
+                * @uiPlaceHolder - ${this._("w_Enddate")}
+                * @uiType - iv-form-date
+                * @uiColumnGroup - row1
+                */
+                endDate: any;
+
+            }
+        `;
+    }
 
 }
 

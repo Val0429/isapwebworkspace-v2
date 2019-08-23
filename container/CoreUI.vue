@@ -101,15 +101,15 @@
                     >
                         <SidebarNavItem
                             :label="_('w_Navigation_Tools_Traffic')"
-                            url="/tools/toolTraffic"
+                            url="/tools/tool_traffic"
                         />
                         <SidebarNavItem
                             :label="_('w_Navigation_Tools_Demographic')"
-                            url="/tools/toolRepeatVisitor"
+                            url="/tools/tool_demographic"
                         />
                         <SidebarNavItem
                             :label="_('w_Navigation_Tools_RepeatVisitor')"
-                            url="/tools/toolDemographic"
+                            url="/tools/tool_repeatVisitor"
                         />
                     </SidebarNavItem>
 
