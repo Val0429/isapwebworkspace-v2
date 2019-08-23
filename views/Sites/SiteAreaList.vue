@@ -119,7 +119,7 @@ export class SiteAreaList extends Vue {
     selectedArea(data) {
         this.isSelectArea = false;
         if (data && data.objectId) {
-            this.isSelectArea = data;
+            this.area = this.isSelectArea = data;
         }
         this.$emit("selectedArea", data);
     }

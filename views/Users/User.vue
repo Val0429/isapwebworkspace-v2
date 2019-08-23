@@ -803,7 +803,6 @@ export default class User extends Vue {
 
     cardSearch(search: string) {
         // TODO: finished search
-        // console.log('search - ', search)
         this.searchKeywords(search);
     }
 

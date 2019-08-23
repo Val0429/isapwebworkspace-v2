@@ -437,8 +437,6 @@ export default class Demographic extends Vue {
     }
 
     async initSelectItemFRSServer() {
-        console.log('initSelectItemFRSServer ~ ', )
-
         this.serverIdSelectItem = {};
 
         if (this.addStep === EAddStep.frs) {

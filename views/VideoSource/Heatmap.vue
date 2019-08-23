@@ -1321,7 +1321,6 @@ export default class HumanDetection extends Vue {
     }
 
     saveROI(data) {
-        console.log("saveROI", data, this.canvasDetail);
         this.canvasDetail = data;
     }
 

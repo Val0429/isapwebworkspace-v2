@@ -7,7 +7,7 @@
                     <div class="box current-info-box">
                         <div class="backgroundColor">
                             <div class="clearfix">
-                                <span class="title">{{_("w_ReportDashboard_Traffic")}} {{_("w_DashboardOverview_Now")}}</span>
+                                <span class="title">{{_("w_ReportDashboard_Traffic")}} </span>
                             </div>
                             <div class="clearfix">
                                 <span class="date">{{anlysisData.traffic.total != null ? toPercent(anlysisData.traffic.total) : "N/A"}}</span>
@@ -21,7 +21,7 @@
                     <div class="box current-info-box">
                         <div class="backgroundColor">
                             <div class="clearfix">
-                                <span class="title">{{_("w_ReportDashboard_AverageOccupancy")}} {{_("w_DashboardOverview_Now")}}</span>
+                                <span class="title">{{_("w_ReportDashboard_AverageOccupancy")}} </span>
                             </div>
                             <div class="clearfix">
                                 <span class="date">{{anlysisData.averageOccupancy.total != null ? numberWithCommas(anlysisData.averageOccupancy.total) : "N/A"}}</span>
@@ -35,7 +35,7 @@
                     <div class="box current-info-box">
                         <div class="backgroundColor">
                             <div class="clearfix">
-                                <span class="title">{{_("w_ReportDashboard_AverageDwellTime")}} {{_("w_DashboardOverview_Now")}}</span>
+                                <span class="title">{{_("w_ReportDashboard_AverageDwellTime")}}</span>
                             </div>
                             <div class="clearfix">
                                 <span class="date">{{anlysisData.averageDwellTime.total != null ? numberWithCommas(anlysisData.averageDwellTime.total) : "N/A"}}</span>
@@ -49,7 +49,7 @@
                     <div class="box current-info-box">
                         <div class="backgroundColor">
                             <div class="clearfix">
-                                <span class="title">{{_("w_ReportDashboard_Demographic")}} {{_("w_DashboardOverview_Now")}}</span>
+                                <span class="title">{{_("w_ReportDashboard_Demographic")}}</span>
                             </div>
                             <div class="clearfix">
                                 <highcharts
@@ -66,7 +66,7 @@
                     <div class="box current-info-box">
                         <div class="backgroundColor">
                             <div class="clearfix">
-                                <span class="title">{{_("w_ReportDashboard_VIPBlacklist")}} {{_("w_DashboardOverview_Now")}}</span>
+                                <span class="title">{{_("w_ReportDashboard_VIPBlacklist")}}</span>
                             </div>
                             <div class="row clearfix">
                                 <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-6 vip-blackList-div">
@@ -96,7 +96,7 @@
                     <div class="box current-info-box">
                         <div class="backgroundColor">
                             <div class="clearfix">
-                                <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}} {{_("w_DashboardOverview_Now")}}</span>
+                                <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}} </span>
                             </div>
                             <div class="clearfix">
                                 <apexchart
@@ -172,6 +172,11 @@ export class FilterStatusDashboard extends Vue {
         demographic: {},
         repeatCustomer: {},
         filterTable: {}
+    };
+
+    time: any = {
+        startDate: new Date(),
+        endDate: new Date()
     };
 
     created() {}
@@ -511,6 +516,32 @@ export class FilterStatusDashboard extends Vue {
         };
     }
 
+    async receiveTime(time: object) {
+        this.time = time;
+        let timeParam = JSON.parse(JSON.stringify(this.time));
+
+        // TODO: wait api
+        // Loading.show();
+        // await this.$server
+        //     .C("/", timeParam)
+        //     .then((response: any) => {
+        //         ResponseFilter.successCheck(
+        //             this,
+        //             response,
+        //             (response: any) => {
+        //             },
+        //             this._("w_Dialog_ErrorTitle")
+        //         );
+        //     })
+        //     .catch((e: any) => {
+        //         return ResponseFilter.catchError(
+        //             this,
+        //             e,
+        //             this._("w_Dialog_ErrorTitle")
+        //         );
+        //     });
+    }
+
     numberWithCommas(number) {
         return Math.abs(number)
             .toFixed(0)
@@ -589,7 +620,7 @@ Vue.component("filter-status-dashboard", FilterStatusDashboard);
     }
 
     .demographic-div {
-        margin-top: -20px;
+        margin-top: 0px;
         height: 200px;
     }
 

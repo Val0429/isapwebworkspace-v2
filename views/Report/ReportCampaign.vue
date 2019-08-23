@@ -222,8 +222,6 @@ export default class ReportCampaign extends Vue {
         this.responseDataSingleCampaignArray = [];
         this.filterData = filterData;
 
-        console.log("this.filterData - ", this.filterData);
-
         if (this.filterData.campaignIds.length > 1) {
             param = {
                 campaignIds: this.filterData.campaignIds
@@ -310,7 +308,6 @@ export default class ReportCampaign extends Vue {
         }
         this.chartMode.multiple = true;
         this.chartMode.single = false;
-        console.log("chartDatas.multiple - ", this.chartDatas.multiple);
     }
 
     sortOutChartDataSingleCampaign(datas: any) {
@@ -376,7 +373,6 @@ export default class ReportCampaign extends Vue {
         }
         this.chartMode.single = true;
         this.chartMode.multiple = false;
-        console.log("chartDatas.single - ", this.chartDatas.single);
     }
 
     analysisTitle(): string {
