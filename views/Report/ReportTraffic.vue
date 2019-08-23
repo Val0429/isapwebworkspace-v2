@@ -1633,7 +1633,6 @@ export default class ReportTraffic extends Vue {
         }
 
         this.chartDatas = tempChartDatas;
-        console.log('this.chartDatas ~ ', this.chartDatas)
     }
 
     // Author: Tina
@@ -1917,7 +1916,6 @@ export default class ReportTraffic extends Vue {
             }
         }
 
-        console.log("this.deviceSummaryFilter ~ ", this.deviceSummaryFilter);
     }
 
     // Author: Tina

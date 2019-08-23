@@ -609,8 +609,6 @@ export default class ReportHeatmap extends Vue {
             isIncludedEmployee: "no"
         };
 
-        console.log("this.filterData - ", this.filterData);
-
         await this.$server
             .C("/report/heatmap/summary", param)
             .then((response: any) => {
@@ -729,8 +727,6 @@ export default class ReportHeatmap extends Vue {
         let gridUnit = 10;
         let valueZoom = 10;
 
-        // for (const summary of datas) {
-        console.log(datas[0]);
         if (
             datas[0] != undefined &&
             datas[0].scores != undefined &&
@@ -751,7 +747,6 @@ export default class ReportHeatmap extends Vue {
 
         this.heatMapPosition = heatmap;
         this.mapImage.src = ServerConfig.url + datas[0].imageSrc;
-        console.log("this.heatMapPosition ~ ", this.heatMapPosition);
     }
 
     sortOutChartDataOneDay(datas: any) {
@@ -781,8 +776,6 @@ export default class ReportHeatmap extends Vue {
         }
 
         this.heatMapPosition = heatmap;
-        console.log("this.heatMapPosition ~ ", this.heatMapPosition);
-        console.log("this.mapImage.src ~ ", this.mapImage.src);
     }
 
     sortOutChartDataManyDay(datas: any) {
@@ -817,8 +810,6 @@ export default class ReportHeatmap extends Vue {
         }
 
         this.heatMapPosition = heatmap;
-        console.log("this.heatMapPosition ~ ", this.heatMapPosition);
-        console.log("this.mapImage.src ~ ", this.mapImage.src);
     }
 
     sortDeviceSummaryFilterData() {
@@ -929,11 +920,6 @@ export default class ReportHeatmap extends Vue {
                 }
             }
         }
-
-        console.log("@@@@@@");
-        // console.log('this.areaSummaryFilter ~ ', this.areaSummaryFilter)
-        // console.log('this.deviceGroupSummaryFilter ~ ', this.deviceGroupSummaryFilter)
-        console.log("this.deviceSummaryFilter ~ ", this.deviceSummaryFilter);
     }
 
     async receiveAreaId(areaId) {
@@ -1067,10 +1053,6 @@ export default class ReportHeatmap extends Vue {
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
                     if (detailKey === "device") {
-                        // console.log('receiveDeviceId  deviceId~ ', this.inputFormData.deviceId)
-                        // console.log('tempSingleData.objectId~ ', tempSingleData.objectId)
-                        // console.log('??? ~ ',  this.inputFormData.deviceId === tempSingleData.objectId)
-
                         if (
                             this.inputFormData.deviceId ===
                             tempSingleData.objectId
@@ -1081,25 +1063,16 @@ export default class ReportHeatmap extends Vue {
                 }
             }
 
-            console.log("^^^^^^^^^^ ~ ");
-
             if (
                 this.checkDateTheSameDay(
                     this.filterData.startDate,
                     this.filterData.endDate
                 )
             ) {
-                console.log("Hour ~ ");
                 this.receiveHour(this.slider.value);
             } else {
-                console.log("Day ~ ");
                 this.receiveDayArrayIndex(this.dayArrayDataIndex);
             }
-
-            console.log(
-                "receiveDeviceId deviceSummaryFilter ~ ",
-                this.deviceSummaryFilter
-            );
 
             // 清除device篩選
             if (
@@ -1244,7 +1217,6 @@ export default class ReportHeatmap extends Vue {
 
     // 一天的其中一小時
     async receiveHour(hour) {
-        console.log(" ~ ", hour);
         let tempHour = new Date();
         tempHour.setHours(parseInt(hour), 0, 0, 0);
         this.hour = new Date(tempHour).toISOString();
@@ -1256,8 +1228,6 @@ export default class ReportHeatmap extends Vue {
 
     // 多天的其中一天
     async receiveDayArrayIndex(timeArrayIndex) {
-        console.log(" ~ ", timeArrayIndex);
-
         this.dayArrayDataIndex = timeArrayIndex;
 
         for (const index in this.dayArray) {
@@ -1271,8 +1241,6 @@ export default class ReportHeatmap extends Vue {
         // const param = this.filterData;
         // this.filterData.startDate = this.dayArrayData;
         // this.filterData.endDate = this.dayArrayData;
-
-        // console.log(this.filterData);
 
         // await this.$server
         //     .C("/report/heatmap/summary", param)
@@ -1297,11 +1265,6 @@ export default class ReportHeatmap extends Vue {
         //         return ResponseFilter.catchError(this, e);
         //     });
 
-        console.log("this.dayArrayData ~ ", this.dayArrayData);
-        console.log(
-            "this.responseData.deviceSummaryFilter ~ ",
-            this.deviceSummaryFilter
-        );
         this.sortOutChartDataManyDay(this.deviceSummaryFilter);
     }
 

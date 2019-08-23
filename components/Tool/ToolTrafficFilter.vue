@@ -153,7 +153,6 @@
                     }
                     break;
                 case 'deviceGroupId':
-                    console.log(' ~ ', this.inputFormData.siteId, this.inputFormData.areaId , this.inputFormData.deviceGroupId)
                     if (this.inputFormData.siteId && this.inputFormData.areaId && this.inputFormData.deviceGroupId) {
                         this.initSelectItemDevice(this.inputFormData.siteId, this.inputFormData.areaId, this.inputFormData.deviceGroupId);
                     } else {

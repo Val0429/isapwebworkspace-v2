@@ -1198,8 +1198,6 @@ export default class ReportDwellTime extends Vue {
         let param = JSON.parse(JSON.stringify(filterData));
         this.filterData = filterData;
 
-        console.log("this.filterData ~ ", this.filterData);
-
         this.designationPeriod = designationPeriod;
         this.inputFormData = {
             areaId: "",
