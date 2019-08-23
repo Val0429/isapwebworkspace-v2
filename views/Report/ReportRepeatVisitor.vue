@@ -638,7 +638,7 @@ export default class ReportRepeatVisitor extends Vue {
     }
 
     initDashboardData() {
-        this.dPageType = EPageType.repeatCustomer;
+        this.dPageType = EPageType.repeatVisitor;
         setTimeout(() => {
             let analysisDashboard: any = this.$refs.analysisDashboard;
             analysisDashboard.initData();

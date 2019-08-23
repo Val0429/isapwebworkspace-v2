@@ -287,6 +287,20 @@ export default class ReportVIPTracking extends Vue {
                 }
             }
         }
+
+        //追加沒有的資料site傳入陣列 以便chart 單店多店判斷
+        for (const filterSiteId of this.filterData.siteIds) {
+            if (this.sites.some(x => x.objectId == filterSiteId)) {
+                continue;
+            }
+            let tempISite = {
+                objectId: filterSiteId,
+                name: this.sitesSelectItem.filter(x => x.id == filterSiteId)[0]
+                    .text,
+                officeHour: []
+            };
+            this.sites.push(tempISite);
+        }
     }
 
     analysisTitle(): string {

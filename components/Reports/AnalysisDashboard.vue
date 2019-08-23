@@ -155,7 +155,7 @@
                     class="box info-box-second"
                     style="border-left: 0px"
                 >
-                    <div :class="ePageType.repeatCustomer == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
+                    <div :class="ePageType.repeatVisitor == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}}</span>
                         </div>
