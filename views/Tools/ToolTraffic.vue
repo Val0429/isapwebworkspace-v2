@@ -11,7 +11,7 @@
             <iv-table
                 ref="listTable"
                 :interface="ITableList()"
-                :server="{ path: '/user/group' }"
+                :server="{ path: '/report/people-counting' }"
             >
             </iv-table>
 
@@ -29,6 +29,8 @@ import { ITransition } from "@/services/Transition";
 
 // Service
 import Dialog from "@/services/Dialog";
+import Loading from '@/services/Loading';
+import ResponseFilter from '@/services/ResponseFilter';
 
 @Component({
     components: {}
@@ -41,8 +43,27 @@ export default class ToolTraffic extends Vue {
 
     mounted() {}
 
-    receiveFilterData() {
+    async receiveFilterData(filterData) {
         this.visible = true;
+
+        Loading.show();
+        await this.$server
+            .C("/report/people-counting", filterData)
+            .then((response: any) => {
+                ResponseFilter.successCheck(
+                    this,
+                    response,
+                    (response: any) => {},
+                );
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_Dialog_ErrorTitle")
+                );
+            });
+
     }
 
     // Todo: wait api

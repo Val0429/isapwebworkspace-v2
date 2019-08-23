@@ -94,25 +94,6 @@
                         />
                     </SidebarNavItem>
 
-                    <!-- Tools -->
-                    <SidebarNavItem
-                        :label="_('w_Navigation_Tools')"
-                        url="/tools"
-                    >
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Tools_Traffic')"
-                            url="/tools/tool_traffic"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Tools_Demographic')"
-                            url="/tools/tool_demographic"
-                        />
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Tools_RepeatVisitor')"
-                            url="/tools/tool_repeatVisitor"
-                        />
-                    </SidebarNavItem>
-
                 </iv-permission>
 
                 <iv-permission :allow="['SuperAdministrator', 'Admin']">
@@ -281,6 +262,28 @@
                         <SidebarNavItem
                             :label="_('w_Navigation_Setting_Tag')"
                             url="/setting/tag"
+                        />
+                    </SidebarNavItem>
+
+                </iv-permission>
+
+                <iv-permission :allow="['SuperAdministrator']">
+                    <!-- Tools -->
+                    <SidebarNavItem
+                        :label="_('w_Navigation_Tools')"
+                        url="/tools"
+                    >
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Tools_Traffic')"
+                            url="/tools/tool_traffic"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Tools_Demographic')"
+                            url="/tools/tool_demographic"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Tools_RepeatVisitor')"
+                            url="/tools/tool_repeatVisitor"
                         />
                     </SidebarNavItem>
 

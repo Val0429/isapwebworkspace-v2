@@ -66,6 +66,8 @@ import { Vue, Component } from "vue-property-decorator";
 
 // Service
 import Dialog from "@/services/Dialog";
+import Loading from '@/services/Loading';
+import ResponseFilter from '@/services/ResponseFilter';
 
 @Component({
     components: {}
@@ -83,8 +85,27 @@ export default class ToolRepeatVisitor extends Vue {
 
     mounted() {}
 
-    receiveFilterData() {
+    async receiveFilterData(filterData) {
         this.visible = true;
+
+        Loading.show();
+        await this.$server
+            .C("/report/repeat-visitor", filterData)
+            .then((response: any) => {
+                ResponseFilter.successCheck(
+                    this,
+                    response,
+                    (response: any) => {},
+                );
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_Dialog_ErrorTitle")
+                );
+            });
+
     }
 
     pageToView() {

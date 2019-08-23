@@ -307,42 +307,23 @@
             };
 
             if (data.isEmployee === 'true') {
-                submitParam.isEmployee = false;
-            } else if(data.isEmployee === 'false') {
                 submitParam.isEmployee = true;
+            } else if(data.isEmployee === 'false') {
+                submitParam.isEmployee = false;
             } else {
                 submitParam.isEmployee = undefined;
             }
 
             if (data.isIn === 'true') {
-                submitParam.isIn = false;
-            } else if(data.isIn === 'false') {
                 submitParam.isIn = true;
+            } else if(data.isIn === 'false') {
+                submitParam.isIn = false;
             } else {
                 submitParam.isIn = undefined;
             }
 
-            // Todo: wait api
-            // Loading.show();
-            // await this.$server
-            //     .C("/", submitParam)
-            //     .then((response: any) => {
-            //         ResponseFilter.successCheck(
-            //             this,
-            //             response,
-            //             (response: any) => {},
-            //         );
-            //     })
-            //     .catch((e: any) => {
-            //         return ResponseFilter.catchError(
-            //             this,
-            //             e,
-            //             this._("w_Dialog_ErrorTitle")
-            //         );
-            //     });
-
             this.visible = false;
-            this.$emit('filter')
+            this.$emit('filter', submitParam)
         }
 
         IFilterConditionForm() {
