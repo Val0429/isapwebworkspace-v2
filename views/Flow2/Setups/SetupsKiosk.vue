@@ -142,6 +142,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ServerConfig from "@/services/ServerConfig";
+import RegexServices from "@/services/RegexServices";
 
 enum EStatus {
     Offline = "Offline",
@@ -392,12 +393,10 @@ export default class SetupsKiosk extends Vue {
     }
 
     updateInputFormData(data) {
-        console.log(data.key, data.value);
         this.inputFormData[data.key] = data.value;
     }
 
     async saveAddOrEdit(data) {
-        
         let param: any = {
             username: data.username,
             data: {
@@ -414,6 +413,7 @@ export default class SetupsKiosk extends Vue {
             param.password = data.password;
 
             Loading.show();
+            param = RegexServices.trim(param);
             await this.$server
                 .C("/kiosks", param)
                 .then((response: any) => {
@@ -441,6 +441,7 @@ export default class SetupsKiosk extends Vue {
             }
 
             Loading.show();
+            param = RegexServices.trim(param);
             await this.$server
                 .U("/kiosks", param)
                 .then((response: any) => {
@@ -476,16 +477,17 @@ export default class SetupsKiosk extends Vue {
             this._("w_Kiosk_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                for (const param of this.selectedDetail) {
-                    let deleteParam: {
+                for (const deleteParam of this.selectedDetail) {
+                    let param: {
                         objectId: string;
                     } = {
-                        objectId: param.objectId
+                        objectId: deleteParam.objectId
                     };
 
                     Loading.show();
+                    param = RegexServices.trim(param);
                     this.$server
-                        .D("/kiosks", deleteParam)
+                        .D("/kiosks", param)
                         .then((response: any) => {
                             ResponseFilter.successCheck(
                                 this,

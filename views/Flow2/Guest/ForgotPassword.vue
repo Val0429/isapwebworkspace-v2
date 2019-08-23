@@ -74,6 +74,7 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
+import RegexServices from "@/services/RegexServices";
 
 interface IInputForgetPassword {
     email: string;
@@ -114,6 +115,7 @@ export default class ForgetPassword extends Vue {
         let param = { email: this.inputForgetPassword.email };
 
         Loading.show();
+        param = RegexServices.trim(param);
         await this.$server
             .C("/flow2/users/forget-password", param)
             .then((response: any) => {

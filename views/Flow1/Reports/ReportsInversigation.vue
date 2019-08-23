@@ -308,7 +308,6 @@ export default class ReportsInversigation extends Vue {
 
     updateFilterForm(datas: any) {
         this.inputFilterData[datas.key] = datas.value;
-        console.log(this.inputFilterData);
         this.filterTableData();
     }
 

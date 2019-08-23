@@ -79,6 +79,7 @@ import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
 import ResponseFilter from "@/services/ResponseFilter";
 import packageJson from "@/package.json";
+import RegexServices from "@/services/RegexServices";
 
 /// install Highcharts
 import Highcharts from "highcharts";
@@ -202,6 +203,8 @@ export default class ReportsDashboard extends Vue {
                 all: true
             }
         };
+
+        param = RegexServices.trim(param);
         await this.$server
             .R("/kiosks", param)
             .then((response: any) => {
@@ -236,11 +239,12 @@ export default class ReportsDashboard extends Vue {
 
     async initRecurring() {
         this.inputFormData.recurring = [];
-
         let param = {
             start: this.inputFormData.startDate.toISOString(),
             end: this.inputFormData.endDate.toISOString()
         };
+
+        param = RegexServices.trim(param);
         await this.$server
             .R("/flow2/reports/recurring", param)
             .then((response: any) => {
@@ -301,6 +305,8 @@ export default class ReportsDashboard extends Vue {
                 end: this.inputFormData.endDate.toISOString(),
                 kioskIds: this.kioskIdString()
             };
+
+            param = RegexServices.trim(param);
             await this.$server
                 .R("/flow2/reports/statistic", param)
                 .then((response: any) => {
@@ -337,6 +343,8 @@ export default class ReportsDashboard extends Vue {
                 end: this.inputFormData.endDate.toISOString(),
                 kioskIds: this.kioskIdString()
             };
+
+            param = RegexServices.trim(param);
             await this.$server
                 .R("/flow2/reports/exception", param)
                 .then((response: any) => {

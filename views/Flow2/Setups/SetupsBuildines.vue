@@ -125,6 +125,7 @@ import { Ws } from "@/services/WebSocket/Ws";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
+import RegexServices from "@/services/RegexServices";
 
 // Transition
 import Transition from "@/services/Transition";
@@ -218,6 +219,7 @@ export default class SetupsFloor extends Vue {
         // add
         if (!this.inputFormData.objectId) {
             Loading.show();
+            param = RegexServices.trim(param);
             await this.$server
                 .C("/flow2/buildings", param)
                 .then((response: any) => {
@@ -242,6 +244,7 @@ export default class SetupsFloor extends Vue {
             param.objectId = data.objectId;
 
             Loading.show();
+            param = RegexServices.trim(param);
             await this.$server
                 .U("/flow2/buildings", param)
                 .then((response: any) => {
@@ -277,16 +280,17 @@ export default class SetupsFloor extends Vue {
             this._("w_Buildings_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-                for (const param of this.selectedDetail) {
-                    let deleteParam: {
+                for (const deleteParam of this.selectedDetail) {
+                    let param: {
                         objectId: string;
                     } = {
-                        objectId: param.objectId
+                        objectId: deleteParam.objectId
                     };
 
                     Loading.show();
+                    param = RegexServices.trim(param);
                     this.$server
-                        .D("/flow2/buildings", deleteParam)
+                        .D("/flow2/buildings", param)
                         .then((response: any) => {
                             ResponseFilter.successCheck(
                                 this,

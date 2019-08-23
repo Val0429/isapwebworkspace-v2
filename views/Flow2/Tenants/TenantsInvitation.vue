@@ -292,6 +292,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 import RoleService from "../../../services/Role/RoleService";
 import Utility from "@/services/Utility";
 import Loading from "@/services/Loading";
+import RegexServices from "@/services/RegexServices";
 
 // Export
 import toExcel from "@/services/Excel/json2excel";
@@ -462,10 +463,8 @@ export default class TenantsInvitation extends Vue {
     }
 
     async initSelectItemPurpose() {
-        const readParam: {} = {};
-
         await this.$server
-            .R("/flow2/purposes", readParam)
+            .R("/flow2/purposes")
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
@@ -484,13 +483,14 @@ export default class TenantsInvitation extends Vue {
 
     async doDelete() {
         for (let item of this.selectedDetail) {
-            const deleteParam = {
+            let param = {
                 objectId: item.objectId,
                 cancelled: true
             };
 
+            param = RegexServices.trim(param);
             await this.$server
-                .U("/flow2/visitors/invites", deleteParam)
+                .U("/flow2/visitors/invites", param)
                 .then((response: any) => {
                     ResponseFilter.successCheck(
                         this,
@@ -691,11 +691,15 @@ export default class TenantsInvitation extends Vue {
                                 row[this.progressExcelTitleName.email] !=
                                 undefined
                             ) {
-                                progressFile.email = row[
-                                    this.progressExcelTitleName.email
-                                ]
-                                    .toString()
-                                    .trim();
+                                let tempEmail =
+                                    row[this.progressExcelTitleName.email];
+                                if (RegexServices.email(tempEmail)) {
+                                    progressFile.email = row[
+                                        this.progressExcelTitleName.email
+                                    ]
+                                        .toString()
+                                        .trim();
+                                }
                             }
 
                             if (
@@ -713,6 +717,7 @@ export default class TenantsInvitation extends Vue {
                                         progressFile.purposeId = purposes.id;
                                         progressFile.purposeName =
                                             purposes.text;
+                                        break;
                                     }
                                 }
                             }
@@ -740,19 +745,30 @@ export default class TenantsInvitation extends Vue {
                             }
 
                             progressFile.startDate = this.resolveProgressFileDate(
-                                progressFile.startDateText
+                                progressFile.startDateText,
+                                true
                             );
 
                             progressFile.endDate = this.resolveProgressFileDate(
-                                progressFile.endDateText
+                                progressFile.endDateText,
+                                false
                             );
 
                             if (progressFile.startDate == null) {
                                 this.progressFileError = true;
                             }
 
-                            if (progressFile.endDateText == null) {
+                            if (progressFile.endDate == null) {
                                 this.progressFileError = true;
+                            }
+
+                            if (
+                                !this.checkStartToEnd(
+                                    progressFile.startDate,
+                                    progressFile.endDate
+                                )
+                            ) {
+                                progressFile.endDate = null;
                             }
 
                             // check disable submit button
@@ -784,14 +800,27 @@ export default class TenantsInvitation extends Vue {
             });
     }
 
-    resolveProgressFileDate(value: string): null | Date {
+    resolveProgressFileDate(value: string, toStart: boolean): null | Date {
         let result = null;
-
-        // 判斷時間格式
         let tempDateArray = value.toString().split("/");
 
         try {
-            if (tempDateArray.length >= 3) {
+            if (
+                tempDateArray.length > 0 &&
+                tempDateArray.length < 3 &&
+                !isNaN(parseInt(tempDateArray[0]))
+            ) {
+                let tempDate: Date = new Date(
+                    (parseInt(tempDateArray[0]) - (25567 + 2)) * 86400 * 1000
+                );
+                if (!isNaN(tempDate.getTime())) {
+                    if (toStart) {
+                        result = Datetime.DateStart(tempDate);
+                    } else {
+                        result = Datetime.DateEnd(tempDate);
+                    }
+                }
+            } else if (tempDateArray.length >= 3) {
                 let resolveDateDetail = true;
                 let tempYear = Utility.PadLeft(tempDateArray[0], "0", 4);
                 let tempMonth = Utility.PadLeft(tempDateArray[1], "0", 2);
@@ -822,8 +851,31 @@ export default class TenantsInvitation extends Vue {
     }
 
     async saveModifyForm() {
+        let isEmail = RegexServices.email(this.inputFormData.email);
+        let isStartToEnd = this.checkStartToEnd(
+            this.inputFormData.startDate,
+            this.inputFormData.endDate
+        );
+
+        this.inputFormData.startDate = Datetime.DateStart(
+            this.inputFormData.startDate
+        );
+        this.inputFormData.endDate = Datetime.DateEnd(
+            this.inputFormData.endDate
+        );
+
+        if (!isEmail) {
+            Dialog.error(this._("w_TenantsInvitation_ErrorEmailFormat"));
+            return false;
+        }
+
+        if (!isStartToEnd) {
+            Dialog.error(this._("w_TenantsInvitation_ErrorStartToEnd"));
+            return false;
+        }
+
         //post api
-        const createParam = {
+        let param = {
             visitors: [
                 {
                     name: this.inputFormData.name,
@@ -834,14 +886,15 @@ export default class TenantsInvitation extends Vue {
             purpose: this.inputFormData.purpose,
             dates: [
                 {
-                    start: Datetime.DateStart(this.inputFormData.startDate),
-                    end: Datetime.DateEnd(this.inputFormData.endDate)
+                    start: this.inputFormData.startDate,
+                    end: this.inputFormData.endDate
                 }
             ]
         };
 
+        param = RegexServices.trim(param);
         await this.$server
-            .C("/flow2/visitors/invites", createParam)
+            .C("/flow2/visitors/invites", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     this.pageToList();
@@ -858,7 +911,7 @@ export default class TenantsInvitation extends Vue {
             let tempValue = this.progressFileContent[i];
 
             //post api
-            const createParam = {
+            let param = {
                 visitors: [
                     {
                         name: tempValue.name,
@@ -875,8 +928,9 @@ export default class TenantsInvitation extends Vue {
                 ]
             };
 
+            param = RegexServices.trim(param);
             await this.$server
-                .C("/flow2/visitors/invites", createParam)
+                .C("/flow2/visitors/invites", param)
                 .then((response: any) => {
                     ResponseFilter.successCheck(
                         this,
@@ -893,7 +947,6 @@ export default class TenantsInvitation extends Vue {
                 });
         }
         Loading.hide();
-        console.log(this.progressFileContent);
         this.pageToProgressStep4();
     }
 
@@ -964,6 +1017,23 @@ export default class TenantsInvitation extends Vue {
             try {
                 result = Datetime.DateTime2String(date, "YYYY-MM-DD");
             } catch (e) {}
+        }
+        return result;
+    }
+
+    checkStartToEnd(start: Date, end: Date): boolean {
+        let result: boolean = true;
+        start = Datetime.DateStart(start);
+        end = Datetime.DateEnd(end);
+
+        // 檢查開始大於結束
+        if (start.getTime() > end.getTime()) {
+            result = false;
+        }
+
+        // 檢查結束大於 7 天
+        if (end.getTime() - start.getTime() > Datetime.oneDayTimestamp * 7) {
+            result = false;
         }
         return result;
     }
@@ -1109,7 +1179,7 @@ export default class TenantsInvitation extends Vue {
                  * @uiLabel - ${this._("w_Tenants_Purpose")}
                  * @uiType - iv-form-selection
                  */
-                purpose?: ${toEnumInterface(
+                purpose: ${toEnumInterface(
                     this.selectItem.purposes as any,
                     false
                 )};

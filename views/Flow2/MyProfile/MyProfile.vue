@@ -86,14 +86,15 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 // Server
 import { ServerName, ServerVersion } from "@/../core/server";
 
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
+
 // Service
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
-
-// Transition
-import Transition from "@/services/Transition";
-import { ITransition } from "@/services/Transition";
+import RegexServices from "@/services/RegexServices";
 
 interface IInputMyProfile {
     objectId: string;
@@ -213,13 +214,14 @@ export default class MyProfile extends Vue {
     }
 
     async saveEditPassword(data) {
-        const param: IInputPasswordUpdate = {
+        let param: IInputPasswordUpdate = {
             objectId: this.userDetail.objectId,
             oldPassword: data.oldPassword,
             newPassword: data.newPassword
         };
 
         Loading.show();
+        param = RegexServices.trim(param);
         await this.$server
             .U("/users/change-password", param)
             .then((response: any) => {

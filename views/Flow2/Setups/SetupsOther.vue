@@ -75,7 +75,6 @@ export default class GeneralSettings extends Vue {
                         response.vms != undefined &&
                         response.vms.workerExpiredDay != undefined
                     ) {
-                        console.log(response.vms.workerExpiredDay);
                         this.inputFormData.removeWorkerDays =
                             response.vms.workerExpiredDay;
                     }
@@ -94,6 +93,8 @@ export default class GeneralSettings extends Vue {
                 }
             }
         };
+
+        param = RegexServices.trim(param);
         await this.$server
             .C("/config", param)
             .then((response: any) => {

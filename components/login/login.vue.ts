@@ -6,6 +6,7 @@ import Dialog from '@/services/Dialog';
 import Loading from '@/services/Loading';
 import RemeberMe from '@/services/RemeberMe';
 import PackeageJSON from '@/package.json';
+import RegexServices from '@/services/RegexServices';
 
 enum ERemeberMe {
     rememberMe = 'rememberMe',
@@ -27,10 +28,31 @@ export default class Login extends Vue {
 
     created() {
         this.showProject();
+        this.testingRegex();
     }
 
     mounted() {
         this.initLoginInfo();
+    }
+
+    testingRegex() {
+        let testingItem = [
+            {
+                a: 234234,
+                b: true,
+                c: '#G$#Gbag wer4 4eg ',
+                d: new Date(),
+                e: ERemeberMe,
+                f: function() {
+                    let a = 1;
+                    let b = 2;
+                    return a + b;
+                },
+                g: null,
+            },
+        ];
+        testingItem = RegexServices.trim(testingItem);
+        console.log(testingItem);
     }
 
     showForgotPassword() {

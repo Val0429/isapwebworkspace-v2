@@ -1,6 +1,6 @@
 {
     "name": "visitor-management-service",
-    "version": "3.01.00",
+    "version": "3.01.01",
     "flow": "/flow2",
     "project": "Suntec",
     "description": "Visitor Management Service",

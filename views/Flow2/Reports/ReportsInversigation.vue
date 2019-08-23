@@ -97,6 +97,7 @@ import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
 import Datetime from "@/services/Datetime";
 import ServerConfig from "@/services/ServerConfig";
+import RegexServices from "@/services/RegexServices";
 
 // Export PDF
 import * as jspdf from "jspdf";
@@ -235,6 +236,7 @@ export default class ReportsInversigation extends Vue {
             }
         };
 
+        param = RegexServices.trim(param);
         await this.$server
             .R("/flow2/purposes", param)
             .then((response: any) => {
@@ -259,6 +261,8 @@ export default class ReportsInversigation extends Vue {
                 pageSize: 10000
             }
         };
+
+        param = RegexServices.trim(param);
         await this.$server
             .R("/kiosks", param)
             .then((response: any) => {
@@ -308,7 +312,6 @@ export default class ReportsInversigation extends Vue {
 
     updateFilterForm(datas: any) {
         this.inputFilterData[datas.key] = datas.value;
-        console.log(this.inputFilterData);
         this.filterTableData();
     }
 
@@ -331,6 +334,7 @@ export default class ReportsInversigation extends Vue {
         }
 
         Loading.show();
+        param = RegexServices.trim(param);
         await this.$server
             .R("/flow2/investigation", param)
             .then((response: any) => {

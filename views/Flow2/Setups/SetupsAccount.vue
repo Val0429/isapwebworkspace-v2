@@ -144,6 +144,7 @@ import Dialog from "@/services/Dialog";
 import RoleService from "@/services/Role/RoleService";
 import ResponseFilter from "@/services/ResponseFilter";
 import Loading from "@/services/Loading";
+import RegexServices from "@/services/RegexServices";
 
 @Component({
     components: {}
@@ -229,6 +230,8 @@ export default class SetupsAccount extends Vue {
                     let param = {
                         objectId: detail.objectId
                     };
+
+                    param = RegexServices.trim(param);
                     this.$server
                         .D("/users", param)
                         .then((response: any) => {
@@ -372,6 +375,8 @@ export default class SetupsAccount extends Vue {
 
     async initSelectItemCompany() {
         let param: any = { paging: { all: true } };
+
+        param = RegexServices.trim(param);
         await this.$server
             .R("/flow2/companies", param)
             .then((response: any) => {
@@ -670,7 +675,9 @@ export default class SetupsAccount extends Vue {
 
         if (param.objectId == "") {
             param.password = this.inputFormData.password;
+
             Loading.show();
+            param = RegexServices.trim(param);
             await this.$server
                 .C("/users", param)
                 .then((response: any) => {
@@ -687,6 +694,7 @@ export default class SetupsAccount extends Vue {
                 });
         } else {
             Loading.show();
+            param = RegexServices.trim(param);
             await this.$server
                 .U("/users", param)
                 .then((response: any) => {

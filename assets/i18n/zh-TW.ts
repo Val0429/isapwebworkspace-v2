@@ -320,9 +320,6 @@ export default class LangObject implements LangObject {
     w_Tenants_sms = 'SMS';
     w_Tenants_AddInvitation = '新增邀請';
     w_Tenants_EditInvitation = '編輯邀請';
-    w_TenantsInvitation_ErrorFileType = 'Please upload xlsx';
-    w_TenantsInvitation_ErrorFileResolve = 'File resolve error';
-
     w_TenantsInvitation_CardTitle = 'Batch create invitation';
     w_TenantsInvitation_Step1 = 'Download Example xlsx';
     w_TenantsInvitation_Step2 = 'Upload xlsx';
@@ -332,6 +329,10 @@ export default class LangObject implements LangObject {
     w_TenantsInvitation_Download = 'Download .xlsx';
     w_TenantsInvitation_ErrorNoData = 'No Data';
     w_TenantsInvitation_UploadSuccess = 'Upload Success';
+    w_TenantsInvitation_ErrorEmailFormat = 'Please input e-mail';
+    w_TenantsInvitation_ErrorStartToEnd = 'Start earlier than End, End less than 7 days from Start';
+    w_TenantsInvitation_ErrorFileType = 'Please upload xlsx';
+    w_TenantsInvitation_ErrorFileResolve = 'File resolve error';
 
     ////////////////// Tenants Visitor //////////////////
     w_Tenants_VisitorList = '訪客清單';

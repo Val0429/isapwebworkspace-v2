@@ -272,7 +272,6 @@ export default class SetupsKiosk extends Vue {
     }
 
     reoloveWsStatus(data: any) {
-        console.log(data);
         let haveObjectId = false;
         for (let statInfo of this.kioskStatus) {
             if (statInfo.objectId == data.objectId) {
