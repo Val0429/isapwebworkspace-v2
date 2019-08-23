@@ -237,8 +237,8 @@ export default class ReportsDashboard extends Vue {
         this.inputFormData.recurring = [];
 
         let param = {
-            start: this.inputFormData.startDate,
-            end: this.inputFormData.endDate
+            start: this.inputFormData.startDate.toISOString(),
+            end: this.inputFormData.endDate.toISOString()
         };
         await this.$server
             .R("/flow1/reports/recurring", param)

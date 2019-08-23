@@ -1,8 +1,8 @@
 {
     "name": "visitor-management-service",
-    "version": "3.01.01",
-    "flow": "/flow2",
-    "project": "Suntec",
+    "version": "3.00.17",
+    "flow": "/flow1",
+    "project": "One Raffie Link",
     "description": "Visitor Management Service",
     "scripts": {
         "start": "npm run start --prefix ../",
