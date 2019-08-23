@@ -6,12 +6,12 @@
         },
         "/flow2": {
             "project": "Suntec",
-            "version": "3.01.03"
+            "version": "3.01.04"
         }
     },
     "name": "visitor-management-service",
     "flow": "/flow2",
-    "version": "3.01.03",
+    "version": "3.01.04",
     "project": {
         "/flow1": "One Raffie Link",
         "/flow2": "Suntec"
