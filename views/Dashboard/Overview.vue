@@ -1,38 +1,21 @@
 <template>
     <div class="animated fadeIn">
 
-        <iv-auto-transition
-            :step="transition.step"
-            :type="transition.type"
-        >
-            <div
-                key="transition_1"
-                v-show="transition.step === 1"
-                :label="'Empty 1'"
-                class="row"
-            >
+        <div class="row">
 
-                <current-status-dashboard class="col-md-4"></current-status-dashboard>
+            <current-status-dashboard class="col-md-4" />
 
-                <filter-status-dashboard class="col-md-8"></filter-status-dashboard>
+            <filter-status-dashboard class="col-md-8" />
 
-                <top-5sites class="col-md-6"></top-5sites>
+            <top-5sites class="col-md-6" />
 
-                <bottom-5sites class="col-md-6"></bottom-5sites>
+            <bottom-5sites class="col-md-6" />
 
-                <peak-hour class="col-md-12"></peak-hour>
+            <peak-hour class="col-md-12" />
 
-            </div>
+            <area-status-by-floor-plan class="col-md-12" />
 
-            <div
-                key="transition_2"
-                v-show="transition.step === 2"
-                :label="'Empty 2'"
-            >
-                Empty 2
-            </div>
-
-        </iv-auto-transition>
+        </div>
 
     </div>
 </template>
@@ -51,12 +34,6 @@ import Dialog from "@/services/Dialog";
     components: {}
 })
 export default class Overview extends Vue {
-    transition: ITransition = {
-        type: Transition.type,
-        prevStep: 1,
-        step: 1
-    };
-
     created() {}
 
     mounted() {}
