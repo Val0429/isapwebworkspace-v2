@@ -112,6 +112,17 @@
 
                 <!--/col-->
             </div>
+
+            <highcharts :options="chartOptions.filterTable"></highcharts>
+
+            <b-row>
+                <select-time
+                    class="col-md-6"
+                    :timeParam="time"
+                    @time="receiveTime"
+                ></select-time>
+            </b-row>
+
         </iv-card>
     </div>
 </template>
@@ -156,9 +167,11 @@ export class FilterStatusDashboard extends Vue {
     chartOptions: {
         demographic: object;
         repeatCustomer: object;
+        filterTable: object;
     } = {
         demographic: {},
-        repeatCustomer: {}
+        repeatCustomer: {},
+        filterTable: {}
     };
 
     created() {}
@@ -472,6 +485,29 @@ export class FilterStatusDashboard extends Vue {
                 }
             },
             labels: ["Average Results"]
+        };
+
+        this.chartOptions.filterTable = {
+            chart: { type: "line" },
+            exporting: { enabled: false },
+            title: { text: null },
+            subtitle: { text: null },
+            xAxis: {
+                categories: ["19", "20", "21", "22", "23"],
+                title: null
+            },
+            yAxis: {
+                title: null
+            },
+            credits: {
+                enabled: false
+            },
+            series: [
+                {
+                    name: "name",
+                    data: [40, 30, 50, 20, 60]
+                }
+            ]
         };
     }
 
