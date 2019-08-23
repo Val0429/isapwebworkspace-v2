@@ -351,6 +351,14 @@ export default class ReportsInversigation extends Vue {
     }
 
     resolveInvestigationResponse(data: any) {
+        let purposeId =
+            data.data && data.data.purpose && data.data.purpose.objectId
+                ? data.data.purpose.objectId
+                : "";
+        let kioskId =
+            data.data && data.data.kiosk && data.data.kiosk.objectId
+                ? data.data.kiosk.objectId
+                : "";
         let purposeName = "";
         let kioskName = "";
         let eventTextArray = data.entity.split("$");
@@ -359,26 +367,30 @@ export default class ReportsInversigation extends Vue {
                 ? this.resolveEventString(eventTextArray[0])
                 : "";
 
-        for (let selItem of this.selectItem.purposes) {
-            if (selItem.id == data.data.purpose.objectId) {
-                purposeName = selItem.text;
-                break;
+        if (purposeId != "") {
+            for (let selItem of this.selectItem.purposes) {
+                if (selItem.id == purposeId) {
+                    purposeName = selItem.text;
+                    break;
+                }
             }
         }
 
-        for (let selItem of this.selectItem.kiosk) {
-            if (selItem.id == data.data.kiosk.objectId) {
-                kioskName = selItem.text;
-                break;
+        if (kioskId != "") {
+            for (let selItem of this.selectItem.kiosk) {
+                if (selItem.id == kioskId) {
+                    kioskName = selItem.text;
+                    break;
+                }
             }
         }
 
         let tempItem: ITableItem = {
             objectId: data.objectId,
             visitorName: data.data.visitorName,
-            purposeId: data.data.purpose.objectId,
+            purposeId: purposeId,
             purposeName: purposeName,
-            kioskId: data.data.kiosk.objectId,
+            kioskId: kioskId,
             kioskName: kioskName,
             event: eventText,
             eventDateString: Datetime.DateTime2String(
@@ -453,18 +465,19 @@ export default class ReportsInversigation extends Vue {
     resolveEventString(event: string): string {
         let result = "";
         switch (event) {
-            case "EventFlow1StrictCompareFace":
+            // FLow1
+            case "EventFlow2StrictCompareFace":
                 result = this._("w_Investigation_EventStrictCompareFace");
                 break;
-            case "EventFlow1StrictCompleteCheckIn":
+            case "EventFlow2StrictCompleteCheckIn":
                 result = this._("w_Investigation_EventStrictCompleteCheckIn");
                 break;
-            case "EventFlow1StrictConfirmPhoneNumber":
+            case "EventFlow2StrictConfirmPhoneNumber":
                 result = this._(
                     "w_Investigation_EventStrictConfirmPhoneNumber"
                 );
                 break;
-            case "EventFlow1StrictTryCheckIn":
+            case "EventFlow2StrictTryCheckIn":
                 result = this._("w_Investigation_EventStrictTryCheckIn");
                 break;
         }
