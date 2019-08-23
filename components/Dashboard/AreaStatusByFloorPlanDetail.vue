@@ -1,18 +1,9 @@
 <template>
     <div>
-        <iv-card :label="_('w_DashboardOverview_AreaStatusByFloorPlan')">
+        <iv-card :label="_('w_ReportDashboard_Traffic')">
             <template #toolbox>
-                <iv-toolbox-add @click="addNewCard" />
+                <iv-toolbox-delete @click="removeCard()" />
             </template>
-            <div class="row">
-                <template v-for="(value, index) in data">
-                    <area-status-by-floor-plan-detail
-                        :datum="value"
-                        @removeCard="removeCard"
-                        class="col-md-6"
-                    />
-                </template>
-            </div>
 
         </iv-card>
     </div>
@@ -51,25 +42,27 @@ import {
 @Component({
     components: {}
 })
-export class AreaStatusByFloorPlan extends Vue {
-    data = [1, 2, 3, 4];
+export class AreaStatusByFloorPlanDetail extends Vue {
+    @Prop({
+        type: Number,
+        default: () => {
+            return 0;
+        }
+    })
+    datum: number;
 
     created() {}
 
     mounted() {}
 
-    addNewCard() {
-        this.data.push(this.data[this.data.length - 1] + 1);
-    }
-
-    removeCard(datum) {
-        console.log("removeCard", datum);
-        this.data = this.data.filter(d => d != datum);
+    removeCard() {
+        console.log("devail", this.datum);
+        this.$emit("removeCard", this.datum);
     }
 }
 
-export default AreaStatusByFloorPlan;
-Vue.component("area-status-by-floor-plan", AreaStatusByFloorPlan);
+export default AreaStatusByFloorPlanDetail;
+Vue.component("area-status-by-floor-plan-detail", AreaStatusByFloorPlanDetail);
 </script>
 
 <style lang="scss" scoped>
