@@ -1,4 +1,14 @@
 {
+    "notes": {
+        "/flow1": {
+            "project": "One Raffie Link",
+            "version": "3.00.17"
+        },
+        "/flow2": {
+            "project": "Suntec",
+            "version": "3.01.01"
+        }
+    },
     "name": "visitor-management-service",
     "flow": "/flow1",
     "version": "3.00.17",
