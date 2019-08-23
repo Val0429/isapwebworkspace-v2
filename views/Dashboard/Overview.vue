@@ -1,6 +1,8 @@
 <template>
     <div class="animated fadeIn">
 
+        <select-permission-site></select-permission-site>
+
         <iv-auto-transition
             :step="transition.step"
             :type="transition.type"
