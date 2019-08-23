@@ -216,10 +216,7 @@ export default class ReportsDashboard extends Vue {
                         for (let ret of response.results) {
                             if (
                                 ret.objectId != undefined &&
-                                ret.username != undefined &&
-                                ret.data != undefined &&
-                                ret.data.activated != undefined &&
-                                ret.data.activated
+                                ret.username != undefined
                             ) {
                                 this.$set(
                                     this.selectItem.kioskIds,
