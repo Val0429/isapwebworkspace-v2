@@ -5,6 +5,14 @@
             :visible="visible"
             :label="_('w_Tool_FilterData')"
         >
+
+            <iv-table
+                ref="listTable"
+                :interface="ITableList()"
+                :server="{ path: '/user/group' }"
+            >
+            </iv-table>
+
         </iv-card>
 
     </div>
@@ -30,6 +38,55 @@ export default class ToolTraffic extends Vue {
     created() {}
 
     mounted() {}
+
+    // Todo: wait api
+    ITableList() {
+        return `
+            interface {
+
+                /**
+                 * @uiLabel - ${this._("w_No")}
+                 * @uiType - iv-cell-auto-index
+                 */
+                no: string;
+
+                
+                /**
+                 * @uiLabel - ${this._("w_Area")}
+                 */
+                area: string;
+
+                   /**
+                 * @uiLabel - ${this._("w_Group")}
+                 */
+                group: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Camera")}
+                 */
+                camera: string;
+
+                  /**
+                 * @uiLabel - ${this._("w_Item")}
+                 */
+                itme: string;
+
+
+
+                /**
+                 * @uiLabel - ${this._("w_Snapshot")}
+                 */
+                snapshot: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Time")}
+                 */
+                time: string;
+
+
+            }
+        `;
+    }
 }
 </script>
 

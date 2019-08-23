@@ -104,6 +104,8 @@ export default class LangObject {
     w_Tag1 = 'Tag';
     w_Site = 'Store';
     w_Group = 'Entrance';
+    w_Camera = 'Camera';
+    w_Time = 'Time';
     w_Item = 'Item';
     w_Total = 'Total';
     w_Average_Occupancy = 'Average Occupancy';
