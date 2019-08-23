@@ -174,6 +174,11 @@ export class FilterStatusDashboard extends Vue {
         filterTable: {}
     };
 
+    time: any = {
+        startDate: new Date(),
+        endDate: new Date()
+    };
+
     created() {}
 
     mounted() {
@@ -509,6 +514,32 @@ export class FilterStatusDashboard extends Vue {
                 }
             ]
         };
+    }
+
+    async receiveTime(time: object) {
+        this.time = time;
+        let timeParam = JSON.parse(JSON.stringify(this.time));
+
+        // TODO: wait api
+        // Loading.show();
+        // await this.$server
+        //     .C("/", timeParam)
+        //     .then((response: any) => {
+        //         ResponseFilter.successCheck(
+        //             this,
+        //             response,
+        //             (response: any) => {
+        //             },
+        //             this._("w_Dialog_ErrorTitle")
+        //         );
+        //     })
+        //     .catch((e: any) => {
+        //         return ResponseFilter.catchError(
+        //             this,
+        //             e,
+        //             this._("w_Dialog_ErrorTitle")
+        //         );
+        //     });
     }
 
     numberWithCommas(number) {
