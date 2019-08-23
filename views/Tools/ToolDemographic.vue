@@ -1,6 +1,8 @@
 <template>
     <div class="animated fadeIn">
 
+        <tool-demographic-filter @filter="receiveFilterData"></tool-demographic-filter>
+
         <iv-card
             :visible="visible"
             :label="_('w_Tool_FilterData')"
@@ -38,6 +40,10 @@ export default class ToolDemographic extends Vue {
 
     mounted() {}
 
+    receiveFilterData() {
+        this.visible = true;
+    }
+
     ITableList() {
         return `
             interface {
@@ -48,7 +54,7 @@ export default class ToolDemographic extends Vue {
                  */
                 no: string;
 
-                
+
                 /**
                  * @uiLabel - ${this._("w_Area")}
                  */
