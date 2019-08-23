@@ -565,26 +565,29 @@ export class SiteAreaForm extends Vue {
                 */
                 mapPhoto?: string;
 
-                /**
-                 * @uiLabel - ${this._("w_Site_High")}
-                 * @uiType - iv-form-number
-                 * @uiColumnGroup - threshold 
-                 */
-                high?:number;
-
-                 /**
-                 * @uiLabel - ${this._("w_Site_Medium")}
-                 * @uiType - iv-form-number
-                 * @uiColumnGroup - threshold 
-                 */
-                medium?:number;
 
                  /**
                  * @uiLabel - ${this._("w_Site_Low")}
                  * @uiType - iv-form-number
-                 * @uiColumnGroup - threshold 
+                 * @uiColumnGroup - threshold
                  */
                 low?:number;
+
+
+                 /**
+                 * @uiLabel - ${this._("w_Site_Medium")}
+                 * @uiType - iv-form-number
+                 * @uiColumnGroup - threshold
+                 */
+                medium?:number;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Site_High")}
+                 * @uiType - iv-form-number
+                 * @uiColumnGroup - threshold
+                 */
+                high?:number;
 
                 imageMap?:any;
 

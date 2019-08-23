@@ -1,7 +1,7 @@
 <template>
     <div class="animated fadeIn">
 
-        <tool-traffic-filter></tool-traffic-filter>
+        <tool-traffic-filter @filter="receiveFilterData"></tool-traffic-filter>
 
         <iv-card
             :visible="visible"
@@ -41,6 +41,10 @@ export default class ToolTraffic extends Vue {
 
     mounted() {}
 
+    receiveFilterData() {
+        this.visible = true;
+    }
+
     // Todo: wait api
     ITableList() {
         return `
@@ -52,7 +56,7 @@ export default class ToolTraffic extends Vue {
                  */
                 no: string;
 
-                
+
                 /**
                  * @uiLabel - ${this._("w_Area")}
                  */

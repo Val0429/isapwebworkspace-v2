@@ -242,13 +242,14 @@ export default class FRSServer extends Vue {
         };
 
         Loading.show();
-        let results = await this.$server
+        await this.$server
             .C("/partner/frs/user-group", addParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(
                     this,
                     response,
                     (response: any) => {
+                        this.groupData = response;
                     },
                     this._("w_FRSManager_UserGroup_failed")
                 );
@@ -261,7 +262,6 @@ export default class FRSServer extends Vue {
                 );
             });
         Loading.hide();
-        this.groupData = results;
 
         let tempBlacklist = {};
         let tempVIP = {};
@@ -271,6 +271,7 @@ export default class FRSServer extends Vue {
             return false;
         } else {
             for (const result of this.groupData) {
+                console.log('result.name ~ ', result.name)
                 switch (result.name) {
                     case "Blacklist":
                         tempBlacklist[result.objectId] = result.name;
@@ -382,12 +383,13 @@ export default class FRSServer extends Vue {
         this.transition.step = 3;
         this.getInputData();
 
-        if (!this.groupData) {
+        if (!this.groupData || this.groupData.length === 0 ) {
             await this.initUserGroupInFRS();
         }
     }
 
     async clickToSetUserGroupInFRS() {
+
         if (
             !this.inputFormData.ip ||
             !this.inputFormData.port ||
@@ -400,7 +402,7 @@ export default class FRSServer extends Vue {
             return false;
         }
 
-        if (!this.groupData) {
+        if (!this.groupData || this.groupData.length === 0) {
             await this.initUserGroupInFRS();
         }
     }
@@ -415,7 +417,7 @@ export default class FRSServer extends Vue {
         let tempGroups: any = [];
         let tempUserGroups = JSON.parse(JSON.stringify(userGroups));
 
-        if (this.groupData) {
+        if (this.groupData || this.groupData.length > 0) {
             this.groupData.map(item => {
                 switch (item.objectId) {
                     case data.employee:

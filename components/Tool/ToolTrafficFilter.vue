@@ -153,27 +153,10 @@
                     }
                     break;
                 case 'deviceGroupId':
-                    console.log(' ~ ', this.inputFormData.siteId, this.inputFormData.areaId , this.inputFormData.deviceGroupId)
                     if (this.inputFormData.siteId && this.inputFormData.areaId && this.inputFormData.deviceGroupId) {
                         this.initSelectItemDevice(this.inputFormData.siteId, this.inputFormData.areaId, this.inputFormData.deviceGroupId);
                     } else {
                         this.inputFormData.deviceId = '';
-                    }
-                    break;
-                case 'startDate':
-                    if (!Datetime.CheckDate(data.value, new Date(this.inputFormData.endDate))) {
-                        Dialog.error(this._("w_ReportDateError"));
-                        this.inputFormData.startDate = new Date();
-                        this.inputFormData.endDate = new Date();
-                        return false;
-                    }
-                    break;
-                case 'endDate':
-                    if (!Datetime.CheckDate(new Date(this.inputFormData.endDate), data.value)) {
-                        Dialog.error(this._("w_ReportDateError"));
-                        this.inputFormData.startDate = new Date();
-                        this.inputFormData.endDate = new Date();
-                        return false;
                     }
                     break;
             }
@@ -317,11 +300,27 @@
                 areaId: data.areaId,
                 deviceGroupId: data.deviceGroupId ? data.deviceGroupId : undefined,
                 deviceId: data.deviceId ? data.deviceId : undefined,
-                isEmployee: data.isEmployee ? data.isEmployee : undefined,
-                isIn: data.isIn ? data.isIn : undefined,
+                isEmployee: data.isEmployee,
+                isIn: data.isIn,
                 startDate: new Date(data.startDate.getFullYear(), data.startDate.getMonth() + 1, data.startDate.getDate(), Number(data.hour)).toISOString(),
                 endDate: new Date(data.endDate.getFullYear(), data.endDate.getMonth() + 1, data.endDate.getDate(), Number(data.hour) + 1).toISOString(),
             };
+
+            if (data.isEmployee === 'true') {
+                submitParam.isEmployee = false;
+            } else if(data.isEmployee === 'false') {
+                submitParam.isEmployee = true;
+            } else {
+                submitParam.isEmployee = undefined;
+            }
+
+            if (data.isIn === 'true') {
+                submitParam.isIn = false;
+            } else if(data.isIn === 'false') {
+                submitParam.isIn = true;
+            } else {
+                submitParam.isIn = undefined;
+            }
 
             // Todo: wait api
             // Loading.show();

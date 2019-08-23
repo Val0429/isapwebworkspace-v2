@@ -96,6 +96,7 @@ export class SiteDeviceGroupList extends Vue {
 
     async deleteGroupDevice() {
         Dialog.confirm(this._("w_DeleteConfirm"), this._("w_Confirm"), () => {
+            
             const body: {
                 objectId: string;
             } = {
