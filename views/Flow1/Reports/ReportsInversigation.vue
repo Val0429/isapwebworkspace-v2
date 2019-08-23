@@ -346,9 +346,15 @@ export default class ReportsInversigation extends Vue {
     }
 
     resolveInvestigationResponse(data: any) {
-        let purposeId = "";
+        let purposeId =
+            data.data && data.data.purpose && data.data.purpose.objectId
+                ? data.data.purpose.objectId
+                : "";
+        let kioskId =
+            data.data && data.data.kiosk && data.data.kiosk.objectId
+                ? data.data.kiosk.objectId
+                : "";
         let purposeName = "";
-        let kioskId = "";
         let kioskName = "";
         let eventTextArray = data.entity.split("$");
         let eventText =
@@ -356,28 +362,18 @@ export default class ReportsInversigation extends Vue {
                 ? this.resolveEventString(eventTextArray[0])
                 : "";
 
-        if (
-            data.data != undefined &&
-            data.data.purpose != undefined &&
-            data.data.purpose.objectId != undefined
-        ) {
+        if (purposeId != "") {
             for (let selItem of this.selectItem.purposes) {
-                if (selItem.id == data.data.purpose.objectId) {
-                    purposeId = data.data.purpose.objectId;
+                if (selItem.id == purposeId) {
                     purposeName = selItem.text;
                     break;
                 }
             }
         }
 
-        if (
-            data.data != undefined &&
-            data.data.kiosk != undefined &&
-            data.data.kiosk.objectId != undefined
-        ) {
+        if (kioskId != "") {
             for (let selItem of this.selectItem.kiosk) {
-                if (selItem.id == data.data.kiosk.objectId) {
-                    kioskId = data.data.kiosk.objectId;
+                if (selItem.id == kioskId) {
                     kioskName = selItem.text;
                     break;
                 }
