@@ -204,12 +204,6 @@ interface RestfulRequest extends ApisRequestBase {
         '/partner/frs-manager': [any, any, false];
         '/partner/frs-manager/device': [any, any, false];
         '/partner/frs-manager/user-group': [any, any, false];
-
-        // tool
-        '/report/people-counting': [any, any, false];
-        '/report/demographic': [any, any, false];
-        '/report/repeat-visitor': [any, any, false];
-
     };
 
     // read
@@ -319,6 +313,11 @@ interface RestfulRequest extends ApisRequestBase {
 
         // FRS Manager
         '/partner/frs-manager': [any, any, false];
+
+        // tool
+        '/report/people-counting': [any, any, false];
+        '/report/demographic': [any, any, false];
+        '/report/repeat-visitor': [any, any, false];
     };
 
     // update

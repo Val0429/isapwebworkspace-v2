@@ -11,7 +11,8 @@
             <iv-table
                 ref="listTable"
                 :interface="ITableList()"
-                :server="{ path: '/user/group' }"
+                :server="{ path: '/report/demographic' }"
+                :params="tabelParam"
             >
             </iv-table>
         </iv-card>
@@ -28,8 +29,8 @@ import { ITransition } from "@/services/Transition";
 
 // Service
 import Dialog from "@/services/Dialog";
-import Loading from '@/services/Loading';
-import ResponseFilter from '@/services/ResponseFilter';
+import Loading from "@/services/Loading";
+import ResponseFilter from "@/services/ResponseFilter";
 
 @Component({
     components: {}
@@ -38,31 +39,17 @@ export default class ToolDemographic extends Vue {
     // 收合card控制
     visible: boolean = false;
 
+    tabelParam: object = {};
+
     created() {}
 
     mounted() {}
 
     async receiveFilterData(filterData) {
         this.visible = true;
+        this.tabelParam = filterData;
 
-        Loading.show();
-        await this.$server
-            .C("/report/demographic", filterData)
-            .then((response: any) => {
-                ResponseFilter.successCheck(
-                    this,
-                    response,
-                    (response: any) => {},
-                );
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(
-                    this,
-                    e,
-                    this._("w_Dialog_ErrorTitle")
-                );
-            });
-
+        (this.$refs.listTable as any).reload();
     }
 
     ITableList() {

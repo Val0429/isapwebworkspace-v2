@@ -12,7 +12,34 @@
                 ref="listTable"
                 :interface="ITableList()"
                 :server="{ path: '/report/people-counting' }"
+                :params="tabelParam"
             >
+
+                <template #area="{ $attrs, $listeners }">
+
+                    {{$attrs.row.area.name}}
+                </template>
+
+                <template #group="{ $attrs, $listeners }">
+                    {{showGroups($attrs.row.deviceGroups)}}
+                </template>
+
+                <template #camera="{ $attrs, $listeners }">
+                    {{$attrs.row.device.name}}
+                </template>
+
+                <template #item="{ $attrs, $listeners }">
+                    {{$attrs.row.isIn ? _('w_Navigation_Tools_TrafficIn') : _('w_Navigation_Tools_TrafficOut')}}
+                </template>
+
+                <template #snapshot="{ $attrs, $listeners }">
+                    <img :src="serverConfig._url + $attrs.row.imageSrc"><img>
+                </template>
+
+                <template #time="{ $attrs, $listeners }">
+                    {{showTime($attrs.row.date)}}
+                </template>
+
             </iv-table>
 
         </iv-card>
@@ -29,15 +56,21 @@ import { ITransition } from "@/services/Transition";
 
 // Service
 import Dialog from "@/services/Dialog";
-import Loading from '@/services/Loading';
-import ResponseFilter from '@/services/ResponseFilter';
+import Loading from "@/services/Loading";
+import ResponseFilter from "@/services/ResponseFilter";
+import Datetime from "@/services/Datetime";
+import ServerConfig from "@/services/ServerConfig";
 
 @Component({
     components: {}
 })
 export default class ToolTraffic extends Vue {
+    serverConfig = ServerConfig;
+
     // 收合card控制
     visible: boolean = false;
+
+    tabelParam: object = {};
 
     created() {}
 
@@ -45,25 +78,21 @@ export default class ToolTraffic extends Vue {
 
     async receiveFilterData(filterData) {
         this.visible = true;
+        this.tabelParam = filterData;
 
-        Loading.show();
-        await this.$server
-            .C("/report/people-counting", filterData)
-            .then((response: any) => {
-                ResponseFilter.successCheck(
-                    this,
-                    response,
-                    (response: any) => {},
-                );
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(
-                    this,
-                    e,
-                    this._("w_Dialog_ErrorTitle")
-                );
-            });
+        (this.$refs.listTable as any).reload();
+    }
 
+    showGroups(data) {
+        var groups = [];
+        for (let datum of data) {
+            groups.push(datum.name);
+        }
+        return groups.join(",");
+    }
+
+    showTime(date) {
+        return Datetime.DateTime2String(new Date(date), "YYYY-MM-DD HH:mm");
     }
 
     // Todo: wait api
@@ -96,7 +125,7 @@ export default class ToolTraffic extends Vue {
                   /**
                  * @uiLabel - ${this._("w_Item")}
                  */
-                itme: string;
+                item: boolean;
 
 
 

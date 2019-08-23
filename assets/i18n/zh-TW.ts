@@ -320,6 +320,8 @@ export default class LangObject implements ILang {
     w_Navigation_Tools_Traffic = 'Traffic';
     w_Navigation_Tools_RepeatVisitor = 'Repeat Visitor';
     w_Navigation_Tools_Demographic = 'Demographic';
+    w_Navigation_Tools_TrafficIn = 'Traffic -IN';
+    w_Navigation_Tools_TrafficOut = 'Traffic - Out';
 
     // failed to fetch
     w_FailedToFetch = "We can't connect to server, please try again!";
