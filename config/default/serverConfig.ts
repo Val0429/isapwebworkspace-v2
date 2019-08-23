@@ -26,4 +26,5 @@ switch (PackageJSON.flow) {
         config.port = 6060;
         break;
 }
+
 export default config;
