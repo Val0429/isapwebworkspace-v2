@@ -36,7 +36,7 @@ interface IReportDashboard {
         value2: number;
         valueRatio2: number;
     };
-    repeatCustomer: {
+    repeatVisitor: {
         sign: ESign;
         total: number;
         value: number;
@@ -104,7 +104,7 @@ class ReportDashboard {
         value2: null,
         valueRatio2: null,
     };
-    repeatCustomer = {
+    repeatVisitor = {
         sign: ESign.none,
         total: null,
         value: null,

@@ -1,7 +1,10 @@
 <template>
-    <div>
+    <div class="animated fadeIn">
 
-        <div class="row mt-4">
+        <div class="row">
+            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
+            </div>
+            <!--/col-->
 
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box">
@@ -135,21 +138,36 @@
             </div>
             <!--/col-->
 
+            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
+            </div>
+            <!--/col-->
+        </div>
+
+        <!-- /row -->
+
+        <div class="row">
+            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
+            </div>
+            <!--/col-->
+
             <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
-                <div class="box info-box">
+                <div
+                    class="box info-box-second"
+                    style="border-left: 0px"
+                >
                     <div :class="ePageType.repeatCustomer == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}}</span>
                         </div>
                         <div class="row clearfix">
                             <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <span class="date">{{anlysisData.repeatCustomer.total != null ? toPercent(anlysisData.repeatCustomer.total) : "N/A"}}</span>
+                                <span class="date">{{anlysisData.repeatVisitor.total != null ? toPercent(anlysisData.repeatVisitor.total) : "N/A"}}</span>
                             </div>
                             <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-12">
-                                <div :class="eSign.none != anlysisData.repeatCustomer.sign ? (eSign.positive == anlysisData.repeatCustomer.sign ?  'ratio green':'ratio red') : 'ratio'">
-                                    <span v-if="eSign.none != anlysisData.repeatCustomer.sign">{{eSign.positive == anlysisData.repeatCustomer.sign ? '▲':'▼'}}</span>
-                                    <span>{{anlysisData.repeatCustomer.value != null ? numberWithCommas(anlysisData.repeatCustomer.value) : "N/A"}} </span><br>
-                                    <span>{{anlysisData.repeatCustomer.valueRatio != null ? toPercent(anlysisData.repeatCustomer.valueRatio,1) : "N/A"}}</span>
+                                <div :class="eSign.none != anlysisData.repeatVisitor.sign ? (eSign.positive == anlysisData.repeatVisitor.sign ?  'ratio green':'ratio red') : 'ratio'">
+                                    <span v-if="eSign.none != anlysisData.repeatVisitor.sign">{{eSign.positive == anlysisData.repeatVisitor.sign ? '▲':'▼'}}</span>
+                                    <span>{{anlysisData.repeatVisitor.value != null ? numberWithCommas(anlysisData.repeatVisitor.value) : "N/A"}} </span><br>
+                                    <span>{{anlysisData.repeatVisitor.valueRatio != null ? toPercent(anlysisData.repeatVisitor.valueRatio,1) : "N/A"}}</span>
                                 </div>
                             </div>
                         </div>
@@ -157,18 +175,8 @@
                 </div>
             </div>
             <!--/col-->
-
-        </div>
-
-        <!-- /row -->
-
-        <div class="row">
-
-            <div class="col-lg-3 col-sm-6 col-xs-6 col-xxs-122">
-                <div
-                    class="box info-box-second"
-                    style="border-left: 0px"
-                >
+            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-122">
+                <div class="box info-box-second">
                     <div :class="ePageType.revenue == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
                             <span class="title">{{_("w_ReportDashboard_Revenue")}}</span>
@@ -190,7 +198,7 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-3 col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box-second">
                     <div :class="ePageType.transaction == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
@@ -213,7 +221,7 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-3 col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box-second">
                     <div :class="ePageType.conversion == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
@@ -237,7 +245,7 @@
             </div>
             <!--/col-->
 
-            <div class="col-lg-3 col-sm-6 col-xs-6 col-xxs-12">
+            <div class="col-lg-2 col-sm-6 col-xs-6 col-xxs-12">
                 <div class="box info-box-second">
                     <div :class="ePageType.asp == anlysisData.pageType ?  'backgroundColor selected':'backgroundColor'">
                         <div class="clearfix">
@@ -260,6 +268,9 @@
             </div>
             <!--/col-->
 
+            <div class="col-lg-1 col-sm-0 col-xs-0 col-xxs-0">
+            </div>
+            <!--/col-->
         </div>
         <!-- /row -->
     </div>
@@ -379,15 +390,13 @@ export class AnalysisDashboard extends Vue {
         this.$server
             .C("/report/complex", readParam)
             .then((response: any) => {
-                ResponseFilter.successCheck(this, response, (response: any) => {
+                if (response != undefined) {
                     this.anlysisData.pageType = this.pageType;
 
-                    // weather
                     if (response.weather) {
                         this.weather = response.weather.icon;
                     }
 
-                    // people Counting
                     if (response.peopleCounting) {
                         this.anlysisData.traffic = {
                             sign:
@@ -405,8 +414,6 @@ export class AnalysisDashboard extends Vue {
                             value: response.peopleCounting.variety
                         };
                     }
-
-                    // human Detection
                     if (response.humanDetection) {
                         this.anlysisData.averageOccupancy = {
                             sign:
@@ -425,7 +432,6 @@ export class AnalysisDashboard extends Vue {
                         };
                     }
 
-                    // average Dwell Time
                     if (response.averageDwellTime) {
                         this.anlysisData.averageDwellTime = {
                             sign:
@@ -444,7 +450,6 @@ export class AnalysisDashboard extends Vue {
                         };
                     }
 
-                    // demographic
                     if (response.demographic) {
                         this.anlysisData.demographic = {
                             sign:
@@ -467,8 +472,6 @@ export class AnalysisDashboard extends Vue {
                             valueRatio2: response.demographic.femalePercent
                         };
                     }
-
-                    // vip/Blacklist
                     if (response.vipBlacklist) {
                         this.anlysisData.vipBlacklist = {
                             sign:
@@ -492,27 +495,23 @@ export class AnalysisDashboard extends Vue {
                             valueRatio2: response.vipBlacklist.blacklistPercent
                         };
                     }
-
-                    // repeat Customer
-                    if (response.repeatCustomer) {
-                        this.anlysisData.repeatCustomer = {
+                    if (response.repeatVisitor) {
+                        this.anlysisData.repeatVisitor = {
                             sign:
-                                response.repeatCustomer.variety == null ||
-                                response.repeatCustomer.variety == 0
+                                response.repeatVisitor.variety == null ||
+                                response.repeatVisitor.variety == 0
                                     ? ESign.none
-                                    : response.repeatCustomer.variety > 0
+                                    : response.repeatVisitor.variety > 0
                                     ? ESign.positive
                                     : ESign.negative,
-                            total: response.repeatCustomer.value,
-                            valueRatio: response.repeatCustomer.variety
-                                ? response.repeatCustomer.variety /
-                                  response.repeatCustomer.value
+                            total: response.repeatVisitor.value,
+                            valueRatio: response.repeatVisitor.variety
+                                ? response.repeatVisitor.variety /
+                                  response.repeatVisitor.value
                                 : null,
-                            value: response.repeatCustomer.variety
+                            value: response.repeatVisitor.variety
                         };
                     }
-
-                    // revenue
                     if (response.revenue) {
                         this.anlysisData.revenue = {
                             sign:
@@ -530,8 +529,6 @@ export class AnalysisDashboard extends Vue {
                             value: response.revenue.variety
                         };
                     }
-
-                    // transaction
                     if (response.transaction) {
                         this.anlysisData.transaction = {
                             sign:
@@ -549,8 +546,6 @@ export class AnalysisDashboard extends Vue {
                             value: response.transaction.variety
                         };
                     }
-
-                    // conversion
                     if (response.conversion) {
                         this.anlysisData.conversion = {
                             sign:
@@ -568,8 +563,6 @@ export class AnalysisDashboard extends Vue {
                             value: response.conversion.variety
                         };
                     }
-
-                    // ASP
                     if (response.asp) {
                         this.anlysisData.asp = {
                             sign:
@@ -586,7 +579,7 @@ export class AnalysisDashboard extends Vue {
                             value: response.asp.variety
                         };
                     }
-                });
+                }
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);

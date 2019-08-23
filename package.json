@@ -8,6 +8,7 @@
         "create-project": "git checkout --orphan"
     },
     "dependencies": {
+        "apexcharts": "^3.8.4",
         "file-saver": "^2.0.2",
         "heatmap.js": "^2.0.5",
         "highcharts": "^7.1.2",
