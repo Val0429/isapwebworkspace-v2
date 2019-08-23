@@ -446,44 +446,40 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
     ////////////////////  Tina start  以下資料來自 step1 choose-metrics   ////////////////////
     receiveName(name: string) {
         this.inputFormData.name = name;
-        // console.log("name ~ ", this.inputFormData.name);
     }
 
     receiveTime(time: undefined | object) {
         this.inputFormData.time = time;
-        // console.log("time ~ ", this.inputFormData.time);
     }
 
     receiveActive(active: string) {
-        this.inputFormData.active = active === 'true';
-        // console.log("active ~ ", this.inputFormData.active);
+        this.inputFormData.active = active === "true";
     }
 
     receiveSiteIds(siteIds: object) {
         this.inputFormData.siteIds = siteIds;
-        // console.log("siteIds ~ ", this.inputFormData.siteIds);
     }
 
     receiveAreaIds(areaIds: object) {
         this.inputFormData.areaIds = areaIds;
-        // console.log("areaIds ~ ", this.inputFormData.areaIds);
     }
 
     receiveDeviceGroupIds(deviceGroupIds: object) {
         this.inputFormData.deviceGroupIds = deviceGroupIds;
-        // console.log("deviceGroupIds ~ ", this.inputFormData.deviceGroupIds);
     }
 
     receiveDeviceIds(deviceIds: object) {
         this.inputFormData.deviceIds = deviceIds;
-        // console.log("deviceIds ~ ", this.inputFormData.deviceIds);
     }
 
     stepTo2(data) {
-
         let stepRef: any = this.$refs.step;
 
-        if (!this.inputFormData.name || this.inputFormData.active === undefined || this.inputFormData.siteIds.length === 0) {
+        if (
+            !this.inputFormData.name ||
+            this.inputFormData.active === undefined ||
+            this.inputFormData.siteIds.length === 0
+        ) {
             Dialog.error(this._("w_RuleAndActions_ErrorTip"));
             stepRef.currentStep = 0;
             return false;
@@ -575,32 +571,26 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
     ////////////////////  以下資料來自 step3 Actions   ////////////////////
     receiveEmail(email: boolean) {
         this.inputFormData.email = email;
-        console.log("email ~ ", this.inputFormData.email);
     }
 
     receiveStoreManager(storeManager: boolean) {
         this.inputFormData.storeManager = storeManager;
-        console.log("storeManager ~ ", this.inputFormData.storeManager);
     }
 
     receivePermissionOfStore(permissionOfStore: boolean) {
         this.inputFormData.permissionOfStore = permissionOfStore;
-        console.log("permissionOfStore ~ ", this.inputFormData.permissionOfStore);
     }
 
     receiveUserIds(userIds: object) {
         this.inputFormData.userIds = userIds;
-        console.log("userIds ~ ", this.inputFormData.userIds);
     }
 
     receiveUserGroupIds(userGroupIds: object) {
         this.inputFormData.userGroupIds = userGroupIds;
-        console.log("userGroupIds ~ ", this.inputFormData.userGroupIds);
     }
 
     receiveMinutes(minutes: number) {
         this.inputFormData.minutes = minutes;
-        console.log("minutes ~ ", this.inputFormData.minutes);
     }
 
     IStep3() {
@@ -613,9 +603,7 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
     //////////////////// Tina end 以上資料來自 step3 Actions   ////////////////////
 
     doSubmit(data) {
-        console.log("data ~ ", data);
-        console.log("this.inputFormData ~ ", this.inputFormData);
-        this.pageToList()
+        this.pageToList();
     }
 
     async doDelete() {

@@ -37,7 +37,7 @@ import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
 Vue.use(HighchartsVue);
 
-import { EMode } from '@/components/Dashboard/index'
+import { EMode } from "@/components/Dashboard/index";
 
 @Component({
     components: {}
@@ -86,17 +86,15 @@ export class Top5sites extends Vue {
     }
 
     initCharts() {
-
         // 整理 xAxis（y軸）的 site
         let tempCategories: string[] = [];
         let tempData: number[] = [];
-        let tempName: string = '';
-
+        let tempName: string = "";
 
         if (this.mode.type === EMode.dwellTime) {
-            tempName = this._('w_Dashboard_Minutes');
+            tempName = this._("w_Dashboard_Minutes");
         } else {
-            tempName = this._('w_ReportCampaign_Traffic');
+            tempName = this._("w_ReportCampaign_Traffic");
         }
 
         this.chartOptions = {
@@ -152,7 +150,6 @@ export class Top5sites extends Vue {
 
     async receiveMode(mode: object) {
         this.mode = mode;
-        // console.log(" ~ ", this.mode);
 
         // TODO: wait api
         // Loading.show();

@@ -747,7 +747,6 @@ export default class HumanDetection extends Vue {
             this._("w_VSHumanDetection_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-
                 let deleteParam: {
                     objectId: any;
                 } = {
@@ -760,22 +759,22 @@ export default class HumanDetection extends Vue {
 
                 Loading.show();
 
-                    this.$server
-                        .D("/device", deleteParam)
-                        .then((response: any) => {
-                            ResponseFilter.successCheck(
-                                this,
-                                response,
-                                (response: any) => {
-                                    Dialog.success(this._("w_Success"));
-                                    (this.$refs
-                                        .humanDetectionTable as any).reload();
-                                }
-                            );
-                        })
-                        .catch((e: any) => {
-                            return ResponseFilter.catchError(this, e);
-                        });
+                this.$server
+                    .D("/device", deleteParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                Dialog.success(this._("w_Success"));
+                                (this.$refs
+                                    .humanDetectionTable as any).reload();
+                            }
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(this, e);
+                    });
 
                 Loading.hide();
             }
@@ -1332,8 +1331,6 @@ export default class HumanDetection extends Vue {
     }
 
     saveROI(data) {
-        // TODO: Do something?
-        console.log("saveROI", data, this.canvasDetail);
         this.canvasDetail = data;
     }
 
