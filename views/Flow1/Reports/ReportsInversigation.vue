@@ -346,7 +346,9 @@ export default class ReportsInversigation extends Vue {
     }
 
     resolveInvestigationResponse(data: any) {
+        let purposeId = "";
         let purposeName = "";
+        let kioskId = "";
         let kioskName = "";
         let eventTextArray = data.entity.split("$");
         let eventText =
@@ -354,26 +356,40 @@ export default class ReportsInversigation extends Vue {
                 ? this.resolveEventString(eventTextArray[0])
                 : "";
 
-        for (let selItem of this.selectItem.purposes) {
-            if (selItem.id == data.data.purpose.objectId) {
-                purposeName = selItem.text;
-                break;
+        if (
+            data.data != undefined &&
+            data.data.purpose != undefined &&
+            data.data.purpose.objectId != undefined
+        ) {
+            for (let selItem of this.selectItem.purposes) {
+                if (selItem.id == data.data.purpose.objectId) {
+                    purposeId = data.data.purpose.objectId;
+                    purposeName = selItem.text;
+                    break;
+                }
             }
         }
 
-        for (let selItem of this.selectItem.kiosk) {
-            if (selItem.id == data.data.kiosk.objectId) {
-                kioskName = selItem.text;
-                break;
+        if (
+            data.data != undefined &&
+            data.data.kiosk != undefined &&
+            data.data.kiosk.objectId != undefined
+        ) {
+            for (let selItem of this.selectItem.kiosk) {
+                if (selItem.id == data.data.kiosk.objectId) {
+                    kioskId = data.data.kiosk.objectId;
+                    kioskName = selItem.text;
+                    break;
+                }
             }
         }
 
         let tempItem: ITableItem = {
             objectId: data.objectId,
             visitorName: data.data.visitorName,
-            purposeId: data.data.purpose.objectId,
+            purposeId: purposeId,
             purposeName: purposeName,
-            kioskId: data.data.kiosk.objectId,
+            kioskId: kioskId,
             kioskName: kioskName,
             event: eventText,
             eventDateString: Datetime.DateTime2String(

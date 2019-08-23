@@ -237,8 +237,8 @@ export default class ReportsDashboard extends Vue {
         this.inputFormData.recurring = [];
 
         let param = {
-            start: this.inputFormData.startDate,
-            end: this.inputFormData.endDate
+            start: this.inputFormData.startDate.toISOString(),
+            end: this.inputFormData.endDate.toISOString()
         };
         await this.$server
             .R("/flow1/reports/recurring", param)
@@ -296,8 +296,8 @@ export default class ReportsDashboard extends Vue {
 
         if (this.inputFormData.kioskIds.length > 0) {
             let param = {
-                start: this.inputFormData.startDate,
-                end: this.inputFormData.endDate,
+                start: this.inputFormData.startDate.toISOString(),
+                end: this.inputFormData.endDate.toISOString(),
                 kioskIds: this.kioskIdString()
             };
             await this.$server
@@ -332,8 +332,8 @@ export default class ReportsDashboard extends Vue {
         this.inputFormData.exception = 0;
         if (this.inputFormData.kioskIds.length > 0) {
             let param = {
-                start: this.inputFormData.startDate,
-                end: this.inputFormData.endDate,
+                start: this.inputFormData.startDate.toISOString(),
+                end: this.inputFormData.endDate.toISOString(),
                 kioskIds: this.kioskIdString()
             };
             await this.$server

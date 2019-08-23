@@ -29,7 +29,10 @@
 
                     <iv-toolbox-divider />
                     <iv-permission :allow="['SystemAdministrator', 'Administrator']">
-                        <iv-toolbox-add @click="pageToAdd()" />
+                        <iv-toolbox-add
+                            v-if="showCreateTool()"
+                            @click="pageToAdd()"
+                        />
                     </iv-permission>
                 </template>
 
@@ -308,6 +311,14 @@ export default class SetupsAccount extends Vue {
                 haveRequest.floor = true;
             }
         }
+    }
+
+    showCreateTool(): boolean {
+        let result = false;
+        if (this.haveSystemAdministrator()) {
+            result = true;
+        }
+        return result;
     }
 
     haveSystemAdministrator() {
