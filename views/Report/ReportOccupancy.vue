@@ -711,6 +711,21 @@ export default class ReportOccupancy extends Vue {
             }
         }
 
+         //追加沒有的資料site傳入陣列 以便chart 單店多店判斷
+        for (const filterSiteId of this.filterData.siteIds) {
+            if (this.sites.some(x => x.objectId == filterSiteId)) {
+                continue;
+            }
+            let tempISite = {
+                objectId: filterSiteId,
+                name: this.sitesSelectItem.filter(x => x.id == filterSiteId)[0]
+                    .text,
+                officeHour: [],
+                areas: []
+            };
+            this.sites.push(tempISite);
+        }
+
         this.dTimeMode = this.filterData.type;
         this.pSiteIds = this.filterData.siteIds;
         this.tags = this.filterData.tagIds;
