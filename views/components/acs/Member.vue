@@ -1214,7 +1214,7 @@ export default class Member extends Vue {
                      : "iv-form-label"
                  }
                  */
-                extensionNumber?: number;
+                phone?: string;
 
                 /**
                  * @uiLabel - ${this._("MVPN")}
@@ -1238,7 +1238,7 @@ export default class Member extends Vue {
                      : "iv-form-label"
                  }
                  */
-                phone?: string;
+                extensionNumber?: number;
 
                 /**
                  * @uiLabel - ${this._("email")}
