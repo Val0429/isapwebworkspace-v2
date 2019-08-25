@@ -18,6 +18,9 @@
                         :disabled="isSelected.length !== 1"
                         @click="pageToView"
                     />
+                    <iv-toolbox-export
+                        @click="doExport()"
+                    />
                     <iv-toolbox-edit
                         v-show="canEdit"
                         :disabled="isSelected.length !== 1"
@@ -291,6 +294,7 @@ import { RegisterRouter } from "@/../core/router";
 import { toEnumInterface } from "@/../core";
 import Dialog from "@/services/Dialog/Dialog";
 import { PermissionName} from '@/../src/constants/permissions';
+import * as XLSX from 'xlsx';
 
 enum EPageStep {
     list = "list",
@@ -509,7 +513,31 @@ private async getFloorGroup() {
         }
       });
   }
-
+async doExport(){
+        let headers= [this._("w_PermissionTable"),this._("w_AccessLevel"),this._("timename"),this._("w_Door"),this._("w_DoorGroup"),this._("w_Elevator"),this._("w_Floor"),this._("w_FloorGroup")];
+        let exportList =[];
+        console.log("headers", headers);
+        let resp:any = await this.$server.R("/acs/permissiontable" as any, Object.assign({"paging.all":"true"}, this.searchParams));
+        for(let pt of resp.results){ 
+            let tablename = pt.tablename;
+            for(let al of pt.accesslevels){
+                let timename = al.timeschedule.timename;
+                let levelname = al.levelname;
+                let elevatorname = al.elevator ? al.elevator.elevatorname:"";
+                let doorname=al.door? al.door.doorname:"";
+                let doorgroupname=al.doorgroup ? al.doorgroup.groupname:"";
+                let floorname=al.floor&&al.floor.length>0?al.floor[0].floorname:"";
+                let floorgroupname=al.floorgroup?al.floorgroup.groupname:"";
+                exportList.push({tablename,levelname,timename,doorname,doorgroupname,elevatorname,floorname,floorgroupname})
+            }
+            
+        }
+        let workbook = XLSX.utils.book_new();
+        let ws = XLSX.utils.aoa_to_sheet([headers]);        
+        XLSX.utils.sheet_add_json(ws, exportList,  {skipHeader: true, origin: "A2"});
+        XLSX.utils.book_append_sheet(workbook, ws, "Sheet1");        
+        XLSX.writeFile(workbook, `${this._("w_PermissionTable")}.xlsx`);
+    }
   private async getTimeSchedule() {
     await this.$server
       .R("/acs/timeschedule",{ "paging.all": "true", system:1 })
