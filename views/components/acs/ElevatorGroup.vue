@@ -116,6 +116,7 @@ export default class ElevatorGroup extends BasicFormQuick implements IFormQuick2
     }
     getReaderCount(group:any){
         let count=0;
+        if(!group.elevators)return count;
         for(let elevator of group.elevators){
             if(elevator.reader && elevator.reader.length>0)
                 count+=elevator.reader.length;
