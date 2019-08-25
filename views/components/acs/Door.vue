@@ -8,6 +8,7 @@
     <ivc-form-quick v-on:viewChange="viewChange($event)"
             :canAdd="canAdd"
             :canEdit="canEdit"
+            :doExport="doExport"
             :canDelete="canDelete"
             :allowEdit="allowEdit">
         <!-- 5) custom view templates with <template #view.* /> -->
@@ -35,7 +36,7 @@ import { EFormQuick} from '@/../components/form/helpers/form-quick/form-quick.vu
 import { IFormQuick2 } from '@/components/form/form-quick/form-quick.vue.ts';
 import { BasicFormQuick } from './basic-form-quick';
 import { PermissionName} from '@/../src/constants/permissions';
-
+import * as XLSX from 'xlsx';
 @Component
 /// 1) class name
 export default class Door extends BasicFormQuick implements IFormQuick2 {    
@@ -108,7 +109,37 @@ export default class Door extends BasicFormQuick implements IFormQuick2 {
                 `;
         }
     }
-    
+    async doExport(){
+        let headers= [this._("w_DoorGroup"),this._("doorname"),this._("readername"),this._("system")];
+        let exportList =[];
+        console.log("headers", headers);
+        let resp:any = await this.$server.R("/acs/door" as any, Object.assign({"paging.all":"true"}, this.params));
+        for(let door of resp.results){            
+            let groupname=this.getInfo(door).map(x=>x.groupname).join(", ");
+            let system = this.getSystemName(door);
+            let readers=[];
+            if(door.readerin){
+                readers.push(...door.readerin);
+            }
+            if(door.readerout){
+                readers.push(...door.readerout);
+            }
+            if(readers.length>0){
+                for(let reader of readers){
+                    exportList.push({groupname, doorname:door.doorname, readername:reader.readername, system});
+                }
+            }
+            else{
+                exportList.push({groupname, doorname:door.doorname, readername:"", system});
+            }
+           
+        }
+        let workbook = XLSX.utils.book_new();
+        let ws = XLSX.utils.aoa_to_sheet([headers]);        
+        XLSX.utils.sheet_add_json(ws, exportList,  {skipHeader: true, origin: "A2"});
+        XLSX.utils.book_append_sheet(workbook, ws, "Sheet1");        
+        XLSX.writeFile(workbook, `${this._("w_Door")}.xlsx`);
+    }
     async viewChange($event: any){
         console.log("view", $event)
         this.filterVisible = $event == 'view';

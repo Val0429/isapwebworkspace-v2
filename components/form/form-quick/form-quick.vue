@@ -14,6 +14,7 @@
                 :canAdd="canAdd"
                 :canEdit="canEdit"
                 :canPreview="canPreview"
+                :doExport="doExport"
                 :canDelete="canDelete"
                 :allowEdit="allowEdit"
                 @selectedRows="selectedRows($event)"

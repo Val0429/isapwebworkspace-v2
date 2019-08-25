@@ -10,7 +10,7 @@
 
                 <!-- <toolbox-divider /> -->
 
-                <!-- <toolbox-export /> -->
+                <iv-toolbox-export v-if="doExport" @click="doExport()"/>
                 <iv-toolbox-add v-if="canAdd" @click="add" />
                 
                 <iv-toolbox-divider v-if="canAdd || canEdit || canPreview || canDelete" />
@@ -58,7 +58,10 @@ export class List extends Vue {
         required: false
     })
     params!: any;
-
+    @Prop({
+        required: false
+    })
+    doExport: any;
     /// private prop
     @Prop({
         type: String,

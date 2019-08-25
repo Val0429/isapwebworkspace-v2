@@ -23,6 +23,10 @@ export class FormQuick extends Vue {
     })
     private canAdd: boolean;
     @Prop({
+        required: false
+    })
+    private doExport: any;
+    @Prop({
         type: Boolean,
         required: false
     })
