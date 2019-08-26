@@ -1,6 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { RegisterLoginRouter } from '@/../core';
-import { ServerName, ServerVersion } from '@/../core/server';
 import { EUserRole } from '@/services/Role';
 import Dialog from '@/services/Dialog';
 import Loading from '@/services/Loading';
@@ -20,7 +19,7 @@ enum ERemeberMe {
 })
 @Component
 export default class Login extends Vue {
-    private version = `${ServerName} ${ServerVersion}`;
+    private version = `${PackeageJSON.description} ${PackeageJSON.project[PackeageJSON.flow].version}`;
     private username: string = '';
     private password: string = '';
     private remeberMe: string = ERemeberMe.noRemeberMe;
@@ -40,12 +39,15 @@ export default class Login extends Vue {
             case '/flow2':
                 result = true;
                 break;
+            case '/flow1':
+            default:
+                break;
         }
         return result;
     }
 
     showProject() {
-        console.log(`Project: ${PackeageJSON.project[PackeageJSON.flow]}`);
+        console.log(`Project: ${PackeageJSON.project[PackeageJSON.flow].name}`);
     }
 
     initLoginInfo() {
