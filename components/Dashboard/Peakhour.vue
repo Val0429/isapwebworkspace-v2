@@ -3,8 +3,19 @@
         <iv-card
             :label="_('w_Dashboard_PeakHour')"
         >
-
             <apexchart type=heatmap height=550 :options="chartOptions" :series="series" />
+
+            <div>
+                <select-permission-site @siteIds="receiveSiteIds"></select-permission-site>
+
+                <select-time
+                    class="col-md-6"
+                    :timeParam="time"
+                    @time="receiveTime"
+                ></select-time>
+            </div>
+
+
         </iv-card>
     </div>
 </template>
@@ -42,6 +53,10 @@ export class Peakhour extends Vue {
 
     mounted() {
         this.initCharts();
+    }
+
+    receiveSiteIds(siteIds: object) {
+        console.log('siteIds ~ ', siteIds)
     }
 
     generateData(count, yrange) {
