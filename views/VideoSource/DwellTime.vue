@@ -333,6 +333,7 @@ export default class DwellTime extends Vue {
     sourceIdSelectItem: any = {};
     demographicIdSelectItem: any = {};
 	frsIdSelectItem: any = {};
+    frsMangerIdSelectItem: any = {};
 
     params: any = {
         mode: ECameraMode.dwellTime
@@ -487,6 +488,41 @@ export default class DwellTime extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
+    }
+
+    async initSelectItemFRSSManagerServer() {
+        this.frsMangerIdSelectItem = {};
+
+        if (this.addStep === EAddStep.frs) {
+            await this.$server
+                .R("/partner/frs-manager")
+                .then((response: any) => {
+                    ResponseFilter.successCheck(this, response, (response: any) => {
+                        for (const returnValue of response.results) {
+                            this.frsMangerIdSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                        }
+                    });
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(this, e);
+                });
+        } else if (this.addStep === EAddStep.frsManager) {
+            await this.$server
+                .R("/partner/frs-manager")
+                .then((response: any) => {
+                    ResponseFilter.successCheck(this, response, (response: any) => {
+                        for (const returnValue of response.results) {
+                            this.frsMangerIdSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                        }
+                    });
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(this, e);
+                });
+        }
+
     }
 
     selectedItem(data) {
@@ -934,6 +970,14 @@ export default class DwellTime extends Vue {
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
 
+        await this.initSelectItemFRSServer();
+        await this.initSelectItemSite();
+        await this.initSelectItemDemographicServer();
+        await this.selectAreaId(this.inputFormData.siteId);
+        await this.selectGroupDeviceId(this.inputFormData.areaId);
+        this.getInputData();
+
+
         if (this.inputFormData.model === EAddStep.frs) {
             this.addStep = EAddStep.frs;
             this.transition.prevStep = this.transition.step;
@@ -946,12 +990,8 @@ export default class DwellTime extends Vue {
             this.transition.step = 3;
         }
 
-        await this.initSelectItemFRSServer();
-        await this.initSelectItemSite();
-        await this.initSelectItemDemographicServer();
-        await this.selectAreaId(this.inputFormData.siteId);
-        await this.selectGroupDeviceId(this.inputFormData.areaId);
-        this.getInputData();
+        await this.initSelectItemFRSSManagerServer();
+
         this.inputFormData.stepType = stepType;
         this.inputFormData.groupIds = JSON.parse(
             JSON.stringify(
