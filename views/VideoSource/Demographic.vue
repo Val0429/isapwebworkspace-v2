@@ -586,10 +586,7 @@ export default class Demographic extends Vue {
         // if (this.inputFormData.serverId !== "") {
         //     this.selectSourceIdAndLocation(this.inputFormData.serverId);
         // }
-
-        if (this.pageStep === EPageStep.edit) {
-            this.selectSourceIdAndLocation(this.inputFormData.serverId);
-        }
+        
     }
 
     tempSaveInputData(data) {
@@ -975,12 +972,14 @@ export default class Demographic extends Vue {
 
 	    if (this.inputFormData.model === EAddStep.frs) {
             this.addStep = EAddStep.frs;
+            this.selectSourceIdAndLocation(this.inputFormData.serverId);
             this.transition.prevStep = this.transition.step;
             this.transition.step = 3;
         }
 
         if (this.inputFormData.model === EAddStep.frsManager) {
             this.addStep = EAddStep.frsManager;
+            this.selectSourceIdAndLocation(this.inputFormData.serverId);
             this.transition.prevStep = this.transition.step;
             this.transition.step = 3;
         }

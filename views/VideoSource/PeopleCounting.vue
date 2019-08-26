@@ -709,10 +709,6 @@ export default class PeopleCounting extends Vue {
                         : "",
             };
         }
-
-        if (this.pageStep === EPageStep.edit) {
-            this.selectSourceIdAndLocation(this.inputFormData.serverId);
-        }
     }
 
     tempSaveInputData(data) {
@@ -1115,18 +1111,21 @@ export default class PeopleCounting extends Vue {
 
         if (this.inputFormData.brand === EAddStep.hanwha) {
             this.addStep = EAddStep.hanwha;
+            this.selectSourceIdAndLocation(this.inputFormData.serverId);
             this.transition.prevStep = this.transition.step;
             this.transition.step = 3;
         }
 
         if (this.inputFormData.model === EAddStep.frs) {
             this.addStep = EAddStep.frs;
+            this.selectSourceIdAndLocation(this.inputFormData.serverId);
             this.transition.prevStep = this.transition.step;
             this.transition.step = 5;
         }
 
         if (this.inputFormData.model === EAddStep.frsManager) {
             this.addStep = EAddStep.frsManager;
+            this.selectSourceIdAndLocation(this.inputFormData.serverId);
             this.transition.prevStep = this.transition.step;
             this.transition.step = 5;
         }
