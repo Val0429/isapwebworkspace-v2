@@ -976,24 +976,25 @@ export default class FaceRecognition extends Vue {
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
 
-        await this.initSelectItemFRSServer();
+	    await this.getInputData();
+
+	    if (this.inputFormData.model === EAddStep.frs) {
+		    this.addStep = EAddStep.frs;
+		    this.transition.prevStep = this.transition.step;
+		    this.transition.step = 3;
+	    }
+
+	    if (this.inputFormData.model === EAddStep.frsManager) {
+		    this.addStep = EAddStep.frsManager;
+		    this.transition.prevStep = this.transition.step;
+		    this.transition.step = 3;
+	    }
+
+	    await this.initSelectItemFRSServer();
         await this.initSelectItemSite();
         await this.initSelectItemDemographicServer();
         await this.selectAreaId(this.inputFormData.siteId);
         await this.selectGroupDeviceId(this.inputFormData.areaId);
-        this.getInputData();
-
-        if (this.inputFormData.model === EAddStep.frs) {
-            this.addStep = EAddStep.frs;
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 3;
-        }
-
-        if (this.inputFormData.model === EAddStep.frsManager) {
-            this.addStep = EAddStep.frsManager;
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 3;
-        }
 
         await this.initSelectItemFRSSManagerServer();
 

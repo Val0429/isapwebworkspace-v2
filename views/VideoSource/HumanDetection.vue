@@ -843,10 +843,13 @@ export default class HumanDetection extends Vue {
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                        response
-                    );
-                    this.regionTreeItem.region = this.regionTreeItem.tree;
+                    for (const returnValue of response) {
+                        this.sitesSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                        this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                            returnValue
+                        );
+                    }
                 });
             })
             .catch((e: any) => {

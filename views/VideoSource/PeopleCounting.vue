@@ -1056,6 +1056,8 @@ export default class PeopleCounting extends Vue {
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
 
+        await this.getInputData();
+
         if (this.inputFormData.brand === EAddStep.hanwha) {
             this.addStep = EAddStep.hanwha;
             this.transition.prevStep = this.transition.step;
@@ -1078,7 +1080,7 @@ export default class PeopleCounting extends Vue {
         await this.initSelectItemSite();
         await this.selectAreaId(this.inputFormData.siteId);
         await this.selectGroupDeviceId(this.inputFormData.areaId);
-        this.getInputData();
+
         this.inputFormData.stepType = stepType;
         this.inputFormData.groupIds = JSON.parse(
             JSON.stringify(

@@ -406,15 +406,19 @@ export default class Demographic extends Vue {
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                        response
-                    );
-                    this.regionTreeItem.region = this.regionTreeItem.tree;
+	                for (const returnValue of response) {
+		                this.sitesSelectItem[returnValue.objectId] =
+			                returnValue.name;
+		                this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+			                returnValue
+		                );
+	                }
                 });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
+
     }
 
     async initSelectItemTree() {
@@ -871,7 +875,9 @@ export default class Demographic extends Vue {
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
 
-        if (this.inputFormData.model === EAddStep.frs) {
+	    await this.getInputData();
+
+	    if (this.inputFormData.model === EAddStep.frs) {
             this.addStep = EAddStep.frs;
             this.transition.prevStep = this.transition.step;
             this.transition.step = 3;
@@ -883,12 +889,12 @@ export default class Demographic extends Vue {
             this.transition.step = 3;
         }
 
-        await this.initSelectItemFRSServer();
+	    await this.initSelectItemSite();
+	    await this.initSelectItemFRSServer();
         await this.initSelectItemDemographicServer();
-        await this.initSelectItemSite();
         await this.selectAreaId(this.inputFormData.siteId);
         await this.selectGroupDeviceId(this.inputFormData.areaId);
-        this.getInputData();
+
         this.inputFormData.stepType = stepType;
         this.inputFormData.groupIds = JSON.parse(
             JSON.stringify(

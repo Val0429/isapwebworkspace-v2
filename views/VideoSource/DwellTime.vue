@@ -408,15 +408,20 @@ export default class DwellTime extends Vue {
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                        response
-                    );
-                    this.regionTreeItem.region = this.regionTreeItem.tree;
+                    for (const returnValue of response) {
+                        this.sitesSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                        this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                            returnValue
+                        );
+                    }
                 });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
+
+        console.log(' ~ ', this.sitesSelectItem)
     }
 
     async initSelectItemTree() {
@@ -970,13 +975,7 @@ export default class DwellTime extends Vue {
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
 
-        await this.initSelectItemFRSServer();
-        await this.initSelectItemSite();
-        await this.initSelectItemDemographicServer();
-        await this.selectAreaId(this.inputFormData.siteId);
-        await this.selectGroupDeviceId(this.inputFormData.areaId);
-        this.getInputData();
-
+        await this.getInputData();
 
         if (this.inputFormData.model === EAddStep.frs) {
             this.addStep = EAddStep.frs;
@@ -990,7 +989,12 @@ export default class DwellTime extends Vue {
             this.transition.step = 3;
         }
 
+        await this.initSelectItemFRSServer();
         await this.initSelectItemFRSSManagerServer();
+        await this.initSelectItemSite();
+        await this.initSelectItemDemographicServer();
+        await this.selectAreaId(this.inputFormData.siteId);
+        await this.selectGroupDeviceId(this.inputFormData.areaId);
 
         this.inputFormData.stepType = stepType;
         this.inputFormData.groupIds = JSON.parse(
