@@ -703,8 +703,8 @@ export default class PeopleCounting extends Vue {
                         ? param.config.sourceId
                         : "",
                 sourceIdView:
-                    param.config && param.config.sourceIdView
-                        ? param.config.sourceIdView
+                    param.config && param.config.sourceId
+                        ? param.config.sourceId
                         : "",
             };
         }

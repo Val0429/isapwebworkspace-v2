@@ -155,7 +155,7 @@
                 <iv-form
                     :interface="IAddAndEditFromiSap()"
                     :value="inputFormData"
-                    @update:serverId="selectSourceIdAndLocation($event)"
+                    @update:serverId="selectFrsMangerId($event)"
                     @update:siteId="selectAreaId($event)"
                     @update:areaId="selectGroupDeviceId($event)"
                     @update:*="tempSaveInputData($event)"
@@ -407,13 +407,10 @@ export default class DwellTime extends Vue {
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    for (const returnValue of response) {
-                        this.sitesSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                        this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                            returnValue
-                        );
-                    }
+                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                        response
+                    );
+                    this.regionTreeItem.region = this.regionTreeItem.tree;
                 });
             })
             .catch((e: any) => {
@@ -579,8 +576,8 @@ export default class DwellTime extends Vue {
                         ? param.config.sourceId
                         : "",
                 sourceIdView:
-                    param.config && param.config.sourceIdView
-                        ? param.config.sourceIdView
+                    param.config && param.config.sourceId
+                        ? param.config.sourceId
                         : "",
             };
         }
@@ -590,7 +587,7 @@ export default class DwellTime extends Vue {
 	    // }
 
 	    if (this.pageStep === EPageStep.edit) {
-		    this.selectSourceIdAndLocation(this.inputFormData.serverId);
+		    this.selectFrsMangerId(this.inputFormData.serverId);
 	    }
     }
 
@@ -642,6 +639,64 @@ export default class DwellTime extends Vue {
                 };
                 this.selecteds.push(selectedsObject);
             }
+        }
+    }
+
+    async selectFrsMangerId(data) {
+        await this.initFrsId(data);
+    }
+
+    async initFrsId(data) {
+
+        this.frsIdSelectItem = {};
+        this.sourceIdSelectItem = {};
+
+        if (data !== undefined) {
+            const readParam: {
+                objectId: string;
+            } = {
+                objectId: data
+            };
+
+            Loading.show();
+            await this.$server
+                .C("/partner/frs-manager/device", readParam)
+                .then((response: any) => {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+
+                            for (const returnValue of response) {
+                                this.$set(
+                                    this.frsIdSelectItem,
+                                    returnValue.frsId,
+                                    returnValue.frsIp
+                                );
+                            }
+
+                            for (const returnValue of response) {
+                                for (const value of returnValue.channels) {
+                                    this.$set(
+                                        this.sourceIdSelectItem,
+                                        value.sourceId,
+                                        value.sourceId
+                                    );
+                                }
+
+                            }
+
+                        },
+                        this._("w_ErrorReadData")
+                    );
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_ErrorReadData")
+                    );
+                });
         }
     }
 

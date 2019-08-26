@@ -326,22 +326,22 @@ export class HighchartsDemographic extends Vue {
         );
 
         // set same chart
-        this.drawChartGenderAge();
-        this.drawChartAge();
-        this.drawChartDwellTime();
+        setTimeout(this.drawChartGenderAge, 100);
+        setTimeout(this.drawChartAge, 100);
+        setTimeout(this.drawChartDwellTime, 100);
 
         switch (this.chartMode) {
             case EChartMode.site1Day1:
-                this.initSite1Day1();
+                setTimeout(this.initSite1Day1, 100);
                 break;
             case EChartMode.site1DayX:
-                this.initSite1DayX();
+                setTimeout(this.initSite1DayX, 100);
                 break;
             case EChartMode.siteXDay1:
-                this.initSiteXDay1();
+                setTimeout(this.initSiteXDay1, 100);
                 break;
             case EChartMode.siteXDayX:
-                this.initSiteXDayX();
+                setTimeout(this.initSiteXDayX, 100);
                 break;
             default:
                 break;

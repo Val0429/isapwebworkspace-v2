@@ -96,7 +96,7 @@
             step: 1
         };
 
-        selectAllSites: string = EIfAllSelected.select;
+        selectAllSites: string = EIfAllSelected.all;
 
         sitesSelectItem: any = [];
         ifAllSitesSelectItem: any = [];
@@ -127,6 +127,7 @@
                 { value: EIfAllSelected.all, text: this._("w_AllSites") },
                 { value: EIfAllSelected.select, text: this._("w_SelectSites") }
             ];
+            this.inputFormData.siteIds = this.inputFormData.allSiteIds;
         }
 
         initRegionTreeSelect() {
