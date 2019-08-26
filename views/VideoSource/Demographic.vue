@@ -406,13 +406,10 @@ export default class Demographic extends Vue {
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    for (const returnValue of response) {
-                        this.sitesSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                        this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                            returnValue
-                        );
-                    }
+                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                        response
+                    );
+                    this.regionTreeItem.region = this.regionTreeItem.tree;
                 });
             })
             .catch((e: any) => {
@@ -577,8 +574,8 @@ export default class Demographic extends Vue {
                         ? param.config.sourceId
                         : "",
                 sourceIdView:
-                    param.config && param.config.sourceIdView
-                        ? param.config.sourceIdView
+                    param.config && param.config.sourceId
+                        ? param.config.sourceId
                         : "",
             };
         }

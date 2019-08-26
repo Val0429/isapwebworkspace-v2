@@ -659,7 +659,7 @@ export default class FRSManager extends Vue {
                      this.groupEmployee
                  )}
                  */
-                employee: ${toEnumInterface(this.groupEmployee as any, false)};
+                employee?: ${toEnumInterface(this.groupEmployee as any, false)};
 
 
                 /**
@@ -668,7 +668,7 @@ export default class FRSManager extends Vue {
                      this.groupVIP
                  )}
                  */
-                vip: ${toEnumInterface(this.groupVIP as any, false)};
+                vip?: ${toEnumInterface(this.groupVIP as any, false)};
 
 
                 /**
@@ -677,7 +677,7 @@ export default class FRSManager extends Vue {
                      this.groupBlacklist
                  )}
                  */
-                blacklist: ${toEnumInterface(
+                blacklist?: ${toEnumInterface(
                     this.groupBlacklist as any,
                     false
                 )};

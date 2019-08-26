@@ -784,6 +784,7 @@ export default class LangObject {
     w_VSDemographic_EditSuccess = 'Demographic Device edit success.';
     w_VSDemographic_EditFailed = 'Demographic Device edit failed, please try again.';
     w_VSDemographic_DeleteConfirm = 'Are you sure to delete selected Demographic Device(s)?';
+    w_VSDemographic_frsMangerId = 'FRS MangerId';
 
     // Heatmap Device
     w_VSHeatmap_List = 'Heatmap Device List';
