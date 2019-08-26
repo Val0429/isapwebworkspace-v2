@@ -13,8 +13,8 @@ import Site from './components/Site.vue';
 
 // components
 $({ path: '/components', name: 'Dashboard', icon: 'fa-sitemap' })(Components);
-$({ path: '/components/users/user', name: 'User', icon: 'fa-user', permission: true })(User);
-$({ path: '/components/users/userGroup', name: 'UserGroup', icon: 'fa-users', permission: true })(UserGroup);
-$({ path: '/components/persons/person', name: 'Person', icon: 'fa-user', permission: true })(Person);
-$({ path: '/components/persons/Stranger', name: 'Stranger', icon: 'fa-user-secret', permission: true })(Stranger);
-$({ path: '/components/region/site', name: 'Site', icon: 'fa-gavel' })(Site);
+$({ path: '/users/user', name: 'User', icon: 'fa-user', permission: true })(User);
+$({ path: '/users/userGroup', name: 'UserGroup', icon: 'fa-users', permission: true })(UserGroup);
+$({ path: '/persons/person', name: 'Person', icon: 'fa-user', permission: true })(Person);
+$({ path: '/persons/Stranger', name: 'Stranger', icon: 'fa-user-secret', permission: true })(Stranger);
+$({ path: '/region/site', name: 'Site', icon: 'fa-gavel' })(Site);

@@ -6,12 +6,12 @@ import { toEnumInterface } from '@/../core';
 export class UsersListForm extends Vue implements IFormQuick {
 
     path: string = "/users";
-    tView: string = "_('wb_View')";
+    tView: string = "_('w_Users_User_List')";
     tAdd: string = "_('wb_Add')";
     tPreview?: string = "_('w_Preview')";
     tEdit?: string = "_('wb_Edit')";
     canAdd?: boolean = true;
-    canPreview?: boolean = true;
+    canPreview?: boolean = false;
     canEdit?: boolean = true;
     canDelete?: boolean = true;
     
@@ -20,105 +20,73 @@ export class UsersListForm extends Vue implements IFormQuick {
             case EFormQuick.View:
                 return `
                 interface {
-                    /**
-                     * @uiLabel - No.
-                     * @uiType - iv-cell-auto-index
+                    /*
+                     * @uiLabel - ${this._('w_User') + this._('w_Name')}
                      */
-                    no: any;
-                    /**
-                     * @uiLabel - ${this._("w_Sex")}
+                    username: string;
+                    /*
+                     * @uiLabel - ${this._('w_User') + this._('w_Group')}
                      */
-                    sex: string;
-                    /**
-                     * @uiLabel - ${this._("w_Service")}
+                    groups: string;
+                    /*
+                     * @uiLabel - ${this._('w_Email')}
                      */
-                    service: boolean;
-                    /**
-                     * @uiLabel - ${this._("w_Service_Type")}
-                     */
-                    serviceType: number;
-                    /**
-                     * @uiLabel - ${this._("w_Service_Description")}
-                     */
-                    description?: string;
+                    publicEmailAddress: string;
                 }
                 `;
             case EFormQuick.Add:
-            case EFormQuick.Edit:
-            case EFormQuick.Preview:
                 return `
                 interface {
-                    /**
-                     * @uiLabel - ${this._("w_Sex")}
-                     * @uiDisabled - ${type === EFormQuick.Preview ? true : false}
+                    /*
+                     * @uiLabel - ${this._('w_User') + this._('w_Name')}
                      */
-                    sex: ${toEnumInterface({
-                        0: "Female",
-                        1: "Male"
-                    })};
-                    /**
-                     * @uiLabel - ${this._("w_Service")}
-                     * @uiRequired - ${this.$form('quick', 'sex') == 0 ? false : true}
-                     * @uiHidden - ${ this.sex == 0 ? true : false }
-                     * @uiDisabled - ${type === EFormQuick.Preview ? true : false}
+                    username: string;
+                    /*
+                     * @uiLabel - ${this._('wb_Password')}
+                     * @uiType - iv-form-password
                      */
-                    service?: boolean;
-                    /**
-                     * @uiLabel - ${this._("w_Service_Type")}
-                     * @uiRequired - ${ this.sex != 0 && !this.isService ? false : true }
-                     * @uiHidden - ${ this.sex == 0 || !this.isService ? true : false }
-                     * @uiDisabled - ${type === EFormQuick.Preview ? true : false}
+                    password: string;
+                    /*
+                     * @uiLabel - ${this._('w_Confirm_Password')}
+                     * @uiType - iv-form-password
                      */
-                    serviceType?: ${toEnumInterface({
-                        0: "未服役",
-                        1: "已服役",
-                        2: "替代役",
-                        3: "免役"
-                    })};
-                    /**
-                     * @uiLabel - ${this._("w_Service_Description")}
-                     * @uiType - iv-form-textarea
-                     * @uiHidden - ${ this.sex == 0 || !this.isService ? true : false }
-                     * @uiDisabled - ${type === EFormQuick.Preview ? true : false}
+                    comfirmPassword: string;
+                    /*
+                     * @uiLabel - ${this._('w_Email')}
                      */
-                    description: string;
+                    publicEmailAddress?: string;
+                    /*
+                     * @uiLabel - ${this._('w_User') + this._('w_Group')}
+                     */
+                    groups1?: string;
+                    /*
+                     * @uiLabel - ${this._('w_User') + this._('w_Group')}
+                     */
+                    groups2: string;
                 }
                 `;
-                // return `
-                // interface {
-                //     /**
-                //      * @uiLabel - ${this._("w_Service_Description")}
-                //      * @uiType - iv-form-textarea
-                //      * @uiHidden - ${ this.isService == true ? false : true }
-                //      */
-                //     description: string;
-                // }
-                // `;
-                // return `
-                // interface {
-                //     /**
-                //      * @uiLabel - ${this._("w_Sex")}
-                //      * @uiType - iv-form-label
-                //      */
-                //     sex: boolean;
-                //     /**
-                //      * @uiLabel - ${this._("w_Service")}
-                //      * @uiType - iv-form-switch
-                //      * @uiDisabled - true
-                //      */
-                //     service?: boolean;
-                //     /**
-                //      * @uiLabel - ${this._("w_Service_Type")}
-                //      * @uiType - iv-form-label
-                //      */
-                //     serviceType?: number;
-                //     /**
-                //      * @uiLabel - ${this._("w_Service_Description")}
-                //      * @uiType - iv-form-label
-                //      */
-                //     description?: string;
-                // }
-                // `;
+            case EFormQuick.Edit:
+                    return `
+                    interface {
+                        /*
+                         * @uiLabel - ${this._('w_User') + this._('w_Name')}
+                         * @uiDisabled - true
+                         */
+                        username: string;
+                        /*
+                         * @uiLabel - ${this._('w_Email')}
+                         */
+                        publicEmailAddress?: string;
+                        /*
+                         * @uiLabel - ${this._('w_User') + this._('w_Group')}
+                         */
+                        groups1?: string;
+                        /*
+                         * @uiLabel - ${this._('w_User') + this._('w_Group')}
+                         */
+                        groups2: string;
+                    }
+                    `;
         }
     }
     // preAdd() {
@@ -142,20 +110,7 @@ export class UsersListForm extends Vue implements IFormQuick {
     //     throw new Error("Method not implemented.");
     // }
 
-    private sex = 0;
-    private isService: boolean = false;
-
     private updateData(data) {
-        switch (data.key) {
-            case 'sex':
-                this.sex = data.value;
-            case 'service':
-                this.isService = data.value;
-        }
-    }
-    private sendData(arg) {
-        console.log('???');
-        console.log(arg);
     }
 }
 export default UsersListForm;

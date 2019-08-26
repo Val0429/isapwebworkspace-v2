@@ -12,32 +12,21 @@ export default class LangObject implements ILang {
     w_Navagation_Region = " 區域管理";
     w_Navagation_Region_Site = "工地";
 
-    // Header
-    w_Title = "標題";
-    w_Content = "內文";
-    w_Preview = "預覽";
-    w_Sex = "性別";
-    w_Service = "服役";
-    w_Service_Type = "役別";
-    w_Service_Description = "服役說明";
+    // Card Header
+    w_Persons_Person_List = "人員列表";
+    w_Persons_Stranger_List = "陌生人列表";
+    w_Users_User_List = "用戶清單";
+    w_Users_Group_List = "群組清單";
 
     // Common
-    w_Nickname = '暱稱';
-    w_Value = '値';
-    w_Options = '可用選項';
-    w_Chooses = '已選擇';
-    w_AllChoose = '全選';
-    w_Reset = '重設';
-    w_Back = '返回';
-    w_Submit = '送出';
-    w_Cancel = 'Cancel';
-    w_Error = 'Error';
-    w_Selection = '選択';
-    w_Multi = '複数';
-    w_Actions = '動作';
-    w_Confirm = 'Confirm';
-    w_Cancelled = 'Cancelled';
-    w_No = 'No';
+    w_User = '用戶';
+    w_Group = '群組';
+    w_Email = '電子信箱';
+    w_Confirm_Password = '請確認密碼';
+    w_Name = '姓名';
+    w_Type = '類型';
+    w_Title = '名稱';
+    w_Picture = '照片';
 
     // Status
     w_Status_Enable = 'Enable';
@@ -59,17 +48,6 @@ export default class LangObject implements ILang {
     // Dialog
     w_Dialog_ErrorTitle = 'Error';
     w_Dialog_SuccessTitle = 'Success';
-
-    // User
-    w_Username = '使用者名稱';
-    w_Name = '名前';
-    w_Password = '密碼';
-    w_Roles = '權限';
-    w_Email = 'Email';
-    w_User = '使用者';
-    w_UserAdd = '新增使用者';
-    w_UserEdit = '修改使用者';
-    w_ConfirmPassword = '確認密碼';
 
     // Error
     w_Error_FailedToFetch = "We can't connect to server, please try again!"; // failed to fetch

@@ -1,12 +1,11 @@
 <template>
     <iv-form-quick
-        ref="quick"
+        ref="user-list"
         @update:*="updateData"
         >
     <!-- 50) custom view templates with <template #view.* /> -->
-    <template #view.service="{$attrs, $listeners}">
-        <div v-if="$attrs.value">{{ $attrs.value ? '是' : '否' }}</div>
-        <div v-else> - </div>
+    <template #view.groups="{$attrs, $listeners}">
+        {{ $attrs.value[0].groupname }}
     </template>
     <!-- 51) custom edit / add template with <template #add.* /> -->
     </iv-form-quick>

@@ -12,31 +12,21 @@ export default class LangObject {
     w_Navagation_Region = "Region";
     w_Navagation_Region_Site = "Site";
 
-    // Header
-    w_Title = "Title";
-    w_Content = "Content";
-    w_Preview = "Preview";
-    w_Sex = "Sex";
-    w_Service = "Service";
-    w_Service_Type = "Service Type";
-    w_Service_Description = "Service Description";
+    // Card Header
+    w_Persons_Person_List = "Person List";
+    w_Persons_Stranger_List = "Stranger List";
+    w_Users_User_List = "User List";
+    w_Users_Group_List = "Group List";
 
     // Common
-    w_Nickname = 'Nickname';
-    w_Value = 'Value';
-    w_Options = 'Options';
-    w_Chooses = 'Choose';
-    w_AllChoose = 'All';
-    w_Reset = 'Reset';
-    w_Back = 'Back';
-    w_Submit = 'Submit';
-    w_Cancel = 'Cancel';
-    w_Selection = 'Selection';
-    w_Multi = 'Multi';
-    w_Actions = 'Actions';
-    w_Confirm = 'Confirm';
-    w_Cancelled = 'Cancelled';
-    w_No = 'No';
+    w_User = 'User';
+    w_Group = 'Group';
+    w_Email = 'E-mail';
+    w_Confirm_Password = 'Confirm Password';
+    w_Name = 'Name';
+    w_Type = 'Type';
+    w_Title = 'Name';
+    w_Picture = 'Picture';
 
     // Status
     w_Status_Enable = 'Enable';
@@ -63,17 +53,6 @@ export default class LangObject {
     w_Error_FailedToFetch = "We can't connect to server, please try again!"; // failed to fetch
     w_Error_401 = 'Not find User, Please login again'; // 401
     w_Error_404 = 'API Not Find'; // 404
-
-    // Login & User
-    w_Username = 'User Name';
-    w_Name = 'Name';
-    w_Password = 'Password';
-    w_Roles = 'Role';
-    w_Email = 'Email';
-    w_User = 'User';
-    w_UserAdd = 'Add User';
-    w_UserEdit = 'Edit User';
-    w_ConfirmPassword = 'Confirm Password';
 
     // Login
     w_Login_Login = 'Login';

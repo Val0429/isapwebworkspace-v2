@@ -12,34 +12,21 @@ export default class LangObject implements ILang {
     w_Navagation_Region = "Region";
     w_Navagation_Region_Site = "Site";
 
-    // Header
-    w_Title = "Title";
-    w_Content = "Content";
-    w_Preview = "Preview";
-    w_Sex = "Sex";
-    w_Service = "Service";
-    w_Service_Type = "Service Type";
-    w_Service_Description = "Service Description";
-    
+    // Card Header
+    w_Persons_Person_List = "Person List";
+    w_Persons_Stranger_List = "Stranger List";
+    w_Users_User_List = "User List";
+    w_Users_Group_List = "Group List";
+
     // Common
-    w_Nickname = '暱稱';
-    w_Value = '値';
-    w_Options = 'Options';
-    w_Chooses = 'Choose';
-    w_AllChoose = 'All';
-    w_Reset = 'Reset';
-    w_Back = 'Back';
-    w_Submit = 'Submit';
-    w_Cancel = 'Cancel';
-    w_Success = 'Success';
-    w_Error = 'Error';
-    w_Failed = 'Failed';
-    w_Selection = '選択';
-    w_Multi = '複数';
-    w_Actions = '動作';
-    w_Confirm = 'Confirm';
-    w_Cancelled = 'Cancelled';
-    w_No = 'No';
+    w_User = 'User';
+    w_Group = 'Group';
+    w_Email = 'E-mail';
+    w_Confirm_Password = 'Confirm Password';
+    w_Name = 'Name';
+    w_Type = 'Type';
+    w_Title = 'Name';
+    w_Picture = 'Picture';
 
     // Status
     w_Status_Enable = 'Enable';
@@ -61,17 +48,6 @@ export default class LangObject implements ILang {
     // Dialog
     w_Dialog_ErrorTitle = 'Error';
     w_Dialog_SuccessTitle = 'Success';
-
-    // Login & User
-    w_Username = '使用者名稱';
-    w_Name = '名前';
-    w_Password = 'パスワード';
-    w_Roles = '權限';
-    w_Email = 'Email';
-    w_User = '使用者';
-    w_UserAdd = '新增使用者';
-    w_UserEdit = '修改使用者';
-    w_ConfirmPassword = '重複輸入密碼';
 
     // Error
     w_Error_FailedToFetch = "We can't connect to server, please try again!"; // failed to fetch

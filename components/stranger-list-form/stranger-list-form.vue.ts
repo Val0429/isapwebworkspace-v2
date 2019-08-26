@@ -20,27 +20,6 @@ export class StrangerListForm extends Vue implements IFormQuick {
             case EFormQuick.View:
                 return `
                 interface {
-                    /**
-                     * @uiLabel - No.
-                     * @uiType - iv-cell-auto-index
-                     */
-                    no: any;
-                    /**
-                     * @uiLabel - ${this._("w_Sex")}
-                     */
-                    sex: string;
-                    /**
-                     * @uiLabel - ${this._("w_Service")}
-                     */
-                    service: boolean;
-                    /**
-                     * @uiLabel - ${this._("w_Service_Type")}
-                     */
-                    serviceType: number;
-                    /**
-                     * @uiLabel - ${this._("w_Service_Description")}
-                     */
-                    description?: string;
                 }
                 `;
             case EFormQuick.Add:
@@ -48,40 +27,6 @@ export class StrangerListForm extends Vue implements IFormQuick {
             case EFormQuick.Preview:
                 return `
                 interface {
-                    /**
-                     * @uiLabel - ${this._("w_Sex")}
-                     * @uiDisabled - ${type === EFormQuick.Preview ? true : false}
-                     */
-                    sex: ${toEnumInterface({
-                        0: "Female",
-                        1: "Male"
-                    })};
-                    /**
-                     * @uiLabel - ${this._("w_Service")}
-                     * @uiRequired - ${this.$form('quick', 'sex') == 0 ? false : true}
-                     * @uiHidden - ${ this.sex == 0 ? true : false }
-                     * @uiDisabled - ${type === EFormQuick.Preview ? true : false}
-                     */
-                    service?: boolean;
-                    /**
-                     * @uiLabel - ${this._("w_Service_Type")}
-                     * @uiRequired - ${ this.sex != 0 && !this.isService ? false : true }
-                     * @uiHidden - ${ this.sex == 0 || !this.isService ? true : false }
-                     * @uiDisabled - ${type === EFormQuick.Preview ? true : false}
-                     */
-                    serviceType?: ${toEnumInterface({
-                        0: "未服役",
-                        1: "已服役",
-                        2: "替代役",
-                        3: "免役"
-                    })};
-                    /**
-                     * @uiLabel - ${this._("w_Service_Description")}
-                     * @uiType - iv-form-textarea
-                     * @uiHidden - ${ this.sex == 0 || !this.isService ? true : false }
-                     * @uiDisabled - ${type === EFormQuick.Preview ? true : false}
-                     */
-                    description: string;
                 }
                 `;
                 // return `

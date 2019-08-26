@@ -15,3 +15,4 @@ export default class Components extends Vue {
         this.$goHome();
     }
 }
+</script>
