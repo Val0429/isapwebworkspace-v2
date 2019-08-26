@@ -69,7 +69,7 @@ export class HighchartsCampaignSingle extends Vue {
     mounted() {}
 
     start() {
-        this.initCampaignSingleChart();
+        setTimeout(this.initCampaignSingleChart, 100);
     }
 
     initCampaignSingleChart() {

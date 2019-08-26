@@ -275,7 +275,7 @@ export class HighchartsDemographic extends Vue {
             },
             {
                 value: EGender.female,
-                text: this._("w_Female")
+                text: this._("w_Male")
             }
         ];
         this.selectItem.ageRange = [
@@ -326,22 +326,22 @@ export class HighchartsDemographic extends Vue {
         );
 
         // set same chart
-        this.drawChartGenderAge();
-        this.drawChartAge();
-        this.drawChartDwellTime();
+        setTimeout(this.drawChartGenderAge, 100);
+        setTimeout(this.drawChartAge, 100);
+        setTimeout(this.drawChartDwellTime, 100);
 
         switch (this.chartMode) {
             case EChartMode.site1Day1:
-                this.initSite1Day1();
+                setTimeout(this.initSite1Day1, 100);
                 break;
             case EChartMode.site1DayX:
-                this.initSite1DayX();
+                setTimeout(this.initSite1DayX, 100);
                 break;
             case EChartMode.siteXDay1:
-                this.initSiteXDay1();
+                setTimeout(this.initSiteXDay1, 100);
                 break;
             case EChartMode.siteXDayX:
-                this.initSiteXDayX();
+                setTimeout(this.initSiteXDayX, 100);
                 break;
             default:
                 break;
@@ -388,7 +388,7 @@ export class HighchartsDemographic extends Vue {
                 data: []
             },
             {
-                name: this._("w_Female"),
+                name: this._("w_Male"),
                 data: []
             }
         ];
@@ -703,7 +703,7 @@ export class HighchartsDemographic extends Vue {
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempStartTimestamp = tempChartData.dateStart.getTime();
             let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
@@ -726,7 +726,7 @@ export class HighchartsDemographic extends Vue {
                 if (
                     value.siteObjectId == tempChartData.siteObjectId &&
                     valTimestamp >= tempStartTimestamp &&
-                    valTimestamp <= tempEndTimestamp
+                    valTimestamp < tempEndTimestamp
                 ) {
                     tempChartData.maleCount += value.maleCount;
                     tempChartData.femaleCount += value.femaleCount;
@@ -1219,7 +1219,7 @@ export class HighchartsDemographic extends Vue {
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempStartTimestamp = tempChartData.dateStart.getTime();
             let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
@@ -1249,7 +1249,7 @@ export class HighchartsDemographic extends Vue {
                     if (
                         value.siteObjectId == tempSiteValue.siteObjectId &&
                         valTimestamp >= tempStartTimestamp &&
-                        valTimestamp <= tempEndTimestamp
+                        valTimestamp < tempEndTimestamp
                     ) {
                         tempSiteValue.maleCount += value.maleCount;
                         tempSiteValue.femaleCount += value.femaleCount;
@@ -1628,15 +1628,7 @@ export class HighchartsDemographic extends Vue {
                     }
                 },
                 tooltip: { enabled: false },
-                series: series,
-                colors: [
-                    "#5CCFFB",
-                    "#5C94FB",
-                    "#8072E1",
-                    "#F1C244",
-                    "#92DE64",
-                    "#FD6893"
-                ]
+                series: series
             };
 
             this.mountChart.ageRange = true;

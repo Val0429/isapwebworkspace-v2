@@ -167,16 +167,16 @@ export class HighchartsOccupancy extends Vue {
 
         switch (this.chartMode) {
             case EChartMode.site1Day1:
-                this.initSite1Day1();
+                setTimeout(this.initSite1Day1, 100);
                 break;
             case EChartMode.site1DayX:
-                this.initSite1DayX();
+                setTimeout(this.initSite1DayX, 100);
                 break;
             case EChartMode.siteXDay1:
-                this.initSiteXDay1();
+                setTimeout(this.initSiteXDay1, 100);
                 break;
             case EChartMode.siteXDayX:
-                this.initSiteXDayX();
+                setTimeout(this.initSiteXDayX, 100);
                 break;
             default:
                 break;
@@ -507,7 +507,7 @@ export class HighchartsOccupancy extends Vue {
                     );
                     break;
             }
-            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempStartTimestamp = tempChartData.dateStart.getTime();
             let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
@@ -531,7 +531,7 @@ export class HighchartsOccupancy extends Vue {
                     if (
                         tempValue.areaId == serie.areaId &&
                         valTimestamp >= tempStartTimestamp &&
-                        valTimestamp <= tempEndTimestamp
+                        valTimestamp < tempEndTimestamp
                     ) {
                         serie.data[dataIndex] += value.occupancy;
                     }
@@ -919,7 +919,7 @@ export class HighchartsOccupancy extends Vue {
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempStartTimestamp = tempChartData.dateStart.getTime();
             let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
@@ -947,7 +947,7 @@ export class HighchartsOccupancy extends Vue {
                     if (
                         value.siteObjectId == tempSiteValue.siteObjectId &&
                         valTimestamp >= tempStartTimestamp &&
-                        valTimestamp <= tempEndTimestamp
+                        valTimestamp < tempEndTimestamp
                     ) {
                         tempSiteValue.occupancy += value.occupancy;
                         tempSiteValue.temperature = value.temperature;

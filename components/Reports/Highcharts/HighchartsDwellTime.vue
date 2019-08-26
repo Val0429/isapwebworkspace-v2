@@ -317,21 +317,21 @@ export class HighchartsDwellTime extends Vue {
         );
 
         // set same chartAge
-        this.drawChartPercentage();
-        this.drawChartAgeRangeGender();
+        setTimeout(this.drawChartPercentage, 100);
+        setTimeout(this.drawChartAgeRangeGender, 100);
 
         switch (this.chartMode) {
             case EChartMode.site1Day1:
-                this.initSite1Day1();
+                setTimeout(this.initSite1Day1, 100);
                 break;
             case EChartMode.site1DayX:
-                this.initSite1DayX();
+                setTimeout(this.initSite1DayX, 100);
                 break;
             case EChartMode.siteXDay1:
-                this.initSiteXDay1();
+                setTimeout(this.initSiteXDay1, 100);
                 break;
             case EChartMode.siteXDayX:
-                this.initSiteXDayX();
+                setTimeout(this.initSiteXDayX, 100);
                 break;
             default:
                 break;
@@ -759,7 +759,7 @@ export class HighchartsDwellTime extends Vue {
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempStartTimestamp = tempChartData.dateStart.getTime();
             let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
@@ -782,7 +782,7 @@ export class HighchartsDwellTime extends Vue {
                 if (
                     value.siteObjectId == tempChartData.siteObjectId &&
                     valTimestamp >= tempStartTimestamp &&
-                    valTimestamp <= tempEndTimestamp
+                    valTimestamp < tempEndTimestamp
                 ) {
                     tempChartData.dwellTime += value.dwellTime;
                     tempChartData.revenue += value.revenue;
@@ -1370,7 +1370,7 @@ export class HighchartsDwellTime extends Vue {
                     if (
                         value.siteObjectId == tempSiteValue.siteObjectId &&
                         valTimestamp >= tempStartTimestamp &&
-                        valTimestamp <= tempEndTimestamp
+                        valTimestamp < tempEndTimestamp
                     ) {
                         tempSiteValue.dwellTime += value.dwellTime;
                         tempSiteValue.revenue += value.revenue;

@@ -76,7 +76,7 @@ export class HighchartsCampaignMultiple extends Vue {
     mounted() {}
 
     start() {
-        this.initCampaignMultipleChart();
+        setTimeout(this.initCampaignMultipleChart, 100);
     }
 
     mountAnyChart(): boolean {

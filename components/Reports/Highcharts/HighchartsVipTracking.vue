@@ -207,11 +207,11 @@ export class HighchartsVipTracking extends Vue {
         switch (this.chartMode) {
             case EChartMode.site1Day1:
             case EChartMode.siteXDay1:
-                this.initSiteXDay1();
+                setTimeout(this.initSiteXDay1, 100);
                 break;
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
-                this.initSiteXDayX();
+                setTimeout(this.initSiteXDayX, 100);
                 break;
             default:
                 break;
@@ -391,7 +391,7 @@ export class HighchartsVipTracking extends Vue {
                 new Date(tempTimestamp + Datetime.oneDayTimestamp)
             );
             let tempStartTimestamp = dateStart.getTime();
-            let tempEndTimestamp = dateEnd.getTime();
+            let tempEndTimestamp = dateEnd.getTime() + 1000;
 
             let spliceIndexList: number[] = [];
             for (let i in tempValues) {
@@ -401,7 +401,7 @@ export class HighchartsVipTracking extends Vue {
 
                 if (
                     valTimestamp >= tempStartTimestamp &&
-                    valTimestamp <= tempEndTimestamp
+                    valTimestamp < tempEndTimestamp
                 ) {
                     switch (value.type) {
                         case EVipTrackingType.vip:
