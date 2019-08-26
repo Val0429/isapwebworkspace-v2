@@ -398,7 +398,7 @@ import {
 import Datetime from "@/services/Datetime";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
-import RegionAPI from "@/services/RegionAPI";
+import RegionAPI from "@/components/RegionTree/models/RegionAPI";
 import Loading from "@/services/Loading";
 
 // Transition

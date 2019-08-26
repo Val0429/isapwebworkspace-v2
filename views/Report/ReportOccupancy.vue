@@ -176,7 +176,7 @@ import {
 
 // Service
 import Dialog from "@/services/Dialog";
-import RegionAPI from "@/services/RegionAPI";
+import RegionAPI from "@/components/RegionTree/models/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Datetime from "@/services/Datetime";
 import WeatherService from "@/components/Reports/models/WeatherService";
