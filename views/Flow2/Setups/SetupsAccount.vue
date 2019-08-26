@@ -293,6 +293,11 @@ export default class SetupsAccount extends Vue {
                 await this.initSelectItemRole();
                 haveRequest.role = true;
             }
+
+            if (!haveRequest.floor) {
+                await this.initSelectItemFloor();
+                haveRequest.floor = true;
+            }
         }
     }
 
@@ -398,6 +403,14 @@ export default class SetupsAccount extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
+    }
+
+    async initSelectItemFloor() {
+        for (let ret of this.$user.user.data.floor) {
+            if (ret.objectId != undefined && ret.name != undefined) {
+                this.$set(this.selectItem.floor, ret.objectId, ret.name);
+            }
+        }
     }
 
     clearInputData() {
