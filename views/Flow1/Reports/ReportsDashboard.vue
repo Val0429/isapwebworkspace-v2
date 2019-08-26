@@ -101,8 +101,6 @@ interface IInputFormData {
     kioskIds: string[];
     startDate: Date | null;
     endDate: Date | null;
-    startDateString: string;
-    endDateString: string;
     statistic: number;
     exception: number;
     recurring: any;
@@ -130,8 +128,6 @@ export default class ReportsDashboard extends Vue {
         kioskIds: [],
         startDate: null,
         endDate: null,
-        startDateString: "",
-        endDateString: "",
         statistic: 0,
         exception: 0,
         recurring: []
@@ -183,14 +179,8 @@ export default class ReportsDashboard extends Vue {
                 this.inputFormData.endDate = Datetime.WeekEnd(new Date());
                 break;
             case EDateRange.today:
-                this.inputFormData.startDateString = Datetime.DateTime2String(
-                    new Date(),
-                    "YYYY-MM-DD"
-                );
-                this.inputFormData.endDateString = Datetime.DateTime2String(
-                    new Date(),
-                    "YYYY-MM-DD"
-                );
+                this.inputFormData.startDate = Datetime.DateStart(new Date());
+                this.inputFormData.endDate = Datetime.DateEnd(new Date());
                 break;
         }
     }
@@ -456,7 +446,7 @@ export default class ReportsDashboard extends Vue {
         return result;
     }
 
-     async changeDateRange() {
+    async changeDateRange() {
         await this.initDateRange();
         await this.initRecurring();
         await this.initStatistic();
