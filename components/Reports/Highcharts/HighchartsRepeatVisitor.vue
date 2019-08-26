@@ -244,8 +244,8 @@ export class HighchartsRepeatVisitor extends Vue {
             percentageRepeat: false
         };
 
-        this.initChart();
-        this.initDetailChart();
+        setTimeout(this.initChart, 100);
+        setTimeout(this.initDetailChart, 100);
     }
 
     mountAnyChart(): boolean {

@@ -167,16 +167,16 @@ export class HighchartsOccupancy extends Vue {
 
         switch (this.chartMode) {
             case EChartMode.site1Day1:
-                this.initSite1Day1();
+                setTimeout(this.initSite1Day1, 100);
                 break;
             case EChartMode.site1DayX:
-                this.initSite1DayX();
+                setTimeout(this.initSite1DayX, 100);
                 break;
             case EChartMode.siteXDay1:
-                this.initSiteXDay1();
+                setTimeout(this.initSiteXDay1, 100);
                 break;
             case EChartMode.siteXDayX:
-                this.initSiteXDayX();
+                setTimeout(this.initSiteXDayX, 100);
                 break;
             default:
                 break;
