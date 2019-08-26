@@ -168,7 +168,7 @@ import {
 } from "@/components/RegionTree";
 
 // Service
-import RegionAPI from "@/services/RegionAPI";
+import RegionAPI from "@/components/RegionTree/models/RegionAPI";
 import ServerConfig from "@/services/ServerConfig";
 import ImageBase64 from "@/services/ImageBase64";
 import ResponseFilter from "@/services/ResponseFilter";

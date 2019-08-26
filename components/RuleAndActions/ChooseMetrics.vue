@@ -328,7 +328,7 @@
 	import Dialog from "@/services/Dialog";
 	import { toEnumInterface } from "../../../core";
 	import ResponseFilter from '@/services/ResponseFilter';
-	import RegionAPI from '@/services/RegionAPI';
+	import RegionAPI from "@/components/RegionTree/models/RegionAPI";
 
 	@Component({
 		components: {}

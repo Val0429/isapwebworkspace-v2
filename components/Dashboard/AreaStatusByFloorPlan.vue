@@ -52,7 +52,7 @@ import {
     components: {}
 })
 export class AreaStatusByFloorPlan extends Vue {
-    data = [1, 2, 3, 4];
+    data = [1];
 
     created() {}
 

@@ -16,17 +16,18 @@
             >
 
                 <template #snapshot="{ $attrs, $listeners }">
-                    <img :src="serverConfig._url + $attrs.row.imageSrc"><img>
+
+                    <img :src="serverConfig._url + $attrs.row.datas[0].imageSrc"><img>
                 </template>
 
                 <template #count="{ $attrs, $listeners }">
-                    {{$attrs.row.NumberOfVisit}}
+                    {{$attrs.row.count}}
                 </template>
 
                 <template #Actions="{$attrs, $listeners}">
 
                     <iv-toolbox-more>
-                        <iv-toolbox-view @click="pageToView" />
+                        <iv-toolbox-view @click="pageToView($attrs.row)" />
                     </iv-toolbox-more>
                 </template>
 
@@ -41,20 +42,40 @@
             :title="_('w_Tool_RepeatVisitorDetail')"
             v-model="modalShow"
         >
-
-            <iv-table
-                ref="listTable"
-                :interface="IDetailList()"
-                :server="{ path: '/' }"
+            <table
+                ref="reportTable"
+                class="table b-table table-striped table-hover"
             >
-                <template #Actions="{$attrs, $listeners}">
+                <thead>
+                    <tr>
+                        <th
+                            class="center"
+                            v-for="(value,index) in tableDetailTitle"
+                            :key="'title_' + index"
+                        >{{ value }}
+                        </th>
+                    </tr>
+                </thead>
 
-                    <iv-toolbox-more>
-                        <iv-toolbox-view @click="pageToView" />
-                    </iv-toolbox-more>
-                </template>
+                <tbody>
+                    <tr
+                        v-for="(value,index) in tableDetailData.datas"
+                        :key="'tableData__' + index"
+                    >
+                        <td class="center">{{index + 1}}</td>
 
-            </iv-table>
+                        <td class="center">
+
+                            <img
+                                :key="'tableDataSrc__' + index"
+                                class="threshold-image"
+                                :src="serverConfig._url  + value.imageSrc"
+                            >
+                        </td>
+                        <td class="center">{{ showTime(value.date) }}</td>
+                    </tr>
+                </tbody>
+            </table>
 
             <hr>
 
@@ -96,6 +117,10 @@ export default class ToolRepeatVisitor extends Vue {
 
     modalShow: boolean = false;
 
+    tableDetailTitle: any = [];
+
+    tableDetailData: any = [];
+
     created() {}
 
     mounted() {}
@@ -107,7 +132,17 @@ export default class ToolRepeatVisitor extends Vue {
         (this.$refs.listTable as any).reload();
     }
 
-    pageToView() {
+    showTime(date) {
+        return Datetime.DateTime2String(new Date(date), "YYYY-MM-DD HH:mm");
+    }
+
+    pageToView(data) {
+        this.tableDetailTitle = [
+            this._("w_no"),
+            this._("w_Snapshot"),
+            this._("w_Time")
+        ];
+        this.tableDetailData = data;
         this.modalShow = true;
     }
 
@@ -136,39 +171,6 @@ export default class ToolRepeatVisitor extends Vue {
 
 
                 Actions?: any;
-            }
-        `;
-    }
-
-    // Todo: wait api
-    IDetailList() {
-        return `
-            interface {
-
-                /**
-                 * @uiLabel - ${this._("w_No")}
-                 * @uiType - iv-cell-auto-index
-                 */
-                no: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Snapshot")}
-                 */
-                snapshot: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Sites")}
-                 */
-                sites: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_Tool_VisitTime")}
-                 */
-                time: string;
-
             }
         `;
     }
