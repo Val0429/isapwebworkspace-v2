@@ -8,6 +8,7 @@
                 <template v-for="(value, index) in data">
                     <area-status-by-floor-plan-detail
                         :datum="value"
+                        :isDelete="data.length <= 1"
                         @removeCard="removeCard"
                         class="col-md-6"
                     />
