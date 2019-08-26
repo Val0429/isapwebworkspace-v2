@@ -35,20 +35,26 @@ export class UsersListForm extends Vue implements IFormQuick {
                 }
                 `;
             case EFormQuick.Add:
+            case EFormQuick.Edit:
                 return `
                 interface {
                     /*
                      * @uiLabel - ${this._('w_User') + this._('w_Name')}
+                     * @uiDisabled - ${type === EFormQuick.Edit ? true : false}
                      */
                     username: string;
                     /*
                      * @uiLabel - ${this._('wb_Password')}
                      * @uiType - iv-form-password
+                     * @uiColumnGroup - pwdGroup
+                     * @uiHidden - ${type === EFormQuick.Edit ? true : false}
                      */
                     password: string;
                     /*
                      * @uiLabel - ${this._('w_Confirm_Password')}
                      * @uiType - iv-form-password
+                     * @uiColumnGroup - pwdGroup
+                     * @uiHidden - ${type === EFormQuick.Edit ? true : false}
                      */
                     comfirmPassword: string;
                     /*
@@ -65,28 +71,6 @@ export class UsersListForm extends Vue implements IFormQuick {
                     groups2: string;
                 }
                 `;
-            case EFormQuick.Edit:
-                    return `
-                    interface {
-                        /*
-                         * @uiLabel - ${this._('w_User') + this._('w_Name')}
-                         * @uiDisabled - true
-                         */
-                        username: string;
-                        /*
-                         * @uiLabel - ${this._('w_Email')}
-                         */
-                        publicEmailAddress?: string;
-                        /*
-                         * @uiLabel - ${this._('w_User') + this._('w_Group')}
-                         */
-                        groups1?: string;
-                        /*
-                         * @uiLabel - ${this._('w_User') + this._('w_Group')}
-                         */
-                        groups2: string;
-                    }
-                    `;
         }
     }
     // preAdd() {
