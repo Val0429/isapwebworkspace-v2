@@ -300,8 +300,8 @@
                 deviceGroupId: data.deviceGroupId ? data.deviceGroupId : undefined,
                 deviceId: data.deviceId ? data.deviceId : undefined,
                 isEmployee: data.isEmployee ? data.isEmployee : undefined,
-                startDate: new Date(data.date.getFullYear(), data.date.getMonth() + 1, data.date.getDate(), Number(data.hour)).toISOString(),
-                endDate: new Date(data.date.getFullYear(), data.date.getMonth() + 1, data.date.getDate(), Number(data.hour) + 1).toISOString(),
+                startDate: new Date(data.date.getFullYear(), data.date.getMonth(), data.date.getDate(), Number(data.hour)).toISOString(),
+                endDate: new Date(data.date.getFullYear(), data.date.getMonth(), data.date.getDate(), Number(data.hour) + 1).toISOString(),
             };
 
             if (data.isEmployee === 'true') {
