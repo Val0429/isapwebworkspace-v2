@@ -537,12 +537,14 @@ export class HighchartsTraffic extends Vue {
         let sortDate = Datetime.SortDateGap(this.startDate, this.endDate);
 
         // 設置最大值避免無窮迴圈
-        let categorieMaxlength = 10000;
+        let categorieMaxlength = 100000;
         let categorieNowlength = 0;
 
         // 時間累加判斷用
-        let tempTimestamp: number = sortDate.startDate.getTime();
-        let endTimestamp: number = sortDate.endDate.getTime();
+        let tempTimestamp: number = Datetime.DateStart(
+            sortDate.startDate
+        ).getTime();
+        let endTimestamp: number = Datetime.DateEnd(sortDate.endDate).getTime();
         let tempDate: Date = new Date(tempTimestamp);
         let dateGap: number =
             Math.floor(
@@ -688,19 +690,17 @@ export class HighchartsTraffic extends Vue {
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempStartTimestamp = tempChartData.dateStart.getTime();
             let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
-                tempChartData.dateStart,
+                tempChartData.date,
                 HighchartsService.datetimeFormat.time
             );
             tempChartData.quarterNumber = Datetime.QuarterNumber(
-                tempChartData.dateStart
+                tempChartData.date
             );
-            tempChartData.weekNumber = Datetime.WeekNumber(
-                tempChartData.dateStart
-            );
+            tempChartData.weekNumber = Datetime.WeekNumber(tempChartData.date);
 
             let spliceIndexList: number[] = [];
             for (let i in tempValues) {
@@ -708,10 +708,39 @@ export class HighchartsTraffic extends Vue {
                 let value: IChartTrafficData = this.anysislyChartValue(val);
                 let valTimestamp = value.date.getTime();
 
+                console.log(
+                    "!!! valTimestampe",
+                    Datetime.DateTime2String(
+                        new Date(valTimestamp),
+                        "YYYY-MM-DD HH:mm:ss"
+                    ),
+                    "!!! value.date",
+                    Datetime.DateTime2String(value.date, "YYYY-MM-DD HH:mm:ss"),
+                    "!!! dateStart",
+                    Datetime.DateTime2String(
+                        tempChartData.dateStart,
+                        "YYYY-MM-DD HH:mm:ss"
+                    ),
+                    "!!! dateEnd",
+                    Datetime.DateTime2String(
+                        tempChartData.dateEnd,
+                        "YYYY-MM-DD HH:mm:ss"
+                    ),
+                    "!!! tempEndTimestamp",
+                    Datetime.DateTime2String(
+                        new Date(tempEndTimestamp),
+                        "YYYY-MM-DD HH:mm:ss"
+                    ),
+                    value.siteObjectId == tempChartData.siteObjectId,
+                    valTimestamp >= tempStartTimestamp,
+                    valTimestamp < tempEndTimestamp,
+                    value.traffic
+                );
+
                 if (
                     value.siteObjectId == tempChartData.siteObjectId &&
                     valTimestamp >= tempStartTimestamp &&
-                    valTimestamp <= tempEndTimestamp
+                    valTimestamp < tempEndTimestamp
                 ) {
                     tempChartData.traffic += value.traffic;
                     tempChartData.revenue += value.revenue;
@@ -723,7 +752,6 @@ export class HighchartsTraffic extends Vue {
                     tempChartData.weatherIcon = HighchartsService.weatherIcon(
                         value.weather
                     );
-
                     spliceIndexList.push(parseInt(i));
                 }
             }
@@ -750,6 +778,14 @@ export class HighchartsTraffic extends Vue {
             }
 
             // push single series data
+            console.log(
+                "@@@@ tempChartData",
+                Datetime.DateTime2String(
+                    tempChartData.date,
+                    "YYYY-MM-DD HH:mm:ss"
+                ),
+                tempChartData.traffic
+            );
             tempResult.push(tempChartData);
 
             // set loop value
@@ -1317,7 +1353,7 @@ export class HighchartsTraffic extends Vue {
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempStartTimestamp = tempChartData.dateStart.getTime();
             let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
@@ -1345,7 +1381,7 @@ export class HighchartsTraffic extends Vue {
                     if (
                         value.siteObjectId == tempSiteValue.siteObjectId &&
                         valTimestamp >= tempStartTimestamp &&
-                        valTimestamp <= tempEndTimestamp
+                        valTimestamp < tempEndTimestamp
                     ) {
                         tempSiteValue.traffic += value.traffic;
                         tempSiteValue.revenue += value.revenue;

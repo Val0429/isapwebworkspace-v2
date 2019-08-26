@@ -759,7 +759,7 @@ export class HighchartsDwellTime extends Vue {
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempStartTimestamp = tempChartData.dateStart.getTime();
             let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
@@ -782,7 +782,7 @@ export class HighchartsDwellTime extends Vue {
                 if (
                     value.siteObjectId == tempChartData.siteObjectId &&
                     valTimestamp >= tempStartTimestamp &&
-                    valTimestamp <= tempEndTimestamp
+                    valTimestamp < tempEndTimestamp
                 ) {
                     tempChartData.dwellTime += value.dwellTime;
                     tempChartData.revenue += value.revenue;
@@ -1370,7 +1370,7 @@ export class HighchartsDwellTime extends Vue {
                     if (
                         value.siteObjectId == tempSiteValue.siteObjectId &&
                         valTimestamp >= tempStartTimestamp &&
-                        valTimestamp <= tempEndTimestamp
+                        valTimestamp < tempEndTimestamp
                     ) {
                         tempSiteValue.dwellTime += value.dwellTime;
                         tempSiteValue.revenue += value.revenue;

@@ -507,7 +507,7 @@ export class HighchartsOccupancy extends Vue {
                     );
                     break;
             }
-            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempStartTimestamp = tempChartData.dateStart.getTime();
             let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
@@ -531,7 +531,7 @@ export class HighchartsOccupancy extends Vue {
                     if (
                         tempValue.areaId == serie.areaId &&
                         valTimestamp >= tempStartTimestamp &&
-                        valTimestamp <= tempEndTimestamp
+                        valTimestamp < tempEndTimestamp
                     ) {
                         serie.data[dataIndex] += value.occupancy;
                     }
@@ -919,7 +919,7 @@ export class HighchartsOccupancy extends Vue {
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempStartTimestamp = tempChartData.dateStart.getTime();
             let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
@@ -947,7 +947,7 @@ export class HighchartsOccupancy extends Vue {
                     if (
                         value.siteObjectId == tempSiteValue.siteObjectId &&
                         valTimestamp >= tempStartTimestamp &&
-                        valTimestamp <= tempEndTimestamp
+                        valTimestamp < tempEndTimestamp
                     ) {
                         tempSiteValue.occupancy += value.occupancy;
                         tempSiteValue.temperature = value.temperature;

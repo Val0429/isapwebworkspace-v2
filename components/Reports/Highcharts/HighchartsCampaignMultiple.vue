@@ -77,6 +77,7 @@ export class HighchartsCampaignMultiple extends Vue {
 
     start() {
         this.initCampaignMultipleChart();
+        console.log("chart prop: ", this.value);
     }
 
     mountAnyChart(): boolean {

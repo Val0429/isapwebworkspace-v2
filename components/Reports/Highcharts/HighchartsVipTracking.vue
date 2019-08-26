@@ -391,7 +391,7 @@ export class HighchartsVipTracking extends Vue {
                 new Date(tempTimestamp + Datetime.oneDayTimestamp)
             );
             let tempStartTimestamp = dateStart.getTime();
-            let tempEndTimestamp = dateEnd.getTime();
+            let tempEndTimestamp = dateEnd.getTime() + 1000;
 
             let spliceIndexList: number[] = [];
             for (let i in tempValues) {
@@ -401,7 +401,7 @@ export class HighchartsVipTracking extends Vue {
 
                 if (
                     valTimestamp >= tempStartTimestamp &&
-                    valTimestamp <= tempEndTimestamp
+                    valTimestamp < tempEndTimestamp
                 ) {
                     switch (value.type) {
                         case EVipTrackingType.vip:
