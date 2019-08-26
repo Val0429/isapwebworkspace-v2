@@ -5,16 +5,12 @@
         >
             <apexchart type=heatmap height=550 :options="chartOptions" :series="series" />
 
-            <div>
-                <select-permission-site @siteIds="receiveSiteIds"></select-permission-site>
+            <select-permission-site @siteIds="receiveSiteIds"></select-permission-site>
 
-                <select-time
-                    class="col-md-6"
-                    :timeParam="time"
-                    @time="receiveTime"
-                ></select-time>
-            </div>
-
+            <select-time
+                :timeParam="time"
+                @time="receiveTime"
+            ></select-time>
 
         </iv-card>
     </div>
@@ -25,7 +21,8 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 
 /// install Highcharts
 import VueApexCharts from 'vue-apexcharts'
-Vue.component('apexchart', VueApexCharts)
+import Datetime from '@/services/Datetime';
+Vue.component('apexchart', VueApexCharts);
 
 @Component({
     components: { apexchart: VueApexCharts }
@@ -38,25 +35,63 @@ export class Peakhour extends Vue {
     })
     label: string;
 
-    // Model
-    @Model("model", {
-        type: String,
-        default: ""
-    })
-    value: string;
+    time: any = {
+        startDate: new Date(),
+        endDate: new Date()
+    };
 
     chartOptions: any = {};
     series: any = [];
 
     created() {
-    }
+        this.initData();}
 
     mounted() {
         this.initCharts();
+
+    }
+
+    initData() {
+
+        this.time = {
+            // TODO: wait api
+            startDate: Datetime.DateToZero(new Date()),
+            endDate: Datetime.DateToZero(new Date())
+
+            // startDate: Datetime.DateToZero(new Date(Datetime.ThisYearStartDate())),
+            // endDate: Datetime.DateToZero(new Date(Datetime.ThisYearEndDate()))
+        };
+
     }
 
     receiveSiteIds(siteIds: object) {
         console.log('siteIds ~ ', siteIds)
+    }
+
+    async receiveTime(time: object) {
+        this.time = time;
+        let timeParam = JSON.parse(JSON.stringify(this.time));
+
+        // TODO: wait api
+        // Loading.show();
+        // await this.$server
+        //     .C("/", timeParam)
+        //     .then((response: any) => {
+        //         ResponseFilter.successCheck(
+        //             this,
+        //             response,
+        //             (response: any) => {
+        //             },
+        //             this._("w_Dialog_ErrorTitle")
+        //         );
+        //     })
+        //     .catch((e: any) => {
+        //         return ResponseFilter.catchError(
+        //             this,
+        //             e,
+        //             this._("w_Dialog_ErrorTitle")
+        //         );
+        //     });
     }
 
     generateData(count, yrange) {
