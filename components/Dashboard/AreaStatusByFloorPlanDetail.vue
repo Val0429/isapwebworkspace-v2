@@ -88,12 +88,12 @@ export class AreaStatusByFloorPlanDetail extends Vue {
         let imageMapRef: any = this.$refs.imageMap;
 
         // imageMap mode
-        // this.imageMap.setupMode = ESetupMode.preview;
-        this.imageMap.setupMode = ESetupMode.setup;
+
+        this.imageMap.setupMode = ESetupMode.preview;
 
         // imageMap setting
-        this.imageMap.draw.deviceGroupInTagLabel = false;
-        this.imageMap.draw.deviceInTagLabel = false;
+        this.imageMap.draw.deviceGroupInTagLabel = true;
+        this.imageMap.draw.deviceInTagLabel = true;
         this.imageMap.draw.dataWindowInMap = true;
         this.imageMap.draw.dataWindowInDeviceGroup = true;
         this.imageMap.draw.dataWindowInDevice = true;
