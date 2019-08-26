@@ -420,8 +420,6 @@ export default class DwellTime extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
-
-        console.log(' ~ ', this.sitesSelectItem)
     }
 
     async initSelectItemTree() {
@@ -996,6 +994,7 @@ export default class DwellTime extends Vue {
         await this.selectAreaId(this.inputFormData.siteId);
         await this.selectGroupDeviceId(this.inputFormData.areaId);
 
+
         this.inputFormData.stepType = stepType;
         this.inputFormData.groupIds = JSON.parse(
             JSON.stringify(
@@ -1038,6 +1037,7 @@ export default class DwellTime extends Vue {
 	    this.clearInputData();
 
         await this.initSelectItemSite();
+        await this.initSelectItemFRSSManagerServer();
         this.inputFormData.stepType = EPageStep.add;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
@@ -1219,6 +1219,14 @@ export default class DwellTime extends Vue {
 				frsId: data.frsId,
 				sourceId: data.sourceId,
 			};
+
+            if (data.frsId) {
+                for (const frsId in this.frsIdSelectItem) {
+                    if (data.frsId === frsId) {
+                        configFRSManagerObject.frsIp = this.frsIdSelectItem[frsId]
+                    }
+                }
+            }
 
 			if (!this.inputFormData.objectId) {
 
@@ -1499,7 +1507,7 @@ export default class DwellTime extends Vue {
                  * @uiPlaceHolder - ${this._("w_ServerId")}
                  */
                 serverId: ${toEnumInterface(
-			        this.serverIdSelectItem as any,
+			        this.frsMangerIdSelectItem as any,
 			        false
 		        )};
 
