@@ -2,7 +2,10 @@
     <div>
         <iv-card :label="_('w_ReportDashboard_Traffic')">
             <template #toolbox>
-                <iv-toolbox-delete @click="removeCard()" />
+                <iv-toolbox-delete
+                    @click="removeCard()"
+                    :disabled="isDelete"
+                />
             </template>
             <image-map
                 ref="imageMap"
@@ -74,6 +77,14 @@ export class AreaStatusByFloorPlanDetail extends Vue {
         }
     })
     datum: number;
+
+    @Prop({
+        type: Boolean,
+        default: () => {
+            return false;
+        }
+    })
+    isDelete: boolean;
 
     imageMap = new ImageMapItem();
 
