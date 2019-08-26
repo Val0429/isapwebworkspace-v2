@@ -117,11 +117,16 @@
 
             <b-row>
                 <select-time
-                    class="col-md-6"
+                    class="col-md-12"
                     :timeParam="time"
                     @time="receiveTime"
                 ></select-time>
+
             </b-row>
+
+            <select-permission-site
+                @siteIds="receiveSiteIds"
+            ></select-permission-site>
 
         </iv-card>
     </div>
@@ -183,6 +188,10 @@ export class FilterStatusDashboard extends Vue {
 
     mounted() {
         this.initData();
+    }
+
+    receiveSiteIds(siteIds: object) {
+        console.log('siteIds ~ ', siteIds)
     }
 
     async initData() {

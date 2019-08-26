@@ -6,64 +6,65 @@
             :type="transition.type"
         >
 
+            <iv-form
+                key="transition_1"
+                v-show="transition.step === 1"
+                :interface="IFilterConditionForm()"
+            >
+                <template #ifAllSites="{ $attrs, $listeners }">
+
+                    <p class="ml-3">{{ _('w_Sites1') }}</p>
+
+                    <b-col cols="9">
+                        <b-form-radio-group
+                            v-model="selectAllSites"
+                            name="ifAllSites"
+                            class="mb-3"
+                            :options="ifAllSitesSelectItem"
+                            @change="changeAllSitesSelect"
+                        ></b-form-radio-group>
+                    </b-col>
+
+                </template>
+
+                <template #siteIds="{$attrs, $listeners}">
+
+                    <iv-form-selection
+                        v-on="$listeners"
+                        v-model="inputFormData.siteIds"
+                        class="col-md-10"
+                        :options="sitesSelectItem"
+                        :multiple="true"
+                        @input="changeSiteIds"
+                    >
+                    </iv-form-selection>
+
+                    <div class="col-md-2">
+                        <b-button
+                            class="col-md-12"
+                            variant="outline-secondary"
+                            @click="pageToChooseTree"
+                        >
+                            {{ _('w_SelectSiteTree') }}
+                        </b-button>
+                    </div>
+
+                </template>
+            </iv-form>
+
+            <region-tree-select
+                key="transition_2"
+                v-show="transition.step === 2"
+                :multiple="true"
+                :regionTreeItem="regionTreeItem"
+                :selectType="selectType"
+                :selecteds="selecteds"
+                v-on:click-back="pageToShowResult"
+            >
+            </region-tree-select>
+
         </iv-auto-transition>
 
-        <iv-form
-            key="transition_1"
-            v-show="transition.step === 1"
-            :interface="IFilterConditionForm()"
-        >
-            <template #ifAllSites="{ $attrs, $listeners }">
-
-                <p class="ml-3">{{ _('w_Sites1') }}</p>
-
-                <b-col cols="9">
-                    <b-form-radio-group
-                        v-model="selectAllSites"
-                        name="ifAllSites"
-                        class="mb-3"
-                        :options="ifAllSitesSelectItem"
-                        @change="changeAllSitesSelect"
-                    ></b-form-radio-group>
-                </b-col>
-
-            </template>
-
-            <template #siteIds="{$attrs, $listeners}">
-
-                <iv-form-selection
-                    v-on="$listeners"
-                    v-model="inputFormData.siteIds"
-                    class="col-md-10"
-                    :options="sitesSelectItem"
-                    :multiple="true"
-                    @input="changeSiteIds"
-                >
-                </iv-form-selection>
-
-                <div class="col-md-2">
-                    <b-button
-                        class="col-md-12"
-                        variant="outline-secondary"
-                        @click="pageToChooseTree"
-                    >
-                        {{ _('w_SelectSiteTree') }}
-                    </b-button>
-                </div>
-
-            </template>
-        </iv-form>
-
-        <region-tree-select
-            key="transition_2"
-            v-show="transition.step === 2"
-            :multiple="true"
-            :regionTreeItem="regionTreeItem"
-            :selectType="selectType"
-            :selecteds="selecteds"
-            v-on:click-back="pageToShowResult"
-        >
-        </region-tree-select>
     </div>
 </template>
 
@@ -105,7 +106,6 @@
             allSiteIds: []
         };
 
-        siteIds: string = 'today';
 
         // tree
         selectType = ERegionType.site;
@@ -186,6 +186,8 @@
             ) {
                 this.selectAllSites = EIfAllSelected.all;
             }
+
+            this.$emit('siteIds', this.inputFormData.siteIds);
         }
 
         async initSelectItemTree() {
@@ -221,6 +223,8 @@
                 this.inputFormData.siteIds = [];
                 this.selecteds = [];
             }
+
+            this.$emit('siteIds', this.inputFormData.siteIds);
         }
 
         changeSiteIds() {
@@ -250,6 +254,8 @@
                     }
                 }
             }
+
+            this.$emit('siteIds', this.inputFormData.siteIds);
         }
 
         IFilterConditionForm() {
