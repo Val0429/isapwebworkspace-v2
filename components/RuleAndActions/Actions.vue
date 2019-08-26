@@ -154,13 +154,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import { toEnumInterface } from "../../../core";
 
 import { ENotifyMethod, EWhoNotify } from "@/components/RuleAndActions";
 
 // Service
-import { toEnumInterface } from "../../../core";
 import ResponseFilter from "@/services/ResponseFilter";
-import RegionAPI from "@/services/RegionAPI";
+import RegionAPI from "@/components/RegionTree/models/RegionAPI";
 
 @Component({
     components: {}

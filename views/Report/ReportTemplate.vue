@@ -301,7 +301,7 @@ import {
 } from "@/components/Reports";
 
 // Service
-import RegionAPI from "@/services/RegionAPI";
+import RegionAPI from "@/components/RegionTree/models/RegionAPI";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";

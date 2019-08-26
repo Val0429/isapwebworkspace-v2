@@ -58,7 +58,7 @@ import {
 } from "@/components/RegionTree";
 
 // Service
-import RegionAPI from "@/services/RegionAPI";
+import RegionAPI from "@/components/RegionTree/models/RegionAPI";
 
 @Component({
     components: {
