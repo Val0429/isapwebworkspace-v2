@@ -333,6 +333,7 @@ export default class DwellTime extends Vue {
     sourceIdSelectItem: any = {};
     demographicIdSelectItem: any = {};
 	frsIdSelectItem: any = {};
+    frsMangerIdSelectItem: any = {};
 
     params: any = {
         mode: ECameraMode.dwellTime
@@ -407,10 +408,13 @@ export default class DwellTime extends Vue {
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                        response
-                    );
-                    this.regionTreeItem.region = this.regionTreeItem.tree;
+                    for (const returnValue of response) {
+                        this.sitesSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                        this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                            returnValue
+                        );
+                    }
                 });
             })
             .catch((e: any) => {
@@ -487,6 +491,41 @@ export default class DwellTime extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
+    }
+
+    async initSelectItemFRSSManagerServer() {
+        this.frsMangerIdSelectItem = {};
+
+        if (this.addStep === EAddStep.frs) {
+            await this.$server
+                .R("/partner/frs-manager")
+                .then((response: any) => {
+                    ResponseFilter.successCheck(this, response, (response: any) => {
+                        for (const returnValue of response.results) {
+                            this.frsMangerIdSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                        }
+                    });
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(this, e);
+                });
+        } else if (this.addStep === EAddStep.frsManager) {
+            await this.$server
+                .R("/partner/frs-manager")
+                .then((response: any) => {
+                    ResponseFilter.successCheck(this, response, (response: any) => {
+                        for (const returnValue of response.results) {
+                            this.frsMangerIdSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                        }
+                    });
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(this, e);
+                });
+        }
+
     }
 
     selectedItem(data) {
@@ -934,6 +973,8 @@ export default class DwellTime extends Vue {
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
 
+        await this.getInputData();
+
         if (this.inputFormData.model === EAddStep.frs) {
             this.addStep = EAddStep.frs;
             this.transition.prevStep = this.transition.step;
@@ -947,11 +988,13 @@ export default class DwellTime extends Vue {
         }
 
         await this.initSelectItemFRSServer();
+        await this.initSelectItemFRSSManagerServer();
         await this.initSelectItemSite();
         await this.initSelectItemDemographicServer();
         await this.selectAreaId(this.inputFormData.siteId);
         await this.selectGroupDeviceId(this.inputFormData.areaId);
-        this.getInputData();
+
+
         this.inputFormData.stepType = stepType;
         this.inputFormData.groupIds = JSON.parse(
             JSON.stringify(
@@ -994,6 +1037,7 @@ export default class DwellTime extends Vue {
 	    this.clearInputData();
 
         await this.initSelectItemSite();
+        await this.initSelectItemFRSSManagerServer();
         this.inputFormData.stepType = EPageStep.add;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
@@ -1175,6 +1219,14 @@ export default class DwellTime extends Vue {
 				frsId: data.frsId,
 				sourceId: data.sourceId,
 			};
+
+            if (data.frsId) {
+                for (const frsId in this.frsIdSelectItem) {
+                    if (data.frsId === frsId) {
+                        configFRSManagerObject.frsIp = this.frsIdSelectItem[frsId]
+                    }
+                }
+            }
 
 			if (!this.inputFormData.objectId) {
 
@@ -1455,7 +1507,7 @@ export default class DwellTime extends Vue {
                  * @uiPlaceHolder - ${this._("w_ServerId")}
                  */
                 serverId: ${toEnumInterface(
-			        this.serverIdSelectItem as any,
+			        this.frsMangerIdSelectItem as any,
 			        false
 		        )};
 

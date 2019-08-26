@@ -455,6 +455,7 @@ export default class PeopleCounting extends Vue {
     serverIdSelectItem: any = {};
     sourceIdSelectItem: any = {};
     frsIdSelectItem: any = {};
+    frsMangerIdSelectItem: any = {};
 
     params: any = {
         mode: ECameraMode.peopleCounting
@@ -484,6 +485,7 @@ export default class PeopleCounting extends Vue {
         location: "",
         direction: "", // FRS 和 FRS Manager 共用
         objectId: "",
+        lines: "1",
         // FRS Manager
         frsId: "",
         sourceId: "",
@@ -513,6 +515,7 @@ export default class PeopleCounting extends Vue {
             location: "",
             direction: "", // FRS 和 FRS Manager 共用
             objectId: "",
+            lines: "1",
             // FRS Manager
             frsId: "",
             sourceId: "",
@@ -585,22 +588,20 @@ export default class PeopleCounting extends Vue {
                     return ResponseFilter.catchError(this, e);
                 });
         } else if (this.addStep === EAddStep.frsManager) {
-            // TODO:
-            // await this.$server
-            //     .R("/partner/frs-manager")
-            //     .then((response: any) => {
-            //         ResponseFilter.successCheck(this, response, (response: any) => {
-            //             for (const returnValue of response.results) {
-            //                 this.serverIdSelectItem[returnValue.objectId] =
-            //                     returnValue.name;
-            //             }
-            //         });
-            //     })
-            //     .catch((e: any) => {
-            //         return ResponseFilter.catchError(this, e);
-            //     });
+            await this.$server
+                .R("/partner/frs-manager")
+                .then((response: any) => {
+                    ResponseFilter.successCheck(this, response, (response: any) => {
+                        for (const returnValue of response.results) {
+                            this.serverIdSelectItem[returnValue.objectId] =
+                                returnValue.name;
+                        }
+                    });
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(this, e);
+                });
         }
-
 
     }
 
@@ -821,8 +822,9 @@ export default class PeopleCounting extends Vue {
             }
         } else if(this.addStep === EAddStep.frsManager) {
 
-            // TODO: Min
             if (data !== undefined) {
+                await this.initFrsId(data);
+
                 // const readParam: {
                 //     objectId: string;
                 // } = {
@@ -858,7 +860,60 @@ export default class PeopleCounting extends Vue {
             }
         }
 
+    }
 
+    async initFrsId(data) {
+
+        this.frsIdSelectItem = {};
+        this.sourceIdSelectItem = {};
+
+        if (data !== undefined) {
+            const readParam: {
+                objectId: string;
+            } = {
+                objectId: data
+            };
+
+            Loading.show();
+            await this.$server
+                .C("/partner/frs-manager/device", readParam)
+                .then((response: any) => {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+
+                            for (const returnValue of response) {
+                                this.$set(
+                                    this.frsIdSelectItem,
+                                    returnValue.frsId,
+                                    returnValue.frsIp
+                                );
+                            }
+
+                            for (const returnValue of response) {
+                                for (const value of returnValue.channels) {
+                                    this.$set(
+                                        this.sourceIdSelectItem,
+                                        value.sourceId,
+                                        value.sourceId
+                                    );
+                                }
+
+                            }
+
+                        },
+                        this._("w_ErrorReadData")
+                    );
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_ErrorReadData")
+                    );
+                });
+        }
     }
 
     async selectAreaId(data) {
@@ -1056,6 +1111,8 @@ export default class PeopleCounting extends Vue {
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
 
+        await this.getInputData();
+
         if (this.inputFormData.brand === EAddStep.hanwha) {
             this.addStep = EAddStep.hanwha;
             this.transition.prevStep = this.transition.step;
@@ -1078,7 +1135,7 @@ export default class PeopleCounting extends Vue {
         await this.initSelectItemSite();
         await this.selectAreaId(this.inputFormData.siteId);
         await this.selectGroupDeviceId(this.inputFormData.areaId);
-        this.getInputData();
+
         this.inputFormData.stepType = stepType;
         this.inputFormData.groupIds = JSON.parse(
             JSON.stringify(
@@ -1221,6 +1278,20 @@ export default class PeopleCounting extends Vue {
             password: data.password
         };
 
+        let tempLine = [];
+
+        switch (this.inputFormData.lines) {
+            case '1':
+                tempLine = [1];
+                break;
+            case '2':
+                tempLine = [2];
+                break;
+            case '1+2':
+                tempLine = [1, 2];
+                break;
+        }
+
         if (this.inputFormData.stepType === EPageStep.add) {
             const datas: any = [
                 {
@@ -1230,7 +1301,8 @@ export default class PeopleCounting extends Vue {
                     model: data.model,
                     areaId: data.areaId,
                     groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                    config: configObject
+                    config: configObject,
+                    lines: tempLine
                 }
             ];
 
@@ -1272,7 +1344,8 @@ export default class PeopleCounting extends Vue {
                     model: data.model,
                     areaId: data.areaId,
                     groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                    config: configObject
+                    config: configObject,
+                    lines: tempLine
                 }
             ];
 
@@ -1410,6 +1483,14 @@ export default class PeopleCounting extends Vue {
                 frsId: data.frsId,
                 sourceId: data.sourceId,
             };
+
+            if (data.frsId) {
+                for (const frsId in this.frsIdSelectItem) {
+                    if (data.frsId === frsId) {
+                        configFRSManagerObject.frsIp = this.frsIdSelectItem[frsId]
+                    }
+                }
+            }
 
             if (!this.inputFormData.objectId) {
 
@@ -1728,6 +1809,15 @@ export default class PeopleCounting extends Vue {
                  */
                 port: number;
 
+
+                /**
+                 * @uiLabel - ${this._("w_Camera_lines")}
+                 */
+                lines: ${toEnumInterface({
+                    '1': "1",
+                    '2': "2",
+                    '1+2': "1+2",
+                })};
 
                 /**
                  * @uiLabel - ${this._("w_Sites")}

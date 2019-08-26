@@ -223,6 +223,8 @@ export default class LangObject implements ILang {
     w_SelectSiteTree = 'Select store tree';
     w_SelectRegionTree = 'Select region tree';
 
+    w_Camera_lines = 'Camera Lines';
+
     w_Mon = 'Mon';
     w_Tue = 'Tue';
     w_Wed = 'Wed';

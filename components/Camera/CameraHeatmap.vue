@@ -57,7 +57,6 @@
 import { Vue, Component, Prop, Emit, Watch } from "vue-property-decorator";
 import { IHeatMapData, IHeatMapPosition, IMapImage } from "./IHeatmap";
 import Heatmap from "heatmap.js";
-import VueSlideBar from "vue-slide-bar";
 
 @Component({})
 export class CameraHeatmap extends Vue {
