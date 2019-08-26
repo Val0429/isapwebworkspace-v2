@@ -275,7 +275,7 @@ export class HighchartsDemographic extends Vue {
             },
             {
                 value: EGender.female,
-                text: this._("w_Female")
+                text: this._("w_Male")
             }
         ];
         this.selectItem.ageRange = [
@@ -388,7 +388,7 @@ export class HighchartsDemographic extends Vue {
                 data: []
             },
             {
-                name: this._("w_Female"),
+                name: this._("w_Male"),
                 data: []
             }
         ];
@@ -703,7 +703,7 @@ export class HighchartsDemographic extends Vue {
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempStartTimestamp = tempChartData.dateStart.getTime();
             let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
@@ -726,7 +726,7 @@ export class HighchartsDemographic extends Vue {
                 if (
                     value.siteObjectId == tempChartData.siteObjectId &&
                     valTimestamp >= tempStartTimestamp &&
-                    valTimestamp <= tempEndTimestamp
+                    valTimestamp < tempEndTimestamp
                 ) {
                     tempChartData.maleCount += value.maleCount;
                     tempChartData.femaleCount += value.femaleCount;
@@ -1219,7 +1219,7 @@ export class HighchartsDemographic extends Vue {
                     break;
             }
 
-            let tempStartTimestamp = tempChartData.dateStart.getTime() - 1000;
+            let tempStartTimestamp = tempChartData.dateStart.getTime();
             let tempEndTimestamp = tempChartData.dateEnd.getTime() + 1000;
 
             tempChartData.timeString = Datetime.DateTime2String(
@@ -1249,7 +1249,7 @@ export class HighchartsDemographic extends Vue {
                     if (
                         value.siteObjectId == tempSiteValue.siteObjectId &&
                         valTimestamp >= tempStartTimestamp &&
-                        valTimestamp <= tempEndTimestamp
+                        valTimestamp < tempEndTimestamp
                     ) {
                         tempSiteValue.maleCount += value.maleCount;
                         tempSiteValue.femaleCount += value.femaleCount;
@@ -1628,15 +1628,7 @@ export class HighchartsDemographic extends Vue {
                     }
                 },
                 tooltip: { enabled: false },
-                series: series,
-                colors: [
-                    "#5CCFFB",
-                    "#5C94FB",
-                    "#8072E1",
-                    "#F1C244",
-                    "#92DE64",
-                    "#FD6893"
-                ]
+                series: series
             };
 
             this.mountChart.ageRange = true;
