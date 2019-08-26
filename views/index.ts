@@ -12,7 +12,7 @@ import Stranger from './components/Stranger.vue';
 import Site from './components/Site.vue';
 
 // components
-$({ path: '/components', name: 'Components', icon: 'isap-icon-add' })(Components);
+$({ path: '/components', name: 'Dashboard', icon: 'fa-sitemap' })(Components);
 $({ path: '/components/users/user', name: 'User', icon: 'fa-user', permission: true })(User);
 $({ path: '/components/users/userGroup', name: 'UserGroup', icon: 'fa-users', permission: true })(UserGroup);
 $({ path: '/components/persons/person', name: 'Person', icon: 'fa-user', permission: true })(Person);

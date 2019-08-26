@@ -13,13 +13,13 @@
             <SidebarNav>
                 <SidebarNavItem url="/components" />
 
-                <SidebarNavTitle label="使用者管理" />
-                <SidebarNavItem url="/components/users/user" />
-                <SidebarNavItem url="/components/users/userGroup" />
-
                 <SidebarNavTitle label="人員管理" />
                 <SidebarNavItem url="/components/persons/person" />
                 <SidebarNavItem url="/components/persons/Stranger" />
+
+                <SidebarNavTitle label="使用者管理" />
+                <SidebarNavItem url="/components/users/user" />
+                <SidebarNavItem url="/components/users/userGroup" />
 
                 <SidebarNavTitle label="區域管理" />
                 <SidebarNavItem url="/components/region/site" />
