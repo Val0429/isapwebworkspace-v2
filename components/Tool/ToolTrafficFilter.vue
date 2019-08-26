@@ -302,8 +302,8 @@
                 deviceId: data.deviceId ? data.deviceId : undefined,
                 isEmployee: data.isEmployee,
                 isIn: data.isIn,
-                startDate: new Date(data.startDate.getFullYear(), data.startDate.getMonth() + 1, data.startDate.getDate(), Number(data.hour)).toISOString(),
-                endDate: new Date(data.endDate.getFullYear(), data.endDate.getMonth() + 1, data.endDate.getDate(), Number(data.hour) + 1).toISOString(),
+                startDate: new Date(data.date.getFullYear(), data.date.getMonth() + 1, data.date.getDate(), Number(data.hour)).toISOString(),
+                endDate: new Date(data.date.getFullYear(), data.date.getMonth() + 1, data.date.getDate(), Number(data.hour) + 1).toISOString(),
             };
 
             if (data.isEmployee === 'true') {
@@ -321,6 +321,8 @@
             } else {
                 submitParam.isIn = undefined;
             }
+
+            console.log(' ~ ', submitParam)
 
             this.visible = false;
             this.$emit('filter', submitParam)
