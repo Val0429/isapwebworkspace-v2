@@ -10,7 +10,12 @@
                                 <span class="title">{{_("w_ReportDashboard_Traffic")}} </span>
                             </div>
                             <div class="clearfix">
-                                <span class="date">{{anlysisData.traffic.total != null ? toPercent(anlysisData.traffic.total) : "N/A"}}</span>
+                                <span
+                                    class="date"
+                                    style="margin-top: 30px;"
+                                >{{anlysisData.traffic.total != null ? numberWithCommas(anlysisData.traffic.total) : "N/A"}}</span>
+                                <!-- <span v-if="eSign.none != anlysisData.traffic.sign">{{eSign.positive == anlysisData.traffic.sign ? '▲':'▼'}}</span>
+                                <span>{{anlysisData.traffic.valueRatio != null ? toPercent(anlysisData.traffic.valueRatio,1) : "N/A"}}</span> -->
                             </div>
                         </div>
                     </div>
@@ -117,11 +122,14 @@
 
             <b-row>
                 <select-time
-                    class="col-md-6"
+                    class="col-md-12"
                     :timeParam="time"
                     @time="receiveTime"
                 ></select-time>
+
             </b-row>
+
+            <select-permission-site @siteIds="receiveSiteIds"></select-permission-site>
 
         </iv-card>
     </div>
@@ -183,6 +191,10 @@ export class FilterStatusDashboard extends Vue {
 
     mounted() {
         this.initData();
+    }
+
+    receiveSiteIds(siteIds: object) {
+        console.log("siteIds ~ ", siteIds);
     }
 
     async initData() {
@@ -605,10 +617,13 @@ Vue.component("filter-status-dashboard", FilterStatusDashboard);
     .date {
         font-weight: bold;
         font-size: 36px;
-        margin-top: 30px;
+        margin-top: 10px;
         padding: 0;
         display: flex;
         justify-content: center;
+    }
+
+    .ratio {
     }
 
     .right {

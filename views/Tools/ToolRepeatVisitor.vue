@@ -14,6 +14,15 @@
                 :server="{ path: '/report/repeat-visitor' }"
                 :params="tabelParam"
             >
+
+                <template #snapshot="{ $attrs, $listeners }">
+                    <img :src="serverConfig._url + $attrs.row.imageSrc"><img>
+                </template>
+
+                <template #count="{ $attrs, $listeners }">
+                    {{$attrs.row.NumberOfVisit}}
+                </template>
+
                 <template #Actions="{$attrs, $listeners}">
 
                     <iv-toolbox-more>
@@ -69,11 +78,15 @@ import { Vue, Component } from "vue-property-decorator";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
+import Datetime from "@/services/Datetime";
+import ServerConfig from "@/services/ServerConfig";
 
 @Component({
     components: {}
 })
 export default class ToolRepeatVisitor extends Vue {
+    serverConfig = ServerConfig;
+
     // 收合card控制
     visible: boolean = false;
 
