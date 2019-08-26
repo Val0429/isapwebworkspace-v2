@@ -1,0 +1,1 @@
+export * from './person-list-form.vue';

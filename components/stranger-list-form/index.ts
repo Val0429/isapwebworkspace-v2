@@ -1,0 +1,1 @@
+export * from './stranger-list-form.vue';
