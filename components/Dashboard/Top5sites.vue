@@ -16,7 +16,7 @@
                 ></select-device-type>
                 <select-time
                     class="col-md-6"
-                    :timeParam="time"
+                    :timeParam="timeParam"
                     @time="receiveTime"
                 ></select-time>
             </b-row>
@@ -43,16 +43,10 @@ import { EMode } from "@/components/Dashboard/index";
     components: {}
 })
 export class Top5sites extends Vue {
-    // Prop
-    @Prop({
-        type: String, // Boolean, Number, String, Array, Object
-        default: ""
-    })
-    label: string;
 
     chartOptions: any = {};
 
-    time: any = {
+    timeParam: any = {
         startDate: new Date(),
         endDate: new Date()
     };

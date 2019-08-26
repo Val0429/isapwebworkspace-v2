@@ -22,6 +22,7 @@ interface IConfigiSap {
 interface IConfigiSapFRSManager {
 	serverId: string;
 	frsId: string;
+	frsIp?: string;
 	sourceId: string;
 }
 

@@ -339,6 +339,7 @@ export default class FaceRecognition extends Vue {
     sourceIdSelectItem: any = {};
     demographicIdSelectItem: any = {};
     frsIdSelectItem: any = {};
+    frsIPSelectItem: any = {};
     frsMangerIdSelectItem: any = {};
     frsMangerServerIdSelectItem: any = {};
 
@@ -496,8 +497,6 @@ export default class FaceRecognition extends Vue {
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
-
-            console.log(' this.demographicIdSelectItem',  this.demographicIdSelectItem)
     }
 
     async initSelectItemFRSSManagerServer() {
@@ -533,7 +532,6 @@ export default class FaceRecognition extends Vue {
                 });
         }
 
-console.log('this.frsMangerIdSelectItem ~ ', this.frsMangerIdSelectItem)
     }
 
     selectedItem(data) {
@@ -684,7 +682,6 @@ console.log('this.frsMangerIdSelectItem ~ ', this.frsMangerIdSelectItem)
     }
 
     async selectFrsMangerId(data) {
-        console.log(' ~ ', data)
          await this.initFrsId(data);
     }
 
@@ -979,25 +976,28 @@ console.log('this.frsMangerIdSelectItem ~ ', this.frsMangerIdSelectItem)
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
 
-        if (this.inputFormData.model === EAddStep.frs) {
-            this.addStep = EAddStep.frs;
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 3;
-        }
+	    await this.getInputData();
 
-        if (this.inputFormData.model === EAddStep.frsManager) {
-            this.addStep = EAddStep.frsManager;
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 3;
-        }
+	    if (this.inputFormData.model === EAddStep.frs) {
+		    this.addStep = EAddStep.frs;
+		    this.transition.prevStep = this.transition.step;
+		    this.transition.step = 3;
+	    }
 
-        await this.initSelectItemFRSServer();
+	    if (this.inputFormData.model === EAddStep.frsManager) {
+		    this.addStep = EAddStep.frsManager;
+		    this.transition.prevStep = this.transition.step;
+		    this.transition.step = 3;
+	    }
+
+	    await this.initSelectItemFRSServer();
         await this.initSelectItemSite();
         await this.initSelectItemDemographicServer();
-        await this.initSelectItemFRSSManagerServer();
         await this.selectAreaId(this.inputFormData.siteId);
         await this.selectGroupDeviceId(this.inputFormData.areaId);
-        this.getInputData();
+
+        await this.initSelectItemFRSSManagerServer();
+
         this.inputFormData.stepType = stepType;
         this.inputFormData.groupIds = JSON.parse(
             JSON.stringify(
@@ -1224,6 +1224,14 @@ console.log('this.frsMangerIdSelectItem ~ ', this.frsMangerIdSelectItem)
                 frsId: data.frsId,
                 sourceId: data.sourceId,
             };
+
+            if (data.frsId) {
+                for (const frsId in this.frsIdSelectItem) {
+                    if (data.frsId === frsId) {
+                        configFRSManagerObject.frsIp = this.frsIdSelectItem[frsId]
+                    }
+                }
+            }
 
             if (!this.inputFormData.objectId) {
 
