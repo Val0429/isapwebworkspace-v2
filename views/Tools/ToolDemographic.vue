@@ -14,6 +14,36 @@
                 :server="{ path: '/report/demographic' }"
                 :params="tabelParam"
             >
+
+                <template #area="{ $attrs, $listeners }">
+
+                    {{$attrs.row.area.name}}
+                </template>
+
+                <template #group="{ $attrs, $listeners }">
+                    {{showGroups($attrs.row.deviceGroups)}}
+                </template>
+
+                <template #camera="{ $attrs, $listeners }">
+                    {{$attrs.row.device.name}}
+                </template>
+
+                <template #snapshot="{ $attrs, $listeners }">
+                    <img :src="serverConfig._url + $attrs.row.imageSrc"><img>
+                </template>
+
+                <template #time="{ $attrs, $listeners }">
+                    {{showTime($attrs.row.date)}}
+                </template>
+
+                <template #grender="{ $attrs, $listeners }">
+                    {{$attrs.row.grender.name}}
+                </template>
+
+                <template #ageRange="{ $attrs, $listeners }">
+                    {{$attrs.row.ageRange.name}}
+                </template>
+
             </iv-table>
         </iv-card>
 
@@ -31,11 +61,15 @@ import { ITransition } from "@/services/Transition";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
+import Datetime from "@/services/Datetime";
+import ServerConfig from "@/services/ServerConfig";
 
 @Component({
     components: {}
 })
 export default class ToolDemographic extends Vue {
+    serverConfig = ServerConfig;
+
     // 收合card控制
     visible: boolean = false;
 
@@ -50,6 +84,18 @@ export default class ToolDemographic extends Vue {
         this.tabelParam = filterData;
 
         (this.$refs.listTable as any).reload();
+    }
+
+    showGroups(data) {
+        var groups = [];
+        for (let datum of data) {
+            groups.push(datum.name);
+        }
+        return groups.join(",");
+    }
+
+    showTime(date) {
+        return Datetime.DateTime2String(new Date(date), "YYYY-MM-DD HH:mm");
     }
 
     ITableList() {
