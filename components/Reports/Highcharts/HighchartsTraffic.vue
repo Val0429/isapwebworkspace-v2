@@ -708,35 +708,6 @@ export class HighchartsTraffic extends Vue {
                 let value: IChartTrafficData = this.anysislyChartValue(val);
                 let valTimestamp = value.date.getTime();
 
-                console.log(
-                    "!!! valTimestampe",
-                    Datetime.DateTime2String(
-                        new Date(valTimestamp),
-                        "YYYY-MM-DD HH:mm:ss"
-                    ),
-                    "!!! value.date",
-                    Datetime.DateTime2String(value.date, "YYYY-MM-DD HH:mm:ss"),
-                    "!!! dateStart",
-                    Datetime.DateTime2String(
-                        tempChartData.dateStart,
-                        "YYYY-MM-DD HH:mm:ss"
-                    ),
-                    "!!! dateEnd",
-                    Datetime.DateTime2String(
-                        tempChartData.dateEnd,
-                        "YYYY-MM-DD HH:mm:ss"
-                    ),
-                    "!!! tempEndTimestamp",
-                    Datetime.DateTime2String(
-                        new Date(tempEndTimestamp),
-                        "YYYY-MM-DD HH:mm:ss"
-                    ),
-                    value.siteObjectId == tempChartData.siteObjectId,
-                    valTimestamp >= tempStartTimestamp,
-                    valTimestamp < tempEndTimestamp,
-                    value.traffic
-                );
-
                 if (
                     value.siteObjectId == tempChartData.siteObjectId &&
                     valTimestamp >= tempStartTimestamp &&
@@ -778,14 +749,6 @@ export class HighchartsTraffic extends Vue {
             }
 
             // push single series data
-            console.log(
-                "@@@@ tempChartData",
-                Datetime.DateTime2String(
-                    tempChartData.date,
-                    "YYYY-MM-DD HH:mm:ss"
-                ),
-                tempChartData.traffic
-            );
             tempResult.push(tempChartData);
 
             // set loop value
