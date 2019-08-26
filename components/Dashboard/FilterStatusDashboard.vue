@@ -14,8 +14,8 @@
                                     class="date"
                                     style="margin-top: 30px;"
                                 >{{anlysisData.traffic.total != null ? numberWithCommas(anlysisData.traffic.total) : "N/A"}}</span>
-                                <!-- <span v-if="eSign.none != anlysisData.traffic.sign">{{eSign.positive == anlysisData.traffic.sign ? '▲':'▼'}}</span>
-                                <span>{{anlysisData.traffic.valueRatio != null ? toPercent(anlysisData.traffic.valueRatio,1) : "N/A"}}</span> -->
+                                <span v-if="eSign.none != anlysisData.traffic.sign">{{eSign.positive == anlysisData.traffic.sign ? '▲':'▼'}}</span>
+                                <span>{{anlysisData.traffic.valueRatio != null ? toPercent(anlysisData.traffic.valueRatio,1) : "N/A"}}</span>
                             </div>
                         </div>
                     </div>
@@ -30,6 +30,8 @@
                             </div>
                             <div class="clearfix">
                                 <span class="date">{{anlysisData.averageOccupancy.total != null ? numberWithCommas(anlysisData.averageOccupancy.total) : "N/A"}}</span>
+                                <span v-if="eSign.none != anlysisData.averageOccupancy.sign">{{eSign.positive == anlysisData.averageOccupancy.sign ? '▲':'▼'}}</span>
+                                <span>{{anlysisData.averageOccupancy.valueRatio != null ? toPercent(anlysisData.averageOccupancy.valueRatio,1) : "N/A"}}</span>
                             </div>
                         </div>
                     </div>
@@ -44,6 +46,8 @@
                             </div>
                             <div class="clearfix">
                                 <span class="date">{{anlysisData.averageDwellTime.total != null ? numberWithCommas(anlysisData.averageDwellTime.total) : "N/A"}}</span>
+                                <span v-if="eSign.none != anlysisData.averageDwellTime.sign">{{eSign.positive == anlysisData.averageDwellTime.sign ? '▲':'▼'}}</span>
+                                <span>{{anlysisData.averageDwellTime.valueRatio != null ? toPercent(anlysisData.averageDwellTime.valueRatio,1) : "N/A"}}</span>
                             </div>
                         </div>
                     </div>
@@ -61,6 +65,10 @@
                                     class="demographic-div"
                                     :options="chartOptions.demographic"
                                 ></highcharts>
+                                <div class="charfix">
+                                    <span v-if="eSign.none != anlysisData.demographic.sign">{{eSign.positive == anlysisData.demographic.sign ? '▲':'▼'}}</span>
+                                    <span>{{anlysisData.demographic.valueRatio != null ? toPercent(anlysisData.demographic.valueRatio,1) : "N/A"}}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -80,6 +88,12 @@
                                             <span>{{anlysisData.vipBlacklist.value != null ? numberWithCommas(anlysisData.vipBlacklist.value) : "N/A"}} </span>
                                         </div>
                                         <img src="../../assets/images/vip.png">
+
+                                        <p>
+                                            <div class="clearfix">
+                                                <span v-if="eSign.none != anlysisData.vipBlacklist.sign">{{eSign.positive == anlysisData.vipBlacklist.sign ? '▲':'▼'}}</span>
+                                                <span>{{anlysisData.vipBlacklist.valueRatio1 != null ? toPercent(anlysisData.vipBlacklist.valueRatio1,1) : "N/A"}}</span>
+                                            </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-6 vip-blackList-div">
@@ -88,7 +102,15 @@
                                         <div>
                                             <span>{{anlysisData.vipBlacklist.value2 != null ? numberWithCommas(anlysisData.vipBlacklist.value2) : "N/A"}} </span>
                                         </div>
-                                        <img src="../../assets/images/stranger.png">
+                                        <img
+                                            src="../../assets/images/stranger.png"
+                                            height="26px"
+                                        >
+                                        <p>
+                                            <div class="clearfix">
+                                                <span v-if="eSign.none != anlysisData.vipBlacklist.sign2">{{eSign.positive == anlysisData.vipBlacklist.sign2 ? '▲':'▼'}}</span>
+                                                <span>{{anlysisData.vipBlacklist.valueRatio2 != null ? toPercent(anlysisData.vipBlacklist.valueRatio2,1) : "N/A"}}</span>
+                                            </div>
                                     </div>
                                 </div>
                             </div>
@@ -106,10 +128,14 @@
                             <div class="clearfix">
                                 <apexchart
                                     type=radialBar
-                                    height=200
+                                    height=180
                                     :options="chartOptions.repeatCustomer"
                                     :series="chartOptions.repeatCustomer.series"
                                 />
+                                <div class="charfix">
+                                    <span v-if="eSign.none != anlysisData.averageDwellTime.sign">{{eSign.positive == anlysisData.averageDwellTime.sign ? '▲':'▼'}}</span>
+                                    <span>{{anlysisData.averageDwellTime.valueRatio != null ? toPercent(anlysisData.averageDwellTime.valueRatio,1) : "N/A"}}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -169,6 +195,8 @@ import {
     components: {}
 })
 export class FilterStatusDashboard extends Vue {
+    eSign = ESign;
+
     anlysisData = new ReportDashboard();
 
     // chart options
@@ -529,6 +557,7 @@ export class FilterStatusDashboard extends Vue {
     }
 
     async receiveTime(time: object) {
+        console.log("receiveTime", time);
         this.time = time;
         let timeParam = JSON.parse(JSON.stringify(this.time));
 
@@ -600,6 +629,10 @@ Vue.component("filter-status-dashboard", FilterStatusDashboard);
 .backgroundColor.selected {
     background: #4d5256;
     color: white;
+}
+
+.charfix {
+    margin-top: -10px;
 }
 
 .clearfix {
