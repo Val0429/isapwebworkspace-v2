@@ -16,9 +16,12 @@
                 :imageMap="imageMap"
             >
             </image-map>
+
+            <site-area-Group-device-filter class="mt-3"></site-area-Group-device-filter>
+
         </iv-card>
     </div>
-</template> 
+</template>
 
 <script lang="ts">
 import {

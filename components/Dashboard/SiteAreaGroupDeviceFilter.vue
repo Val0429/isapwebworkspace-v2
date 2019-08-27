@@ -10,20 +10,33 @@
                 key="transition_1"
                 v-show="transition.step === 1"
                 :interface="IFilterConditionForm()"
+                :value="inputFormData"
+                @update:*="updateInputFormData($event)"
             >
+
+                <template #type="{ $attrs, $listeners }">
+                    <iv-form-selection
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        v-model="inputFormData.type"
+                    >
+                    </iv-form-selection>
+                </template>
+
                 <template #siteId="{$attrs, $listeners}">
+
+                    <p class="col-md-12 mb-2">* {{ _('w_Site') }}</p>
 
                     <iv-form-selection
                         v-on="$listeners"
-                        v-model="inputFormData.siteIds"
-                        class="col-md-10"
-                        :options="sitesSelectItem"
-                        :multiple="true"
-                        @input="changeSiteIds"
+                        v-model="inputFormData.siteId"
+                        class="col-md-9"
+                        :options="siteSelectItem"
+                        :multiple="false"
                     >
                     </iv-form-selection>
 
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <b-button
                             class="col-md-12"
                             variant="outline-secondary"
@@ -34,12 +47,43 @@
                     </div>
 
                 </template>
+
+                <template #areaId="{ $attrs, $listeners }">
+                    <iv-form-selection
+                        v-if="inputFormData.siteId"
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        v-model="inputFormData.areaId"
+                    >
+                    </iv-form-selection>
+                </template>
+
+                <template #deviceGroupId="{ $attrs, $listeners }">
+                    <iv-form-selection
+                        v-if="inputFormData.siteId && inputFormData.areaId"
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        v-model="inputFormData.deviceGroupId"
+                    >
+                    </iv-form-selection>
+                </template>
+
+                <template #deviceId="{ $attrs, $listeners }">
+                    <iv-form-selection
+                        v-if="inputFormData.siteId && inputFormData.areaId && inputFormData.deviceGroupId"
+                        v-bind="$attrs"
+                        v-on="$listeners"
+                        v-model="inputFormData.deviceId"
+                    >
+                    </iv-form-selection>
+                </template>
+
             </iv-form>
 
             <region-tree-select
                 key="transition_2"
                 v-show="transition.step === 2"
-                :multiple="true"
+                :multiple="false"
                 :regionTreeItem="regionTreeItem"
                 :selectType="selectType"
                 :selecteds="selecteds"
@@ -72,6 +116,7 @@ import {
     RegionTreeItem,
     ERegionType
 } from "../RegionTree";
+import { EMode } from '.';
 
 @Component({
     components: {}
@@ -83,6 +128,7 @@ export class SiteAreaGroupDeviceFilter extends Vue {
         step: 1
     };
 
+    metricSelectItem: any = {};
     siteSelectItem: any = [];
     areaSelectItem: any = {};
     deviceGroupSelectItem: any = {};
@@ -92,7 +138,8 @@ export class SiteAreaGroupDeviceFilter extends Vue {
         siteId: "",
         areaId: "",
         deviceGroupId: "",
-        deviceId: ""
+        deviceId: "",
+        type: EMode.peopleCounting
     };
 
     // tree
@@ -101,7 +148,7 @@ export class SiteAreaGroupDeviceFilter extends Vue {
     selecteds: IRegionTreeSelected[] = [];
 
     created() {
-        this.initData();
+        this.initSelectItem();
         this.siteFilterPermission();
         this.initRegionTreeSelect();
         this.initSelectItemTree();
@@ -109,7 +156,18 @@ export class SiteAreaGroupDeviceFilter extends Vue {
 
     mounted() {}
 
-    initData() {}
+    initSelectItem() {
+        this.metricSelectItem = {
+            peopleCounting: this._("w_Navigation_RuleAndActions_Traffic"),
+            humanDetection: this._("w_Navigation_RuleAndActions_Occupancy"),
+            demographic: this._("w_Navigation_VideoSources_Demographic"),
+            dwellTime: this._("w_Navigation_VideoSources_DwellTime"),
+            visitor: this._("w_ReportDashboard_RepeatCustomer1"),
+            vip: this._("w_VIPAndBlackList_TableTitleVip"),
+            black: this._("w_VIPAndBlackList_TableTitleBlacklist")
+        };
+
+    }
 
     initRegionTreeSelect() {
         this.regionTreeItem = new RegionTreeItem();
@@ -120,7 +178,6 @@ export class SiteAreaGroupDeviceFilter extends Vue {
         for (const detail of this.$user.user.allowSites) {
             let site = { id: detail.objectId, text: detail.name };
             this.siteSelectItem.push(site);
-            this.inputFormData.allSiteIds.push(detail.objectId);
         }
     }
 
@@ -150,9 +207,8 @@ export class SiteAreaGroupDeviceFilter extends Vue {
 
         this.selecteds = [];
 
-        for (const id of this.inputFormData.siteId) {
             for (const detail of this.siteSelectItem) {
-                if (id === detail.id) {
+                if (this.inputFormData.siteId === detail.id) {
                     let selectedsObject: IRegionTreeSelected = {
                         objectId: detail.id,
                         type: ERegionType.site,
@@ -161,14 +217,13 @@ export class SiteAreaGroupDeviceFilter extends Vue {
                     this.selecteds.push(selectedsObject);
                 }
             }
-        }
+
     }
 
     async pageToShowResult() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
 
-        this.transition.step = this.transition.prevStep;
 
         // siteId clear
         this.inputFormData.siteId = "";
@@ -181,11 +236,15 @@ export class SiteAreaGroupDeviceFilter extends Vue {
             await this.initSelectItemArea(this.inputFormData.siteId);
         }
 
-        this.$emit("siteIds", this.inputFormData.siteIds);
+        this.$emit("filter-data", this.inputFormData);
     }
 
     async updateInputFormData(data) {
         switch (data.key) {
+            case 'type':
+                this.inputFormData.type = data.value;
+                this.$emit("filter-data", this.inputFormData);
+                break;
             case "siteId":
                 if (this.inputFormData.siteId) {
                     this.initSelectItemArea(this.inputFormData.siteId);
@@ -194,6 +253,7 @@ export class SiteAreaGroupDeviceFilter extends Vue {
                     this.inputFormData.deviceGroupId = "";
                     this.inputFormData.deviceId = "";
                 }
+                this.$emit("filter-data", this.inputFormData);
                 break;
             case "areaId":
                 if (this.inputFormData.siteId && this.inputFormData.areaId) {
@@ -205,6 +265,7 @@ export class SiteAreaGroupDeviceFilter extends Vue {
                     this.inputFormData.deviceGroupId = "";
                     this.inputFormData.deviceId = "";
                 }
+                this.$emit("filter-data", this.inputFormData);
                 break;
             case "deviceGroupId":
                 if (
@@ -220,6 +281,7 @@ export class SiteAreaGroupDeviceFilter extends Vue {
                 } else {
                     this.inputFormData.deviceId = "";
                 }
+                this.$emit("filter-data", this.inputFormData);
                 break;
         }
     }
@@ -330,12 +392,14 @@ export class SiteAreaGroupDeviceFilter extends Vue {
             siteId: siteId,
             areaId: areaId,
             deviceGroupId: deviceGroupId,
-            mode: EDeviceMode.peopleCounting
+            mode: this.inputFormData.type
         };
 
         if (!siteId && !areaId && !deviceGroupId) {
             return false;
         }
+
+        console.log(' ~ ', readParam)
 
         await this.$server
             .R("/device", readParam)
@@ -364,24 +428,26 @@ export class SiteAreaGroupDeviceFilter extends Vue {
         return `
             interface {
 
+                /**
+                 * @uiLabel - ${this._("w_ReportTemplate_Metric")}
+                 */
+                type: ${toEnumInterface(this.metricSelectItem as any, false)};
+
 
                 /**
                  * @uiLabel - ${this._("w_Sites")}
-                * @uiColumnGroup - row1
                  */
                 siteId: any;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Areas")}
-                 * @uiColumnGroup - row1
+                 * @uiLabel - ${this._("w_Area")}
                  */
                 areaId: ${toEnumInterface(this.areaSelectItem as any, false)};
 
 
                 /**
-                 * @uiLabel - ${this._("w_DeviceGroups")}
-                 * @uiColumnGroup - row1
+                 * @uiLabel - ${this._("w_DeviceGroup")}
                  */
                 deviceGroupId?: ${toEnumInterface(
                     this.deviceGroupSelectItem as any,
@@ -390,8 +456,7 @@ export class SiteAreaGroupDeviceFilter extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_Devices")}
-                 * @uiColumnGroup - row1
+                 * @uiLabel - ${this._("w_Device")}
                  */
                 deviceId?: ${toEnumInterface(
                     this.deviceSelectItem as any,

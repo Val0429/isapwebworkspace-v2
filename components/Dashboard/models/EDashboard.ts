@@ -13,6 +13,8 @@ enum ETime {
 
 enum EMode {
     peopleCounting = 'peopleCounting',
+    humanDetection = 'Human Detection',
+    demographic = 'Demographic',
     dwellTime = 'dwellTime',
     visitor = 'visitor',
     vip = 'vip',

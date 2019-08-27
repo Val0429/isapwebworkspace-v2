@@ -1,7 +1,7 @@
 <template>
     <div>
         <iv-card :label="_('w_Dashboard_Top5sites')">
-            <h5 class="mb-3">{{ mode.modeTitle }}</h5>
+            <h5 class="mb-3">{{ modeParam.modeTitle }}</h5>
 
             <highcharts
                 ref="highcharts"
@@ -11,7 +11,7 @@
             <b-row>
                 <select-device-type
                     class="col-md-6"
-                    :modeParam="mode"
+                    :modeParam="modeParam"
                     @mode="receiveMode"
                 ></select-device-type>
                 <select-time
@@ -51,7 +51,7 @@ export class Top5sites extends Vue {
         endDate: new Date()
     };
 
-    mode: any = {
+    modeParam: any = {
         type: "",
         modeTitle: ""
     };
@@ -64,7 +64,7 @@ export class Top5sites extends Vue {
     mounted() {}
 
     initData() {
-        this.mode = {
+        this.modeParam = {
             type: EMode.peopleCounting,
             modeTitle: this._("w_Navigation_RuleAndActions_Traffic")
         };
@@ -85,7 +85,7 @@ export class Top5sites extends Vue {
         let tempData: number[] = [];
         let tempName: string = "";
 
-        if (this.mode.type === EMode.dwellTime) {
+        if (this.modeParam.type === EMode.dwellTime) {
             tempName = this._("w_Dashboard_Minutes");
         } else {
             tempName = this._("w_ReportCampaign_Traffic");
@@ -143,7 +143,7 @@ export class Top5sites extends Vue {
     }
 
     async receiveMode(mode: object) {
-        this.mode = mode;
+        this.modeParam = mode;
 
         // TODO: wait api
         // Loading.show();

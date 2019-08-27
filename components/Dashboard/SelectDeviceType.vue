@@ -48,7 +48,7 @@
 
         initSelectItem() {
             this.metricSelectItem = {
-                peopleCounting: this._("w_Navigation_VideoSources_PeopleCounting"),
+                peopleCounting: this._("w_Navigation_RuleAndActions_Traffic"),
                 dwellTime: this._("w_Navigation_VideoSources_DwellTime"),
                 visitor: this._("w_ReportDashboard_RepeatCustomer1"),
                 vip: this._("w_VIPAndBlackList_TableTitleVip"),
