@@ -26,8 +26,7 @@ import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 
 interface IInputFormData {
-    host: string;
-    port: number;
+    hosting: string;
 }
 
 @Component({
@@ -37,11 +36,9 @@ export default class System extends Vue {
 
     // input框綁定model資料
     inputFormData: IInputFormData = {
-        host: "",
-        port: null
+        hosting: "",
     };
 
-    tempHost = '';
 
     created() {
         this.readHosting();
@@ -54,7 +51,7 @@ export default class System extends Vue {
             .R("/setting/system")
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    this.tempHost = response.hosting
+                    this.inputFormData.hosting = response.hosting
                 });
             })
             .catch((e: any) => {
@@ -64,9 +61,6 @@ export default class System extends Vue {
                     this._("w_MailServer_Read_Fail")
                 );
             });
-
-        this.inputFormData.host = this.tempHost.substring(7).split(":")[0];
-        this.inputFormData.port = parseInt(this.tempHost.substring(7).split(":")[1]);
     }
 
     // 新增MailServer
@@ -109,17 +103,9 @@ export default class System extends Vue {
                 /**
                  * @uiLabel - ${this._("w_System_WebHost")}
                  * @uiPlaceHolder - ${this._("w_System_WebHost")}
-                 * @uiType - iv-form-ip
                  */
-                host: string;
+                hosting: string;
 
-
-                 /**
-                 * @uiLabel - ${this._("w_Port")}
-                 * @uiPlaceHolder - ${this._("w_Port_PlaceHolder")}
-                 * @uiAttrs - { max: 65535, min: 1}
-                 */
-                port: number;
 
             }
         `;
