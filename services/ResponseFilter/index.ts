@@ -10,7 +10,7 @@ interface IResponseFilter {
 export class ResponseFilter {
     constructor() {}
 
-    successCheck(viewItem: any, response: any, callback: Function, errorMessage: string = '', check: boolean = true) {
+    successCheck(vue: any, response: any, callback: Function, errorMessage: string = '', check: boolean = true) {
         Loading.hide();
         let responseItem: IResponseFilter = {
             totalLength: 0,
@@ -20,7 +20,7 @@ export class ResponseFilter {
 
         // response undefined
         if (response == undefined) {
-            Dialog.error(viewItem._('w_ErrorResponseUndefined'));
+            Dialog.error(vue._('w_Error_ResponseUndefined'));
             return false;
         }
 
@@ -70,11 +70,23 @@ export class ResponseFilter {
         }
     }
 
-    catchError(viewItem: any, e: any, message: string = '') {
+    catchError(vue: any, e: any, message: string = '') {
         console.log('error: ', e);
         Loading.hide();
+
+        let errorMessage = '';
+        if (e.message != undefined) {
+            errorMessage = e.message;
+        }
+        if (e.body != undefined) {
+            errorMessage = e.body;
+        }
+        if (message != '') {
+            errorMessage = message;
+        }
+
         if (e.err != undefined && e.err == 'Failed to fetch') {
-            Dialog.error(viewItem._('w_FailedToFetch'));
+            Dialog.error(vue._('w_Error_FailedToFetch'));
             return true;
         }
         if (!e.res) {
@@ -84,10 +96,16 @@ export class ResponseFilter {
             return false;
         }
         if (e.res.statusCode == 401) {
-            viewItem.$router.push({ path: '/login' });
+            Dialog.error(vue._('w_Error_401'));
+            vue.$router.push({ path: '/login' });
             return true;
         }
-        Dialog.error(message != '' ? message : e.message);
+
+        if (e.res.statusCode == 404) {
+            Dialog.error(vue._('w_Error_404'));
+            return true;
+        }
+        Dialog.error(errorMessage);
         return true;
     }
 }
