@@ -85,13 +85,15 @@ export class Peakhour extends Vue {
         //     });
     }
 
-    generateData(count, yRange) {
+    developData(count, yRange) {
         var i = 0;
         var series = [];
         while (i < count) {
             var x = "w" + (i + 1).toString();
-            var y = Math.floor(Math.random() * (yRange.max - yRange.min + 1)) + yRange.min;
-            series.push({x: x, y: y});
+            var y =
+                Math.floor(Math.random() * (yRange.max - yRange.min + 1)) +
+                yRange.min;
+            series.push({ x: x, y: y });
             i++;
         }
         return series;
@@ -101,67 +103,40 @@ export class Peakhour extends Vue {
         // TODO: Wait API
         this.series = [
             {
-                name: "Jan",
-                data: this.generateData(7, {
-                    min: -30,
-                    max: 55
-                })
+                name: "5pm",
+                data: this.developData(7, { min: -30, max: 55 })
             },
             {
-                name: "Feb",
-                data: this.generateData(7, {
-                    min: -30,
-                    max: 55
-                })
+                name: "4pm",
+                data: this.developData(7, { min: -30, max: 55 })
             },
             {
-                name: "Mar",
-                data: this.generateData(7, {
-                    min: -30,
-                    max: 55
-                })
+                name: "3pm",
+                data: this.developData(7, { min: -30, max: 55 })
             },
             {
-                name: "Apr",
-                data: this.generateData(7, {
-                    min: -30,
-                    max: 55
-                })
+                name: "2pm",
+                data: this.developData(7, { min: -30, max: 55 })
             },
             {
-                name: "May",
-                data: this.generateData(7, {
-                    min: -30,
-                    max: 55
-                })
+                name: "1pm",
+                data: this.developData(7, { min: -30, max: 55 })
             },
             {
-                name: "Jun",
-                data: this.generateData(7, {
-                    min: -30,
-                    max: 55
-                })
+                name: "12am",
+                data: this.developData(7, { min: -30, max: 55 })
             },
             {
-                name: "Jul",
-                data: this.generateData(7, {
-                    min: -30,
-                    max: 55
-                })
+                name: "11am",
+                data: this.developData(7, { min: -30, max: 55 })
             },
             {
-                name: "Aug",
-                data: this.generateData(7, {
-                    min: -30,
-                    max: 55
-                })
+                name: "10am",
+                data: this.developData(7, { min: -30, max: 55 })
             },
             {
-                name: "Sep",
-                data: this.generateData(7, {
-                    min: -30,
-                    max: 55
-                })
+                name: "9am",
+                data: this.developData(7, { min: -30, max: 55 })
             }
         ];
 
