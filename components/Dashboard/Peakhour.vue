@@ -7,7 +7,10 @@
                 :options="chartOptions"
                 :series="series"
             />
-            <select-permission-site @siteIds="receiveSiteIds"></select-permission-site>
+            <select-permission-site
+                @siteIds="receiveSiteIds"
+                :radioName="radioName"
+            ></select-permission-site>
             <select-time
                 :timeParam="timeParam"
                 @updateTime="receiveTime"
@@ -32,6 +35,8 @@ export class Peakhour extends Vue {
         startDate: new Date(),
         endDate: new Date()
     };
+
+    radioName: string = 'Peakhour';
 
     chartOptions: any = {};
     series: any = [];

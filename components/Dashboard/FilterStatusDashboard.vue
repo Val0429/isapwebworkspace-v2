@@ -150,6 +150,7 @@
                 <select-time
                     class="col-md-12"
                     :timeParam="timeParam"
+                    :radioName="radioName"
                     @updateTime="receiveTime"
                 ></select-time>
 
@@ -214,6 +215,8 @@ export class FilterStatusDashboard extends Vue {
         startDate: new Date(),
         endDate: new Date()
     };
+
+    radioName: string = 'AreaStatusByFloorPlanDetail';
 
     created() {}
 

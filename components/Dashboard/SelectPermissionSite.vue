@@ -18,7 +18,7 @@
                     <b-col cols="9">
                         <b-form-radio-group
                             v-model="selectAllSites"
-                            name="ifAllSites"
+                            :name="radioName"
                             class="mb-3"
                             :options="ifAllSitesSelectItem"
                             @change="changeAllSitesSelect"
@@ -93,6 +93,13 @@ import { EIfAllSelected } from "../Reports";
     components: {}
 })
 export class SelectPermissionSite extends Vue {
+    // Prop
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: ''
+    })
+    radioName: string;
+
     transition: ITransition = {
         type: Transition.type,
         prevStep: 1,
