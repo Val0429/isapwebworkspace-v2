@@ -70,7 +70,7 @@
                                             class="text-right"
                                         >
                                             <!-- language -->
-                                            <iv-language-button />
+                                            <!-- <iv-language-button /> -->
                                             <!--== language ==-->
 
                                             <!-- forgot password -->
