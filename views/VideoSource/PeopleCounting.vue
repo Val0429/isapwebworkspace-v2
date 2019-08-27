@@ -186,6 +186,7 @@
 
             </iv-card>
 
+            <!-- Hanwha -->
             <iv-auto-card
                 key="transition_3"
                 v-show="transition.step === 3"
@@ -283,6 +284,302 @@
 
             </iv-card>
 
+            <!-- Eocortex -->
+            <iv-auto-card
+                key="transition_8"
+                v-show="transition.step === 8"
+                :label="pageStep === ePageStep.add ? _('w_VSPeopleCounting_AddEocortexUse') : _('w_VSPeopleCounting_EditEocortexUse')"
+            >
+                <template #toolbox>
+                    <iv-toolbox-leave
+                        v-show="pageStep === ePageStep.add"
+                        @click="pageToList"
+                    />
+                    <iv-toolbox-step-backward
+                        v-show="pageStep === ePageStep.add"
+                        @click="pageStepBackward"
+                    />
+                    <iv-toolbox-back
+                        v-show="pageStep === ePageStep.edit"
+                        @click="pageToList"
+                    />
+                </template>
+
+                <iv-form
+                    :interface="IAddAndEditFromHanwha()"
+                    :value="inputFormData"
+                    @update:siteId="selectAreaId($event)"
+                    @update:areaId="selectGroupDeviceId($event)"
+                    @update:*="tempSaveInputData($event)"
+                    @submit="saveAddOrEditHanwha($event)"
+                >
+                    <template #selectTree="{ $atrs, $listeners }">
+
+                        <div class="m-3">
+
+                            <b-button @click="pageToChooseTree">
+                                {{ _('w_SelectSiteTree') }}
+                            </b-button>
+                        </div>
+
+                    </template>
+
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        v-show="pageStep === ePageStep.add"
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList"
+                    >{{ _('w_Leave') }}
+                    </b-button>
+
+                    <b-button
+                        v-show="pageStep === ePageStep.add"
+                        variant="secondary"
+                        size="lg"
+                        @click="pageStepBackward"
+                    >{{ _('w_StepBackward') }}
+                    </b-button>
+
+                    <b-button
+                        v-show="pageStep === ePageStep.edit"
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+            <iv-card
+                key="transition_9"
+                v-show="transition.step === 9"
+                :visible="true"
+                :label="_('w_VSPeopleCounting_View')"
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="IViewFromHanwha()"
+                    :value="inputFormData"
+                >
+
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-card>
+
+            <!-- Brickstream -->
+            <iv-auto-card
+                key="transition_10"
+                v-show="transition.step === 10"
+                :label="pageStep === ePageStep.add ? _('w_VSPeopleCounting_AddBrickstreamUse') : _('w_VSPeopleCounting_EditBrickstreamUse')"
+            >
+                <template #toolbox>
+                    <iv-toolbox-leave
+                        v-show="pageStep === ePageStep.add"
+                        @click="pageToList"
+                    />
+                    <iv-toolbox-step-backward
+                        v-show="pageStep === ePageStep.add"
+                        @click="pageStepBackward"
+                    />
+                    <iv-toolbox-back
+                        v-show="pageStep === ePageStep.edit"
+                        @click="pageToList"
+                    />
+                </template>
+
+                <iv-form
+                    :interface="IAddAndEditFromHanwha()"
+                    :value="inputFormData"
+                    @update:siteId="selectAreaId($event)"
+                    @update:areaId="selectGroupDeviceId($event)"
+                    @update:*="tempSaveInputData($event)"
+                    @submit="saveAddOrEditHanwha($event)"
+                >
+                    <template #selectTree="{ $atrs, $listeners }">
+
+                        <div class="m-3">
+
+                            <b-button @click="pageToChooseTree">
+                                {{ _('w_SelectSiteTree') }}
+                            </b-button>
+                        </div>
+
+                    </template>
+
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        v-show="pageStep === ePageStep.add"
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList"
+                    >{{ _('w_Leave') }}
+                    </b-button>
+
+                    <b-button
+                        v-show="pageStep === ePageStep.add"
+                        variant="secondary"
+                        size="lg"
+                        @click="pageStepBackward"
+                    >{{ _('w_StepBackward') }}
+                    </b-button>
+
+                    <b-button
+                        v-show="pageStep === ePageStep.edit"
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+            <iv-card
+                key="transition_11"
+                v-show="transition.step === 11"
+                :visible="true"
+                :label="_('w_VSPeopleCounting_View')"
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="IViewFromHanwha()"
+                    :value="inputFormData"
+                >
+
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-card>
+
+            <!-- Dahua -->
+            <iv-auto-card
+                key="transition_12"
+                v-show="transition.step === 12"
+                :label="pageStep === ePageStep.add ? _('w_VSPeopleCounting_AddDahuaUse') : _('w_VSPeopleCounting_EditDahuaUse')"
+            >
+                <template #toolbox>
+                    <iv-toolbox-leave
+                        v-show="pageStep === ePageStep.add"
+                        @click="pageToList"
+                    />
+                    <iv-toolbox-step-backward
+                        v-show="pageStep === ePageStep.add"
+                        @click="pageStepBackward"
+                    />
+                    <iv-toolbox-back
+                        v-show="pageStep === ePageStep.edit"
+                        @click="pageToList"
+                    />
+                </template>
+
+                <iv-form
+                    :interface="IAddAndEditFromHanwha()"
+                    :value="inputFormData"
+                    @update:siteId="selectAreaId($event)"
+                    @update:areaId="selectGroupDeviceId($event)"
+                    @update:*="tempSaveInputData($event)"
+                    @submit="saveAddOrEditHanwha($event)"
+                >
+                    <template #selectTree="{ $atrs, $listeners }">
+
+                        <div class="m-3">
+
+                            <b-button @click="pageToChooseTree">
+                                {{ _('w_SelectSiteTree') }}
+                            </b-button>
+                        </div>
+
+                    </template>
+
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        v-show="pageStep === ePageStep.add"
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList"
+                    >{{ _('w_Leave') }}
+                    </b-button>
+
+                    <b-button
+                        v-show="pageStep === ePageStep.add"
+                        variant="secondary"
+                        size="lg"
+                        @click="pageStepBackward"
+                    >{{ _('w_StepBackward') }}
+                    </b-button>
+
+                    <b-button
+                        v-show="pageStep === ePageStep.edit"
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+            <iv-card
+                key="transition_13"
+                v-show="transition.step === 13"
+                :visible="true"
+                :label="_('w_VSPeopleCounting_View')"
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="IViewFromHanwha()"
+                    :value="inputFormData"
+                >
+
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-card>
+
+
+            <!-- iSap -->
             <iv-auto-card
                 key="transition_5"
                 v-show="transition.step === 5"

@@ -68,12 +68,12 @@
             </highcharts-repeat-visitor>
 
             <!-- Ben -->
-            <vistor-details-table
-                :thresholdDetailTableContent="rData"
-                :dayXSiteX="rDayXxSiteX"
-                ref="reportTable"
-            >
-            </vistor-details-table>
+            <!--            <vistor-details-table-->
+            <!--                :thresholdDetailTableContent="rData"-->
+            <!--                :dayXSiteX="rDayXxSiteX"-->
+            <!--                ref="reportTable"-->
+            <!--            >-->
+            <!--            </vistor-details-table>-->
 
         </iv-card>
 
@@ -677,7 +677,7 @@ export default class ReportRepeatVisitor extends Vue {
             let tempChartData: IChartRepeatVisitorData = {
                 date: new Date(),
                 siteObjectId: this.filterData.firstSiteId,
-                repeatCount: parseInt(summary),
+                repeatCount: parseInt(summary) + 1,
                 ageRange: EAgeRange.none,
                 maleCount: 0,
                 femaleCount: 0
