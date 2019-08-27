@@ -24,6 +24,11 @@
                         :selectable="false"
                         :server="{ path: '/flow2/loglist' }"
                     >
+
+                        <template #action="{$attrs}">
+                            {{ resolveAction($attrs.row.action) }}
+                        </template>
+
                         <template #entity="{$attrs}">
                             {{ resolveEntity($attrs.row) }}
                         </template>
@@ -122,64 +127,95 @@ export default class Logs extends Vue {
         (this.$refs.listTable as any).reload();
     }
 
+    resolveAction(action: string): string {
+        action = action.replace("Event", "");
+        action = action.replace(/Flow[\d]/, "");
+        return action;
+    }
+
     resolveEntity(data: any): string {
         let result = "";
-        console.log(data.action, ELogActionType.EventLogin);
+        let userName =
+            data.owner && data.owner.username ? data.owner.username : "";
         switch (data.action) {
-            case ELogActionType.EventLogin:
-                result = data.owner.username + " Login";
+            case "EventLogin":
+                result = `[${userName}] Login`;
                 break;
-            case ELogActionType.EventLogout:
+            case "EventLogout":
+                result = `[${userName}] Logout`;
                 break;
-            case ELogActionType.EventConfigChanged:
+            case "EventConfigChanged":
+                result = `[${userName}] Change config`;
                 break;
-            case ELogActionType.EventUserAdd:
+            case "EventUserAdd":
+                result = `[${userName}] Add user`;
                 break;
-            case ELogActionType.EventUserEdit:
-                break;
-
-            case ELogActionType.EventUserRemove:
-                break;
-            case ELogActionType.EventKioskAdd:
-                break;
-            case ELogActionType.EventKioskEdit:
-                break;
-            case ELogActionType.EventKioskRemove:
-                break;
-            case ELogActionType.EventLicenseAdd:
+            case "EventUserEdit":
+                result = `[${userName}] Edit user`;
                 break;
 
-            case ELogActionType.EventFlow2InvitationComplete:
+            case "EventUserRemove":
+                result = `[${userName}] Remove user`;
                 break;
-            case ELogActionType.EventFlow2PreRegistrationComplete:
+            case "EventKioskAdd":
+                result = `[${userName}] Add Kiosk`;
                 break;
-            case ELogActionType.EventFlow2StrictTryCheckIn:
+            case "EventKioskEdit":
+                result = `[${userName}] Edit Kiosk`;
                 break;
-            case ELogActionType.EventFlow2StrictConfirmPhoneNumber:
+            case "EventKioskRemove":
+                result = `[${userName}] Remove Kiosk`;
                 break;
-            case ELogActionType.EventFlow2StrictScanIDCard:
-                break;
-
-            case ELogActionType.EventFlow2StrictCompareFace:
-                break;
-            case ELogActionType.EventFlow2StrictCompleteCheckIn:
-                break;
-            case ELogActionType.EventFlow2RegistrationComplete:
-                break;
-            case ELogActionType.EventFlow2TryCheckIn:
-                break;
-            case ELogActionType.EventFlow2FaceVerifyResult:
+            case "EventLicenseAdd":
+                result = `[${userName}] Add license`;
                 break;
 
-            case ELogActionType.EventFlow2DoneCheckIn:
+            case "EventFlow2InvitationComplete":
+                result = `[${userName}] Invitation complete`;
                 break;
-            case ELogActionType.EventFlow2CompanyAdd:
+            case "EventFlow2PreRegistrationComplete":
+                result = `[${userName}] Pre-registration complete`;
                 break;
-            case ELogActionType.EventFlow2CompanyEdit:
+            case "EventFlow2StrictTryCheckIn":
+                result = `[${userName}] Strict try check in`;
                 break;
-            case ELogActionType.EventFlow2CompanyRemove:
+            case "EventFlow2StrictConfirmPhoneNumber":
+                result = `[${userName}] Strict confirm phone number`;
                 break;
-            case ELogActionType.EventFlow2Concierge:
+            case "EventFlow2StrictScanIDCard":
+                result = `[${userName}] Strict scan ID card`;
+                break;
+
+            case "EventFlow2StrictCompareFace":
+                result = `[${userName}] Strict compare face`;
+                break;
+            case "EventFlow2StrictCompleteCheckIn":
+                result = `[${userName}] Strict complete check in`;
+                break;
+            case "EventFlow2RegistrationComplete":
+                result = `[${userName}] Registration complete`;
+                break;
+            case "EventFlow2TryCheckIn":
+                result = `[${userName}] Try check in`;
+                break;
+            case "EventFlow2FaceVerifyResult":
+                result = `[${userName}] Face verify`;
+                break;
+
+            case "EventFlow2DoneCheckIn":
+                result = `[${userName}] Check in done`;
+                break;
+            case "EventFlow2CompanyAdd":
+                result = `[${userName}] Add company`;
+                break;
+            case "EventFlow2CompanyEdit":
+                result = `[${userName}] Edit company`;
+                break;
+            case "EventFlow2CompanyRemove":
+                result = `[${userName}] Remove company`;
+                break;
+            case "EventFlow2Concierge":
+                result = `[${userName}] Concierge log`;
                 break;
 
             default:
@@ -206,11 +242,11 @@ export default class Logs extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Logs_EventType")}
                  */
-                action: string;
+                action: any;
 
                 owner: interface {
                     /**
-                     * @uiLabel - ${this._("w_Logs_Owner")}
+                     * @uiLabel - ${this._("w_Logs_Message")}
                      */
                     username: string;
                 };
