@@ -354,7 +354,7 @@ export class FilterConditionCampaign extends Vue {
                  * @uiLabel - ${this._("w_Sites")}
                  * @uiColumnGroup - site
                  */
-                siteIds?: ${toEnumInterface(this.campaignSiteSelectItem as any, false)};
+                siteIds?: any;
 
 
             }

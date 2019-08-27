@@ -362,7 +362,7 @@
                  * @uiLabel - ${this._("w_Sites")}
                 * @uiColumnGroup - row1
                  */
-                siteId: ${toEnumInterface(this.siteSelectItem as any, false)};
+                siteId: any;
 
 
                 /**

@@ -270,13 +270,7 @@ export class SelectPermissionSite extends Vue {
                 ifAllSites?: any;
 
 
-                /**
-                 * @uiLabel - ${this._("w_Dashboard_SelectTime")}
-                 */
-                siteIds?: ${toEnumInterface(
-                    this.sitesSelectItem as any,
-                    false
-                )};
+                siteIds?: any;
 
             }
         `;
