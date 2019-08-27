@@ -22,10 +22,15 @@
                         :multiple="tableMultiple"
                         :params="tableParam"
                         :selectable="false"
-                        :server="{ path: '/flow2/logs' }"
+                        :server="{ path: '/flow2/loglist' }"
                     >
+
+                        <template #action="{$attrs}">
+                            {{ resolveAction($attrs.row.action) }}
+                        </template>
+
                         <template #entity="{$attrs}">
-                            {{ JSON.stringify($attrs.row.entity) }}
+                            {{ resolveEntity($attrs.row) }}
                         </template>
 
                     </iv-table>
@@ -51,6 +56,34 @@ import { ITransition } from "@/services/Transition";
 // Service
 import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
+
+enum ELogActionType {
+    EventLogin = "1",
+    EventLogout = "2",
+    EventConfigChanged = "101",
+    EventUserAdd = "202",
+    EventUserEdit = "203",
+    EventUserRemove = "204",
+    EventKioskAdd = "212",
+    EventKioskEdit = "213",
+    EventKioskRemove = "214",
+    EventLicenseAdd = "300",
+    EventFlow2InvitationComplete = "3100",
+    EventFlow2PreRegistrationComplete = "3101",
+    EventFlow2StrictTryCheckIn = "3110",
+    EventFlow2StrictConfirmPhoneNumber = "3111",
+    EventFlow2StrictScanIDCard = "3112",
+    EventFlow2StrictCompareFace = "3113",
+    EventFlow2StrictCompleteCheckIn = "3114",
+    EventFlow2RegistrationComplete = "3115",
+    EventFlow2TryCheckIn = "3116",
+    EventFlow2FaceVerifyResult = "3117",
+    EventFlow2DoneCheckIn = "3118",
+    EventFlow2CompanyAdd = "4022",
+    EventFlow2CompanyEdit = "4023",
+    EventFlow2CompanyRemove = "4024",
+    EventFlow2Concierge = "4030"
+}
 
 @Component({
     components: {
@@ -94,6 +127,108 @@ export default class Logs extends Vue {
         (this.$refs.listTable as any).reload();
     }
 
+    resolveAction(action: string): string {
+        action = action.replace("Event", "");
+        action = action.replace(/Flow[\d]/, "");
+        return action;
+    }
+
+    resolveEntity(data: any): string {
+        let result = "";
+        let userName =
+            data.owner && data.owner.username ? data.owner.username : "";
+        switch (data.action) {
+            case "EventLogin":
+                result = `[${userName}] Login`;
+                break;
+            case "EventLogout":
+                result = `[${userName}] Logout`;
+                break;
+            case "EventConfigChanged":
+                result = `[${userName}] Change config`;
+                break;
+            case "EventUserAdd":
+                result = `[${userName}] Add user`;
+                break;
+            case "EventUserEdit":
+                result = `[${userName}] Edit user`;
+                break;
+
+            case "EventUserRemove":
+                result = `[${userName}] Remove user`;
+                break;
+            case "EventKioskAdd":
+                result = `[${userName}] Add Kiosk`;
+                break;
+            case "EventKioskEdit":
+                result = `[${userName}] Edit Kiosk`;
+                break;
+            case "EventKioskRemove":
+                result = `[${userName}] Remove Kiosk`;
+                break;
+            case "EventLicenseAdd":
+                result = `[${userName}] Add license`;
+                break;
+
+            case "EventFlow2InvitationComplete":
+                result = `[${userName}] Invitation complete`;
+                break;
+            case "EventFlow2PreRegistrationComplete":
+                result = `[${userName}] Pre-registration complete`;
+                break;
+            case "EventFlow2StrictTryCheckIn":
+                result = `[${userName}] Strict try check in`;
+                break;
+            case "EventFlow2StrictConfirmPhoneNumber":
+                result = `[${userName}] Strict confirm phone number`;
+                break;
+            case "EventFlow2StrictScanIDCard":
+                result = `[${userName}] Strict scan ID card`;
+                break;
+
+            case "EventFlow2StrictCompareFace":
+                result = `[${userName}] Strict compare face`;
+                break;
+            case "EventFlow2StrictCompleteCheckIn":
+                result = `[${userName}] Strict complete check in`;
+                break;
+            case "EventFlow2RegistrationComplete":
+                result = `[${userName}] Registration complete`;
+                break;
+            case "EventFlow2TryCheckIn":
+                result = `[${userName}] Try check in`;
+                break;
+            case "EventFlow2FaceVerifyResult":
+                result = `[${userName}] Face verify`;
+                break;
+
+            case "EventFlow2DoneCheckIn":
+                result = `[${userName}] Check in done`;
+                break;
+            case "EventFlow2CompanyAdd":
+                result = `[${userName}] Add company`;
+                break;
+            case "EventFlow2CompanyEdit":
+                result = `[${userName}] Edit company`;
+                break;
+            case "EventFlow2CompanyRemove":
+                result = `[${userName}] Remove company`;
+                break;
+            case "EventFlow2Concierge":
+                result = `[${userName}] Concierge log`;
+                break;
+
+            default:
+                break;
+        }
+
+        if (result == "") {
+            result = JSON.stringify(data.entity);
+        }
+
+        return result;
+    }
+
     ITableList() {
         return `
             interface {
@@ -107,11 +242,11 @@ export default class Logs extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Logs_EventType")}
                  */
-                action: string;
+                action: any;
 
                 owner: interface {
                     /**
-                     * @uiLabel - ${this._("w_Logs_Owner")}
+                     * @uiLabel - ${this._("w_Logs_Message")}
                      */
                     username: string;
                 };

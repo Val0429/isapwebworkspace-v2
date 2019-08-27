@@ -18,7 +18,7 @@ export default class LangObject {
     w_Cancelled = 'Cancelled';
     w_No = 'No';
     w_Next = 'Next';
-    w_Prev = 'Previos';
+    w_Prev = 'previous';
 
     // Status
     w_Status_Enable = 'Enable';
@@ -44,8 +44,8 @@ export default class LangObject {
     // Error
     w_Error_FailedToFetch = "We can't connect to server, please try again!"; // failed to fetch
     w_Error_ResponseUndefined = "We can't get any response"; // no response
-    w_Error_401 = 'Not find User, Please login again'; // 401
-    w_Error_404 = 'API Not Find'; // 404
+    w_Error_401 = 'Incorrect usename or password'; // 401
+    w_Error_404 = 'Cannot connect to VMS'; // 404
 
     // Login & User
     w_Username = 'User Name';
@@ -58,6 +58,7 @@ export default class LangObject {
     w_UserEdit = 'Edit User';
     w_ConfirmPassword = 'Confirm Password';
     w_RememberMe = 'Remember Me';
+    w_Phone = 'Phone';
 
     // Login
     w_Login_Login = 'Login';
@@ -330,13 +331,14 @@ export default class LangObject {
     w_TenantsInvitation_Step3 = 'Check resolve value';
     w_TenantsInvitation_Step4 = 'Upload result';
     w_TenantsInvitation_ApiMessage = 'API Message';
-    w_TenantsInvitation_Download = 'Download .xlsx';
+    w_TenantsInvitation_Download = 'Download batch invitation template file';
     w_TenantsInvitation_ErrorNoData = 'Error';
     w_TenantsInvitation_UploadSuccess = 'Upload Success';
     w_TenantsInvitation_ErrorEmailFormat = 'Please input e-mail';
     w_TenantsInvitation_ErrorStartToEnd = 'Start earlier than End, End less than 7 days from Start';
     w_TenantsInvitation_ErrorFileType = 'Please upload xlsx';
     w_TenantsInvitation_ErrorFileResolve = 'File resolve error';
+    w_TenantsInvitation_Cencel = 'Cancel Invitation';
 
     ////////////////// Tenants Visitor //////////////////
 
@@ -390,9 +392,9 @@ export default class LangObject {
     ////////////////// other  //////////////////
     w_SetupsOther_PublicExternalNotURL = 'Public External Not URL';
     w_SetupsOther_UpdateSuccess = 'Update Success';
-    w_SetupsOther_RemoveWorkerDaysFormLabel = 'Remove Worker Days';
+    w_SetupsOther_RemoveWorkerDaysFormLabel = "Number of days to keep visitors' data before deleting it";
     w_SetupsOther_PublicExternalIPFormLabel = 'Public External IP';
-    w_GeneralSettings_RemoveWorkerDaysCardTitle = 'Remove Worker Days';
+    w_GeneralSettings_RemoveWorkerDaysCardTitle = 'Delete aged data';
 
     ////////////////// Potrait //////////////////
     w_Potrait_Photo = 'Your Photo';
@@ -410,4 +412,5 @@ export default class LangObject {
     w_Logs_Summary = 'Summary';
     w_Logs_Owner = 'Owner';
     w_Logs_Entity = 'Entity';
+    w_Logs_Message = 'Message';
 }

@@ -58,6 +58,9 @@
                                 <th>{{ _('w_Investigation_KioskName') }}</th>
                                 <th>{{ _('w_Investigation_Event') }}</th>
                                 <th>{{ _('w_Investigation_EventTime') }}</th>
+                                <th>{{ _('w_Company_Name') }}</th>
+                                <th>{{ _('w_Email') }}</th>
+                                <th>{{ _('w_Phone') }}</th>
                             </thead>
                             <tbody>
                                 <tr v-for="(value, index) of tableDatas">
@@ -67,6 +70,9 @@
                                     <td>{{ value.kioskName }}</td>
                                     <td>{{ value.event }}</td>
                                     <td>{{ value.eventDateString }}</td>
+                                    <td >{{ value.data && value.data.company && value.data.company.name ? value.data.company.name : "" }}</td>
+                                    <td >{{ value.data && value.data.visitor && value.data.visitor.email ? value.data.visitor.email : "" }}</td>
+                                    <td >{{ value.data && value.data.visitor && value.data.visitor.phone ? value.data.visitor.phone : "" }}</td>
                                 </tr>
                             </tbody>
                         </table>
