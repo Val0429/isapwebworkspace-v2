@@ -10,7 +10,7 @@
             <select-permission-site @siteIds="receiveSiteIds"></select-permission-site>
             <select-time
                 :timeParam="timeParam"
-                @time="receiveTime"
+                @updateTime="receiveTime"
             ></select-time>
         </iv-card>
     </div>

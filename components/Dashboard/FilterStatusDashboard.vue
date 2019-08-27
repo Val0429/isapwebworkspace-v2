@@ -150,7 +150,7 @@
                 <select-time
                     class="col-md-12"
                     :timeParam="timeParam"
-                    @time="receiveTime"
+                    @updateTime="receiveTime"
                 ></select-time>
 
             </b-row>
