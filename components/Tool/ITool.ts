@@ -10,7 +10,7 @@ interface IFilter extends IDate {
 	deviceId: string;
 	isEmployee: boolean | string;
 	date?: Date;
-	hour?: string
+	hour?: string | number
 }
 
 interface IRepeatVisitorFilter extends IDate {

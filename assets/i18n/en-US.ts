@@ -135,6 +135,9 @@ export default class LangObject {
     w_DeviceName = 'Device Name';
     w_DeviceGroups = 'Entrance(s)';
     w_Hanwha = 'Hanwha';
+    w_Eocortex = 'Eocortex';
+    w_Brickstream = 'Brickstream';
+    w_Dahua = 'Dahua';
     w_iSapFRS = 'FRS';
     w_iSapFRSServer = 'FRS Server';
     w_iSapFRSManager = 'FRS Manager';
@@ -754,6 +757,18 @@ export default class LangObject {
     w_VSPeopleCounting_Addhanwha = 'Use Hanwha Server';
     w_VSPeopleCounting_AddhanwhaUse = 'Add People Counting Device Use Hanwha Server';
     w_VSPeopleCounting_EdithanwhaUse = 'Edit People Counting Device Use Hanwha Server';
+
+    w_VSPeopleCounting_AddEocortex = 'Use Eocortex Server';
+    w_VSPeopleCounting_AddEocortexUse = 'Add People Counting Device Use Eocortex Server';
+    w_VSPeopleCounting_EditEocortexUse = 'Edit People Counting Device Use Eocortex Server';
+
+    w_VSPeopleCounting_AddBrickstream = 'Use Brickstream Server';
+    w_VSPeopleCounting_AddBrickstreamUse = 'Add People Counting Device Use Brickstream Server';
+    w_VSPeopleCounting_EditBrickstreamUse = 'Edit People Counting Device Use Brickstream Server';
+
+    w_VSPeopleCounting_AddDahua = 'Use Dahua Server';
+    w_VSPeopleCounting_AddDahuaUse = 'Add People Counting Device Use Dahua Server';
+    w_VSPeopleCounting_EditDahuaUse = 'Edit People Counting Device Use Dahua Server';
 
     w_VSPeopleCounting_AddisapUseFRS = 'Add People Counting Device Use iSap FRS Server';
     w_VSPeopleCounting_EditisapUseFRS = 'Edit People Counting Device Use iSap FRS Server';
