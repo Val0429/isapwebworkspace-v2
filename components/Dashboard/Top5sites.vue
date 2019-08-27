@@ -69,7 +69,7 @@ export class Top5sites extends Vue {
             modeTitle: this._("w_Navigation_RuleAndActions_Traffic")
         };
 
-        this.time = {
+        this.timeParam = {
             // TODO: wait api
             startDate: Datetime.DateToZero(new Date()),
             endDate: Datetime.DateToZero(new Date())
@@ -117,8 +117,8 @@ export class Top5sites extends Vue {
     }
 
     async receiveTime(time: object) {
-        this.time = time;
-        let timeParam = JSON.parse(JSON.stringify(this.time));
+        this.timeParam = time;
+        let timeParam = JSON.parse(JSON.stringify(this.timeParam));
 
         // TODO: wait api
         // Loading.show();
