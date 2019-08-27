@@ -1,6 +1,9 @@
 <template>
     <div>
-        <iv-card :label="_('w_ReportDashboard_Traffic')">
+        <iv-card
+            :label="_('w_ReportDashboard_Traffic')"
+            :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
+        >
             <template #toolbox>
                 <iv-toolbox-delete
                     @click="removeCard()"
