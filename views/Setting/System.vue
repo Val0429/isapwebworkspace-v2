@@ -24,6 +24,7 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
+import RegexService from '@/services/RegexServices';
 
 interface IInputFormData {
     hosting: string;
@@ -65,18 +66,23 @@ export default class System extends Vue {
 
     // 新增MailServer
     async saveSystemData(data) {
-        // port正則
-        const portRegex = /^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/;
 
-        if (!portRegex.test(data.port)) {
-            Dialog.error(this._("w_Error_Port"));
+        /* test ok 
+         http://172.16.10.21:6066
+         https://172.16.10.21:4449
+         http://www.isap.com
+         https://www.isap.com
+         */
+
+        if (!RegexService.url(data.hosting)) {
+            Dialog.error(this._("w_WrongURL"));
             return false;
         }
 
         const systemObject: {
             hosting: string;
         } = {
-            hosting: `http://${data.host}:${data.port.toString()}`
+            hosting: data.hosting
         };
 
         Loading.show();
@@ -105,7 +111,6 @@ export default class System extends Vue {
                  * @uiPlaceHolder - ${this._("w_System_WebHost")}
                  */
                 hosting: string;
-
 
             }
         `;

@@ -218,6 +218,7 @@ export default class LangObject {
     w_ErrorConfig = 'Required IP, Port, WSPort, Protocol, Account and Password';
     w_ErrorConfigFRSManager = 'Required IP, Port, Protocol, Account and Password';
     w_WrongConfig = 'Please check IP, Port, WSPort, Protocol, Account and Password again';
+    w_WrongURL = 'URL Wrong';
 
     w_PeakHours = 'PEAK HOURS';
     w_SelectSiteTree = 'Select store tree';
