@@ -638,10 +638,10 @@ export default class Member extends Vue {
     }
   }
 
-  pageToAdd() {
+  async pageToAdd() {
     this.pageStep = EPageStep.add;
     this.clearInputData();
-    this.initPremission();
+    await this.initPremission();
   }
   storedPermissionOptions:any[]=[];
   async initPremission() {
@@ -665,12 +665,13 @@ export default class Member extends Vue {
 
   async pageToEdit() {
     this.getInputData();
-    this.initPremission();
+    await this.initPremission();
     this.pageStep = EPageStep.edit;
   }
 
-  pageToView() {
+  async pageToView() {
     this.getInputData();
+    await this.initPremission();
     this.pageStep = EPageStep.view;
   }
 
