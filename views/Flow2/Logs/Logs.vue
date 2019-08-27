@@ -22,10 +22,10 @@
                         :multiple="tableMultiple"
                         :params="tableParam"
                         :selectable="false"
-                        :server="{ path: '/flow2/logs' }"
+                        :server="{ path: '/flow2/loglist' }"
                     >
                         <template #entity="{$attrs}">
-                            {{ JSON.stringify($attrs.row.entity) }}
+                            {{ resolveEntity($attrs.row) }}
                         </template>
 
                     </iv-table>
@@ -51,6 +51,34 @@ import { ITransition } from "@/services/Transition";
 // Service
 import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
+
+enum ELogActionType {
+    EventLogin = "1",
+    EventLogout = "2",
+    EventConfigChanged = "101",
+    EventUserAdd = "202",
+    EventUserEdit = "203",
+    EventUserRemove = "204",
+    EventKioskAdd = "212",
+    EventKioskEdit = "213",
+    EventKioskRemove = "214",
+    EventLicenseAdd = "300",
+    EventFlow2InvitationComplete = "3100",
+    EventFlow2PreRegistrationComplete = "3101",
+    EventFlow2StrictTryCheckIn = "3110",
+    EventFlow2StrictConfirmPhoneNumber = "3111",
+    EventFlow2StrictScanIDCard = "3112",
+    EventFlow2StrictCompareFace = "3113",
+    EventFlow2StrictCompleteCheckIn = "3114",
+    EventFlow2RegistrationComplete = "3115",
+    EventFlow2TryCheckIn = "3116",
+    EventFlow2FaceVerifyResult = "3117",
+    EventFlow2DoneCheckIn = "3118",
+    EventFlow2CompanyAdd = "4022",
+    EventFlow2CompanyEdit = "4023",
+    EventFlow2CompanyRemove = "4024",
+    EventFlow2Concierge = "4030"
+}
 
 @Component({
     components: {
@@ -92,6 +120,77 @@ export default class Logs extends Vue {
             this.tableParam.action = datas.eventType;
         }
         (this.$refs.listTable as any).reload();
+    }
+
+    resolveEntity(data: any): string {
+        let result = "";
+        console.log(data.action, ELogActionType.EventLogin);
+        switch (data.action) {
+            case ELogActionType.EventLogin:
+                result = data.owner.username + " Login";
+                break;
+            case ELogActionType.EventLogout:
+                break;
+            case ELogActionType.EventConfigChanged:
+                break;
+            case ELogActionType.EventUserAdd:
+                break;
+            case ELogActionType.EventUserEdit:
+                break;
+
+            case ELogActionType.EventUserRemove:
+                break;
+            case ELogActionType.EventKioskAdd:
+                break;
+            case ELogActionType.EventKioskEdit:
+                break;
+            case ELogActionType.EventKioskRemove:
+                break;
+            case ELogActionType.EventLicenseAdd:
+                break;
+
+            case ELogActionType.EventFlow2InvitationComplete:
+                break;
+            case ELogActionType.EventFlow2PreRegistrationComplete:
+                break;
+            case ELogActionType.EventFlow2StrictTryCheckIn:
+                break;
+            case ELogActionType.EventFlow2StrictConfirmPhoneNumber:
+                break;
+            case ELogActionType.EventFlow2StrictScanIDCard:
+                break;
+
+            case ELogActionType.EventFlow2StrictCompareFace:
+                break;
+            case ELogActionType.EventFlow2StrictCompleteCheckIn:
+                break;
+            case ELogActionType.EventFlow2RegistrationComplete:
+                break;
+            case ELogActionType.EventFlow2TryCheckIn:
+                break;
+            case ELogActionType.EventFlow2FaceVerifyResult:
+                break;
+
+            case ELogActionType.EventFlow2DoneCheckIn:
+                break;
+            case ELogActionType.EventFlow2CompanyAdd:
+                break;
+            case ELogActionType.EventFlow2CompanyEdit:
+                break;
+            case ELogActionType.EventFlow2CompanyRemove:
+                break;
+            case ELogActionType.EventFlow2Concierge:
+                break;
+
+            default:
+                break;
+        }
+
+        if (result == "") {
+            result = JSON.stringify(data.entity);
+        }
+
+        return result;
     }
 
     ITableList() {
