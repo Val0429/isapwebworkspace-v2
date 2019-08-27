@@ -1,6 +1,6 @@
 {
     "name": "bar",
-    "version": "2.03.04",
+    "version": "2.03.05",
     "description": "Bar",
     "scripts": {
         "start": "npm run start --prefix ../",
