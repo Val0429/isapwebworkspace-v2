@@ -656,7 +656,7 @@ export class HighchartsRepeatVisitor extends Vue {
             }
 
             // set percentage count
-            if (val.repeatCount > 0) {
+            if (val.maleCount > 0 || val.femaleCount > 0) {
                 countItem.times++;
                 if (val.repeatCount == 1) {
                     countItem.m1++;

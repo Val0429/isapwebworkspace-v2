@@ -672,11 +672,12 @@ export default class ReportRepeatVisitor extends Vue {
         this.chartDatas = [];
 
         // 取得date、siteObjectId資料
-        for (const summary of array) {
+        for (const summary in array) {
+            let data = array[summary];
             let tempChartData: IChartRepeatVisitorData = {
                 date: new Date(),
                 siteObjectId: this.filterData.firstSiteId,
-                repeatCount: summary.total,
+                repeatCount: parseInt(summary),
                 ageRange: EAgeRange.none,
                 maleCount: 0,
                 femaleCount: 0
@@ -687,17 +688,17 @@ export default class ReportRepeatVisitor extends Vue {
 
             // 跑maleRange、 femaleRange
             for (let index = 0; index < 6; index++) {
-                if (summary.maleRanges[index] === null) {
+                if (data.maleRanges[index] === null) {
                     break;
                 }
 
-                if (summary.femaleRanges[index] === null) {
+                if (data.femaleRanges[index] === null) {
                     break;
                 }
 
                 let tempData = JSON.parse(JSON.stringify(tempChartData));
-                maleTotal = summary.maleRanges[index];
-                femaleTotal = summary.femaleRanges[index];
+                maleTotal = data.maleRanges[index];
+                femaleTotal = data.femaleRanges[index];
 
                 tempData.maleCount = maleTotal;
                 tempData.femaleCount = femaleTotal;
