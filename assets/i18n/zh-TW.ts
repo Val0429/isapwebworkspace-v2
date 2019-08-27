@@ -58,6 +58,7 @@ export default class LangObject implements LangObject {
     w_UserEdit = '編輯使用者';
     w_ConfirmPassword = '確認密碼';
     w_RememberMe = 'Remember Me';
+    w_Phone = 'Phone';
 
     // Login
     w_Login_Login = 'Login';
@@ -333,6 +334,7 @@ export default class LangObject implements LangObject {
     w_TenantsInvitation_ErrorStartToEnd = 'Start earlier than End, End less than 7 days from Start';
     w_TenantsInvitation_ErrorFileType = 'Please upload xlsx';
     w_TenantsInvitation_ErrorFileResolve = 'File resolve error';
+    w_TenantsInvitation_Cencel = 'Cancel Invitation';
 
     ////////////////// Tenants Visitor //////////////////
     w_Tenants_VisitorList = '訪客清單';

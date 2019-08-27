@@ -819,11 +819,13 @@ export default class SetupsAccount extends Vue {
 
                  /**
                  * @uiLabel - ${this._("w_User_Email")}
+                 * @uiValidation - ${RegexServices.regexItem.email}
                  */
                 email: string;
 
                 /**
                  * @uiLabel - ${this._("w_User_Phone")}
+                 * @uiValidation - ${RegexServices.regexItem.number}
                  */
                 phone: string;
 

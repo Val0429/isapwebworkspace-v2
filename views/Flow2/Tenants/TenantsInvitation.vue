@@ -19,7 +19,7 @@
                         :disabled="selectedDetail.length !== 1"
                         @click="pageToView"
                     />
-                    <iv-toolbox-delete
+                    <iv-toolbox-invitation-cancel
                         :disabled="selectedDetail.length === 0"
                         @click="doDelete"
                     />
@@ -70,7 +70,7 @@
                             :disabled="selectedDetail.length !== 1"
                         >
                             <iv-toolbox-view @click="pageToView" />
-                            <iv-toolbox-delete @click="doDelete" />
+                            <iv-toolbox-invitation-cancel @click="doDelete" />
                         </iv-toolbox-more>
                     </template>
 
@@ -147,6 +147,7 @@
 
             </iv-auto-card>
 
+            <!-- Upload xlsx -->
             <iv-card
                 key="transition_4"
                 v-show="transition.step === 4"
@@ -161,21 +162,35 @@
                     ref="progressStep"
                     @mounted="doMounted"
                 >
-
                     <template #1-title>{{ _('w_TenantsInvitation_Step1') }}</template>
                     <template #1>
-                        <b-button
-                            class="col-md-12"
-                            @click="downloadExample"
-                        >{{ _('w_TenantsInvitation_Download') }}</b-button>
+                        <b-row>
+                            <b-col></b-col>
+                            <b-col>
+                                <b-button
+                                    @click="downloadExample"
+                                >
+                                {{ _('w_TenantsInvitation_Download') }}
+                                </b-button>
+                            </b-col>
+                            <b-col></b-col>
+                        </b-row>
                     </template>
 
                     <template #2-title>{{ _('w_TenantsInvitation_Step2') }}</template>
                     <template #2>
-                        <b-form-file
-                            v-model="progressFile"
-                            v-on:input="uploadProgressFile"
-                        />
+                        <b-row>
+                            <b-col></b-col>
+                            <b-col>
+                                <b-form-file
+                                    accept=".xlsx"
+                                    v-model="progressFile"
+                                    v-on:input="uploadProgressFile"
+                                />
+                            </b-col>
+                            <b-col></b-col>
+                        </b-row>
+                       
                     </template>
 
                     <template #3-title>{{ _('w_TenantsInvitation_Step3') }}</template>
@@ -579,6 +594,8 @@ export default class TenantsInvitation extends Vue {
         return result;
     }
 
+    
+
     getInputData() {
         for (const param of this.selectedDetail) {
             let visitorMobile =
@@ -763,6 +780,19 @@ export default class TenantsInvitation extends Vue {
                             }
 
                             if (
+                                progressFile.startDate != null &&
+                                Datetime.DateStart(
+                                    progressFile.startDate
+                                ).getTime() <
+                                    Datetime.DateStart(new Date()).getTime()
+                            ) {
+                                this.progressFileError = true;
+                                progressFile.startDate = null;
+                            }
+
+                            if (
+                                progressFile.startDate != null &&
+                                progressFile.endDate != null &&
                                 !this.checkStartToEnd(
                                     progressFile.startDate,
                                     progressFile.endDate
@@ -998,7 +1028,7 @@ export default class TenantsInvitation extends Vue {
         ];
         const data = excelData.map(v => filterVal.map(k => v[k]));
         const [fileName, fileType, sheetName] = [
-            "ImportBetchInvitationTemplate",
+            "Batch invitations template file",
             "xlsx",
             "Invitation"
         ];
@@ -1147,6 +1177,7 @@ export default class TenantsInvitation extends Vue {
             interface {
                 /**
                  * @uiLabel - ${this._("w_Tenants_MobileNumber")}
+                 * @uiValidation - ${RegexServices.regexItem.number}
                  */
                 mobile: string;
 
@@ -1157,6 +1188,7 @@ export default class TenantsInvitation extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Tenants_Email")}
+                 * @uiValidation - ${RegexServices.regexItem.email}
                  */
                 email: string;
 
@@ -1173,7 +1205,6 @@ export default class TenantsInvitation extends Vue {
                  * @uiColumnGroup - date
                  */
                 endDate: Date;
-
         
                 /**
                  * @uiLabel - ${this._("w_Tenants_Purpose")}

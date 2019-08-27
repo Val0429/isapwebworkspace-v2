@@ -1,0 +1,227 @@
+/*
+ * Created on Tue Jul 30 2019
+ * Author: Val Liu
+ * Copyright (c) 2019, iSAP Solution
+ */
+
+
+export enum EventList {
+    EventLogin = "1",
+    EventLogout = "2",
+    EventConfigChanged = "101",
+    EventUserAdd = "202",
+    EventUserEdit = "203",
+    EventUserRemove = "204",
+    EventKioskAdd = "212",
+    EventKioskEdit = "213",
+    EventKioskRemove = "214",
+    EventLicenseAdd = "300",
+    EventFlow2InvitationComplete = "3100",
+    EventFlow2PreRegistrationComplete = "3101",
+    EventFlow2StrictTryCheckIn = "3110",
+    EventFlow2StrictConfirmPhoneNumber = "3111",
+    EventFlow2StrictScanIDCard = "3112",
+    EventFlow2StrictCompareFace = "3113",
+    EventFlow2StrictCompleteCheckIn = "3114",
+    EventFlow2RegistrationComplete = "3115",
+    EventFlow2TryCheckIn = "3116",
+    EventFlow2FaceVerifyResult = "3117",
+    EventFlow2DoneCheckIn = "3118",
+    EventFlow2CompanyAdd = "4022",
+    EventFlow2CompanyEdit = "4023",
+    EventFlow2CompanyRemove = "4024",
+    EventFlow2Concierge = "4030"
+}
+
+
+export type EventType<T> =
+    T extends "1" ? EventLogin :
+    T extends "2" ? EventLogout :
+    T extends "101" ? EventConfigChanged :
+    T extends "202" ? EventUserAdd :
+    T extends "203" ? EventUserEdit :
+    T extends "204" ? EventUserRemove :
+    T extends "212" ? EventKioskAdd :
+    T extends "213" ? EventKioskEdit :
+    T extends "214" ? EventKioskRemove :
+    T extends "300" ? EventLicenseAdd :
+    T extends "3100" ? EventFlow2InvitationComplete :
+    T extends "3101" ? EventFlow2PreRegistrationComplete :
+    T extends "3110" ? EventFlow2StrictTryCheckIn :
+    T extends "3111" ? EventFlow2StrictConfirmPhoneNumber :
+    T extends "3112" ? EventFlow2StrictScanIDCard :
+    T extends "3113" ? EventFlow2StrictCompareFace :
+    T extends "3114" ? EventFlow2StrictCompleteCheckIn :
+    T extends "3115" ? EventFlow2RegistrationComplete :
+    T extends "3116" ? EventFlow2TryCheckIn :
+    T extends "3117" ? EventFlow2FaceVerifyResult :
+    T extends "3118" ? EventFlow2DoneCheckIn :
+    T extends "4022" ? EventFlow2CompanyAdd :
+    T extends "4023" ? EventFlow2CompanyEdit :
+    T extends "4024" ? EventFlow2CompanyRemove :
+    T extends "4030" ? EventFlow2Concierge :
+    never;
+
+export type EventsType<T> =
+    T extends "1" ? Events<IEvents<IEventLogin>> :
+    T extends "2" ? Events<IEvents<IEventLogout>> :
+    T extends "101" ? Events<IEvents<IEventConfigChanged>> :
+    T extends "202" ? Events<IEvents<IEventUserAdd>> :
+    T extends "203" ? Events<IEvents<IEventUserEdit>> :
+    T extends "204" ? Events<IEvents<IEventUserRemove>> :
+    T extends "212" ? Events<IEvents<IEventKioskAdd>> :
+    T extends "213" ? Events<IEvents<IEventKioskEdit>> :
+    T extends "214" ? Events<IEvents<IEventKioskRemove>> :
+    T extends "300" ? Events<IEvents<IEventLicenseAdd>> :
+    T extends "3100" ? Events<IEvents<IEventFlow2InvitationComplete>> :
+    T extends "3101" ? Events<IEvents<IEventFlow2PreRegistrationComplete>> :
+    T extends "3110" ? Events<IEvents<IEventFlow2StrictTryCheckIn>> :
+    T extends "3111" ? Events<IEvents<IEventFlow2StrictConfirmPhoneNumber>> :
+    T extends "3112" ? Events<IEvents<IEventFlow2StrictScanIDCard>> :
+    T extends "3113" ? Events<IEvents<IEventFlow2StrictCompareFace>> :
+    T extends "3114" ? Events<IEvents<IEventFlow2StrictCompleteCheckIn>> :
+    T extends "3115" ? Events<IEvents<IEventFlow2RegistrationComplete>> :
+    T extends "3116" ? Events<IEvents<IEventFlow2TryCheckIn>> :
+    T extends "3117" ? Events<IEvents<IEventFlow2FaceVerifyResult>> :
+    T extends "3118" ? Events<IEvents<IEventFlow2DoneCheckIn>> :
+    T extends "4022" ? Events<IEvents<IEventFlow2CompanyAdd>> :
+    T extends "4023" ? Events<IEvents<IEventFlow2CompanyEdit>> :
+    T extends "4024" ? Events<IEvents<IEventFlow2CompanyRemove>> :
+    T extends "4030" ? Events<IEvents<IEventFlow2Concierge>> :
+    never;
+
+
+/// EventEventList.EventLogin: Login //////////////////////////////////
+export interface IEventLogin extends IEvent {
+    action: EventList.EventLogin;
+
+    /**
+    * owner: self User
+    */
+    owner: Parse.User;
+    /// target: Administrator / Host / Kiosk = none. Visitor = Target Kiosk
+    target?: Parse.User;
+
+}
+@registerSubclass() export class EventLogin extends ParseObject<IEventLogin> { constructor(data?: Omit<IEventLogin, 'action'>) { super({ action: EventList.EventLogin, ...data }) } }
+////////////////////////////////////////////////////
+
+
+/// EventEventList.EventLogout: Logout //////////////////////////////////
+export interface IEventLogout extends IEvent {
+    action: EventList.EventLogout;
+
+    /// owner: self User
+    /// target: Administrator / Host / Kiosk = none. Visitor = Target Kiosk
+
+}
+@registerSubclass() export class EventLogout extends ParseObject<IEventLogout> { constructor(data?: Omit<IEventLogout, 'action'>) { super({ action: EventList.EventLogout, ...data }) } }
+////////////////////////////////////////////////////
+
+
+/// EventEventList.EventConfigChanged: ConfigChanged //////////////////////////////////
+export interface IEventConfigChanged extends IEvent {
+    action: EventList.EventConfigChanged;
+
+    key: string;
+    value: any;
+
+}
+@registerSubclass() export class EventConfigChanged extends ParseObject<IEventConfigChanged> { constructor(data?: Omit<IEventConfigChanged, 'action'>) { super({ action: EventList.EventConfigChanged, ...data }) } }
+////////////////////////////////////////////////////
+
+
+/// EventEventList.EventUserAdd: UserAdd //////////////////////////////////
+export interface IEventUserAdd extends IEvent {
+    action: EventList.EventUserAdd;
+
+}
+@registerSubclass() export class EventUserAdd extends ParseObject<IEventUserAdd> { constructor(data?: Omit<IEventUserAdd, 'action'>) { super({ action: EventList.EventUserAdd, ...data }) } }
+////////////////////////////////////////////////////
+
+
+/// EventEventList.EventUserEdit: UserEdit //////////////////////////////////
+export interface IEventUserEdit extends IEvent {
+    action: EventList.EventUserEdit;
+
+}
+@registerSubclass() export class EventUserEdit extends ParseObject<IEventUserEdit> { constructor(data?: Omit<IEventUserEdit, 'action'>) { super({ action: EventList.EventUserEdit, ...data }) } }
+////////////////////////////////////////////////////
+
+
+/// EventEventList.EventUserRemove: UserRemove //////////////////////////////////
+export interface IEventUserRemove extends IEvent {
+    action: EventList.EventUserRemove;
+
+    /**
+    * User being removed.
+    */
+    name: string;
+
+}
+@registerSubclass() export class EventUserRemove extends ParseObject<IEventUserRemove> { constructor(data?: Omit<IEventUserRemove, 'action'>) { super({ action: EventList.EventUserRemove, ...data }) } }
+////////////////////////////////////////////////////
+
+
+/// EventEventList.EventKioskAdd: KioskAdd //////////////////////////////////
+export interface IEventKioskAdd extends IEvent {
+    action: EventList.EventKioskAdd;
+
+}
+@registerSubclass() export class EventKioskAdd extends ParseObject<IEventKioskAdd> { constructor(data?: Omit<IEventKioskAdd, 'action'>) { super({ action: EventList.EventKioskAdd, ...data }) } }
+////////////////////////////////////////////////////
+
+
+/// EventEventList.EventKioskEdit: KioskEdit //////////////////////////////////
+export interface IEventKioskEdit extends IEvent {
+    action: EventList.EventKioskEdit;
+
+}
+@registerSubclass() export class EventKioskEdit extends ParseObject<IEventKioskEdit> { constructor(data?: Omit<IEventKioskEdit, 'action'>) { super({ action: EventList.EventKioskEdit, ...data }) } }
+////////////////////////////////////////////////////
+
+
+/// EventEventList.EventKioskRemove: KioskRemove //////////////////////////////////
+export interface IEventKioskRemove extends IEvent {
+    action: EventList.EventKioskRemove;
+
+    /**
+    * Kiosk being removed.
+    */
+    name: string;
+
+}
+@registerSubclass() export class EventKioskRemove extends ParseObject<IEventKioskRemove> { constructor(data?: Omit<IEventKioskRemove, 'action'>) { super({ action: EventList.EventKioskRemove, ...data }) } }
+////////////////////////////////////////////////////
+
+
+/// EventEventList.EventLicenseAdd: LicenseAdd //////////////////////////////////
+export interface IEventLicenseAdd extends IEvent {
+    action: EventList.EventLicenseAdd;
+
+    key: string;
+
+}
+@registerSubclass() export class EventLicenseAdd extends ParseObject<IEventLicenseAdd> { constructor(data?: Omit<IEventLicenseAdd, 'action'>) { super({ action: EventList.EventLicenseAdd, ...data }) } }
+////////////////////////////////////////////////////
+
+
+/// EventEventList.EventFlow2InvitationComplete: Flow2InvitationComplete //////////////////////////////////
+export interface IEventFlow2InvitationComplete extends IEvent {
+    action: EventList.EventFlow2InvitationComplete;
+
+    invitation: Flow2Invitations;
+    company: Flow2Companies;
+    visitors: Flow2Visitors[];
+
+}
+@registerSubclass() export class EventFlow2InvitationComplete extends ParseObject<IEventFlow2InvitationComplete> { constructor(data?: Omit<IEventFlow2InvitationComplete, 'action'>) { super({ action: EventList.EventFlow2InvitationComplete, ...data }) } }
+////////////////////////////////////////////////////
+
+
+/// EventEventList.EventFlow2PreRegistrationComplete: Flow2PreRegistrationComplete //////////////////////////////////
+export interface IEventFlow2PreRegistrationComplete extends IEvent {
+    action: EventList.EventFlow2PreRegistrationComplete;
+
+/**
+* Invitation visitor that completes regis
