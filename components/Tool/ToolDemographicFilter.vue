@@ -370,7 +370,7 @@
                  * @uiLabel - ${this._("w_BOSalesRecords_Hour")}
                  * @uiColumnGroup - row2
                  */
-                hour: ${toEnumInterface(this.hourSelectItem as any, false)};
+                hour: any;
 
             }
         `;
