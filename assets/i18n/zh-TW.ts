@@ -17,6 +17,8 @@ export default class LangObject implements ILang {
     w_Persons_Stranger_List = "陌生人列表";
     w_Users_User_List = "用戶清單";
     w_Users_Group_List = "群組清單";
+    w_Region_Site_Search = "工地查詢";
+    w_Region_Site_Detail = "工地細節";
 
     // Common
     w_User = '用戶';
@@ -27,6 +29,17 @@ export default class LangObject implements ILang {
     w_Type = '類型';
     w_Title = '名稱';
     w_Picture = '照片';
+    w_Image = '圖片';
+    w_Region = '區域';
+    w_Site = '工地';
+    w_Work_Area = '工區';
+    w_Search = '查詢';
+    w_Detail = '細節';
+    w_Status = '狀態';
+    w_Address = '地址';
+    w_Lat = '經度';
+    w_Lng = '緯度';
+
 
     // Status
     w_Status_Enable = 'Enable';

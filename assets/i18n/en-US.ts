@@ -17,6 +17,8 @@ export default class LangObject {
     w_Persons_Stranger_List = "Stranger List";
     w_Users_User_List = "User List";
     w_Users_Group_List = "Group List";
+    w_Region_Site_Search = "Site Search";
+    w_Region_Site_Detail = "Site Detail";
 
     // Common
     w_User = 'User';
@@ -27,6 +29,17 @@ export default class LangObject {
     w_Type = 'Type';
     w_Title = 'Name';
     w_Picture = 'Picture';
+    w_Image = 'Image';
+    w_Region = 'Region';
+    w_Site = 'Site';
+    w_Work_Area = 'Work Area';
+    w_Search = 'Search';
+    w_Detail = 'Detail';
+    w_Status = 'Status';
+    w_Address = 'Address';
+    w_Lat = 'Latitude';
+    w_Lng = 'Longitude';
+
 
     // Status
     w_Status_Enable = 'Enable';

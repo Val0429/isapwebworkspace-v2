@@ -10,59 +10,60 @@ export class SiteForm extends Vue implements IFormQuick {
     tAdd: string = "_('wb_Add')";
     tPreview?: string = "_('w_Preview')";
     tEdit?: string = "_('wb_Edit')";
-    canAdd?: boolean = true;
-    canPreview?: boolean = true;
+    canAdd?: boolean = false;
+    canPreview?: boolean = false;
     canEdit?: boolean = true;
-    canDelete?: boolean = true;
+    canDelete?: boolean = false;
     
     inf(type: EFormQuick): string {
         switch (type) {
             case EFormQuick.View:
+            case EFormQuick.Edit:
                 return `
                 interface {
-                }
-                `;
-            case EFormQuick.Add:
-            case EFormQuick.Edit:
-            case EFormQuick.Preview:
-                return `
-                }
-                `;
-                // return `
-                // interface {
-                //     /**
-                //      * @uiLabel - ${this._("w_Service_Description")}
-                //      * @uiType - iv-form-textarea
-                //      * @uiHidden - ${ this.isService == true ? false : true }
-                //      */
-                //     description: string;
-                // }
-                // `;
-                // return `
-                // interface {
-                //     /**
-                //      * @uiLabel - ${this._("w_Sex")}
-                //      * @uiType - iv-form-label
-                //      */
-                //     sex: boolean;
-                //     /**
-                //      * @uiLabel - ${this._("w_Service")}
-                //      * @uiType - iv-form-switch
-                //      * @uiDisabled - true
-                //      */
-                //     service?: boolean;
-                //     /**
-                //      * @uiLabel - ${this._("w_Service_Type")}
-                //      * @uiType - iv-form-label
-                //      */
-                //     serviceType?: number;
-                //     /**
-                //      * @uiLabel - ${this._("w_Service_Description")}
-                //      * @uiType - iv-form-label
-                //      */
-                //     description?: string;
-                // }
-                // `;
+                    /*
+                     * @uiLabel - ID
+                     */
+                    caseid: number;
+                    /*
+                     * @uiLabel - ${this._('w_Region')}
+                     */
+                    region: string;
+                    /*
+                     * @uiLabel - ${this._('w_Site') + this._('w_Title')}
+                     */
+                    name: string;
+                    /*
+                     * @uiLabel - ${this._('w_Work_Area')}
+                     */
+                    workarea: string;
+                    /*
+                     * @uiLabel - ${this._('w_Status')}
+                     */
+                    case_status: ${toEnumInterface({
+                        '0': '關閉',
+                        '1': '開啟'
+                    })};
+                    /*
+                     * @uiLabel - ${this._('w_Image')}
+                     */
+                    images: any;
+                    /*
+                     * @uiLabel - ${this._('w_Address')}
+                     * @uiHidden - ${type === EFormQuick.Edit ? false : true}
+                     */
+                    address: string;
+                    /*
+                     * @uiLabel - ${this._('w_Lat')}
+                     * @uiHidden - ${type === EFormQuick.Edit ? false : true}
+                     */
+                    latitude: number;
+                    /*
+                     * @uiLabel - ${this._('w_Lng')}
+                     * @uiHidden - ${type === EFormQuick.Edit ? false : true}
+                     */
+                    longitude: number;
+                }`;
         }
     }
     // preAdd() {
