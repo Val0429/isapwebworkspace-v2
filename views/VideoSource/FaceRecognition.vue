@@ -991,12 +991,11 @@ export default class FaceRecognition extends Vue {
 	    }
 
 	    await this.initSelectItemFRSServer();
+        await this.initSelectItemFRSSManagerServer();
         await this.initSelectItemSite();
         await this.initSelectItemDemographicServer();
         await this.selectAreaId(this.inputFormData.siteId);
         await this.selectGroupDeviceId(this.inputFormData.areaId);
-
-        await this.initSelectItemFRSSManagerServer();
 
         this.inputFormData.stepType = stepType;
         this.inputFormData.groupIds = JSON.parse(

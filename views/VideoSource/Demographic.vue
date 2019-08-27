@@ -586,7 +586,7 @@ export default class Demographic extends Vue {
         // if (this.inputFormData.serverId !== "") {
         //     this.selectSourceIdAndLocation(this.inputFormData.serverId);
         // }
-        
+
     }
 
     tempSaveInputData(data) {
@@ -984,9 +984,9 @@ export default class Demographic extends Vue {
             this.transition.step = 3;
         }
 
-	    await this.initSelectItemSite();
 	    await this.initSelectItemFRSServer();
         await this.initSelectItemDemographicServer();
+        await this.initSelectItemSite();
         await this.selectAreaId(this.inputFormData.siteId);
         await this.selectGroupDeviceId(this.inputFormData.areaId);
 
