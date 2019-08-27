@@ -327,13 +327,6 @@ export class ToolTrafficFilter extends Vue {
             ).toISOString()
         };
 
-        console.log(' ~ ', new Date(
-            data.date.getFullYear(),
-            data.date.getMonth(),
-            data.date.getDate(),
-            data.hour + 1
-        ))
-
         if (data.isEmployee === "true") {
             submitParam.isEmployee = true;
         } else if (data.isEmployee === "false") {
