@@ -149,8 +149,8 @@
             <b-row>
                 <select-time
                     class="col-md-12"
-                    :timeParam="time"
-                    @time="receiveTime"
+                    :timeParam="timeParam"
+                    @updateTime="receiveTime"
                 ></select-time>
 
             </b-row>
@@ -210,7 +210,7 @@ export class FilterStatusDashboard extends Vue {
         filterTable: {}
     };
 
-    time: any = {
+    timeParam: any = {
         startDate: new Date(),
         endDate: new Date()
     };
@@ -557,9 +557,8 @@ export class FilterStatusDashboard extends Vue {
     }
 
     async receiveTime(time: object) {
-        console.log("receiveTime", time);
-        this.time = time;
-        let timeParam = JSON.parse(JSON.stringify(this.time));
+        this.timeParam = time;
+        let timeParam = JSON.parse(JSON.stringify(this.timeParam));
 
         // TODO: wait api
         // Loading.show();

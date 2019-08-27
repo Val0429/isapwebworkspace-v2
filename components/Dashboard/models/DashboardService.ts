@@ -1,6 +1,3 @@
-
-class DashboardService {
-    
-}
+class DashboardService {}
 
 export default new DashboardService();

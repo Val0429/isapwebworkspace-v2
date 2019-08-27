@@ -57,14 +57,14 @@ export default class Login extends Vue {
                 Loading.hide();
                 console.log(e);
                 if (e.err != undefined && e.err == 'Failed to fetch') {
-                    Dialog.error(this._('w_FailedToFetch'));
+                    Dialog.error(this._('w_Error_FailedToFetch'));
                     return true;
                 }
                 if (e.res != undefined && e.res.statusCode != undefined && e.res.statusCode == 401) {
-                    Dialog.error(this._('w_UserSession_Empty'));
+                    Dialog.error(this._('w_Error_401'));
                 }
                 if (e.res != undefined && e.res.statusCode != undefined && e.res.statusCode == 400) {
-                    Dialog.error(this._('w_UserSession_Empty'));
+                    Dialog.error(this._('w_Error_401'));
                 }
             });
     }

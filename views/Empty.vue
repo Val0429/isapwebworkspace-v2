@@ -6,21 +6,21 @@
             :type="transition.type"
         >
 
-            <div
+            <iv-card
                 key="transition_1"
                 v-show="transition.step === 1"
                 :label="'Empty 1'"
             >
                 Empty 1
-            </div>
+            </iv-card>
 
-            <div
+            <iv-card
                 key="transition_2"
                 v-show="transition.step === 2"
                 :label="'Empty 2'"
             >
                 Empty 2
-            </div>
+            </iv-card>
 
         </iv-auto-transition>
 
@@ -35,7 +35,10 @@ import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
 
 // Service
+import Loading from "@/services/Loading";
 import Dialog from "@/services/Dialog";
+import Datetime from "@/services/Datetime";
+import ResponseFilter from "@/services/ResponseFilter";
 
 @Component({
     components: {}

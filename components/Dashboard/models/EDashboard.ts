@@ -22,4 +22,3 @@ enum EMode {
 }
 
 export { ETime, EMode };
-

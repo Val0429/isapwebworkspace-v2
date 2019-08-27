@@ -1,11 +1,7 @@
 <template>
     <div>
-        <iv-card
-            :label="_('w_Dashboard_Bottom5sites')"
-        >
-
-<!--            <select-time @time="receiveTime"></select-time>-->
-
+        <iv-card :label="_('w_Dashboard_Bottom5sites')">
+            <!-- <select-time @updateTime="receiveTime"></select-time> -->
         </iv-card>
     </div>
 </template>
@@ -20,7 +16,7 @@ import exportingInit from "highcharts/modules/exporting";
 exportingInit(Highcharts);
 Vue.use(HighchartsVue);
 
-import { EMode } from '@/components/Dashboard/index'
+import { EMode } from "@/components/Dashboard/index";
 
 @Component({
     components: {}
@@ -37,11 +33,9 @@ export class Bottom5sites extends Vue {
 
     time: any = {};
 
-    created() {
-    }
+    created() {}
 
-    mounted() {
-    }
+    mounted() {}
 
     async receiveTime(time: object) {
         this.time = JSON.parse(JSON.stringify(time));

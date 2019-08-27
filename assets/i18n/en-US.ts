@@ -23,8 +23,6 @@ export default class LangObject {
     w_UserAdd = 'Add user';
     w_UserEdit = 'Edit user';
 
-    m_PasswordShouldBeSame = 'Password should be same';
-
     /////////////////////////////////////////////
 
     // common
@@ -331,11 +329,11 @@ export default class LangObject {
     w_Navigation_Tools_TrafficIn = 'Traffic -IN';
     w_Navigation_Tools_TrafficOut = 'Traffic - Out';
 
-    // failed to fetch
-    w_FailedToFetch = "We can't connect to server, please try again!";
-
-    // 401
-    w_UserSession_Empty = 'Not find User, Please login again';
+    // Error
+    w_Error_FailedToFetch = "We can't connect to server, please try again!"; // failed to fetch
+    w_Error_ResponseUndefined = "We can't get any response"; // no response
+    w_Error_401 = 'Not find User, Please login again'; // 401
+    w_Error_404 = 'API Not Find'; // 404
 
     // image map
     w_ImageMap_DataWindowMainTitle = 'Data Window';

@@ -287,7 +287,7 @@ export default class ForgetPassword extends Vue {
                     e.res.statusCode != undefined &&
                     e.res.statusCode == 401
                 ) {
-                    Dialog.error(this._("w_UserSession_Empty"));
+                    Dialog.error(this._("w_Error_401"));
                 }
             });
     }

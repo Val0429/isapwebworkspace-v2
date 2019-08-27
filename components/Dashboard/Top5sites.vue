@@ -17,7 +17,7 @@
                 <select-time
                     class="col-md-6"
                     :timeParam="timeParam"
-                    @time="receiveTime"
+                    @updateTime="receiveTime"
                 ></select-time>
             </b-row>
 
@@ -43,7 +43,6 @@ import { EMode } from "@/components/Dashboard/index";
     components: {}
 })
 export class Top5sites extends Vue {
-
     chartOptions: any = {};
 
     timeParam: any = {
