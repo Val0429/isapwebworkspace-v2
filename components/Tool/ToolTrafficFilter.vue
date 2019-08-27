@@ -54,7 +54,6 @@
                     <iv-form-selection
                         v-bind="$attrs"
                         v-on="$listeners"
-                        :options="hourSelectItem"
                     >
                     </iv-form-selection>
                 </template>
@@ -84,7 +83,7 @@ export class ToolTrafficFilter extends Vue {
     deviceSelectItem: any = {};
     isIncludedEmployeeSelectItem: any = {};
     inOrOutTypeSelectItem: any = {};
-    hourSelectItem: any = [];
+    hourSelectItem: any = {};
 
     // 收合card控制
     visible: boolean = true;
@@ -98,7 +97,7 @@ export class ToolTrafficFilter extends Vue {
         isIn: "true",
         startDate: new Date(),
         endDate: new Date(),
-        hour: "10",
+        hour: 10,
         date: new Date()
     };
 
@@ -125,8 +124,10 @@ export class ToolTrafficFilter extends Vue {
                 i === 24 ? "00" : i < 10 ? "0" + i.toString() : i.toString();
             const tempValue =
                 tempHour + ":00" + (i < 12 || i > 23 ? " am" : " pm");
-            const tempObject = { id: i.toString(), text: tempValue };
-            this.hourSelectItem.push(tempObject);
+            // const tempObject = { id: i.toString(), text: tempValue };
+            // this.hourSelectItem.push(tempObject);
+
+            this.hourSelectItem[i] = tempValue;
         }
     }
 
@@ -326,6 +327,13 @@ export class ToolTrafficFilter extends Vue {
             ).toISOString()
         };
 
+        console.log(' ~ ', new Date(
+            data.date.getFullYear(),
+            data.date.getMonth(),
+            data.date.getDate(),
+            data.hour + 1
+        ))
+
         if (data.isEmployee === "true") {
             submitParam.isEmployee = true;
         } else if (data.isEmployee === "false") {
@@ -418,7 +426,7 @@ export class ToolTrafficFilter extends Vue {
                  * @uiLabel - ${this._("w_BOSalesRecords_Hour")}
                  * @uiColumnGroup - row2
                  */
-                hour: any;
+                hour: ${toEnumInterface(this.hourSelectItem as any, false)};
 
             }
         `;

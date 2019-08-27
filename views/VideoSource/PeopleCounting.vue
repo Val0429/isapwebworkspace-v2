@@ -75,6 +75,7 @@
                     <iv-toolbox-back @click="pageToList" />
                 </template>
 
+                <!-- Hanwha -->
                 <div class="font-weight-bold"> {{ _('w_VSPeopleCounting_Addhanwha') }}</div>
 
                 <b-button
@@ -85,6 +86,51 @@
                     @click="pageToAddByHanwha(eAddStep.hanwha)"
                 >
                     {{ _('w_Hanwha') }}
+                </b-button>
+
+                <hr>
+
+                <!-- Eocortex -->
+                <div class="font-weight-bold"> {{ _('w_VSPeopleCounting_AddEocortex') }}</div>
+
+                <b-button
+                    class="button mt-3 mb-1"
+                    size="md"
+                    variant="success"
+                    type="button"
+                    @click="pageToAddByEocortex(eAddStep.eocortex)"
+                >
+                    {{ _('w_Eocortex') }}
+                </b-button>
+
+                <hr>
+
+                <!-- Brickstream -->
+                <div class="font-weight-bold"> {{ _('w_VSPeopleCounting_AddBrickstream') }}</div>
+
+                <b-button
+                    class="button mt-3 mb-1"
+                    size="md"
+                    variant="success"
+                    type="button"
+                    @click="pageToAddByBrickstream(eAddStep.brickstream)"
+                >
+                    {{ _('w_Brickstream') }}
+                </b-button>
+
+                <hr>
+
+                <!-- Dahua -->
+                <div class="font-weight-bold"> {{ _('w_VSPeopleCounting_AddDahua') }}</div>
+
+                <b-button
+                    class="button mt-3 mb-1"
+                    size="md"
+                    variant="success"
+                    type="button"
+                    @click="pageToAddByDahua(eAddStep.dahua)"
+                >
+                    {{ _('w_Dahua') }}
                 </b-button>
 
                 <hr>
@@ -140,9 +186,6 @@
 
             </iv-card>
 
-            <!-- add and edit by Hanwha -->
-            <!--             v-show="(addStep === eAddStep.hanwha && pageStep === ePageStep.add) || (addStep === eAddStep.hanwha && pageStep === ePageStep.edit)"
-         -->
             <iv-auto-card
                 key="transition_3"
                 v-show="transition.step === 3"
@@ -212,13 +255,6 @@
 
             </iv-auto-card>
 
-            <!-- view by Hanwha -->
-            <!--        <iv-card-->
-            <!--            v-show="pageStep === ePageStep.view && addStep === eAddStep.hanwha"-->
-            <!--            :visible="true"-->
-            <!--            :label="_('w_VSPeopleCounting_View')"-->
-            <!--        >-->
-
             <iv-card
                 key="transition_4"
                 v-show="transition.step === 4"
@@ -246,12 +282,6 @@
                 </template>
 
             </iv-card>
-
-            <!-- add and edit by iSap FRS and FRS Manager  -->
-            <!--        <iv-auto-card-->
-            <!--            v-show="(addStep === eAddStep.isapFrs && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.add) || (addStep === eAddStep.isapFrs && pageStep === ePageStep.edit) || (addStep === eAddStep.isapFrsManager && pageStep === ePageStep.edit) "-->
-            <!--            :label=showLabelTitle()-->
-            <!--        >-->
 
             <iv-auto-card
                 key="transition_5"
@@ -323,13 +353,6 @@
                 </template>
 
             </iv-auto-card>
-
-            <!-- view by iSap FRS and FRS Manager -->
-            <!--        <iv-card-->
-            <!--            v-show="(pageStep === ePageStep.view && addStep === eAddStep.isapFrs) || (pageStep === ePageStep.view && addStep === eAddStep.isapFrs)"-->
-            <!--            :visible="true"-->
-            <!--            :label="_('w_VSPeopleCounting_View')"-->
-            <!--        >-->
 
             <iv-card
                 key="transition_6"
@@ -421,6 +444,9 @@ enum EAddStep {
     isap = "isap",
     frs = "frs",
     frsManager = "frsManager",
+    eocortex = "eocortex",
+    brickstream = "brickstream",
+    dahua = "dahua",
     none = "none",
 }
 
@@ -1164,6 +1190,24 @@ export default class PeopleCounting extends Vue {
             this.transition.prevStep = this.transition.step;
             this.transition.step = 6;
         }
+
+        if (this.inputFormData.model === EAddStep.eocortex) {
+            this.addStep = EAddStep.eocortex;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 9;
+        }
+
+        if (this.inputFormData.model === EAddStep.brickstream) {
+            this.addStep = EAddStep.brickstream;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 11;
+        }
+
+        if (this.inputFormData.model === EAddStep.dahua) {
+            this.addStep = EAddStep.dahua;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 13;
+        }
     }
 
     async pageToAddByHanwha() {
@@ -1194,6 +1238,36 @@ export default class PeopleCounting extends Vue {
         this.inputFormData.stepType = EPageStep.add;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 5;
+    }
+
+    async pageToAddByEocortex() {
+        console.log('pageToAddByEocortex ~ ')
+        this.clearInputData();
+        await this.initSelectItemSite();
+        this.addStep = EAddStep.eocortex;
+        this.inputFormData.stepType = EPageStep.add;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 8;
+    }
+
+    async pageToAddByBrickstream() {
+        console.log('pageToAddByBrickstream ~ ')
+        this.clearInputData();
+        await this.initSelectItemSite();
+        this.addStep = EAddStep.brickstream;
+        this.inputFormData.stepType = EPageStep.add;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 10;
+    }
+
+    async pageToAddByDahua() {
+        console.log('pageToAddByDahua ~ ')
+        this.clearInputData();
+        await this.initSelectItemSite();
+        this.addStep = EAddStep.dahua;
+        this.inputFormData.stepType = EPageStep.add;
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 12;
     }
 
     pageStepBackward() {

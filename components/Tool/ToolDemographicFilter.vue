@@ -54,7 +54,6 @@
                     <iv-form-selection
                         v-bind="$attrs"
                         v-on="$listeners"
-                        :options="hourSelectItem"
                     >
                     </iv-form-selection>
                 </template>
@@ -86,7 +85,7 @@
         deviceSelectItem: any = {};
         isIncludedEmployeeSelectItem: any = {};
         inOrOutTypeSelectItem: any = {};
-        hourSelectItem: any = [];
+        hourSelectItem: any = {};
 
         // 收合card控制
         visible: boolean = true;
@@ -99,7 +98,7 @@
             isEmployee: 'false',
             startDate: new Date(),
             endDate: new Date(),
-            hour: '10',
+            hour: 10,
             date: new Date()
         };
 
@@ -127,8 +126,10 @@
                     i === 24 ? "00" : i < 10 ? "0" + i.toString() : i.toString();
                 const tempValue =
                     tempHour + ":00" + (i < 12 || i > 23 ? " am" : " pm");
-                const tempObject = { id: i.toString(), text: tempValue };
-                this.hourSelectItem.push(tempObject);
+                // const tempObject = { id: i.toString(), text: tempValue };
+                // this.hourSelectItem.push(tempObject);
+
+                this.hourSelectItem[i] = tempValue;
             }
         }
 
@@ -370,7 +371,7 @@
                  * @uiLabel - ${this._("w_BOSalesRecords_Hour")}
                  * @uiColumnGroup - row2
                  */
-                hour: any;
+                hour: ${toEnumInterface(this.hourSelectItem as any, false)};
 
             }
         `;
