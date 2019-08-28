@@ -698,26 +698,20 @@ export default class Member extends Vue {
       });
     }
   }
-  testDate(date){
+  testDate(date, splitter:string="."){
       try{    
        let dt = new Date(date);
-       return dt.toISOString().split(".")[0];
+       return dt.toISOString().split(splitter)[0];
     }catch (err){
-        return;
+        return "";
     }
   }
   async doSave($event){
     await this.saveAddOrEdit(this.inputFormData, this.permissionSelected);
   }
   async saveAddOrEdit(inputFormData:any, accessRules:string[], checkDuplication:boolean=true,refreshAfterwards:boolean=true) {
-    let dob="";
-    try{    
-          let dt = new Date(inputFormData.birthday || "");
-          dob = dt.toISOString().split("T")[0];
-        }catch (err){
-            ;
-        }
-        
+    let dob= this.testDate(inputFormData.birthday, "T");
+    
     console.log("dob", dob);
     let tempPersonalDetails: any = {
           Address: "",
@@ -757,8 +751,7 @@ export default class Member extends Vue {
     let tempCustomFieldsList: any = [];
     for(let field of CustomFields){             
       if(field.date) {
-          let dt = this.testDate(inputFormData[field.name]);
-          tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue: dt || ""});      
+          tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue: this.testDate(inputFormData[field.name])});      
       }
       else tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue:inputFormData[field.name] || ""});      
     }
@@ -796,6 +789,12 @@ export default class Member extends Vue {
         PersonalDetails: tempPersonalDetails,
         CustomFields: tempCustomFieldsList
       };
+      if(inputFormData["registrationDate"]){
+         member.StartDate = inputFormData["registrationDate"];
+      }
+      if(inputFormData["resignationDate"]){
+         member.EndDate = inputFormData["resignationDate"];
+      }
     if (member.objectId) {
       if(checkDuplication){
         let isDuplicateFound = await this.checkDuplication(member);
