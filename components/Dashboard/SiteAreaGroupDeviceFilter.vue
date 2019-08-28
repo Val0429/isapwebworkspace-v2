@@ -101,7 +101,6 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 import { toEnumInterface } from "../../../core";
 import Loading from "@/services/Loading";
 import ResponseFilter from "@/services/ResponseFilter";
-import { EDeviceMode } from "@/components/Reports";
 
 import ReportService from "../Reports/models/ReportService";
 import RegionAPI from "../RegionTree/models/RegionAPI";
@@ -122,6 +121,13 @@ import { EMode } from '.';
     components: {}
 })
 export class SiteAreaGroupDeviceFilter extends Vue {
+    // Prop
+    @Prop({
+        type: String, // Boolean, Number, String, Array, Object
+        default: () => {}
+    })
+    deviceType: EMode.peopleCounting;
+
     transition: ITransition = {
         type: Transition.type,
         prevStep: 1,
@@ -152,6 +158,7 @@ export class SiteAreaGroupDeviceFilter extends Vue {
         this.siteFilterPermission();
         this.initRegionTreeSelect();
         this.initSelectItemTree();
+        this.inputFormData.type = this.deviceType;
     }
 
     mounted() {}
@@ -352,7 +359,7 @@ export class SiteAreaGroupDeviceFilter extends Vue {
         } = {
             siteId: siteId,
             areaId: areaId,
-            mode: EDeviceMode.peopleCounting
+            mode: this.inputFormData.type
         };
 
         if (!siteId && !areaId) {
@@ -399,8 +406,6 @@ export class SiteAreaGroupDeviceFilter extends Vue {
             return false;
         }
 
-        console.log(' ~ ', readParam)
-
         await this.$server
             .R("/device", readParam)
             .then((response: any) => {
@@ -428,11 +433,6 @@ export class SiteAreaGroupDeviceFilter extends Vue {
         return `
             interface {
 
-                /**
-                 * @uiLabel - ${this._("w_ReportTemplate_Metric")}
-                 */
-                type: ${toEnumInterface(this.metricSelectItem as any, false)};
-
 
                 /**
                  * @uiLabel - ${this._("w_Sites")}
@@ -442,12 +442,14 @@ export class SiteAreaGroupDeviceFilter extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Area")}
+                 * @uiColumnGroup - row2
                  */
                 areaId: ${toEnumInterface(this.areaSelectItem as any, false)};
 
 
                 /**
                  * @uiLabel - ${this._("w_DeviceGroup")}
+                 * @uiColumnGroup - row2
                  */
                 deviceGroupId?: ${toEnumInterface(
                     this.deviceGroupSelectItem as any,
@@ -457,6 +459,7 @@ export class SiteAreaGroupDeviceFilter extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Device")}
+                 * @uiColumnGroup - row2
                  */
                 deviceId?: ${toEnumInterface(
                     this.deviceSelectItem as any,
