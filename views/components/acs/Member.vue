@@ -789,12 +789,12 @@ export default class Member extends Vue {
         PersonalDetails: tempPersonalDetails,
         CustomFields: tempCustomFieldsList
       };
-      if(inputFormData["registrationDate"]){
-         member.StartDate = inputFormData["registrationDate"];
-      }
-      if(inputFormData["resignationDate"]){
-         member.EndDate = inputFormData["resignationDate"];
-      }
+      // if(inputFormData["registrationDate"]){
+      //    member.StartDate = moment(inputFormData["registrationDate"]).toDate();
+      // }
+      // if(inputFormData["resignationDate"]){
+      //    member.EndDate = moment(inputFormData["resignationDate"]).toDate();
+      // }
     if (member.objectId) {
       if(checkDuplication){
         let isDuplicateFound = await this.checkDuplication(member);
