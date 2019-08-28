@@ -1,8 +1,11 @@
 <template>
     <div>
-        <iv-card :label="_('w_DashboardOverview_CurrentStatus')">
+        <iv-card
+            :label="_('w_DashboardOverview_CurrentStatus')"
+            :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
+        >
             <template #toolbox>
-                <iv-toolbox-dashboard-refresh>
+                <iv-toolbox-dashboard-refresh variant="white">
                     <iv-toolbox-dashboard-traffic
                         :iconDisabled="currentStatus.isTraffic"
                         @click="countCurrentStatus('isTraffic')"

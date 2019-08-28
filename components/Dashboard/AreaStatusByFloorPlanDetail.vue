@@ -12,7 +12,7 @@
 
             <template #toolbox>
 
-                <iv-toolbox-dashboard-refresh>
+                <iv-toolbox-dashboard-refresh variant="white">
                     <iv-toolbox-dashboard-traffic
                         :iconDisabled="currentStatus.isTraffic"
                         @click="changeStatus('isTraffic')"
@@ -39,6 +39,7 @@
                     />
                 </iv-toolbox-dashboard-refresh>
                 <iv-toolbox-delete
+                    variant="white"
                     @click="removeCard()"
                     :disabled="isDelete"
                 />
@@ -54,7 +55,10 @@
             >
             </image-map>
 
-            <site-area-Group-device-filter class="mt-3"></site-area-Group-device-filter>
+            <site-area-Group-device-filter
+                :deviceType="deviceType"
+                class="mt-3"
+            ></site-area-Group-device-filter>
 
         </iv-card>
     </div>
@@ -96,6 +100,7 @@ import {
     DataWindowOccupancyItem,
     DataWindowPeopleCountingItem
 } from "@/components/ImageMap";
+import { EMode } from "@/components/Dashboard/index";
 
 import {
     ReportDashboard,
@@ -127,6 +132,8 @@ export class AreaStatusByFloorPlanDetail extends Vue {
     isDelete: boolean;
 
     imageMap = new ImageMapItem();
+
+    deviceType: string = EMode.peopleCounting;
 
     currentStatus: {
         isTraffic: boolean;

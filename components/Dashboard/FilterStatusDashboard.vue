@@ -1,7 +1,10 @@
 <template>
     <div>
 
-        <iv-card :label="_('w_DashboardOverview_FilterStatus')">
+        <iv-card
+            :label="_('w_DashboardOverview_FilterStatus')"
+            :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
+        >
             <div class="row">
                 <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
                     <div class="box current-info-box">

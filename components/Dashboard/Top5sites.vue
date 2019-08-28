@@ -1,6 +1,35 @@
 <template>
     <div>
-        <iv-card :label="_('w_Dashboard_Top5sites')">
+        <iv-card
+            :label="_('w_Dashboard_Top5sites')"
+            :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
+
+        >
+            <template #toolbox>
+                <iv-toolbox-more variant="white">
+                    <iv-toolbox-dashboard-traffic
+                        :iconDisabled="currentStatus.isTraffic"
+                        @click="currentStatus.isTraffic = !currentStatus.isTraffic"
+                    />
+                    <iv-toolbox-dashboard-dwelltime
+                        :iconDisabled="currentStatus.isDwellTime"
+                        @click="currentStatus.isDwellTime = !currentStatus.isDwellTime"
+                    />
+                    <iv-toolbox-dashboard-vip
+                        :iconDisabled="currentStatus.isVip"
+                        @click="currentStatus.isVip = !currentStatus.isVip"
+                    />
+                    <iv-toolbox-dashboard-blacklist
+                        :iconDisabled="currentStatus.isBlacklist"
+                        @click="currentStatus.isBlacklist = !currentStatus.isBlacklist"
+                    />
+                    <iv-toolbox-dashboard-repeatcustomer
+                        :iconDisabled="currentStatus.isRepeatCustomer"
+                        @click="currentStatus.isRepeatCustomer = !currentStatus.isRepeatCustomer"
+                    />
+                </iv-toolbox-more>
+            </template>
+
             <h5 class="mb-3">{{ modeParam.modeTitle }}</h5>
 
             <highcharts
@@ -53,6 +82,20 @@ export class Top5sites extends Vue {
     modeParam: any = {
         type: "",
         modeTitle: ""
+    };
+
+    currentStatus: {
+        isTraffic: boolean;
+        isDwellTime: boolean;
+        isVip: boolean;
+        isBlacklist: boolean;
+        isRepeatCustomer: boolean;
+    } = {
+        isTraffic: true,
+        isDwellTime: false,
+        isVip: false,
+        isBlacklist: false,
+        isRepeatCustomer: false
     };
 
     created() {

@@ -1,6 +1,9 @@
 <template>
     <div>
-        <iv-card :label="_('w_Dashboard_Bottom5sites')">
+        <iv-card
+            :label="_('w_Dashboard_Bottom5sites')"
+            :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
+        >
             <!-- <select-time @updateTime="receiveTime"></select-time> -->
         </iv-card>
     </div>

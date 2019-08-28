@@ -1,6 +1,9 @@
 <template>
     <div>
-        <iv-card :label="_('w_Dashboard_PeakHour')">
+        <iv-card
+            :label="_('w_Dashboard_PeakHour')"
+            :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
+        >
             <apexchart
                 type=heatmap
                 height=550
