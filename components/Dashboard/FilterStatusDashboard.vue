@@ -8,7 +8,10 @@
             <div class="row ">
                 <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
                     <div class="box current-info-box">
-                        <div class="backgroundColor selected">
+                        <div
+                            :class="currentStatus.isTraffic ? 'backgroundColor selected' : 'backgroundColor'"
+                            @click="clickChartType('isTraffic')"
+                        >
                             <div class="clearfix">
                                 <span class="title">{{_("w_ReportDashboard_Traffic")}} </span>
                             </div>
@@ -27,7 +30,10 @@
 
                 <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
                     <div class="box current-info-box">
-                        <div class="backgroundColor">
+                        <div
+                            :class="currentStatus.isOccupancy ? 'backgroundColor selected' : 'backgroundColor'"
+                            @click="clickChartType('isOccupancy')"
+                        >
                             <div class="clearfix">
                                 <span class="title">{{_("w_ReportDashboard_AverageOccupancy")}} </span>
                             </div>
@@ -43,7 +49,10 @@
 
                 <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
                     <div class="box current-info-box">
-                        <div class="backgroundColor">
+                        <div
+                            :class="currentStatus.isDwellTime ? 'backgroundColor selected' : 'backgroundColor'"
+                            @click="clickChartType('isDwellTime')"
+                        >
                             <div class="clearfix">
                                 <span class="title">{{_("w_ReportDashboard_AverageDwellTime")}}</span>
                             </div>
@@ -59,7 +68,10 @@
 
                 <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
                     <div class="box current-info-box">
-                        <div class="backgroundColor">
+                        <div
+                            :class="currentStatus.isDemographic ? 'backgroundColor selected' : 'backgroundColor'"
+                            @click="clickChartType('isDemographic')"
+                        >
                             <div class="clearfix">
                                 <span class="title">{{_("w_ReportDashboard_Demographic")}}</span>
                             </div>
@@ -80,7 +92,10 @@
 
                 <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
                     <div class="box current-info-box">
-                        <div class="backgroundColor">
+                        <div
+                            :class="currentStatus.isVipBlacklist ? 'backgroundColor selected' : 'backgroundColor'"
+                            @click="clickChartType('isVipBlacklist')"
+                        >
                             <div class="clearfix">
                                 <span class="title">{{_("w_ReportDashboard_VIPBlacklist")}}</span>
                             </div>
@@ -124,7 +139,10 @@
 
                 <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
                     <div class="box current-info-box">
-                        <div class="backgroundColor">
+                        <div
+                            :class="currentStatus.isRepeatCustomer ? 'backgroundColor selected' : 'backgroundColor'"
+                            @click="clickChartType('isRepeatCustomer')"
+                        >
                             <div class="clearfix">
                                 <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}} </span>
                             </div>
@@ -221,6 +239,22 @@ export class FilterStatusDashboard extends Vue {
 
     radioName: string = "AreaStatusByFloorPlanDetail";
 
+    currentStatus: {
+        isTraffic: boolean;
+        isOccupancy: boolean;
+        isDwellTime: boolean;
+        isDemographic: boolean;
+        isVipBlacklist: boolean;
+        isRepeatCustomer: boolean;
+    } = {
+        isTraffic: true,
+        isOccupancy: false,
+        isDwellTime: false,
+        isDemographic: false,
+        isVipBlacklist: false,
+        isRepeatCustomer: false
+    };
+
     created() {}
 
     mounted() {
@@ -229,6 +263,13 @@ export class FilterStatusDashboard extends Vue {
 
     receiveSiteIds(siteIds: object) {
         console.log("siteIds ~ ", siteIds);
+    }
+
+    clickChartType(type) {
+        for (let status of Object.keys(this.currentStatus)) {
+            this.currentStatus[status] = false;
+        }
+        this.currentStatus[type] = true;
     }
 
     async initData() {
