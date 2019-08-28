@@ -487,6 +487,7 @@ export class CurrentStatusDashboard extends Vue {
         ];
 
         this.chartOptions.demographic = {
+            labels: ["Male", "Female"],
             series: [44, 55],
             responsive: [
                 {
@@ -629,7 +630,7 @@ Vue.component("current-status-dashboard", CurrentStatusDashboard);
     }
 
     .demographic-div {
-        margin-top: 20px;
+        margin-top: 10px;
         display: flex;
         justify-content: center;
     }

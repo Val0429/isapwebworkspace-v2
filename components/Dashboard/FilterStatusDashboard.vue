@@ -16,10 +16,7 @@
                                 <span class="title">{{_("w_ReportDashboard_Traffic")}} </span>
                             </div>
                             <div class="clearfix">
-                                <span
-                                    class="date"
-                                    style="margin-top: 30px;"
-                                >{{anlysisData.traffic.total != null ? numberWithCommas(anlysisData.traffic.total) : "N/A"}}</span>
+                                <span class="date">{{anlysisData.traffic.total != null ? numberWithCommas(anlysisData.traffic.total) : "N/A"}}</span>
                                 <span v-if="eSign.none != anlysisData.traffic.sign">{{eSign.positive == anlysisData.traffic.sign ? '▲':'▼'}}</span>
                                 <span>{{anlysisData.traffic.valueRatio != null ? toPercent(anlysisData.traffic.valueRatio,1) : "N/A"}}</span>
                             </div>
@@ -77,8 +74,9 @@
                             </div>
                             <div class="clearfix">
                                 <apexchart
+                                    class="demographic-div"
                                     type=donut
-                                    width=150
+                                    width=140
                                     :options="chartOptions.demographic"
                                     :series="chartOptions.demographic.series"
                                 />
@@ -509,6 +507,7 @@ export class FilterStatusDashboard extends Vue {
         ];
 
         this.chartOptions.demographic = {
+            labels: ["Male", "Female"],
             series: [44, 55],
             responsive: [
                 {
@@ -704,8 +703,8 @@ Vue.component("filter-status-dashboard", FilterStatusDashboard);
     }
 
     .demographic-div {
-        margin-top: -4px;
-        height: 200px;
+        display: flex;
+        justify-content: center;
     }
 
     .vip-blackList-div {
