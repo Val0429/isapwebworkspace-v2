@@ -1600,6 +1600,7 @@ export default class Demographic extends Vue {
                 /**
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiType - iv-form-label
+                 * @uiHidden - ${ this.addStep === EAddStep.frsManager ? "true" : "false" }
                  */
                 sourceidView?: string;
 
