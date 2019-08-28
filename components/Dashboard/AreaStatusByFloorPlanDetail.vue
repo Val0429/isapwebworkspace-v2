@@ -6,6 +6,7 @@
         >
             <template #toolbox>
                 <iv-toolbox-delete
+                    variant="white"
                     @click="removeCard()"
                     :disabled="isDelete"
                 />
