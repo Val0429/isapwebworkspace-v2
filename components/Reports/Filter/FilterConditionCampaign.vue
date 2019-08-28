@@ -23,7 +23,7 @@
 
                 <template #campaignIds="{ $attrs, $listeners }">
                     <iv-form-selection
-                        v-if="inputFormData.campaignIds && checkObjectLength(campaignSelectItem) > 1"
+                        v-if="inputFormData.year && checkObjectLength(campaignSelectItem) > 1"
                         v-bind="$attrs"
                         v-on="$listeners"
                         v-model="inputFormData.campaignIds"
@@ -155,11 +155,10 @@ export class FilterConditionCampaign extends Vue {
         switch (data.key) {
             case "year":
                 this.inputFormData.year = data.value;
-
                 if (this.inputFormData.year) {
                     let tempCampaignSelectItem = { all: this._('w_AllCampaign')};
                     for (const year in this.campaignAllData) {
-                        if (this.inputFormData.year === year) {
+                        if (this.inputFormData.year === parseInt(year)) {
                             const tempYearCampaign = this.campaignAllData[year];
                             for (const campaignKey of tempYearCampaign) {
                                 tempCampaignSelectItem[campaignKey.objectId] = campaignKey.name;
@@ -178,7 +177,6 @@ export class FilterConditionCampaign extends Vue {
                 break;
             case "campaignIds":
                 this.inputFormData.campaignIds = data.value;
-
                 if (this.inputFormData.campaignIds) {
                     let tempCampaignSiteSelectItem = { all: this._('w_AllSites')};
                     for (const year in this.campaignAllData) {
@@ -283,7 +281,7 @@ export class FilterConditionCampaign extends Vue {
 
         if (this.inputFormData.year) {
             for (const year in this.campaignAllData) {
-                if (this.inputFormData.year === year) {
+                if (this.inputFormData.year === parseInt(year)) {
                     const tempYearCampaign = this.campaignAllData[year];
 
                     // all campaigns
@@ -317,7 +315,7 @@ export class FilterConditionCampaign extends Vue {
                 }
             }
         }
-
+        
         this.visible = false;
         this.$emit("submit-data", doSubmitParam);
     }
@@ -354,7 +352,7 @@ export class FilterConditionCampaign extends Vue {
                  * @uiLabel - ${this._("w_Sites")}
                  * @uiColumnGroup - site
                  */
-                siteIds?: any;
+                siteIds?: ${toEnumInterface(this.campaignSiteSelectItem as any, false)};
 
 
             }
