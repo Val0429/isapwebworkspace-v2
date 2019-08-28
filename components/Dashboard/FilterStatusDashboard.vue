@@ -4,10 +4,9 @@
         <iv-card
             :label="_('w_DashboardOverview_FilterStatus')"
             :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
-            class="font-3xl"
         >
             <div class="row ">
-                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2 font-sm">
+                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
                     <div class="box current-info-box">
                         <div
                             :class="currentStatus.isTraffic ? 'backgroundColor selected' : 'backgroundColor'"
@@ -17,10 +16,7 @@
                                 <span class="title">{{_("w_ReportDashboard_Traffic")}} </span>
                             </div>
                             <div class="clearfix">
-                                <span
-                                    class="date"
-                                    style="margin-top: 30px;"
-                                >{{anlysisData.traffic.total != null ? numberWithCommas(anlysisData.traffic.total) : "N/A"}}</span>
+                                <span class="date">{{anlysisData.traffic.total != null ? numberWithCommas(anlysisData.traffic.total) : "N/A"}}</span>
                                 <span v-if="eSign.none != anlysisData.traffic.sign">{{eSign.positive == anlysisData.traffic.sign ? '▲':'▼'}}</span>
                                 <span>{{anlysisData.traffic.valueRatio != null ? toPercent(anlysisData.traffic.valueRatio,1) : "N/A"}}</span>
                             </div>
@@ -29,7 +25,7 @@
                 </div>
                 <!--/col-->
 
-                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2 font-sm">
+                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
                     <div class="box current-info-box">
                         <div
                             :class="currentStatus.isOccupancy ? 'backgroundColor selected' : 'backgroundColor'"
@@ -39,9 +35,7 @@
                                 <span class="title">{{_("w_ReportDashboard_AverageOccupancy")}} </span>
                             </div>
                             <div class="clearfix">
-                                <span class="date"
-                                      style="margin-top: 30px;"
-                                >{{anlysisData.averageOccupancy.total != null ? numberWithCommas(anlysisData.averageOccupancy.total) : "N/A"}}</span>
+                                <span class="date">{{anlysisData.averageOccupancy.total != null ? numberWithCommas(anlysisData.averageOccupancy.total) : "N/A"}}</span>
                                 <span v-if="eSign.none != anlysisData.averageOccupancy.sign">{{eSign.positive == anlysisData.averageOccupancy.sign ? '▲':'▼'}}</span>
                                 <span>{{anlysisData.averageOccupancy.valueRatio != null ? toPercent(anlysisData.averageOccupancy.valueRatio,1) : "N/A"}}</span>
                             </div>
@@ -50,14 +44,14 @@
                 </div>
                 <!--/col-->
 
-                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2 font-sm">
+                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
                     <div class="box current-info-box">
                         <div
                             :class="currentStatus.isDwellTime ? 'backgroundColor selected' : 'backgroundColor'"
                             @click="clickChartType('isDwellTime')"
                         >
                             <div class="clearfix">
-                                <span class="title">{{_("w_ReportDashboard_AverageDwellTime")}}</span>
+                                <span class="title">{{_("w_ReportDashboard_AverageDwellTime2")}}</span>
                             </div>
                             <div class="clearfix">
                                 <span class="date">{{anlysisData.averageDwellTime.total != null ? numberWithCommas(anlysisData.averageDwellTime.total) : "N/A"}}</span>
@@ -79,10 +73,14 @@
                                 <span class="title">{{_("w_ReportDashboard_Demographic")}}</span>
                             </div>
                             <div class="clearfix">
-                                <highcharts
+                                <apexchart
                                     class="demographic-div"
+                                    type=donut
+                                    width=140
                                     :options="chartOptions.demographic"
-                                ></highcharts>
+                                    :series="chartOptions.demographic.series"
+                                />
+
                                 <div class="charfix">
                                     <span v-if="eSign.none != anlysisData.demographic.sign">{{eSign.positive == anlysisData.demographic.sign ? '▲':'▼'}}</span>
                                     <span>{{anlysisData.demographic.valueRatio != null ? toPercent(anlysisData.demographic.valueRatio,1) : "N/A"}}</span>
@@ -93,7 +91,7 @@
                 </div>
                 <!--/col-->
 
-                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2 font-sm">
+                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
                     <div class="box current-info-box">
                         <div
                             :class="currentStatus.isVipBlacklist ? 'backgroundColor selected' : 'backgroundColor'"
@@ -108,12 +106,12 @@
                                         <div>
                                             <span>{{anlysisData.vipBlacklist.value != null ? numberWithCommas(anlysisData.vipBlacklist.value) : "N/A"}} </span>
                                         </div>
-                                        <img src="../../assets/images/vip.png" class="mt-2">
+                                        <img src="../../assets/images/vip.png">
 
-                                        <p class=" mb-2">
+                                        <p>
                                             <div class="clearfix">
                                                 <span v-if="eSign.none != anlysisData.vipBlacklist.sign">{{eSign.positive == anlysisData.vipBlacklist.sign ? '▲':'▼'}}</span>
-                                                <span >{{anlysisData.vipBlacklist.valueRatio1 != null ? toPercent(anlysisData.vipBlacklist.valueRatio1,1) : "N/A"}}</span>
+                                                <span>{{anlysisData.vipBlacklist.valueRatio1 != null ? toPercent(anlysisData.vipBlacklist.valueRatio1,1) : "N/A"}}</span>
                                             </div>
                                     </div>
                                 </div>
@@ -126,9 +124,8 @@
                                         <img
                                             src="../../assets/images/stranger.png"
                                             height="26px"
-                                            class="mt-2"
                                         >
-                                        <p class=" mb-2">
+                                        <p>
                                             <div class="clearfix">
                                                 <span v-if="eSign.none != anlysisData.vipBlacklist.sign2">{{eSign.positive == anlysisData.vipBlacklist.sign2 ? '▲':'▼'}}</span>
                                                 <span>{{anlysisData.vipBlacklist.valueRatio2 != null ? toPercent(anlysisData.vipBlacklist.valueRatio2,1) : "N/A"}}</span>
@@ -141,7 +138,7 @@
                 </div>
                 <!--/col-->
 
-                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2 font-sm">
+                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
                     <div class="box current-info-box">
                         <div
                             :class="currentStatus.isRepeatCustomer ? 'backgroundColor selected' : 'backgroundColor'"
@@ -510,32 +507,23 @@ export class FilterStatusDashboard extends Vue {
         ];
 
         this.chartOptions.demographic = {
-            chart: { zoomType: "x", height: "116px" },
-            exporting: { enabled: false },
-            title: {
-                text: null,
-                style:
-                    "font-weight: bold; font-size: 12px; margin: 0; padding: 0; display: flex; justify-content: center;"
-            },
-            subtitle: { text: null },
-            tooltip: {
-                enabled: true,
-                pointFormat:
-                    '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/>' +
-                    "Area (square km): <b>{point.y}</b>"
-            },
-            series: [
+            labels: ["Male", "Female"],
+            series: [44, 55],
+            responsive: [
                 {
-                    type: "pie",
-                    size: "80%",
-                    innerSize: "60%",
-                    label: { enabled: true },
-                    data: demographicData
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: "bottom"
+                        }
+                    }
                 }
             ],
-
-            credits: {
-                enabled: false
+            legend: {
+                show: false
             }
         };
 
@@ -715,8 +703,8 @@ Vue.component("filter-status-dashboard", FilterStatusDashboard);
     }
 
     .demographic-div {
-        margin-top: -4px;
-        height: 200px;
+        display: flex;
+        justify-content: center;
     }
 
     .vip-blackList-div {
