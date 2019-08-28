@@ -1025,6 +1025,7 @@ export default class LangObject {
     w_ReportDashboard_Traffic = 'TRAFFIC';
     w_ReportDashboard_AverageOccupancy = 'AVERAGE OCCUPANCY';
     w_ReportDashboard_AverageDwellTime = 'AVERAGE DWELL TIME(M)';
+    w_ReportDashboard_AverageDwellTime2 = 'AVERAGE DWELL';
     w_ReportDashboard_Demographic = 'DEMOGRAPHIC';
     w_ReportDashboard_VIPBlacklist = 'VIP/BLACKLIST';
     w_ReportDashboard_RepeatCustomer = 'REPEAT CUSTOMER';
