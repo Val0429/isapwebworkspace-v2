@@ -4,9 +4,10 @@
         <iv-card
             :label="_('w_DashboardOverview_FilterStatus')"
             :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
+            class="font-3xl"
         >
             <div class="row ">
-                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
+                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2 font-sm">
                     <div class="box current-info-box">
                         <div
                             :class="currentStatus.isTraffic ? 'backgroundColor selected' : 'backgroundColor'"
@@ -25,7 +26,7 @@
                 </div>
                 <!--/col-->
 
-                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
+                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2 font-sm">
                     <div class="box current-info-box">
                         <div
                             :class="currentStatus.isOccupancy ? 'backgroundColor selected' : 'backgroundColor'"
@@ -35,7 +36,9 @@
                                 <span class="title">{{_("w_ReportDashboard_AverageOccupancy")}} </span>
                             </div>
                             <div class="clearfix">
-                                <span class="date">{{anlysisData.averageOccupancy.total != null ? numberWithCommas(anlysisData.averageOccupancy.total) : "N/A"}}</span>
+                                <span class="date"
+                                      style="margin-top: 30px;"
+                                >{{anlysisData.averageOccupancy.total != null ? numberWithCommas(anlysisData.averageOccupancy.total) : "N/A"}}</span>
                                 <span v-if="eSign.none != anlysisData.averageOccupancy.sign">{{eSign.positive == anlysisData.averageOccupancy.sign ? '▲':'▼'}}</span>
                                 <span>{{anlysisData.averageOccupancy.valueRatio != null ? toPercent(anlysisData.averageOccupancy.valueRatio,1) : "N/A"}}</span>
                             </div>
@@ -44,7 +47,7 @@
                 </div>
                 <!--/col-->
 
-                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
+                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2 font-sm">
                     <div class="box current-info-box">
                         <div
                             :class="currentStatus.isDwellTime ? 'backgroundColor selected' : 'backgroundColor'"
@@ -91,7 +94,7 @@
                 </div>
                 <!--/col-->
 
-                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
+                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2 font-sm">
                     <div class="box current-info-box">
                         <div
                             :class="currentStatus.isVipBlacklist ? 'backgroundColor selected' : 'backgroundColor'"
@@ -106,12 +109,12 @@
                                         <div>
                                             <span>{{anlysisData.vipBlacklist.value != null ? numberWithCommas(anlysisData.vipBlacklist.value) : "N/A"}} </span>
                                         </div>
-                                        <img src="../../assets/images/vip.png">
+                                        <img src="../../assets/images/vip.png" class="mt-2">
 
-                                        <p>
+                                        <p class=" mb-2">
                                             <div class="clearfix">
                                                 <span v-if="eSign.none != anlysisData.vipBlacklist.sign">{{eSign.positive == anlysisData.vipBlacklist.sign ? '▲':'▼'}}</span>
-                                                <span>{{anlysisData.vipBlacklist.valueRatio1 != null ? toPercent(anlysisData.vipBlacklist.valueRatio1,1) : "N/A"}}</span>
+                                                <span >{{anlysisData.vipBlacklist.valueRatio1 != null ? toPercent(anlysisData.vipBlacklist.valueRatio1,1) : "N/A"}}</span>
                                             </div>
                                     </div>
                                 </div>
@@ -124,8 +127,9 @@
                                         <img
                                             src="../../assets/images/stranger.png"
                                             height="26px"
+                                            class="mt-2"
                                         >
-                                        <p>
+                                        <p class=" mb-2">
                                             <div class="clearfix">
                                                 <span v-if="eSign.none != anlysisData.vipBlacklist.sign2">{{eSign.positive == anlysisData.vipBlacklist.sign2 ? '▲':'▼'}}</span>
                                                 <span>{{anlysisData.vipBlacklist.valueRatio2 != null ? toPercent(anlysisData.vipBlacklist.valueRatio2,1) : "N/A"}}</span>
@@ -138,7 +142,7 @@
                 </div>
                 <!--/col-->
 
-                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
+                <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2 font-sm">
                     <div class="box current-info-box">
                         <div
                             :class="currentStatus.isRepeatCustomer ? 'backgroundColor selected' : 'backgroundColor'"

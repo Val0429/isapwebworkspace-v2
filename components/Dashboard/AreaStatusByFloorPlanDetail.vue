@@ -2,12 +2,13 @@
     <div>
         <iv-card
             :label="currentStatus.isTraffic ? _('w_ReportDashboard_Traffic') :
-             currentStatus.isOccupancy ? _('w_ReportDashboard_AverageOccupancy') : 
-             currentStatus.isDwellTime ? _('w_ReportDashboard_AverageDwellTime') : 
-             currentStatus.isDemographic ? _('w_ReportDashboard_Demographic') : 
-             currentStatus.isVipBlacklist ? _('w_ReportDashboard_VIPBlacklist') : 
+             currentStatus.isOccupancy ? _('w_ReportDashboard_AverageOccupancy') :
+             currentStatus.isDwellTime ? _('w_ReportDashboard_AverageDwellTime') :
+             currentStatus.isDemographic ? _('w_ReportDashboard_Demographic') :
+             currentStatus.isVipBlacklist ? _('w_ReportDashboard_VIPBlacklist') :
              _('w_ReportDashboard_RepeatCustomer')"
             :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
+            class="font-lg font-weight-bold"
         >
 
             <template #toolbox>
@@ -47,6 +48,7 @@
             </template>
             <image-map
                 ref="imageMap"
+                class="font-sm font-weight-lighter"
                 v-on:click-add-tag-label="pageAddDeviceGroup"
                 v-on:click-edit-tag-label="pageEditDeviceGroup"
                 v-on:click-device="clickDevice"
@@ -57,7 +59,7 @@
 
             <site-area-Group-device-filter
                 :deviceType="deviceType"
-                class="mt-3"
+                class="mt-3 font-sm font-weight-lighter"
             ></site-area-Group-device-filter>
 
         </iv-card>

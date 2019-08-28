@@ -31,7 +31,7 @@ import {EMode} from "@/components/Dashboard/models/EDashboard";
                 </iv-toolbox-dashboard-refresh>
             </template>
 
-            <h5 class="mb-3">{{ modeParam.modeTitle }}</h5>
+            <h5 class="mb-3 font-weight-bold">{{ modeParam.modeTitle }}</h5>
 
             <highcharts
                 ref="highcharts"
@@ -155,6 +155,7 @@ export class Top5sites extends Vue {
             credits: {
                 enabled: false
             },
+            colors:['#5C94FB'],
             series: [
                 {
                     name: tempName,
