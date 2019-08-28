@@ -10,6 +10,7 @@ export default class LangObject {
     w_Password = 'Password';
     w_Selection = 'Selection';
     w_Multi = 'Multi';
+    w_Information = 'Information';
 
     w_Username = 'User name';
     w_Roles = 'Role';

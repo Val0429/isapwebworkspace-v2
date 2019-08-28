@@ -1,29 +1,31 @@
 <template>
     <div class="animated fadeIn">
-
-        <iv-auto-transition
-            :step="transition.step"
-            :type="transition.type"
-        >
-
-            <div
-                key="transition_1"
-                v-show="transition.step === 1"
-                :label="'Empty 1'"
-            >
-                Empty 1
+        <div class="row">
+            <div class="col-md-9">
+                <l-map
+                    class="l-map"
+                    :zoom="zoom"
+                    :center="center"
+                >
+                    <l-tile-layer
+                        :url="url"
+                        :attribution="attribution"
+                    ></l-tile-layer>
+                    <l-marker
+                        :lat-lng="marker"
+                        @click="click($event)"
+                    ></l-marker>
+                </l-map>
             </div>
 
-            <div
-                key="transition_2"
-                v-show="transition.step === 2"
-                :label="'Empty 2'"
-            >
-                Empty 2
+            <div class="col-md-3">
+                <iv-card
+                    :label="_('w_Information')"
+                    :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
+                >
+                </iv-card>
             </div>
-
-        </iv-auto-transition>
-
+        </div>
     </div>
 </template>
 
@@ -37,23 +39,49 @@ import { ITransition } from "@/services/Transition";
 // Service
 import Dialog from "@/services/Dialog";
 
+//Map
+import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
+import { Icon, DefaultMapPanes, latLng, tileLayer } from "leaflet";
+import "leaflet/dist/leaflet.css";
+Vue.component("l-map", LMap);
+Vue.component("l-tile-layer", LTileLayer);
+Vue.component("l-marker", LMarker);
+
+delete (Icon.Default.prototype as any)._getIconUrl;
+
+Icon.Default.mergeOptions({
+    iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
+    iconUrl: require("leaflet/dist/images/marker-icon.png"),
+    shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+});
+
 @Component({
     components: {}
 })
 export default class Map extends Vue {
-    transition: ITransition = {
-        type: Transition.type,
-        prevStep: 1,
-        step: 1
-    };
+    zoom = 13;
+    center = latLng(25.041629, 121.543767);
+    url = "http://{s}.tile.osm.org/{z}/{x}/{y}.png";
+    attribution =
+        '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
+    marker = latLng(25.041629, 121.543767);
 
     created() {}
 
     mounted() {}
+
+    click(data) {
+        console.log("click", data);
+        alert(JSON.stringify(data.latlng));
+    }
 }
 </script>
 
 <style lang="scss" scoped>
+.l-map {
+    height: 700px;
+    margin: 0;
+}
 </style>
 
 
