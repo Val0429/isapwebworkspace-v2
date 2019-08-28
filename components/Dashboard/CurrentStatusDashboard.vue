@@ -94,10 +94,13 @@
                             <span class="title">{{_("w_ReportDashboard_Demographic")}} {{_("w_DashboardOverview_Now")}}</span>
                         </div>
                         <div class="clearfix">
-                            <highcharts
+                            <apexchart
                                 class="demographic-div"
+                                type=donut
+                                width=150
                                 :options="chartOptions.demographic"
-                            ></highcharts>
+                                :series="chartOptions.demographic.series"
+                            />
                         </div>
                     </div>
                 </div>
@@ -484,35 +487,22 @@ export class CurrentStatusDashboard extends Vue {
         ];
 
         this.chartOptions.demographic = {
-            chart: { zoomType: "x", height: "130px" },
-            exporting: { enabled: false },
-            title: {
-                text:
-                    this._("w_ReportDashboard_Demographic") +
-                    " " +
-                    this._("w_DashboardOverview_Now"),
-                style:
-                    "font-weight: bold; font-size: 12px; margin: 0; padding: 0; display: flex; justify-content: center;"
-            },
-            subtitle: { text: null },
-            tooltip: {
-                enabled: true,
-                pointFormat:
-                    '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/>' +
-                    "Area (square km): <b>{point.y}</b>"
-            },
-            series: [
+            series: [44, 55],
+            responsive: [
                 {
-                    type: "pie",
-                    size: "140%",
-                    innerSize: "60%",
-                    label: { enabled: true },
-                    data: demographicData
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: "bottom"
+                        }
+                    }
                 }
             ],
-
-            credits: {
-                enabled: false
+            legend: {
+                show: false
             }
         };
 
@@ -639,8 +629,9 @@ Vue.component("current-status-dashboard", CurrentStatusDashboard);
     }
 
     .demographic-div {
-        margin-top: -20px;
-        height: 200px;
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
     }
 
     .vip-blackList-div {

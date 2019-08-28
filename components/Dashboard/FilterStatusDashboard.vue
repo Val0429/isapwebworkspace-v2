@@ -76,10 +76,13 @@
                                 <span class="title">{{_("w_ReportDashboard_Demographic")}}</span>
                             </div>
                             <div class="clearfix">
-                                <highcharts
-                                    class="demographic-div"
+                                <apexchart
+                                    type=donut
+                                    width=150
                                     :options="chartOptions.demographic"
-                                ></highcharts>
+                                    :series="chartOptions.demographic.series"
+                                />
+
                                 <div class="charfix">
                                     <span v-if="eSign.none != anlysisData.demographic.sign">{{eSign.positive == anlysisData.demographic.sign ? '▲':'▼'}}</span>
                                     <span>{{anlysisData.demographic.valueRatio != null ? toPercent(anlysisData.demographic.valueRatio,1) : "N/A"}}</span>
@@ -149,7 +152,7 @@
                             <div class="clearfix">
                                 <apexchart
                                     type=radialBar
-                                    height=180
+                                    height=170
                                     :options="chartOptions.repeatCustomer"
                                     :series="chartOptions.repeatCustomer.series"
                                 />
@@ -506,32 +509,22 @@ export class FilterStatusDashboard extends Vue {
         ];
 
         this.chartOptions.demographic = {
-            chart: { zoomType: "x", height: "116px" },
-            exporting: { enabled: false },
-            title: {
-                text: null,
-                style:
-                    "font-weight: bold; font-size: 12px; margin: 0; padding: 0; display: flex; justify-content: center;"
-            },
-            subtitle: { text: null },
-            tooltip: {
-                enabled: true,
-                pointFormat:
-                    '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/>' +
-                    "Area (square km): <b>{point.y}</b>"
-            },
-            series: [
+            series: [44, 55],
+            responsive: [
                 {
-                    type: "pie",
-                    size: "80%",
-                    innerSize: "60%",
-                    label: { enabled: true },
-                    data: demographicData
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: "bottom"
+                        }
+                    }
                 }
             ],
-
-            credits: {
-                enabled: false
+            legend: {
+                show: false
             }
         };
 
