@@ -2,7 +2,7 @@
 
     <iv-toolbox-element-base
         v-bind="$attrs"
-        :title="_('w_ReportDashboard_VIPBlacklist')"
+        :title="_('w_VIPAndBlackList_TableTitleVip')"
         :icon="iconDisabled ? 'fa fa-check  isap-toolbox-icon' : 'fa isap-toolbox-icon'"
         v-show="visible"
         :variant="variant"
@@ -83,6 +83,8 @@ export class ToolboxDashboardVip extends Vue {
         default: true
     })
     iconDisabled!: boolean;
+
+    created(){}
 
     @Emit()
     click(event) {

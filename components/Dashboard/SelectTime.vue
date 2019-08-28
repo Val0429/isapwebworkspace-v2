@@ -2,10 +2,14 @@
     <div>
         <iv-form :interface="IFilterConditionForm()">
             <template #time="{ $attrs, $listeners }">
+
+                <p class="font-sm col-md-12 ml-1">{{ _("w_Dashboard_SelectTime") }}</p>
+
                 <iv-form-selection
-                    v-bind="$attrs"
                     v-on="$listeners"
                     v-model="time"
+                    class="col-md-12"
+                    :options="timeSelectItem"
                     @input="updateTime($event)"
                 >
                 </iv-form-selection>
@@ -15,13 +19,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
-import { toEnumInterface } from "../../../core";
-import Datetime from "@/services/Datetime";
+    import {Component, Prop, Vue} from "vue-property-decorator";
+    import Datetime from "@/services/Datetime";
 
-import { ETime } from "@/components/Dashboard/index";
+    import {ETime} from "@/components/Dashboard/index";
 
-@Component({
+    @Component({
     components: {}
 })
 export class SelectTime extends Vue {
@@ -32,7 +35,7 @@ export class SelectTime extends Vue {
     })
     timeParam: any;
 
-    timeSelectItem: any = {};
+    timeSelectItem: any = [];
 
     time: string = "today";
 
@@ -43,54 +46,56 @@ export class SelectTime extends Vue {
     mounted() {}
 
     initSelectItem() {
-        this.timeSelectItem = {
-            today: `${this._("w_Dashboard_Today")} ( ${Datetime.CountDateNumber(
-                0
-            )} ~ ${Datetime.CountDateNumber(0)} )`,
-            yesterday: `${this._(
-                "w_Dashboard_Yesterday"
-            )} ( ${Datetime.CountDateNumber(-1)} ~ ${Datetime.CountDateNumber(
-                -1
-            )} )`,
-            last7day: `${this._(
-                "w_Dashboard_Last7Day"
-            )} ( ${Datetime.CountDateNumber(-6)} ~ ${Datetime.CountDateNumber(
-                0
-            )} )`,
-            last14day: `${this._(
-                "w_Dashboard_Last14Day"
-            )} ( ${Datetime.CountDateNumber(-13)} ~ ${Datetime.CountDateNumber(
-                0
-            )} )`,
-            last28day: `${this._(
-                "w_Dashboard_Last28Day"
-            )} ( ${Datetime.CountDateNumber(-27)} ~ ${Datetime.CountDateNumber(
-                0
-            )} )`,
-            last30day: `${this._(
-                "w_Dashboard_Last30Day"
-            )} ( ${Datetime.CountDateNumber(-29)} ~ ${Datetime.CountDateNumber(
-                0
-            )} )`,
-            last60day: `${this._(
-                "w_Dashboard_Last60Day"
-            )} ( ${Datetime.CountDateNumber(-59)} ~ ${Datetime.CountDateNumber(
-                0
-            )} )`,
-            last90day: `${this._(
-                "w_Dashboard_Last90Day"
-            )} ( ${Datetime.CountDateNumber(-89)} ~ ${Datetime.CountDateNumber(
-                0
-            )} )`,
-            last180day: `${this._(
-                "w_Dashboard_Last180Day"
-            )} ( ${Datetime.CountDateNumber(-179)} ~ ${Datetime.CountDateNumber(
-                0
-            )} )`,
-            thisYear: `${this._(
-                "w_thisYear"
-            )} ( ${Datetime.ThisYearStartDate()} ~ ${Datetime.ThisYearEndDate()} )`
-        };
+
+        this.timeSelectItem = [
+            { id: ETime.today, text: `${this._("w_Dashboard_Today")} ( ${Datetime.CountDateNumber(
+                    0
+                )} ~ ${Datetime.CountDateNumber(0)} )`},
+            { id: ETime.yesterday, text:  `${this._(
+                    "w_Dashboard_Yesterday"
+                )} ( ${Datetime.CountDateNumber(-1)} ~ ${Datetime.CountDateNumber(
+                    -1
+                )} )`},
+            { id: ETime.last7day, text: `${this._(
+                    "w_Dashboard_Last7Day"
+                )} ( ${Datetime.CountDateNumber(-6)} ~ ${Datetime.CountDateNumber(
+                    0
+                )} )`},
+            { id: ETime.last14day, text: `${this._(
+                    "w_Dashboard_Last14Day"
+                )} ( ${Datetime.CountDateNumber(-13)} ~ ${Datetime.CountDateNumber(
+                    0
+                )} )`},
+            { id: ETime.last28day, text:  `${this._(
+                    "w_Dashboard_Last28Day"
+                )} ( ${Datetime.CountDateNumber(-27)} ~ ${Datetime.CountDateNumber(
+                    0
+                )} )`},
+            { id: ETime.last30day, text: `${this._(
+                    "w_Dashboard_Last30Day"
+                )} ( ${Datetime.CountDateNumber(-29)} ~ ${Datetime.CountDateNumber(
+                    0
+                )} )`},
+            { id: ETime.last60day, text:  `${this._(
+                    "w_Dashboard_Last60Day"
+                )} ( ${Datetime.CountDateNumber(-59)} ~ ${Datetime.CountDateNumber(
+                    0
+                )} )` },
+            { id: ETime.last90day, text: `${this._(
+                    "w_Dashboard_Last90Day"
+                )} ( ${Datetime.CountDateNumber(-89)} ~ ${Datetime.CountDateNumber(
+                    0
+                )} )`},
+            { id: ETime.last180day, text: `${this._(
+                    "w_Dashboard_Last180Day"
+                )} ( ${Datetime.CountDateNumber(-179)} ~ ${Datetime.CountDateNumber(
+                    0
+                )} )`},
+            { id: ETime.thisYear, text: `${this._(
+                    "w_thisYear"
+                )} ( ${Datetime.ThisYearStartDate()} ~ ${Datetime.ThisYearEndDate()} )`},
+        ]
+
         this.numberOfDaysDifference(
             this.timeParam.startDate,
             this.timeParam.endDate
@@ -242,7 +247,7 @@ export class SelectTime extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Dashboard_SelectTime")}
                  */
-                time?: ${toEnumInterface(this.timeSelectItem as any, false)};
+                time?: any;
 
             }
         `;
