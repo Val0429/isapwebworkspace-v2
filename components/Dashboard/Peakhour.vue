@@ -140,6 +140,34 @@ export class Peakhour extends Vue {
         // TODO: Wait API
         this.series = [
             {
+                name: `11${this._("mb_DateTime_LowerPM")}`,
+                data: this.developData(7, { min: -30, max: 55 })
+            },
+            {
+                name: `10${this._("mb_DateTime_LowerPM")}`,
+                data: this.developData(7, { min: -30, max: 55 })
+            },
+            {
+                name: `9${this._("mb_DateTime_LowerPM")}`,
+                data: this.developData(7, { min: -30, max: 55 })
+            },
+            {
+                name: `8${this._("mb_DateTime_LowerPM")}`,
+                data: this.developData(7, { min: -30, max: 55 })
+            },
+            {
+                name: `7${this._("mb_DateTime_LowerPM")}`,
+                data: this.developData(7, { min: -30, max: 55 })
+            },
+            {
+                name: `6${this._("mb_DateTime_LowerPM")}`,
+                data: this.developData(7, { min: -30, max: 55 })
+            },
+            {
+                name: `5${this._("mb_DateTime_LowerPM")}`,
+                data: this.developData(7, { min: -30, max: 55 })
+            },
+            {
                 name: `5${this._("mb_DateTime_LowerPM")}`,
                 data: this.developData(7, { min: -30, max: 55 })
             },
@@ -156,7 +184,7 @@ export class Peakhour extends Vue {
                 data: this.developData(7, { min: -30, max: 55 })
             },
             {
-                name: `1${this._("mb_DateTime_LowerPM")}`,
+                name: ' ',
                 data: this.developData(7, { min: -30, max: 55 })
             },
             {
@@ -174,6 +202,45 @@ export class Peakhour extends Vue {
             {
                 name: `9${this._("mb_DateTime_LowerAM")}`,
                 data: this.developData(7, { min: -30, max: 55 })
+            },
+            {
+                name: `8${this._("mb_DateTime_LowerAM")}`,
+                data: this.developData(7, { min: -30, max: 55 })
+            },
+            {
+                name: `7${this._("mb_DateTime_LowerAM")}`,
+                data: this.developData(7, { min: -30, max: 55 })
+            },
+            {
+                name: `6${this._("mb_DateTime_LowerAM")}`,
+                data: this.developData(7, { min: -30, max: 55 })
+            },
+            {
+                name: `5${this._("mb_DateTime_LowerAM")}`,
+                data: this.developData(7, { min: -30, max: 55 })
+            },
+            {
+                name: `4${this._("mb_DateTime_LowerAM")}`,
+                data: this.developData(7, { min: -30, max: 55 })
+            }
+            ,
+            {
+                name: `3${this._("mb_DateTime_LowerAM")}`,
+                data: this.developData(7, { min: -30, max: 55 })
+            }
+            ,
+            {
+                name: `2${this._("mb_DateTime_LowerAM")}`,
+                data: this.developData(7, { min: -30, max: 55 })
+            }
+            ,
+            {
+                name: `1${this._("mb_DateTime_LowerAM")}`,
+                data: this.developData(7, { min: -30, max: 55 })
+            },
+            {
+                name: `0${this._("mb_DateTime_LowerAM")}`,
+                data: this.developData(7, { min: -30, max: 55 })
             }
         ];
 
@@ -189,7 +256,7 @@ export class Peakhour extends Vue {
                     colorScale: {
                         ranges: [
                             {
-                                from: -30,
+                                from: -10000,
                                 to: 5,
                                 name: "",
                                 color: "#F4F6F8"
