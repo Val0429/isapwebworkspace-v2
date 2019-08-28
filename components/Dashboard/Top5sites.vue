@@ -140,10 +140,11 @@ export class Top5sites extends Vue {
         }
 
         this.chartOptions = {
-            chart: { type: "bar" },
+            chart: { type: "bar", height: 150 },
             exporting: { enabled: false },
             title: { text: null },
             subtitle: { text: null },
+
             xAxis: {
                 categories: ["Africa", "America", "Asia", "Europe", "Oceania"],
                 title: null
@@ -152,16 +153,15 @@ export class Top5sites extends Vue {
                 title: null,
                 labels: false
             },
-            credits: {
-                enabled: false
-            },
+            credits: { enabled: false },
+            legend: { enabled: false },
             colors:['#5C94FB'],
             series: [
                 {
                     name: tempName,
                     data: [107, 31, 635, 203, 2]
                 }
-            ]
+            ],
         };
     }
 

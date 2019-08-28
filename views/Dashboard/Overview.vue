@@ -5,17 +5,18 @@
             <current-status-dashboard class="col-md-3" />
             <filter-status-dashboard class="col-md-9" />
 
-            <b-row class="col-md-12" >
-                <b-col>
-                    <peak-hour class="col-md-12" />
-
+            <div class="row" >
+                <b-col cols="6">
+                    <div>
+                        <peak-hour class="col-md-12" />
+                    </div>
                 </b-col>
-                <b-col>
-                    <top-5sites class="col-md-12" />
-                    <bottom-5sites class="col-md-12" />
+                <b-col cols="6">
+                    <top-5sites class="col-md-12 top5"/>
+                    <bottom-5sites class="col-md-12 bottom5" />
                 </b-col>
 
-            </b-row>
+            </div>
 
             <area-status-by-floor-plan class="col-md-12" />
         </div>
@@ -52,6 +53,20 @@ export default class Overview extends Vue {
     width: 73%;
     margin: 1%;
 }
+
+.pickhour {
+    height: 150%;
+}
+
+    .top5 {
+        height: 80%;
+        margin-bottom: -240px;
+    }
+
+    .bottom5 {
+        height: 80%;
+    }
+
 </style>
 
 

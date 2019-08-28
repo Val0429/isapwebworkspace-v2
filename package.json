@@ -8,6 +8,7 @@
         "create-project": "git checkout --orphan"
     },
     "dependencies": {
+        "@types/leaflet": "^1.5.1",
         "apexcharts": "^3.8.4",
         "file-saver": "^2.0.2",
         "heatmap.js": "^2.0.5",
@@ -16,9 +17,11 @@
         "html2canvas": "^1.0.0-rc.3",
         "jspdf": "^1.5.3",
         "jssha": "^2.3.1",
+        "leaflet": "^1.5.1",
         "vue-apexcharts": "^1.4.0",
         "vue-loading-overlay": "^3.2.0",
         "vue-slide-bar": "^1.2.0",
+        "vue2-leaflet": "^2.2.1",
         "xlsx": "^0.14.3"
     },
     "devDependencies": {
