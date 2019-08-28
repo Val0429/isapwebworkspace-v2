@@ -4,9 +4,19 @@
         <div class="row">
             <current-status-dashboard class="col-md-3" />
             <filter-status-dashboard class="col-md-9" />
-            <top-5sites class="col-md-6" />
-            <bottom-5sites class="col-md-6" />
-            <peak-hour class="col-md-12" />
+
+            <b-row class="col-md-12" >
+                <b-col>
+                    <peak-hour class="col-md-12" />
+
+                </b-col>
+                <b-col>
+                    <top-5sites class="col-md-12" />
+                    <bottom-5sites class="col-md-12" />
+                </b-col>
+
+            </b-row>
+
             <area-status-by-floor-plan class="col-md-12" />
         </div>
 
