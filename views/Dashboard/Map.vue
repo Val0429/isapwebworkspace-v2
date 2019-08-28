@@ -19,11 +19,7 @@
             </div>
 
             <div class="col-md-3">
-                <iv-card
-                    :label="_('w_Information')"
-                    :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
-                >
-                </iv-card>
+                <map-status-dashboard />
             </div>
         </div>
     </div>
