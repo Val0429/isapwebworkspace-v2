@@ -1869,7 +1869,7 @@ export default class PeopleCounting extends Vue {
                         customId: data.customId,
                         name: data.name,
                         brand: EAddStep.isap,
-                        model: EAddStep.frs,
+                        model: EAddStep.frsManager,
                         areaId: data.areaId,
                         direction: data.direction,
                         groupIds: data.groupIds !== undefined ? data.groupIds : [],
@@ -1910,7 +1910,7 @@ export default class PeopleCounting extends Vue {
                         objectId: data.objectId,
                         name: data.name,
                         brand: EAddStep.isap,
-                        model: EAddStep.frs,
+                        model: EAddStep.frsManager,
                         areaId: data.areaId,
                         direction: data.direction,
                         groupIds: data.groupIds !== undefined ? data.groupIds : [],
@@ -2429,6 +2429,7 @@ export default class PeopleCounting extends Vue {
                 /**
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiType - iv-form-label
+                 * @uiHidden - ${ this.addStep === EAddStep.frsManager ? "true" : "false" }
                  */
                 sourceidView?: string;
 
