@@ -3,29 +3,33 @@
         <iv-card
             :label="_('w_Dashboard_Top5sites')"
             :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
-
         >
             <template #toolbox>
                 <iv-toolbox-more variant="white">
                     <iv-toolbox-dashboard-traffic
-                        :iconDisabled="currentStatus.isTraffic"
-                        @click="currentStatus.isTraffic = !currentStatus.isTraffic"
+                        :disabled="isClick.isClickTraffic"
+                        :iconDisabled="currentDevice.isTraffic"
+                        @click="clickTraffic()"
                     />
                     <iv-toolbox-dashboard-dwelltime
-                        :iconDisabled="currentStatus.isDwellTime"
-                        @click="currentStatus.isDwellTime = !currentStatus.isDwellTime"
+                        :disabled="isClick.isClickDwellTime"
+                        :iconDisabled="currentDevice.isDwellTime"
+                        @click="clickDwellTime()"
                     />
                     <iv-toolbox-dashboard-vip
-                        :iconDisabled="currentStatus.isVip"
-                        @click="currentStatus.isVip = !currentStatus.isVip"
+                        :disabled="isClick.isClickVip"
+                        :iconDisabled="currentDevice.isVip"
+                        @click="clickVip()"
                     />
                     <iv-toolbox-dashboard-blacklist
-                        :iconDisabled="currentStatus.isBlacklist"
-                        @click="currentStatus.isBlacklist = !currentStatus.isBlacklist"
+                        :disabled="isClick.isClickBlacklist"
+                        :iconDisabled="currentDevice.isBlacklist"
+                        @click="currentDevice.isBlacklist = !currentDevice.isBlacklist"
                     />
                     <iv-toolbox-dashboard-repeatcustomer
-                        :iconDisabled="currentStatus.isRepeatCustomer"
-                        @click="currentStatus.isRepeatCustomer = !currentStatus.isRepeatCustomer"
+                        :disabled="isClick.isClickRepeatCustomer"
+                        :iconDisabled="currentDevice.isRepeatCustomer"
+                        @click="currentDevice.isRepeatCustomer = !currentDevice.isRepeatCustomer"
                     />
                 </iv-toolbox-more>
             </template>
@@ -84,7 +88,9 @@ export class Top5sites extends Vue {
         modeTitle: ""
     };
 
-    currentStatus: {
+    eDeviceMode = EMode;
+
+    currentDevice: {
         isTraffic: boolean;
         isDwellTime: boolean;
         isVip: boolean;
@@ -98,9 +104,24 @@ export class Top5sites extends Vue {
         isRepeatCustomer: false
     };
 
+    isClick: {
+        isClickTraffic: boolean;
+        isClickDwellTime: boolean;
+        isClickVip: boolean;
+        isClickBlacklist: boolean;
+        isClickRepeatCustomer: boolean;
+    } = {
+        isClickTraffic: false,
+        isClickDwellTime: true,
+        isClickVip: true,
+        isClickBlacklist: true,
+        isClickRepeatCustomer: true
+    };
+
     created() {
         this.initCharts();
         this.initData();
+        console.log('isClick ~ ', this.isClick)
     }
 
     mounted() {}
@@ -120,6 +141,75 @@ export class Top5sites extends Vue {
             // endDate: Datetime.DateToZero(new Date(Datetime.ThisYearEndDate()))
         };
     }
+
+    clickTraffic() {
+        this.currentDevice.isTraffic = !this.currentDevice.isTraffic;
+
+        if (this.currentDevice.isTraffic) {
+            this.isClick = {
+                isClickTraffic: false,
+                isClickDwellTime: true,
+                isClickVip: true,
+                isClickBlacklist: true,
+                isClickRepeatCustomer: true
+            };
+        } else {
+            this.isClick = {
+                isClickTraffic: false,
+                isClickDwellTime: false,
+                isClickVip: false,
+                isClickBlacklist: false,
+                isClickRepeatCustomer: false
+            };
+        }
+        console.log("this.isClick ~ ", this.isClick);
+    }
+
+    clickDwellTime() {
+        this.currentDevice.isDwellTime = !this.currentDevice.isDwellTime;
+        if (this.currentDevice.isDwellTime) {
+            this.isClick = {
+                isClickTraffic: true,
+                isClickDwellTime: false,
+                isClickVip: true,
+                isClickBlacklist: true,
+                isClickRepeatCustomer: true
+            };
+        } else {
+            this.isClick = {
+                isClickTraffic: false,
+                isClickDwellTime: false,
+                isClickVip: false,
+                isClickBlacklist: false,
+                isClickRepeatCustomer: false
+            };
+        }
+        console.log("this.isClick ~ ", this.isClick);
+    }
+
+    clickVip() {
+        this.currentDevice.isVip = !this.currentDevice.isVip;
+        if (this.currentDevice.isVip) {
+            this.isClick = {
+                isClickTraffic: true,
+                isClickDwellTime: true,
+                isClickVip: false,
+                isClickBlacklist: true,
+                isClickRepeatCustomer: true
+            };
+        } else {
+            this.isClick = {
+                isClickTraffic: false,
+                isClickDwellTime: false,
+                isClickVip: false,
+                isClickBlacklist: false,
+                isClickRepeatCustomer: false
+            };
+        }
+        console.log("this.isClick ~ ", this.isClick);
+    }
+
+    updateDevice(deviceMode: EMode) {}
 
     initCharts() {
         // 整理 xAxis（y軸）的 site
