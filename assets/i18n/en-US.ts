@@ -61,6 +61,7 @@ export default class LangObject {
     w_Login_Login = 'Login';
     w_Login_LoginTitle = 'Login';
     w_Login_ForgotPassword = 'Forgot Password';
+    w_Login_Error_401 = 'Incorrect username or password';
 
     // Logout
     w_Logout = 'Logout';
