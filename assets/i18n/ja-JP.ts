@@ -671,4 +671,7 @@ export default class LangObject implements ILang {
     update = "Update";
     delete = "Delete";
     ClassName = "項目";
+    w_Download = "Download";
+    w_Member_ExportResult = "Export Result";
+    w_Download_Notify = "Download link will appear soon after the file is ready";
 }

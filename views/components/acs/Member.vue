@@ -1,6 +1,7 @@
 <template>
   <div class="animated fadeIn">
     <iv-modal :label="_('w_MemberFields')" :visible.sync="exportVisible">
+      <h3>{{_("w_Download_Notify")}}</h3>
             <iv-form
                   ref="fieldForm"
                     :interface="exportInterface()"
@@ -17,6 +18,7 @@
                 </iv-form>
                 
         </iv-modal>
+        
         <iv-modal :label="_('w_MemberFields')" :visible.sync="importVisible">
             <iv-form
                   ref="importForm"
@@ -284,7 +286,7 @@ import * as XLSX from 'xlsx';
 // Sort Select
 import { ISortSelectOption } from "@/components/SortSelect";
 import SortSelect from "@/components/SortSelect/SortSelect.vue";
-
+import ServerConfig from "@/services/ServerConfig";
 enum EPageStep {
   list = "list",
   add = "add",
@@ -305,6 +307,8 @@ enum ITemplateCard {
   }
 })
 export default class Member extends Vue {
+  serverUrl = ServerConfig.url;
+  
   beforeMount() {
     if (!this.$user || !this.$user.permissions) return;
     this.permissionName = PermissionName.member;
@@ -471,14 +475,30 @@ export default class Member extends Vue {
         for(let field of this.fieldSelected){          
           extraHeader[field]=this._(field as any);
         }
-        let members:any = await this.$server.C("/acs/exportmember" as any, 
+        let resp:any = await this.$server.C("/acs/exportmember" as any, 
                             { 
                               filter: this.getParams, 
                               fieldSelected:this.fieldSelected,
                               storedPermissionOptions:this.storedPermissionOptions,
                               extraHeader
                             });
-       
+       if(resp.file){
+         let downloadFileFunc = async()=>{
+           try{
+              
+              let respCheckFile:any = await this.$server.R("acs/exportmember" as any, {fileName:resp.file});
+              console.log("respCheckFile", respCheckFile.ready);
+              if(!respCheckFile.ready) throw new Error("file is not ready");    
+              window.location.href = this.serverUrl+"files/"+resp.file+"?sessionId="+this.$user.sessionId;
+              
+           }catch(err){
+             console.error("error checking file", err);
+             setTimeout(downloadFileFunc, 3000);
+           }
+         };
+         
+         setTimeout(downloadFileFunc, 3000);
+       }
         this.exportVisible=false;
         this.fieldSelected=[];
         this.fieldOptions = this.savedFieldOptions;
