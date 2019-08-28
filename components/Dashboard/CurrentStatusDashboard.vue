@@ -35,7 +35,7 @@
             </template>
 
             <div
-                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12 p-1"
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12 p-2"
                 :hidden="!currentStatus.isTraffic"
             >
                 <div class="box current-info-box">
@@ -86,7 +86,7 @@
             <!--/col-->
 
             <div
-                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12 p-1"
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12 p-2"
                 :hidden="!currentStatus.isDemographic"
             >
                 <div class="box current-info-box">
