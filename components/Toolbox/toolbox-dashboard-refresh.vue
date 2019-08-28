@@ -2,7 +2,7 @@
 
     <iv-toolbox-element-base
         v-bind="$attrs"
-        :title="_('w_ReportDashboard_Traffic')"
+        :title="_('w_Switch')"
         icon="fa fa-refresh isap-toolbox-icon"
         v-show="visible"
         :variant="variant"

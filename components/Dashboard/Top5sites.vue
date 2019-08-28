@@ -1,37 +1,34 @@
+import {EMode} from "@/components/Dashboard/models/EDashboard";
 <template>
     <div>
         <iv-card
             :label="_('w_Dashboard_Top5sites')"
             :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
+            class="font-3xl"
         >
             <template #toolbox>
-                <iv-toolbox-more variant="white">
+                <iv-toolbox-dashboard-refresh variant="white">
                     <iv-toolbox-dashboard-traffic
-                        :disabled="isClick.isClickTraffic"
                         :iconDisabled="currentDevice.isTraffic"
-                        @click="clickTraffic()"
+                        @click="changeDevice('isTraffic')"
                     />
                     <iv-toolbox-dashboard-dwelltime
-                        :disabled="isClick.isClickDwellTime"
                         :iconDisabled="currentDevice.isDwellTime"
-                        @click="clickDwellTime()"
+                        @click="changeDevice('isDwellTime')"
                     />
                     <iv-toolbox-dashboard-vip
-                        :disabled="isClick.isClickVip"
                         :iconDisabled="currentDevice.isVip"
-                        @click="clickVip()"
+                        @click="changeDevice('isVip')"
                     />
                     <iv-toolbox-dashboard-blacklist
-                        :disabled="isClick.isClickBlacklist"
                         :iconDisabled="currentDevice.isBlacklist"
-                        @click="currentDevice.isBlacklist = !currentDevice.isBlacklist"
+                        @click="changeDevice('isBlacklist')"
                     />
                     <iv-toolbox-dashboard-repeatcustomer
-                        :disabled="isClick.isClickRepeatCustomer"
                         :iconDisabled="currentDevice.isRepeatCustomer"
-                        @click="currentDevice.isRepeatCustomer = !currentDevice.isRepeatCustomer"
+                        @click="changeDevice('isRepeatCustomer')"
                     />
-                </iv-toolbox-more>
+                </iv-toolbox-dashboard-refresh>
             </template>
 
             <h5 class="mb-3">{{ modeParam.modeTitle }}</h5>
@@ -41,38 +38,26 @@
                 :options="chartOptions"
             ></highcharts>
 
-            <b-row>
-                <select-device-type
-                    class="col-md-6"
-                    :modeParam="modeParam"
-                    @mode="receiveMode"
-                ></select-device-type>
-                <select-time
-                    class="col-md-6"
-                    :timeParam="timeParam"
-                    @updateTime="receiveTime"
-                ></select-time>
-            </b-row>
+
+            <select-time
+                :timeParam="timeParam"
+                @updateTime="receiveTime"
+            ></select-time>
 
         </iv-card>
     </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+    import {Component, Vue} from "vue-property-decorator";
+    /// install Highcharts
+    import HighchartsVue from "highcharts-vue";
+    import Datetime from "@/services/Datetime";
+    import {EMode} from "@/components/Dashboard/index";
 
-/// install Highcharts
-import Highcharts from "highcharts";
-import HighchartsVue from "highcharts-vue";
-import Loading from "@/services/Loading";
-import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog";
-import Datetime from "@/services/Datetime";
-Vue.use(HighchartsVue);
+    Vue.use(HighchartsVue);
 
-import { EMode } from "@/components/Dashboard/index";
-
-@Component({
+    @Component({
     components: {}
 })
 export class Top5sites extends Vue {
@@ -88,8 +73,6 @@ export class Top5sites extends Vue {
         modeTitle: ""
     };
 
-    eDeviceMode = EMode;
-
     currentDevice: {
         isTraffic: boolean;
         isDwellTime: boolean;
@@ -104,24 +87,9 @@ export class Top5sites extends Vue {
         isRepeatCustomer: false
     };
 
-    isClick: {
-        isClickTraffic: boolean;
-        isClickDwellTime: boolean;
-        isClickVip: boolean;
-        isClickBlacklist: boolean;
-        isClickRepeatCustomer: boolean;
-    } = {
-        isClickTraffic: false,
-        isClickDwellTime: true,
-        isClickVip: true,
-        isClickBlacklist: true,
-        isClickRepeatCustomer: true
-    };
-
     created() {
         this.initCharts();
         this.initData();
-        console.log('isClick ~ ', this.isClick)
     }
 
     mounted() {}
@@ -142,74 +110,22 @@ export class Top5sites extends Vue {
         };
     }
 
-    clickTraffic() {
-        this.currentDevice.isTraffic = !this.currentDevice.isTraffic;
-
-        if (this.currentDevice.isTraffic) {
-            this.isClick = {
-                isClickTraffic: false,
-                isClickDwellTime: true,
-                isClickVip: true,
-                isClickBlacklist: true,
-                isClickRepeatCustomer: true
-            };
-        } else {
-            this.isClick = {
-                isClickTraffic: false,
-                isClickDwellTime: false,
-                isClickVip: false,
-                isClickBlacklist: false,
-                isClickRepeatCustomer: false
-            };
+    changeDevice(type) {
+        for (let status of Object.keys(this.currentDevice)) {
+            this.currentDevice[status] = false;
         }
-        console.log("this.isClick ~ ", this.isClick);
-    }
+        this.currentDevice[type] = !this.currentDevice[type];
 
-    clickDwellTime() {
-        this.currentDevice.isDwellTime = !this.currentDevice.isDwellTime;
         if (this.currentDevice.isDwellTime) {
-            this.isClick = {
-                isClickTraffic: true,
-                isClickDwellTime: false,
-                isClickVip: true,
-                isClickBlacklist: true,
-                isClickRepeatCustomer: true
-            };
+            this.modeParam.type = EMode.dwellTime;
+            this.modeParam.modeTitle = this._("w_Dashboard_Minutes")
         } else {
-            this.isClick = {
-                isClickTraffic: false,
-                isClickDwellTime: false,
-                isClickVip: false,
-                isClickBlacklist: false,
-                isClickRepeatCustomer: false
-            };
+            this.modeParam.type = EMode.peopleCounting;
+            this.modeParam.modeTitle = this._("w_Navigation_RuleAndActions_Traffic")
         }
-        console.log("this.isClick ~ ", this.isClick);
-    }
 
-    clickVip() {
-        this.currentDevice.isVip = !this.currentDevice.isVip;
-        if (this.currentDevice.isVip) {
-            this.isClick = {
-                isClickTraffic: true,
-                isClickDwellTime: true,
-                isClickVip: false,
-                isClickBlacklist: true,
-                isClickRepeatCustomer: true
-            };
-        } else {
-            this.isClick = {
-                isClickTraffic: false,
-                isClickDwellTime: false,
-                isClickVip: false,
-                isClickBlacklist: false,
-                isClickRepeatCustomer: false
-            };
-        }
-        console.log("this.isClick ~ ", this.isClick);
+        this.initCharts();
     }
-
-    updateDevice(deviceMode: EMode) {}
 
     initCharts() {
         // 整理 xAxis（y軸）的 site
