@@ -1021,6 +1021,7 @@ export default class LangObject {
     w_Title_One_EventName = ' Selected event : ';
 
     // Report Dashboard
+    w_ReportDashboard_Refresh = 'Refresh';
     w_ReportDashboard_Traffic = 'TRAFFIC';
     w_ReportDashboard_AverageOccupancy = 'AVERAGE OCCUPANCY';
     w_ReportDashboard_AverageDwellTime = 'AVERAGE DWELL TIME(M)';
