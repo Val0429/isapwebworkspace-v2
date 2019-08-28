@@ -594,7 +594,7 @@ Vue.component("current-status-dashboard", CurrentStatusDashboard);
 }
 
 .current-info-box {
-    border: 1px solid #4d5256;
+    border-bottom: 1px solid #4d5256;
     margin: 0 0 30px 0;
 
     .backgroundColor {
