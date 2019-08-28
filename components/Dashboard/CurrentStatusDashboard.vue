@@ -3,6 +3,7 @@
         <iv-card
             :label="_('w_DashboardOverview_CurrentStatus')"
             :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
+            class="font-3xl"
         >
             <template #toolbox>
                 <iv-toolbox-dashboard-refresh variant="white">
@@ -34,7 +35,7 @@
             </template>
 
             <div
-                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12 p-1"
                 :hidden="!currentStatus.isTraffic"
             >
                 <div class="box current-info-box">
@@ -51,7 +52,7 @@
             <!--/col-->
 
             <div
-                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12 p-2"
                 :hidden="!currentStatus.isOccupancy"
             >
                 <div class="box current-info-box">
@@ -68,7 +69,7 @@
             <!--/col-->
 
             <div
-                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12 p-2"
                 :hidden="!currentStatus.isDwellTime"
             >
                 <div class="box current-info-box">
@@ -85,7 +86,7 @@
             <!--/col-->
 
             <div
-                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12 p-1"
                 :hidden="!currentStatus.isDemographic"
             >
                 <div class="box current-info-box">
@@ -105,7 +106,7 @@
             <!--/col-->
 
             <div
-                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12 p-2"
                 :hidden="!currentStatus.isVipBlacklist"
             >
                 <div class="box current-info-box">
@@ -138,7 +139,7 @@
             <!--/col-->
 
             <div
-                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12"
+                class="col-lg-12 col-sm-12 col-xs-12 col-xxs-12 p-2"
                 :hidden="!currentStatus.isRepeatCustomer"
             >
                 <div class="box current-info-box">
