@@ -554,7 +554,7 @@ async doExport(){
         this.inputFormData.permissionName = this.selectedDetail.tablename;
         if(!this.selectedDetail.accesslevels)return;
         for (const tempAccesslevels of this.selectedDetail.accesslevels) {
-            
+            console.log("tempAccesslevels", tempAccesslevels);
             if (!tempAccesslevels.type) continue;
 
             let deviceData: any = {
@@ -591,7 +591,7 @@ async doExport(){
                     //deviceData.area.text = origin.area.name;
                     break;
                 case EDeviceType.elevator:
-                    console.log("tempAccesslevels", tempAccesslevels);
+                    
                     if (!tempAccesslevels.elevator) break;
                     deviceData.deviceName.id = tempAccesslevels.elevator.objectId;
                     origin = this.selectItemOriginal.elevator.find(x=>x.objectId == deviceData.deviceName.id);                        
@@ -614,7 +614,6 @@ async doExport(){
                     if(!origin.area )break
                     //deviceData.area.id = origin.area.name;
                     //deviceData.area.text = origin.area.name;
-                    break;
                     break;
                 case EDeviceType.none:
                 default:
