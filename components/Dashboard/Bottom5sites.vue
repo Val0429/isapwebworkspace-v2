@@ -140,7 +140,7 @@ import {EMode} from "@/components/Dashboard/models/EDashboard";
             }
 
             this.chartOptions = {
-                chart: { type: "bar" },
+                chart: { type: "bar", height: 150 },
                 exporting: { enabled: false },
                 title: { text: null },
                 subtitle: { text: null },
@@ -152,9 +152,8 @@ import {EMode} from "@/components/Dashboard/models/EDashboard";
                     title: null,
                     labels: false
                 },
-                credits: {
-                    enabled: false
-                },
+                credits: { enabled: false },
+                legend: { enabled: false },
                 colors:['#FD6893'],
                 series: [
                     {

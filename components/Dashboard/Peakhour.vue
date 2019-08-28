@@ -46,7 +46,7 @@ export class Peakhour extends Vue {
     series: any = [];
 
     chartItem = {
-        height: 550
+        height: 480
     };
 
     created() {

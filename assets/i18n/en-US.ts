@@ -222,8 +222,8 @@ export default class LangObject {
     w_WrongURL = 'URL Wrong';
 
     w_PeakHours = 'PEAK HOURS';
-    w_SelectSiteTree = 'Select store tree';
-    w_SelectRegionTree = 'Select region tree';
+    w_SelectSiteTree = 'Store Tree';
+    w_SelectRegionTree = 'Region Tree';
 
     w_Camera_lines = 'Camera Lines';
 
@@ -1176,7 +1176,7 @@ export default class LangObject {
     w_Dashboard_Bottom5sites = 'Bottom 5 sites';
     w_Dashboard_PeakHour = 'Peak Hour';
 
-    w_Dashboard_SelectTime = 'Select Time';
+    w_Dashboard_SelectTime = 'Select Date Designation';
     w_Dashboard_Today = 'Today';
     w_Dashboard_Yesterday = 'Yesterday';
     w_Dashboard_LastDay = 'Last  Day';
