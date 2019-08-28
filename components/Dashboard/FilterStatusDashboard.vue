@@ -5,10 +5,10 @@
             :label="_('w_DashboardOverview_FilterStatus')"
             :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
         >
-            <div class="row">
+            <div class="row ">
                 <div class="col-lg-2 col-sm-2 col-xs-2 col-xxs-2">
                     <div class="box current-info-box">
-                        <div class="backgroundColor">
+                        <div class="backgroundColor selected">
                             <div class="clearfix">
                                 <span class="title">{{_("w_ReportDashboard_Traffic")}} </span>
                             </div>
@@ -219,7 +219,7 @@ export class FilterStatusDashboard extends Vue {
         endDate: new Date()
     };
 
-    radioName: string = 'AreaStatusByFloorPlanDetail';
+    radioName: string = "AreaStatusByFloorPlanDetail";
 
     created() {}
 
@@ -465,7 +465,7 @@ export class FilterStatusDashboard extends Vue {
         ];
 
         this.chartOptions.demographic = {
-            chart: { zoomType: "x", height: "110px" },
+            chart: { zoomType: "x", height: "116px" },
             exporting: { enabled: false },
             title: {
                 text: null,
@@ -621,7 +621,7 @@ Vue.component("filter-status-dashboard", FilterStatusDashboard);
 }
 
 .current-info-box {
-    border: 1px solid #4d5256;
+    border: 1px solid #cad5db;
     margin: 0 0 30px 0;
 
     .backgroundColor {
@@ -632,7 +632,7 @@ Vue.component("filter-status-dashboard", FilterStatusDashboard);
 }
 
 .backgroundColor.selected {
-    background: #4d5256;
+    background: #cad5db;
     color: white;
 }
 
@@ -661,9 +661,6 @@ Vue.component("filter-status-dashboard", FilterStatusDashboard);
         justify-content: center;
     }
 
-    .ratio {
-    }
-
     .right {
         float: right;
     }
@@ -673,7 +670,7 @@ Vue.component("filter-status-dashboard", FilterStatusDashboard);
     }
 
     .demographic-div {
-        margin-top: 0px;
+        margin-top: -4px;
         height: 200px;
     }
 
