@@ -220,9 +220,6 @@ export default class SetupsAccount extends Vue {
         this.initSelectItem();
         this.clearInputData();
         this.getInputData();
-        if (RoleService.haveAdministrator(this)) {
-            this.initSelectItemFloorWithCompany(this.inputFormData.companies);
-        }
     }
 
     async doDelete() {
@@ -269,6 +266,18 @@ export default class SetupsAccount extends Vue {
         if (RoleService.haveAdministrator(this)) {
             await this.initSelectItemRole();
             await this.initSelectItemCompanyWithAPI();
+
+            for (const param of this.selectedDetail) {
+                if (
+                    param.data != undefined &&
+                    param.data.company != undefined &&
+                    param.data.company.objectId != undefined
+                ) {
+                    await this.initSelectItemFloorWithCompany(
+                        param.data.company.objectId
+                    );
+                }
+            }
         }
 
         if (RoleService.haveTenantAdministrator(this)) {
@@ -402,6 +411,7 @@ export default class SetupsAccount extends Vue {
         for (let company of this.companies) {
             if (companyId == company.objectId) {
                 for (let floor of company.floor) {
+                    console.log("!!! floor", floor);
                     this.$set(
                         this.selectItem.floor,
                         floor.objectId,
