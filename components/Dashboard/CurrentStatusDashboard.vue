@@ -2,32 +2,32 @@
     <div>
         <iv-card :label="_('w_DashboardOverview_CurrentStatus')">
             <template #toolbox>
-                <iv-toolbox-more>
+                <iv-toolbox-dashboard-refresh>
                     <iv-toolbox-dashboard-traffic
                         :iconDisabled="currentStatus.isTraffic"
-                        @click="currentStatus.isTraffic = !currentStatus.isTraffic"
+                        @click="countCurrentStatus('isTraffic')"
                     />
                     <iv-toolbox-dashboard-occupancy
                         :iconDisabled="currentStatus.isOccupancy"
-                        @click="currentStatus.isOccupancy = !currentStatus.isOccupancy"
+                        @click="countCurrentStatus('isOccupancy')"
                     />
                     <iv-toolbox-dashboard-dwelltime
                         :iconDisabled="currentStatus.isDwellTime"
-                        @click="currentStatus.isDwellTime = !currentStatus.isDwellTime"
+                        @click="countCurrentStatus('isDwellTime')"
                     />
                     <iv-toolbox-dashboard-demographic
                         :iconDisabled="currentStatus.isDemographic"
-                        @click="currentStatus.isDemographic = !currentStatus.isDemographic"
+                        @click="countCurrentStatus('isDemographic')"
                     />
                     <iv-toolbox-dashboard-vipblacklist
                         :iconDisabled="currentStatus.isVipBlacklist"
-                        @click="currentStatus.isVipBlacklist = !currentStatus.isVipBlacklist"
+                        @click="countCurrentStatus('isVipBlacklist')"
                     />
                     <iv-toolbox-dashboard-repeatcustomer
                         :iconDisabled="currentStatus.isRepeatCustomer"
-                        @click="currentStatus.isRepeatCustomer = !currentStatus.isRepeatCustomer"
+                        @click="countCurrentStatus('isRepeatCustomer')"
                     />
-                </iv-toolbox-more>
+                </iv-toolbox-dashboard-refresh>
             </template>
 
             <div
@@ -206,6 +206,8 @@ export class CurrentStatusDashboard extends Vue {
         repeatCustomer: {}
     };
 
+    maxcurrentStatus = 4;
+
     currentStatus: {
         isTraffic: boolean;
         isOccupancy: boolean;
@@ -216,16 +218,33 @@ export class CurrentStatusDashboard extends Vue {
     } = {
         isTraffic: true,
         isOccupancy: true,
-        isDwellTime: true,
+        isDwellTime: false,
         isDemographic: true,
         isVipBlacklist: true,
-        isRepeatCustomer: true
+        isRepeatCustomer: false
     };
 
     created() {}
 
     mounted() {
         this.initData();
+    }
+
+    countCurrentStatus(type) {
+        this.currentStatus[type] = !this.currentStatus[type];
+
+        let count = 0;
+
+        for (let status of Object.keys(this.currentStatus)) {
+            if (this.currentStatus[status] === true) {
+                count++;
+            }
+        }
+
+        if (this.maxcurrentStatus < count) {
+            this.currentStatus[type] = !this.currentStatus[type];
+            return;
+        }
     }
 
     async initData() {

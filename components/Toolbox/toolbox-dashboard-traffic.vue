@@ -80,7 +80,7 @@ export class ToolboxDashboardTraffic extends Vue {
     @Prop({
         type: Boolean,
         required: false,
-        default: true
+        default: false
     })
     iconDisabled!: boolean;
 
