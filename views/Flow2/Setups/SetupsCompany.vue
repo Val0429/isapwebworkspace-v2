@@ -322,7 +322,14 @@ export default class SetupsCompany extends Vue {
     }
 
     addContactNumber() {
+        console.log(this.inputFormData.contactNumber);
+
         if (!this.inputFormData.contactNumber) {
+            return false;
+        }
+
+        if (!RegexServices.number(this.inputFormData.contactNumber)) {
+            Dialog.error(this._("w_Company_ErrorContactNumberNotNumber"));
             return false;
         }
 

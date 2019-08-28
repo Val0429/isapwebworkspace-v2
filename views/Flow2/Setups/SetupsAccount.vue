@@ -220,6 +220,9 @@ export default class SetupsAccount extends Vue {
         this.initSelectItem();
         this.clearInputData();
         this.getInputData();
+        if (RoleService.haveAdministrator(this)) {
+            this.initSelectItemFloorWithCompany(this.inputFormData.companies);
+        }
     }
 
     async doDelete() {
@@ -258,46 +261,20 @@ export default class SetupsAccount extends Vue {
         this.selectItem.company = {};
         this.selectItem.floor = {};
 
-        let haveRequest = {
-            role: false,
-            company: false,
-            floor: false
-        };
-
         if (RoleService.haveSystemAdministrator(this)) {
-            if (!haveRequest.role) {
-                await this.initSelectItemRole();
-                haveRequest.role = true;
-            }
-
-            if (!haveRequest.company) {
-                await this.initSelectItemCompany();
-                haveRequest.company = true;
-            }
+            await this.initSelectItemRole();
+            await this.initSelectItemCompanyWithAPI();
         }
 
         if (RoleService.haveAdministrator(this)) {
-            if (!haveRequest.role) {
-                await this.initSelectItemRole();
-                haveRequest.role = true;
-            }
-
-            if (!haveRequest.company) {
-                await this.initSelectItemCompany();
-                haveRequest.company = true;
-            }
+            await this.initSelectItemRole();
+            await this.initSelectItemCompanyWithAPI();
         }
 
         if (RoleService.haveTenantAdministrator(this)) {
-            if (!haveRequest.role) {
-                await this.initSelectItemRole();
-                haveRequest.role = true;
-            }
-
-            if (!haveRequest.floor) {
-                await this.initSelectItemFloor();
-                haveRequest.floor = true;
-            }
+            await this.initSelectItemRole();
+            await this.initSelectItemCompanyWithStorage();
+            await this.initSelectItemFloorWithAPI();
         }
     }
 
@@ -370,7 +347,7 @@ export default class SetupsAccount extends Vue {
         }
     }
 
-    async initSelectItemCompany() {
+    async initSelectItemCompanyWithAPI() {
         let param: any = { paging: { all: true } };
 
         param = RegexServices.trim(param);
@@ -405,10 +382,33 @@ export default class SetupsAccount extends Vue {
             });
     }
 
-    async initSelectItemFloor() {
+    async initSelectItemCompanyWithStorage() {
+        this.selectItem.company = {};
+        this.selectItem.company[
+            this.$user.user.data.company.objectId
+        ] = this.$user.user.data.company.name;
+    }
+
+    async initSelectItemFloorWithAPI() {
         for (let ret of this.$user.user.data.floor) {
             if (ret.objectId != undefined && ret.name != undefined) {
                 this.$set(this.selectItem.floor, ret.objectId, ret.name);
+            }
+        }
+    }
+
+    async initSelectItemFloorWithCompany(companyId: string) {
+        this.selectItem.floor = {};
+        for (let company of this.companies) {
+            if (companyId == company.objectId) {
+                for (let floor of company.floor) {
+                    this.$set(
+                        this.selectItem.floor,
+                        floor.objectId,
+                        floor.name
+                    );
+                }
+                break;
             }
         }
     }
@@ -606,19 +606,7 @@ export default class SetupsAccount extends Vue {
             }
         }
         if (datas.key == "companies") {
-            this.selectItem.floor = {};
-            for (let company of this.companies) {
-                if (datas.value == company.objectId) {
-                    for (let floor of company.floor) {
-                        this.$set(
-                            this.selectItem.floor,
-                            floor.objectId,
-                            floor.name
-                        );
-                    }
-                    break;
-                }
-            }
+            this.initSelectItemFloorWithCompany(datas.value);
         }
         this.inputFormData[datas.key] = datas.value;
     }

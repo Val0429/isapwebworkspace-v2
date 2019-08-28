@@ -44,7 +44,7 @@ export default class LangObject {
     // Error
     w_Error_FailedToFetch = "We can't connect to server, please try again!"; // failed to fetch
     w_Error_ResponseUndefined = "We can't get any response"; // no response
-    w_Error_401 = 'Incorrect usename or password'; // 401
+    w_Error_401 = 'Not find User, Please login again'; // 401
     w_Error_404 = 'Cannot connect to VMS'; // 404
 
     // Login & User
@@ -64,6 +64,7 @@ export default class LangObject {
     w_Login_Login = 'Login';
     w_Login_LoginTitle = 'Login';
     w_Login_ForgotPassword = 'Forgot Password';
+    w_Login_Error_401 = 'Incorrect username or password';
 
     // Logout
     w_Logout = 'Logout';
@@ -293,6 +294,8 @@ export default class LangObject {
     w_Company_ContactPerson = 'Contact Person';
     w_Company_ContactNumber = 'Contact Number';
     w_Company_Floor = 'Floor';
+
+    w_Company_ErrorContactNumberNotNumber = 'Please check contact only digits';
 
     ////////////////// Kiosk //////////////////
 

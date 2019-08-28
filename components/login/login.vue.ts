@@ -104,16 +104,17 @@ export default class Login extends Vue {
             })
             .catch((e: any) => {
                 Loading.hide();
-                console.log(e);
                 if (e.err != undefined && e.err == 'Failed to fetch') {
                     Dialog.error(this._('w_Error_FailedToFetch'));
                     return true;
                 }
-                if (e.res != undefined && e.res.statusCode != undefined && e.res.statusCode == 401) {
-                    Dialog.error(this._('w_Error_401'));
+                if (e.res != undefined && e.res.statusCode != undefined && (e.res.statusCode == 400 || e.res.statusCode == 401)) {
+                    Dialog.error(this._('w_Login_Error_401'));
+                    return true;
                 }
-                if (e.res != undefined && e.res.statusCode != undefined && e.res.statusCode == 400) {
+                if (e.res != undefined && e.res.statusCode != undefined && e.res.statusCode == 404) {
                     Dialog.error(this._('w_Error_404'));
+                    return true;
                 }
             });
         this.$router.push('/');
