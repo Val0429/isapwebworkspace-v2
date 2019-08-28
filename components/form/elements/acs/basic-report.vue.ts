@@ -64,14 +64,16 @@ export class BasicReport extends Vue{
     private reprocessRecords() {
         console.log("record updated");
         let processedRecords = [];
+        let stringProcessedRecords = [];
         for (let record of this.records) {
             let newItem = {};
             for (let field of this.sortedFields) {
                 newItem[field.key] = record[field.key];
             }
-            let exists = processedRecords.find(x=>JSON.stringify(x) === JSON.stringify(newItem));
+            let exists = stringProcessedRecords.find(x=> x == JSON.stringify(newItem));
             if(!exists){
                 console.log("new Item",JSON.stringify(newItem) , processedRecords.length);
+                stringProcessedRecords.push(JSON.stringify(newItem));
                 processedRecords.push(newItem);
             }
         }
