@@ -338,6 +338,7 @@ export default class LangObject implements LangObject {
     w_TenantsInvitation_ErrorFileType = 'Please upload xlsx';
     w_TenantsInvitation_ErrorFileResolve = 'File resolve error';
     w_TenantsInvitation_Cencel = 'Cancel Invitation';
+    w_TenantsInvitation_ErrorStartEarilyToday = 'Start earlier than today';
 
     ////////////////// Tenants Visitor //////////////////
     w_Tenants_VisitorList = '訪客清單';

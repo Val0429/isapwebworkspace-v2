@@ -342,6 +342,7 @@ export default class LangObject {
     w_TenantsInvitation_ErrorFileType = 'Please upload xlsx';
     w_TenantsInvitation_ErrorFileResolve = 'File resolve error';
     w_TenantsInvitation_Cencel = 'Cancel Invitation';
+    w_TenantsInvitation_ErrorStartEarilyToday = 'Start earlier than today';
 
     ////////////////// Tenants Visitor //////////////////
 
