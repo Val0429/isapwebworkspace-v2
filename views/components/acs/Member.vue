@@ -467,40 +467,18 @@ export default class Member extends Vue {
     console.log("exportToExcel", $event);
         if(this.fieldSelected.length==0)return;
         if(this.storedPermissionOptions.length==0) await this.initPremission();
-
-        let members:any = await this.$server.R("/acs/member", Object.assign({"paging.all":"true"}, this.getParams));
-        let exportList =[];
-        let headers=[];
         let extraHeader:any={};
-        for(let field of this.fieldSelected){
-          headers.push(field);
+        for(let field of this.fieldSelected){          
           extraHeader[field]=this._(field as any);
         }
-        exportList.push(extraHeader)
-        for (let member of members.results){
-          let newMember:any = {};
-          for(let field of  this.fieldSelected){
-              newMember[field]=member[field];
-              if(field=="permissionTable"){
-                let permissions = [];
-                for(let perm of member.permissionTable){
-                    let permissiontable = this.storedPermissionOptions.find(x=> x.value == perm.toString());
-                    if(!permissiontable)continue;
-                    permissions.push(permissiontable.text);
-                }
-                newMember.permissionTable = permissions.join(",");
-              }
-          }
-          let exist = exportList.find(x=>JSON.stringify(x)==JSON.stringify(newMember));
-          if(!exist) exportList.push(newMember);
-          
-        }
-           
-        let workbook = XLSX.utils.book_new();
-        let ws = XLSX.utils.aoa_to_sheet([headers]);        
-        XLSX.utils.sheet_add_json(ws, exportList,  {skipHeader: true, origin: "A2"});
-        XLSX.utils.book_append_sheet(workbook, ws, "Sheet1");    
-        XLSX.writeFile(workbook, `${this._("w_Member")}.xlsx`);
+        let members:any = await this.$server.C("/acs/exportmember" as any, 
+                            { 
+                              filter: this.getParams, 
+                              fieldSelected:this.fieldSelected,
+                              storedPermissionOptions:this.storedPermissionOptions,
+                              extraHeader
+                            });
+       
         this.exportVisible=false;
         this.fieldSelected=[];
         this.fieldOptions = this.savedFieldOptions;
