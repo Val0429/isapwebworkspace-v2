@@ -1,15 +1,49 @@
 <template>
     <div>
         <iv-card
-            :label="_('w_ReportDashboard_Traffic')"
+            :label="currentStatus.isTraffic ? _('w_ReportDashboard_Traffic') :
+             currentStatus.isOccupancy ? _('w_ReportDashboard_AverageOccupancy') : 
+             currentStatus.isDwellTime ? _('w_ReportDashboard_AverageDwellTime') : 
+             currentStatus.isDemographic ? _('w_ReportDashboard_Demographic') : 
+             currentStatus.isVipBlacklist ? _('w_ReportDashboard_VIPBlacklist') : 
+             _('w_ReportDashboard_RepeatCustomer')"
             :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
         >
+
             <template #toolbox>
+
+                <iv-toolbox-dashboard-refresh variant="white">
+                    <iv-toolbox-dashboard-traffic
+                        :iconDisabled="currentStatus.isTraffic"
+                        @click="changeStatus('isTraffic')"
+                    />
+                    <iv-toolbox-dashboard-occupancy
+                        :iconDisabled="currentStatus.isOccupancy"
+                        @click="changeStatus('isOccupancy')"
+                    />
+                    <iv-toolbox-dashboard-dwelltime
+                        :iconDisabled="currentStatus.isDwellTime"
+                        @click="changeStatus('isDwellTime')"
+                    />
+                    <iv-toolbox-dashboard-demographic
+                        :iconDisabled="currentStatus.isDemographic"
+                        @click="changeStatus('isDemographic')"
+                    />
+                    <iv-toolbox-dashboard-vipblacklist
+                        :iconDisabled="currentStatus.isVipBlacklist"
+                        @click="changeStatus('isVipBlacklist')"
+                    />
+                    <iv-toolbox-dashboard-repeatcustomer
+                        :iconDisabled="currentStatus.isRepeatCustomer"
+                        @click="changeStatus('isRepeatCustomer')"
+                    />
+                </iv-toolbox-dashboard-refresh>
                 <iv-toolbox-delete
                     variant="white"
                     @click="removeCard()"
                     :disabled="isDelete"
                 />
+
             </template>
             <image-map
                 ref="imageMap"
@@ -101,10 +135,33 @@ export class AreaStatusByFloorPlanDetail extends Vue {
 
     deviceType: string = EMode.peopleCounting;
 
+    currentStatus: {
+        isTraffic: boolean;
+        isOccupancy: boolean;
+        isDwellTime: boolean;
+        isDemographic: boolean;
+        isVipBlacklist: boolean;
+        isRepeatCustomer: boolean;
+    } = {
+        isTraffic: true,
+        isOccupancy: false,
+        isDwellTime: false,
+        isDemographic: false,
+        isVipBlacklist: false,
+        isRepeatCustomer: false
+    };
+
     created() {}
 
     mounted() {
         this.initImageMap();
+    }
+
+    changeStatus(type) {
+        for (let status of Object.keys(this.currentStatus)) {
+            this.currentStatus[status] = false;
+        }
+        this.currentStatus[type] = !this.currentStatus[type];
     }
 
     // 建立 image map

@@ -2,8 +2,8 @@
 
     <iv-toolbox-element-base
         v-bind="$attrs"
-        :title="_('w_ReportDashboard_AverageDwellTime')"
-        :icon="iconDisabled ? 'fa fa-check  isap-toolbox-icon' : 'fa isap-toolbox-icon'"
+        :title="_('w_ReportDashboard_Traffic')"
+        icon="fa fa-refresh isap-toolbox-icon"
         v-show="visible"
         :variant="variant"
         :size="size"
@@ -48,7 +48,7 @@ import $ from "jquery";
 @Component({
     components: { FormMergeBindings }
 })
-export class ToolboxDashboardDwellTime extends Vue {
+export class ToolboxDashboardRefresh extends Vue {
     @Prop({
         type: String,
         required: false,
@@ -89,8 +89,8 @@ export class ToolboxDashboardDwellTime extends Vue {
         return;
     }
 }
-export default ToolboxDashboardDwellTime;
-Vue.component("iv-toolbox-dashboard-dwelltime", ToolboxDashboardDwellTime);
+export default ToolboxDashboardRefresh;
+Vue.component("iv-toolbox-dashboard-refresh", ToolboxDashboardRefresh);
 </script>
 
 
