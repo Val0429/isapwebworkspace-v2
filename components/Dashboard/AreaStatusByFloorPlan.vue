@@ -1,6 +1,9 @@
 <template>
     <div>
-        <iv-card :label="_('w_DashboardOverview_AreaStatusByFloorPlan')">
+        <iv-card
+            :label="_('w_DashboardOverview_AreaStatusByFloorPlan')"
+            :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
+        >
             <template #toolbox>
                 <iv-toolbox-add @click="addNewCard" />
             </template>
