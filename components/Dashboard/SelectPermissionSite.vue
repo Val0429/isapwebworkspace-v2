@@ -13,13 +13,13 @@
             >
                 <template #ifAllSites="{ $attrs, $listeners }">
 
-                    <p class="ml-3">{{ _('w_Sites1') }}</p>
+                    <p class="ml-3 font-sm">{{ _('w_Sites1') }}</p>
 
                     <b-col cols="9">
                         <b-form-radio-group
                             v-model="selectAllSites"
                             :name="radioName"
-                            class="mb-3"
+                            class="mb-3 font-sm"
                             :options="ifAllSitesSelectItem"
                             @change="changeAllSitesSelect"
                         ></b-form-radio-group>
@@ -32,7 +32,7 @@
                     <iv-form-selection
                         v-on="$listeners"
                         v-model="inputFormData.siteIds"
-                        class="col-md-10"
+                        class="col-md-10 mt-2"
                         :options="sitesSelectItem"
                         :multiple="true"
                         @input="changeSiteIds"
@@ -55,6 +55,7 @@
             <region-tree-select
                 key="transition_2"
                 v-show="transition.step === 2"
+                class="font-sm"
                 :multiple="true"
                 :regionTreeItem="regionTreeItem"
                 :selectType="selectType"

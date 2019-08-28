@@ -3,6 +3,7 @@
         <iv-card
             :label="_('w_Dashboard_PeakHour')"
             :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
+            class="font-3xl"
         >
             <apexchart
                 type=heatmap

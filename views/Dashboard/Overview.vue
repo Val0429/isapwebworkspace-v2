@@ -2,8 +2,8 @@
     <div class="animated fadeIn">
 
         <div class="row">
-            <current-status-dashboard class="col-md-4" />
-            <filter-status-dashboard class="col-md-8" />
+            <current-status-dashboard class="col-md-3" />
+            <filter-status-dashboard class="col-md-9" />
             <top-5sites class="col-md-6" />
             <bottom-5sites class="col-md-6" />
             <peak-hour class="col-md-12" />

@@ -1,8 +1,12 @@
 <template>
     <div>
-        <iv-card :label="_('w_DashboardOverview_AreaStatusByFloorPlan')">
+        <iv-card
+            :label="_('w_DashboardOverview_AreaStatusByFloorPlan')"
+            :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
+            class="font-3xl"
+        >
             <template #toolbox>
-                <iv-toolbox-add @click="addNewCard" />
+                <iv-toolbox-add @click="addNewCard" variant="white" />
             </template>
             <div class="row">
                 <template v-for="(value, index) in data">

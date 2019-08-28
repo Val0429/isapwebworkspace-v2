@@ -1021,6 +1021,7 @@ export default class LangObject {
     w_Title_One_EventName = ' Selected event : ';
 
     // Report Dashboard
+    w_ReportDashboard_Refresh = 'Refresh';
     w_ReportDashboard_Traffic = 'TRAFFIC';
     w_ReportDashboard_AverageOccupancy = 'AVERAGE OCCUPANCY';
     w_ReportDashboard_AverageDwellTime = 'AVERAGE DWELL TIME(M)';
@@ -1166,7 +1167,7 @@ export default class LangObject {
     w_DashboardMap_Map = 'Map';
     w_DashboardOverview_Overview = 'Overview';
     w_DashboardOverview_CurrentStatus = 'Current Status';
-    w_DashboardOverview_FilterStatus = 'Filter Status';
+    w_DashboardOverview_FilterStatus = 'Chart';
     w_DashboardOverview_Now = 'NOW';
     w_DashboardOverview_AreaStatusByFloorPlan = 'Area Status By Floor Plan';
 

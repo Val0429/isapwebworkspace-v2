@@ -2,8 +2,8 @@
 
     <iv-toolbox-element-base
         v-bind="$attrs"
-        :title="_('w_VIPAndBlackList_TableTitleVip')"
-        :icon="iconDisabled ? 'fa fa-check  isap-toolbox-icon' : 'fa isap-toolbox-icon'"
+        :title="_('w_ReportDashboard_Refresh')"
+        icon="fa fa-refresh isap-toolbox-icon"
         v-show="visible"
         :variant="variant"
         :size="size"
@@ -48,7 +48,7 @@ import $ from "jquery";
 @Component({
     components: { FormMergeBindings }
 })
-export class ToolboxDashboardVip extends Vue {
+export class ToolboxDashboardRefresh extends Vue {
     @Prop({
         type: String,
         required: false,
@@ -80,22 +80,17 @@ export class ToolboxDashboardVip extends Vue {
     @Prop({
         type: Boolean,
         required: false,
-        default: true
+        default: false
     })
     iconDisabled!: boolean;
-
-    created(){}
 
     @Emit()
     click(event) {
         return;
     }
 }
-export default ToolboxDashboardVip;
-Vue.component(
-    "iv-toolbox-dashboard-vip",
-    ToolboxDashboardVip
-);
+export default ToolboxDashboardRefresh;
+Vue.component("iv-toolbox-dashboard-refresh", ToolboxDashboardRefresh);
 </script>
 
 

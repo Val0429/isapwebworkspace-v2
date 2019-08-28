@@ -1,74 +1,63 @@
+import {EMode} from "@/components/Dashboard/models/EDashboard";
 <template>
     <div>
         <iv-card
             :label="_('w_Dashboard_Top5sites')"
             :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
-
+            class="font-3xl"
         >
             <template #toolbox>
-                <iv-toolbox-more variant="white">
+                <iv-toolbox-dashboard-refresh variant="white">
                     <iv-toolbox-dashboard-traffic
-                        :iconDisabled="currentStatus.isTraffic"
-                        @click="currentStatus.isTraffic = !currentStatus.isTraffic"
+                        :iconDisabled="currentDevice.isTraffic"
+                        @click="changeDevice('isTraffic')"
                     />
                     <iv-toolbox-dashboard-dwelltime
-                        :iconDisabled="currentStatus.isDwellTime"
-                        @click="currentStatus.isDwellTime = !currentStatus.isDwellTime"
+                        :iconDisabled="currentDevice.isDwellTime"
+                        @click="changeDevice('isDwellTime')"
                     />
                     <iv-toolbox-dashboard-vip
-                        :iconDisabled="currentStatus.isVip"
-                        @click="currentStatus.isVip = !currentStatus.isVip"
+                        :iconDisabled="currentDevice.isVip"
+                        @click="changeDevice('isVip')"
                     />
                     <iv-toolbox-dashboard-blacklist
-                        :iconDisabled="currentStatus.isBlacklist"
-                        @click="currentStatus.isBlacklist = !currentStatus.isBlacklist"
+                        :iconDisabled="currentDevice.isBlacklist"
+                        @click="changeDevice('isBlacklist')"
                     />
                     <iv-toolbox-dashboard-repeatcustomer
-                        :iconDisabled="currentStatus.isRepeatCustomer"
-                        @click="currentStatus.isRepeatCustomer = !currentStatus.isRepeatCustomer"
+                        :iconDisabled="currentDevice.isRepeatCustomer"
+                        @click="changeDevice('isRepeatCustomer')"
                     />
-                </iv-toolbox-more>
+                </iv-toolbox-dashboard-refresh>
             </template>
 
-            <h5 class="mb-3">{{ modeParam.modeTitle }}</h5>
+            <h5 class="mb-3 font-weight-bold">{{ modeParam.modeTitle }}</h5>
 
             <highcharts
                 ref="highcharts"
                 :options="chartOptions"
             ></highcharts>
 
-            <b-row>
-                <select-device-type
-                    class="col-md-6"
-                    :modeParam="modeParam"
-                    @mode="receiveMode"
-                ></select-device-type>
-                <select-time
-                    class="col-md-6"
-                    :timeParam="timeParam"
-                    @updateTime="receiveTime"
-                ></select-time>
-            </b-row>
+
+            <select-time
+                :timeParam="timeParam"
+                @updateTime="receiveTime"
+            ></select-time>
 
         </iv-card>
     </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
+    import {Component, Vue} from "vue-property-decorator";
+    /// install Highcharts
+    import HighchartsVue from "highcharts-vue";
+    import Datetime from "@/services/Datetime";
+    import {EMode} from "@/components/Dashboard/index";
 
-/// install Highcharts
-import Highcharts from "highcharts";
-import HighchartsVue from "highcharts-vue";
-import Loading from "@/services/Loading";
-import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog";
-import Datetime from "@/services/Datetime";
-Vue.use(HighchartsVue);
+    Vue.use(HighchartsVue);
 
-import { EMode } from "@/components/Dashboard/index";
-
-@Component({
+    @Component({
     components: {}
 })
 export class Top5sites extends Vue {
@@ -84,7 +73,7 @@ export class Top5sites extends Vue {
         modeTitle: ""
     };
 
-    currentStatus: {
+    currentDevice: {
         isTraffic: boolean;
         isDwellTime: boolean;
         isVip: boolean;
@@ -121,6 +110,23 @@ export class Top5sites extends Vue {
         };
     }
 
+    changeDevice(type) {
+        for (let status of Object.keys(this.currentDevice)) {
+            this.currentDevice[status] = false;
+        }
+        this.currentDevice[type] = !this.currentDevice[type];
+
+        if (this.currentDevice.isDwellTime) {
+            this.modeParam.type = EMode.dwellTime;
+            this.modeParam.modeTitle = this._("w_Dashboard_Minutes")
+        } else {
+            this.modeParam.type = EMode.peopleCounting;
+            this.modeParam.modeTitle = this._("w_Navigation_RuleAndActions_Traffic")
+        }
+
+        this.initCharts();
+    }
+
     initCharts() {
         // 整理 xAxis（y軸）的 site
         let tempCategories: string[] = [];
@@ -149,6 +155,7 @@ export class Top5sites extends Vue {
             credits: {
                 enabled: false
             },
+            colors:['#5C94FB'],
             series: [
                 {
                     name: tempName,
