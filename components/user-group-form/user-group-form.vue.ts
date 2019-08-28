@@ -6,8 +6,8 @@ import { toEnumInterface } from '@/../core';
 export class UserGroupForm extends Vue implements IFormQuick {
 
     path: string = "/users/groups";
-    tView: string = "_('wb_View')";
-    tAdd: string = "_('wb_Add')";
+    tView: string = "_('m_Users_Group_List')";
+    tAdd: string = "_('m_Users_Add_Group')";
     tPreview?: string = "";
     tEdit?: string = "_('wb_Edit')";
     canAdd?: boolean = true;
@@ -49,21 +49,5 @@ export class UserGroupForm extends Vue implements IFormQuick {
     // postEdit?(row: any) {
     //     throw new Error("Method not implemented.");
     // }
-
-    private sex = 0;
-    private isService: boolean = false;
-
-    private updateData(data) {
-        switch (data.key) {
-            case 'sex':
-                this.sex = data.value;
-            case 'service':
-                this.isService = data.value;
-        }
-    }
-    private sendData(arg) {
-        console.log('???');
-        console.log(arg);
-    }
 }
 export default UserGroupForm;

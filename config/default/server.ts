@@ -6,8 +6,9 @@ interface RestfulRequest extends ApisRequestBase {
         "/users": [any, any, true],
         "/users/groups": [any, any, true],
         "/continental/sites": [any, any, true],
-        "/persons": [any, any, true],
+        "/continental/workcards": [any, any, true],
         "/continental/unrecognizeduser": [any, any, true],
+        "/roles": [any, any, true],
     }, 
     "Post": { 
         "/users/login": [UsersLoginAll.Input, UsersLoginAll.Output, false], 

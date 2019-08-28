@@ -1,24 +1,28 @@
-import { RegisterLanguage, ILang } from '@/../core/i18n';
+import { RegisterLanguage } from '@/../core/i18n';
 
 @RegisterLanguage('zh-TW', '正體中文')
-export default class LangObject implements ILang {
+export default class LangObject {
     // Navagation
-    w_Navagation_Persons = "人員管理";
-    w_Navagation_Persons_Person = "人員";
-    w_Navagation_Persons_Stranger = "陌生人";
-    w_Navagation_Users = "使用者管理";
-    w_Navagation_Users_Users = "使用者";
-    w_Navagation_Users_Groups = "使用者群組";
-    w_Navagation_Region = " 區域管理";
-    w_Navagation_Region_Site = "工地";
+    m_Dashboard = "Dashboard";
+    m_Navagation_Persons = "人員管理";
+    m_Navagation_Persons_Person = "人員";
+    m_Navagation_Persons_Stranger = "陌生人";
+    m_Navagation_Users = "使用者管理";
+    m_Navagation_Users_Users = "使用者";
+    m_Navagation_Users_Groups = "使用者群組";
+    m_Navagation_Region = " 區域管理";
+    m_Navagation_Region_Site = "工地";
 
     // Card Header
-    w_Persons_Person_List = "人員列表";
-    w_Persons_Stranger_List = "陌生人列表";
-    w_Users_User_List = "用戶清單";
-    w_Users_Group_List = "群組清單";
-    w_Region_Site_Search = "工地查詢";
-    w_Region_Site_Detail = "工地細節";
+    m_Persons_Person_List = "人員列表";
+    m_Persons_Stranger_List = "陌生人列表";
+    m_Users_User_List = "用戶清單";
+    m_Users_Group_List = "群組清單";
+    m_Region_Site_Search = "工地查詢";
+    m_Region_Site_Detail = "工地細節";
+    m_Users_Add_User = "新增用戶";
+    m_Users_Edit_User = "修改用戶";
+    m_Users_Add_Group = "新增群組";
 
     // Common
     w_User = '用戶';
@@ -33,24 +37,20 @@ export default class LangObject implements ILang {
     w_Region = '區域';
     w_Site = '工地';
     w_Work_Area = '工區';
-    w_Search = '查詢';
+    w_Inquire = '查詢';
     w_Detail = '細節';
     w_Status = '狀態';
     w_Address = '地址';
     w_Lat = '經度';
     w_Lng = '緯度';
-
+    w_Actions = '檢視';
+    w_Number = '編號';
+    w_Card_Number = '卡號';
+    w_Timestamp = '時間';
 
     // Status
-    w_Status_Enable = 'Enable';
-    w_Status_Enabled = 'Enabled';
-    w_Status_Disable = 'Disable';
-    w_Status_Disabled = 'Disabled';
-    w_Status_No = 'No';
-    w_Status_Yes = 'Yes';
-    w_Status_Success = 'Success';
-    w_Status_Failed = 'Failed';
-    w_Status_Error = 'Error';
+    w_Status_On = '開啟';
+    w_Status_Off = '關閉';
 
     // Date
     w_Startdate = '開始日';

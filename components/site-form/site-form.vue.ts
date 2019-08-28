@@ -7,7 +7,7 @@ export class SiteForm extends Vue implements IFormQuick {
 
     path: string = "/continental/sites";
     tView: string = "_('wb_View')";
-    tAdd: string = "_('wb_Add')";
+    tAdd: string = "_('w_Inquire')";
     tPreview?: string = "_('w_Preview')";
     tEdit?: string = "_('wb_Edit')";
     canAdd?: boolean = false;
@@ -23,46 +23,51 @@ export class SiteForm extends Vue implements IFormQuick {
                 interface {
                     /*
                      * @uiLabel - ID
+                     * @uiHidden - ${type === EFormQuick.View ? false : true}
                      */
                     caseid: number;
                     /*
                      * @uiLabel - ${this._('w_Region')}
+                     * @uiHidden - ${type === EFormQuick.View ? false : true}
                      */
                     region: string;
                     /*
                      * @uiLabel - ${this._('w_Site') + this._('w_Title')}
+                     * @uiHidden - ${type === EFormQuick.View ? false : true}
                      */
                     name: string;
                     /*
                      * @uiLabel - ${this._('w_Work_Area')}
+                     * @uiHidden - ${type === EFormQuick.View ? false : true}
                      */
                     workarea: string;
-                    /*
-                     * @uiLabel - ${this._('w_Status')}
-                     */
-                    case_status: ${toEnumInterface({
-                        '0': '關閉',
-                        '1': '開啟'
-                    })};
-                    /*
-                     * @uiLabel - ${this._('w_Image')}
-                     */
-                    images: any;
                     /*
                      * @uiLabel - ${this._('w_Address')}
                      * @uiHidden - ${type === EFormQuick.Edit ? false : true}
                      */
-                    address: string;
+                    address?: string;
                     /*
                      * @uiLabel - ${this._('w_Lat')}
                      * @uiHidden - ${type === EFormQuick.Edit ? false : true}
                      */
-                    latitude: number;
+                    latitude?: number;
                     /*
                      * @uiLabel - ${this._('w_Lng')}
                      * @uiHidden - ${type === EFormQuick.Edit ? false : true}
                      */
-                    longitude: number;
+                    longitude?: number;
+                    /*
+                     * @uiLabel - ${this._('w_Status')}
+                     */
+                    case_status?: ${toEnumInterface({
+                        0: this._('w_Status_Off'),
+                        1: this._('w_Status_On')
+                    })};
+                    /*
+                     * @uiLabel - ${this._('w_Image')}
+                     * @uiType - ${type === EFormQuick.Edit ? 'iv-form-file' : ''}
+                     */
+                    images?: any;
                 }`;
         }
     }

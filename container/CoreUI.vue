@@ -1,27 +1,29 @@
 <template>
     <CoreUIBase>
         <template #header>
-            Hello iSAP
+            <div v-if="$user && $user.user" class="container-fluid role">
+                {{ $user.user.username }}
+                <i class="fa fa-user-circle" />
+            </div>
         </template>
 
         <template #footer>
-            iSAP
+            © 2019
         </template>
 
         <template #nav>
-            <SidebarHeader label="iSAP Web Framework" />
             <SidebarNav>
-                <SidebarNavItem url="/components" />
+                <SidebarNavItem url="/dashboard" />
 
-                <SidebarNavTitle label="人員管理" />
+                <SidebarNavTitle :label="_('m_Navagation_Persons')" />
                 <SidebarNavItem url="/persons/person" />
                 <SidebarNavItem url="/persons/Stranger" />
 
-                <SidebarNavTitle label="使用者管理" />
+                <SidebarNavTitle :label="_('m_Navagation_Users')" />
                 <SidebarNavItem url="/users/user" />
                 <SidebarNavItem url="/users/userGroup" />
-
-                <SidebarNavTitle label="區域管理" />
+                
+                <SidebarNavTitle :label="_('m_Navagation_Region')" />
                 <SidebarNavItem url="/region/site" />
 
             </SidebarNav>
@@ -45,3 +47,15 @@ import { CoreUI as CoreUIBase,
 export default class CoreUI extends Vue {
 }
 </script>
+
+<style lang="scss" scope>
+.role {
+    font-size: 16px;
+    text-align: right;
+    line-height: 20px;
+    i {
+        font-size: 20px;
+        padding-left: 2px;
+    }
+}
+</style>

@@ -5,29 +5,38 @@ import { toEnumInterface } from '@/../core';
 @Component
 export class StrangerListForm extends Vue implements IFormQuick {
 
-    path: string = "/continental/unrecognizationusers";
-    tView: string = "_('wb_View')";
+    path: string = "/continental/unrecognizeduser";
+    tView: string = "_('m_Persons_Stranger_List')";
     tAdd: string = "_('wb_Add')";
     tPreview?: string = "_('w_Preview')";
     tEdit?: string = "_('wb_Edit')";
-    canAdd?: boolean = true;
-    canPreview?: boolean = true;
-    canEdit?: boolean = true;
-    canDelete?: boolean = true;
+    canAdd?: boolean = false;
+    canPreview?: boolean = false;
+    canEdit?: boolean = false;
+    canDelete?: boolean = false;
     
     inf(type: EFormQuick): string {
         switch (type) {
             case EFormQuick.View:
                 return `
-                interface {
-                }
-                `;
-            case EFormQuick.Add:
-            case EFormQuick.Edit:
-            case EFormQuick.Preview:
-                return `
-                interface {
-                }
+                    interface {
+                        /**
+                         * @uiLabel - ${this._("w_Picture")}
+                         */
+                        snapshot: string;
+                        /**
+                         * @uiLabel - ${this._("w_Timestamp")}
+                         */
+                        updatedAt: Date;
+                        /**
+                         * @uiLabel - ${this._("w_Site")}
+                         */
+                        workplace: string;
+                        /**
+                         * @uiLabel - ${this._("w_Work_Area")}
+                         */
+                        channel: string;
+                    }
                 `;
                 // return `
                 // interface {

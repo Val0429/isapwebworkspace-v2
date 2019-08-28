@@ -1,5 +1,6 @@
 <template>
     <div key="main">
+        <iv-language-button />
         <ivc-site-form />
     </div>
 </template>

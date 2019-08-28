@@ -6,10 +6,10 @@ import { toEnumInterface } from '@/../core';
 export class UsersListForm extends Vue implements IFormQuick {
 
     path: string = "/users";
-    tView: string = "_('w_Users_User_List')";
-    tAdd: string = "_('wb_Add')";
+    tView: string = "_('m_Users_User_List')";
+    tAdd: string = "_('m_Users_Add_User')";
     tPreview?: string = "_('w_Preview')";
-    tEdit?: string = "_('wb_Edit')";
+    tEdit?: string = "_('m_Users_Edit_User')";
     canAdd?: boolean = true;
     canPreview?: boolean = false;
     canEdit?: boolean = true;
@@ -27,7 +27,7 @@ export class UsersListForm extends Vue implements IFormQuick {
                     /*
                      * @uiLabel - ${this._('w_User') + this._('w_Group')}
                      */
-                    groups: string;
+                    roles: string;
                     /*
                      * @uiLabel - ${this._('w_Email')}
                      */
@@ -64,11 +64,9 @@ export class UsersListForm extends Vue implements IFormQuick {
                     /*
                      * @uiLabel - ${this._('w_User') + this._('w_Group')}
                      */
-                    groups1?: string;
-                    /*
-                     * @uiLabel - ${this._('w_User') + this._('w_Group')}
-                     */
-                    groups2: string;
+                    roles: ${
+                        toEnumInterface(this.groupList)
+                    };
                 }
                 `;
         }
@@ -87,6 +85,16 @@ export class UsersListForm extends Vue implements IFormQuick {
     // prePreview?(row: any) {
         // throw new Error("Method not implemented.");
     // }
+
+    preEdit?(row: any) {
+        row = { ...row, roles: row.roles[0].name };
+        return row;
+    }
+    postEdit?(row: any) {
+        row = { ...row, roles: [row.roles] };
+        return row;
+    } 
+
     // preEdit?(row: any) {
     //     throw new Error("Method not implemented.");
     // }
@@ -94,7 +102,19 @@ export class UsersListForm extends Vue implements IFormQuick {
     //     throw new Error("Method not implemented.");
     // }
 
+    private groupList: any = {};
     private updateData(data) {
+        console.log('data')
+        console.log(data)
+    }
+    private async doMounted() {
+        let data: any = await this.$server.R('/roles');
+        //this.groupList = {...data}
+        this.groupList = data.reduce( (final, value) => {
+            final[value] = value;
+            return final;
+        }, {});
+        console.log('grouplist', this.groupList);
     }
 }
 export default UsersListForm;

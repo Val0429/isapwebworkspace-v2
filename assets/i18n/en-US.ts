@@ -3,6 +3,7 @@ import { RegisterLanguage } from '@/../core/i18n';
 @RegisterLanguage('en-US', 'English')
 export default class LangObject {
     // Navagation
+    m_Dashboard = "Dashboard";
     w_Navagation_Persons = "Persons";
     w_Navagation_Persons_Person = "Person";
     w_Navagation_Persons_Stranger = "Stranger";
@@ -13,12 +14,15 @@ export default class LangObject {
     w_Navagation_Region_Site = "Site";
 
     // Card Header
-    w_Persons_Person_List = "Person List";
-    w_Persons_Stranger_List = "Stranger List";
-    w_Users_User_List = "User List";
-    w_Users_Group_List = "Group List";
-    w_Region_Site_Search = "Site Search";
-    w_Region_Site_Detail = "Site Detail";
+    m_Persons_Person_List = "Person List";
+    m_Persons_Stranger_List = "Stranger List";
+    m_Users_User_List = "User List";
+    m_Users_Group_List = "Group List";
+    m_Region_Site_Search = "Site Search";
+    m_Region_Site_Detail = "Site Detail";
+    m_Users_Add_User = "Add User";
+    m_Users_Edit_User = "Edit User";
+    m_Users_Add_Group = "Add Group";
 
     // Common
     w_User = 'User';
@@ -33,24 +37,20 @@ export default class LangObject {
     w_Region = 'Region';
     w_Site = 'Site';
     w_Work_Area = 'Work Area';
-    w_Search = 'Search';
+    w_Inquire = 'Inquire';
     w_Detail = 'Detail';
     w_Status = 'Status';
     w_Address = 'Address';
     w_Lat = 'Latitude';
     w_Lng = 'Longitude';
-
+    w_Actions = 'Actions';
+    w_Number = 'Number';
+    w_Card_Number = 'Card Number';
+    w_Timestamp = 'Time';
 
     // Status
-    w_Status_Enable = 'Enable';
-    w_Status_Enabled = 'Enabled';
-    w_Status_Disable = 'Disable';
-    w_Status_Disabled = 'Disabled';
-    w_Status_No = 'No';
-    w_Status_Yes = 'Yes';
-    w_Status_Success = 'Success';
-    w_Status_Failed = 'Failed';
-    w_Status_Error = 'Error';
+    w_Status_On = 'On';
+    w_Status_Off = 'Off';
 
     // Dialog
     w_Dialog_ErrorTitle = 'Error';

@@ -2,7 +2,9 @@
     <iv-route-transition>
     <div key="main">
         <b-button @click="logout">Logout</b-button>
+        <div id="map" class="map">
 
+        </div>
         <ul>
             <li>server requirement
                 <ul>
@@ -20,7 +22,6 @@
     </div>
     </iv-route-transition>
 </template>
-
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { RegisterRouter } from '@/../core/router';
