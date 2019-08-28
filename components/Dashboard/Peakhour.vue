@@ -6,7 +6,7 @@
         >
             <apexchart
                 type=heatmap
-                height=550
+                :height="chartItem.height"
                 :options="chartOptions"
                 :series="series"
             />
@@ -39,10 +39,14 @@ export class Peakhour extends Vue {
         endDate: new Date()
     };
 
-    radioName: string = 'Peakhour';
+    radioName: string = "Peakhour";
 
     chartOptions: any = {};
     series: any = [];
+
+    chartItem = {
+        height: 550
+    };
 
     created() {
         this.initData();
@@ -94,13 +98,37 @@ export class Peakhour extends Vue {
     }
 
     developData(count, yRange) {
-        var i = 0;
-        var series = [];
+        let i = 0;
+        let series = [];
         while (i < count) {
-            var x = "w" + (i + 1).toString();
-            var y =
+            let weekDay = i.toString();
+            let x = "";
+            let y =
                 Math.floor(Math.random() * (yRange.max - yRange.min + 1)) +
                 yRange.min;
+            switch (weekDay) {
+                case "0":
+                    x = this._("mb_DateTime_ShortWeekDay0");
+                    break;
+                case "1":
+                    x = this._("mb_DateTime_ShortWeekDay1");
+                    break;
+                case "2":
+                    x = this._("mb_DateTime_ShortWeekDay2");
+                    break;
+                case "3":
+                    x = this._("mb_DateTime_ShortWeekDay3");
+                    break;
+                case "4":
+                    x = this._("mb_DateTime_ShortWeekDay4");
+                    break;
+                case "5":
+                    x = this._("mb_DateTime_ShortWeekDay5");
+                    break;
+                case "6":
+                    x = this._("mb_DateTime_ShortWeekDay6");
+                    break;
+            }
             series.push({ x: x, y: y });
             i++;
         }
@@ -111,39 +139,39 @@ export class Peakhour extends Vue {
         // TODO: Wait API
         this.series = [
             {
-                name: "5pm",
+                name: `5${this._("mb_DateTime_LowerPM")}`,
                 data: this.developData(7, { min: -30, max: 55 })
             },
             {
-                name: "4pm",
+                name: `4${this._("mb_DateTime_LowerPM")}`,
                 data: this.developData(7, { min: -30, max: 55 })
             },
             {
-                name: "3pm",
+                name: `3${this._("mb_DateTime_LowerPM")}`,
                 data: this.developData(7, { min: -30, max: 55 })
             },
             {
-                name: "2pm",
+                name: `2${this._("mb_DateTime_LowerPM")}`,
                 data: this.developData(7, { min: -30, max: 55 })
             },
             {
-                name: "1pm",
+                name: `1${this._("mb_DateTime_LowerPM")}`,
                 data: this.developData(7, { min: -30, max: 55 })
             },
             {
-                name: "12am",
+                name: `12${this._("mb_DateTime_LowerAM")}`,
                 data: this.developData(7, { min: -30, max: 55 })
             },
             {
-                name: "11am",
+                name: `11${this._("mb_DateTime_LowerAM")}`,
                 data: this.developData(7, { min: -30, max: 55 })
             },
             {
-                name: "10am",
+                name: `10${this._("mb_DateTime_LowerAM")}`,
                 data: this.developData(7, { min: -30, max: 55 })
             },
             {
-                name: "9am",
+                name: `9${this._("mb_DateTime_LowerAM")}`,
                 data: this.developData(7, { min: -30, max: 55 })
             }
         ];
@@ -153,6 +181,7 @@ export class Peakhour extends Vue {
             title: { text: "" },
             chart: { toolbar: { show: false } },
             dataLabels: { enabled: false },
+            legend: { show: true },
             plotOptions: {
                 heatmap: {
                     shadeIntensity: 0.5,
@@ -161,31 +190,31 @@ export class Peakhour extends Vue {
                             {
                                 from: -30,
                                 to: 5,
-                                name: "Low",
+                                name: "",
                                 color: "#F4F6F8"
                             },
                             {
                                 from: 6,
                                 to: 20,
-                                name: "Medium",
+                                name: "",
                                 color: "#D8E7F8"
                             },
                             {
                                 from: 21,
                                 to: 45,
-                                name: "High",
+                                name: "",
                                 color: "#B9CAFC"
                             },
                             {
                                 from: 46,
                                 to: 55,
-                                name: "Strong",
+                                name: "",
                                 color: "#5780F8"
                             },
                             {
                                 from: 56,
                                 to: 1000,
-                                name: "Extreme",
+                                name: "",
                                 color: "#265BF6"
                             }
                         ]

@@ -1,0 +1,3 @@
+interface IPeakhour {}
+
+export { IPeakhour };
