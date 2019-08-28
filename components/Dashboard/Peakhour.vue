@@ -137,112 +137,26 @@ export class Peakhour extends Vue {
     }
 
     initCharts() {
-        // TODO: Wait API
-        this.series = [
-            {
-                name: `11${this._("mb_DateTime_LowerPM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `10${this._("mb_DateTime_LowerPM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `9${this._("mb_DateTime_LowerPM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `8${this._("mb_DateTime_LowerPM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `7${this._("mb_DateTime_LowerPM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `6${this._("mb_DateTime_LowerPM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `5${this._("mb_DateTime_LowerPM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `5${this._("mb_DateTime_LowerPM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `4${this._("mb_DateTime_LowerPM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `3${this._("mb_DateTime_LowerPM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `2${this._("mb_DateTime_LowerPM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: ' ',
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `12${this._("mb_DateTime_LowerAM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `11${this._("mb_DateTime_LowerAM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `10${this._("mb_DateTime_LowerAM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `9${this._("mb_DateTime_LowerAM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `8${this._("mb_DateTime_LowerAM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `7${this._("mb_DateTime_LowerAM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `6${this._("mb_DateTime_LowerAM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `5${this._("mb_DateTime_LowerAM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `4${this._("mb_DateTime_LowerAM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
+        this.series = [];
+        for (let i = 23; i >= 0; i--) {
+            let name = "";
+            if (i == 0) {
+                name = "12" + this._("mb_DateTime_LowerAM");
+            } else if (i % 3 != 0) {
+                name = " ";
+            } else if (i == 12) {
+                name = "12" + this._("mb_DateTime_LowerPM");
+            } else if (i > 12) {
+                name = (i - 12).toString() + this._("mb_DateTime_LowerPM");
+            } else {
+                 name = i.toString() + this._("mb_DateTime_LowerAM");
             }
-            ,
-            {
-                name: `3${this._("mb_DateTime_LowerAM")}`,
+
+            this.series.push({
+                name: name,
                 data: this.developData(7, { min: -30, max: 55 })
-            }
-            ,
-            {
-                name: `2${this._("mb_DateTime_LowerAM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            }
-            ,
-            {
-                name: `1${this._("mb_DateTime_LowerAM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            },
-            {
-                name: `0${this._("mb_DateTime_LowerAM")}`,
-                data: this.developData(7, { min: -30, max: 55 })
-            }
-        ];
+            });
+        }
 
         // TODO: Wait API
         this.chartOptions = {
@@ -257,6 +171,12 @@ export class Peakhour extends Vue {
                         ranges: [
                             {
                                 from: -10000,
+                                to: -1,
+                                name: "",
+                                color: "#ececec"
+                            },
+                            {
+                                from: 0,
                                 to: 5,
                                 name: "",
                                 color: "#F4F6F8"
