@@ -2,7 +2,7 @@
 
     <iv-toolbox-element-base
         v-bind="$attrs"
-        :title="_('w_Switch')"
+        :title="_('w_ReportDashboard_Refresh')"
         icon="fa fa-refresh isap-toolbox-icon"
         v-show="visible"
         :variant="variant"

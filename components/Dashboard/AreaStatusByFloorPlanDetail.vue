@@ -161,7 +161,7 @@ export class AreaStatusByFloorPlanDetail extends Vue {
         for (let status of Object.keys(this.currentStatus)) {
             this.currentStatus[status] = false;
         }
-        this.currentStatus[type] = !this.currentStatus[type];
+        this.currentStatus[type] = true;
     }
 
     // 建立 image map
