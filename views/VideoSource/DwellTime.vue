@@ -601,14 +601,13 @@ export default class DwellTime extends Vue {
                         ? param.area["objectId"]
                         : "",
 
-                // TODO: check param
                 frsId:
                     param.config && param.config.frsId
                         ? param.config.frsId
                         : "",
                 frsIdView:
-                    param.config && param.config.frsId
-                        ? param.config.frsId
+                    param.config && param.config.frsIp
+                        ? param.config.frsIp
                         : "",
                 sourceId:
                     param.config && param.config.sourceId
@@ -1233,6 +1232,7 @@ export default class DwellTime extends Vue {
 					{
 						customId: data.customId,
 						name: data.name,
+                        demoServerId: data.demoServerId,
 						brand: EAddStep.isap,
 						model: EAddStep.frsManager,
 						direction: data.direction,
@@ -1274,6 +1274,7 @@ export default class DwellTime extends Vue {
 					{
 						objectId: data.objectId,
 						name: data.name,
+                        demoServerId: data.demoServerId,
 						brand: EAddStep.isap,
 						model: EAddStep.frsManager,
 						direction: data.direction,
@@ -1620,6 +1621,7 @@ export default class DwellTime extends Vue {
                 /**
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiType - iv-form-label
+                 * @uiHidden - ${ this.addStep === EAddStep.frsManager ? "true" : "false" }
                  */
                 sourceidView?: string;
 
@@ -1637,7 +1639,6 @@ export default class DwellTime extends Vue {
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiType - iv-form-label
                  * @uiHidden - ${ this.addStep === EAddStep.frs ? "true" : "false" }
-                 */
                  */
                 sourceIdView?: string;
 
