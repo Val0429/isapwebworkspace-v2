@@ -16,15 +16,15 @@
                 <template #toolbox>
 
                     <iv-toolbox-view
-                        :disabled="isSelected.length !== 1"
+                        :disabled="selectedDetail.length !== 1"
                         @click="pageToView()"
                     />
                     <iv-toolbox-edit
-                        :disabled="isSelected.length !== 1"
+                        :disabled="selectedDetail.length !== 1"
                         @click="pageToEdit()"
                     />
                     <iv-toolbox-delete
-                        :disabled="isSelected.length === 0"
+                        :disabled="selectedDetail.length === 0"
                         @click="deleteData()"
                     />
                     <iv-toolbox-divider />
@@ -45,17 +45,17 @@
                     </template>
 
                     <template #Actions="{$attrs, $listeners}">
-                        <iv-toolbox-more :disabled="isSelected.length !== 1">
+                        <iv-toolbox-more :disabled="selectedDetail.length !== 1">
                             <iv-toolbox-view
-                                :disabled="isSelected.length !== 1"
+                                :disabled="selectedDetail.length !== 1"
                                 @click="pageToView()"
                             />
                             <iv-toolbox-edit
-                                :disabled="isSelected.length !== 1"
+                                :disabled="selectedDetail.length !== 1"
                                 @click="pageToEdit()"
                             />
                             <iv-toolbox-delete
-                                :disabled="isSelected.length !== 1"
+                                :disabled="selectedDetail.length !== 1"
                                 @click="deleteData()"
                             />
                         </iv-toolbox-more>
@@ -244,7 +244,7 @@ export default class HumanDetectionServer extends Vue {
     newImgSrc = "";
 
     //data
-    isSelected: any = [];
+
     selectedDetail: any = [];
 
     inputFormData: any = {};
@@ -294,7 +294,7 @@ export default class HumanDetectionServer extends Vue {
     }
 
     selectedData(data) {
-        this.isSelected = data;
+        this.selectedDetail = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
     }
