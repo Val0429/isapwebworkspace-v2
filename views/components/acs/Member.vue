@@ -486,7 +486,7 @@ export default class Member extends Vue {
          let downloadFileFunc = async()=>{
            try{
               
-              let respCheckFile:any = await this.$server.R("acs/exportmember" as any, {fileName:resp.file});
+              let respCheckFile:any = await this.$server.R("/acs/exportmember" as any, {fileName:resp.file});
               console.log("respCheckFile", respCheckFile.ready);
               if(!respCheckFile.ready) throw new Error("file is not ready");    
               window.location.href = this.serverUrl+"files/"+resp.file+"?sessionId="+this.$user.sessionId;
