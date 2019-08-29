@@ -385,7 +385,6 @@ export default class HumanDetection extends Vue {
         step: 1
     };
 
-
     tableMultiple: boolean = true;
     selectedDetail: any = [];
     sitesSelectItem: any = {};
@@ -477,10 +476,12 @@ export default class HumanDetection extends Vue {
             siteId: string;
             areaId: string;
             mode: string;
+            paging: object;
         } = {
             siteId: this.inputFormData.siteId,
             areaId: this.inputFormData.areaId,
-            mode: this.inputFormData.mode
+            mode: this.inputFormData.mode,
+            paging: { all: true }
         };
 
         this.groupNameItem = [];
@@ -505,21 +506,10 @@ export default class HumanDetection extends Vue {
     }
 
     async initHdServerItem() {
-        let body: {
-            paging: {
-                page: number;
-                pageSize: number;
-            };
-        } = {
-            paging: {
-                page: 1,
-                pageSize: 999
-            }
-        };
-
+        let param: any = { paging: { all: true } };
         this.hdServerItem = [];
         await this.$server
-            .R("/partner/human-detection", body)
+            .R("/partner/human-detection", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (let item of response.results) {
@@ -534,21 +524,11 @@ export default class HumanDetection extends Vue {
     }
 
     async initCMSItem() {
-        let body: {
-            paging: {
-                page: number;
-                pageSize: number;
-            };
-        } = {
-            paging: {
-                page: 1,
-                pageSize: 999
-            }
-        };
+        let param: any = { paging: { all: true } };
 
         this.cmsItem = [];
         await this.$server
-            .R("/partner/cms", body)
+            .R("/partner/cms", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (let item of response.results) {
@@ -565,8 +545,10 @@ export default class HumanDetection extends Vue {
     async initDeviceData(data) {
         let body: {
             objectId: string;
+            paging: object;
         } = {
-            objectId: data
+            objectId: data,
+            paging: { all: true }
         };
         Loading.show();
         await this.$server
@@ -710,9 +692,11 @@ export default class HumanDetection extends Vue {
             const readParam: {
                 areaId: string;
                 mode: string;
+                paging: object;
             } = {
                 areaId: data,
-                mode: ECameraMode.humanDetection
+                mode: ECameraMode.humanDetection,
+                paging: { all: true }
             };
 
             await this.$server
@@ -835,8 +819,10 @@ export default class HumanDetection extends Vue {
 
         const readAllSiteParam: {
             type: string;
+            paging: object;
         } = {
-            type: "all"
+            type: "all",
+            paging: { all: true }
         };
 
         await this.$server
@@ -863,8 +849,9 @@ export default class HumanDetection extends Vue {
     }
 
     async initSelectItemTree() {
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/location/tree")
+            .R("/location/tree", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
@@ -944,8 +931,10 @@ export default class HumanDetection extends Vue {
         if (data !== undefined || data !== "") {
             const readParam: {
                 siteId: string;
+                paging: object;
             } = {
-                siteId: data
+                siteId: data,
+                paging: { all: true }
             };
 
             await this.$server

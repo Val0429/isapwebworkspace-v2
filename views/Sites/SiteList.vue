@@ -85,20 +85,10 @@ export class SiteList extends Vue {
     async initSiteListDeviceGroup() {
         this.deviceGroupAll = [];
 
-        let body: {
-            paging: {
-                page: number;
-                pageSize: number;
-            };
-        } = {
-            paging: {
-                page: 1,
-                pageSize: 999
-            }
-        };
+        let param: any = { paging: { all: true } };
 
         await this.$server
-            .R("/device/group", body)
+            .R("/device/group", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     if (response.results != undefined) {
@@ -113,9 +103,9 @@ export class SiteList extends Vue {
 
     async initSiteListArea() {
         this.areaAll = [];
-
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/location/area/all", {})
+            .R("/location/area/all", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     this.areaAll = response;

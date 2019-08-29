@@ -197,9 +197,9 @@ export default class ReportVIPTracking extends Vue {
     // Author: Tina
     async initSelectItemTag() {
         let tempTagSelectItem = {};
-
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/tag/all")
+            .R("/tag/all", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {

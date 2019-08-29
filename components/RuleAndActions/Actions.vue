@@ -22,20 +22,19 @@
                 {{ _('w_RuleAndActions_Email') }}
             </b-form-checkbox>
 
-<!--            <b-form-checkbox-->
-<!--                :disabled="disabled"-->
-<!--                v-for="option in notifyMethodSelectItem"-->
-<!--                v-model="notifyMethodSelected"-->
-<!--                :key="option.value"-->
-<!--                :value="option.value"-->
-<!--                name="notifyMethodSelected"-->
-<!--                class="col-md-12 ml-4 mb-2"-->
-<!--                inline-->
-<!--                @input="changeNotifyMethod"-->
-<!--            >-->
-<!--                {{ option.text }}-->
-<!--            </b-form-checkbox>-->
-
+            <!--            <b-form-checkbox-->
+            <!--                :disabled="disabled"-->
+            <!--                v-for="option in notifyMethodSelectItem"-->
+            <!--                v-model="notifyMethodSelected"-->
+            <!--                :key="option.value"-->
+            <!--                :value="option.value"-->
+            <!--                name="notifyMethodSelected"-->
+            <!--                class="col-md-12 ml-4 mb-2"-->
+            <!--                inline-->
+            <!--                @input="changeNotifyMethod"-->
+            <!--            >-->
+            <!--                {{ option.text }}-->
+            <!--            </b-form-checkbox>-->
 
         </template>
 
@@ -69,7 +68,6 @@
                 {{ _('w_RuleAndActions_UsersHavePermission') }}
             </b-form-checkbox>
 
-
             <!-- User -->
             <b-form-checkbox
                 :value="true"
@@ -93,7 +91,6 @@
                 @input="selectUserIds"
             >
             </iv-form-selection>
-
 
             <!-- UserGroup -->
             <b-form-checkbox
@@ -119,19 +116,19 @@
             >
             </iv-form-selection>
 
-<!--            <b-form-checkbox-->
-<!--                :disabled="disabled"-->
-<!--                v-for="option in notifyTargetSelectItem"-->
-<!--                v-model="notifyTargetSelected"-->
-<!--                :key="option.value"-->
-<!--                :value="option.value"-->
-<!--                name="notifyTargetSelected"-->
-<!--                class="col-md-12 ml-4 mb-2"-->
-<!--                inline-->
-<!--                @input="changeNotifyTarget"-->
-<!--            >-->
-<!--                {{ option.text }}-->
-<!--            </b-form-checkbox>-->
+            <!--            <b-form-checkbox-->
+            <!--                :disabled="disabled"-->
+            <!--                v-for="option in notifyTargetSelectItem"-->
+            <!--                v-model="notifyTargetSelected"-->
+            <!--                :key="option.value"-->
+            <!--                :value="option.value"-->
+            <!--                name="notifyTargetSelected"-->
+            <!--                class="col-md-12 ml-4 mb-2"-->
+            <!--                inline-->
+            <!--                @input="changeNotifyTarget"-->
+            <!--            >-->
+            <!--                {{ option.text }}-->
+            <!--            </b-form-checkbox>-->
 
         </template>
 
@@ -197,7 +194,7 @@ export class Actions extends Vue {
 
         userIds: [],
         groupIds: [],
-        minutes: 0,
+        minutes: 0
     };
 
     created() {
@@ -242,9 +239,10 @@ export class Actions extends Vue {
 
     async initSelectItemUsers() {
         this.userSelectItem = [];
+        let param: any = { paging: { all: true } };
 
         await this.$server
-            .R("/user/user")
+            .R("/user/user", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
@@ -263,9 +261,10 @@ export class Actions extends Vue {
 
     async initSelectItemUserGroup() {
         this.userGroupSelectItem = [];
+        let param: any = { paging: { all: true } };
 
         await this.$server
-            .R("/user/group/all")
+            .R("/user/group/all", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {

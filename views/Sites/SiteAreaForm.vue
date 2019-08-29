@@ -147,9 +147,11 @@ export class SiteAreaForm extends Vue {
         let body: {
             siteId: string;
             areaId: string;
+            paging: object;
         } = {
             siteId: this.site.objectId,
-            areaId: this.area.objectId
+            areaId: this.area.objectId,
+            paging: { all: true }
         };
 
         await this.$server
@@ -167,22 +169,12 @@ export class SiteAreaForm extends Vue {
 
     async getDeviceData() {
         if (this.area) {
-            let body: {
-                paging: {
-                    page: number;
-                    pageSize: number;
-                };
-            } = {
-                paging: {
-                    page: 1,
-                    pageSize: 999
-                }
-            };
+            let param: any = { paging: { all: true } };
 
             this.devices = [];
 
             await this.$server
-                .R("/device", body)
+                .R("/device", param)
                 .then((response: any) => {
                     ResponseFilter.successCheck(
                         this,

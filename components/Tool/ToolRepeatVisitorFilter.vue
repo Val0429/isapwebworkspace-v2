@@ -74,8 +74,10 @@ export class ToolRepeatVisitorFilter extends Vue {
 
         const readAllSiteParam: {
             type: string;
+            paging: object;
         } = {
-            type: "all"
+            type: "all",
+            paging: { all: true }
         };
 
         await this.$server

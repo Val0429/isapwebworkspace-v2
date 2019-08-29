@@ -263,7 +263,10 @@ import { toEnumInterface } from "@/../core";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 // API Interface
-import { IConfigiSap, IConfigiSapFRSManager } from "@/config/default/api/interfaces";
+import {
+    IConfigiSap,
+    IConfigiSapFRSManager
+} from "@/config/default/api/interfaces";
 
 // Region Tree
 import {
@@ -322,7 +325,6 @@ export default class Demographic extends Vue {
     eAddStep = EAddStep;
     addStep: EAddStep = EAddStep.none;
 
-
     tableMultiple: boolean = true;
 
     selectedDetail: any = [];
@@ -351,16 +353,16 @@ export default class Demographic extends Vue {
         siteId: "",
         groupIds: [],
         name: "",
-        demoServerId: "",   // FRS 和 FRS Manager 共用
-        serverId: "",   // FRS 和 FRS Manager 共用
+        demoServerId: "", // FRS 和 FRS Manager 共用
+        serverId: "", // FRS 和 FRS Manager 共用
         sourceid: "",
         location: "",
         objectId: "",
         // FRS Manager
         frsId: "",
         sourceId: "",
-        model: '',
-        brand: '',
+        model: "",
+        brand: ""
     };
 
     created() {}
@@ -383,8 +385,8 @@ export default class Demographic extends Vue {
             // FRS Manager
             frsId: "",
             sourceId: "",
-            model: '',
-            brand: '',
+            model: "",
+            brand: ""
         };
     }
 
@@ -398,32 +400,34 @@ export default class Demographic extends Vue {
 
         const readAllSiteParam: {
             type: string;
+            paging: object;
         } = {
-            type: "all"
+            type: "all",
+            paging: { all: true }
         };
 
         await this.$server
             .R("/location/site/all", readAllSiteParam)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-	                for (const returnValue of response) {
-		                this.sitesSelectItem[returnValue.objectId] =
-			                returnValue.name;
-		                this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-			                returnValue
-		                );
-	                }
+                    for (const returnValue of response) {
+                        this.sitesSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                        this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+                            returnValue
+                        );
+                    }
                 });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });
-
     }
 
     async initSelectItemTree() {
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/location/tree")
+            .R("/location/tree", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
@@ -439,45 +443,51 @@ export default class Demographic extends Vue {
 
     async initSelectItemFRSServer() {
         this.serverIdSelectItem = {};
-
+        let param: any = { paging: { all: true } };
         if (this.addStep === EAddStep.frs) {
             await this.$server
-                .R("/partner/frs")
+                .R("/partner/frs", param)
                 .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        for (const returnValue of response.results) {
-                            this.serverIdSelectItem[returnValue.objectId] =
-                                returnValue.name;
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            for (const returnValue of response.results) {
+                                this.serverIdSelectItem[returnValue.objectId] =
+                                    returnValue.name;
+                            }
                         }
-                    });
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
                 });
         } else if (this.addStep === EAddStep.frsManager) {
-	        await this.$server
-		        .R("/partner/frs-manager")
-		        .then((response: any) => {
-			        ResponseFilter.successCheck(this, response, (response: any) => {
-				        for (const returnValue of response.results) {
-					        this.serverIdSelectItem[returnValue.objectId] =
-						        returnValue.name;
-				        }
-			        });
-		        })
-		        .catch((e: any) => {
-			        return ResponseFilter.catchError(this, e);
-		        });
+            await this.$server
+                .R("/partner/frs-manager", param)
+                .then((response: any) => {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            for (const returnValue of response.results) {
+                                this.serverIdSelectItem[returnValue.objectId] =
+                                    returnValue.name;
+                            }
+                        }
+                    );
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(this, e);
+                });
         }
-
-
     }
 
     async initSelectItemDemographicServer() {
         this.demographicIdSelectItem = {};
-
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/partner/demographic")
+            .R("/partner/demographic", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
@@ -578,14 +588,13 @@ export default class Demographic extends Vue {
                 sourceIdView:
                     param.config && param.config.sourceId
                         ? param.config.sourceId
-                        : "",
+                        : ""
             };
         }
 
         // if (this.inputFormData.serverId !== "") {
         //     this.selectSourceIdAndLocation(this.inputFormData.serverId);
         // }
-
     }
 
     tempSaveInputData(data) {
@@ -636,140 +645,133 @@ export default class Demographic extends Vue {
         }
     }
 
-	async selectSourceIdAndLocation(data) {
+    async selectSourceIdAndLocation(data) {
+        this.sourceIdSelectItem = {};
 
-		this.sourceIdSelectItem = {};
+        if (this.addStep === EAddStep.frs) {
+            if (data !== undefined) {
+                const readParam: {
+                    objectId: string;
+                } = {
+                    objectId: data
+                };
 
-		if (this.addStep === EAddStep.frs) {
-			if (data !== undefined) {
-				const readParam: {
-					objectId: string;
-				} = {
-					objectId: data
-				};
+                Loading.show();
+                await this.$server
+                    .C("/partner/frs/device", readParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                for (const returnValue of response) {
+                                    this.$set(
+                                        this.sourceIdSelectItem,
+                                        returnValue.sourceid,
+                                        returnValue.sourceid
+                                    );
+                                }
+                            },
+                            this._("w_ErrorReadData")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(
+                            this,
+                            e,
+                            this._("w_ErrorReadData")
+                        );
+                    });
+            }
+        } else if (this.addStep === EAddStep.frsManager) {
+            if (data !== undefined) {
+                await this.initFrsId(data);
 
-				Loading.show();
-				await this.$server
-					.C("/partner/frs/device", readParam)
-					.then((response: any) => {
-						ResponseFilter.successCheck(
-							this,
-							response,
-							(response: any) => {
-								for (const returnValue of response) {
-									this.$set(
-										this.sourceIdSelectItem,
-										returnValue.sourceid,
-										returnValue.sourceid
-									);
-								}
-							},
-							this._("w_ErrorReadData")
-						);
-					})
-					.catch((e: any) => {
-						return ResponseFilter.catchError(
-							this,
-							e,
-							this._("w_ErrorReadData")
-						);
-					});
-			}
-		} else if(this.addStep === EAddStep.frsManager) {
+                // const readParam: {
+                //     objectId: string;
+                // } = {
+                //     objectId: data
+                // };
+                //
+                // Loading.show();
+                // await this.$server
+                //     .C("/partner/frs/device", readParam)
+                //     .then((response: any) => {
+                //         ResponseFilter.successCheck(
+                //             this,
+                //             response,
+                //             (response: any) => {
+                //                 for (const returnValue of response) {
+                //                     this.$set(
+                //                         this.sourceIdSelectItem,
+                //                         returnValue.sourceid,
+                //                         returnValue.sourceid
+                //                     );
+                //                 }
+                //             },
+                //             this._("w_ErrorReadData")
+                //         );
+                //     })
+                //     .catch((e: any) => {
+                //         return ResponseFilter.catchError(
+                //             this,
+                //             e,
+                //             this._("w_ErrorReadData")
+                //         );
+                //     });
+            }
+        }
+    }
 
-			if (data !== undefined) {
-				await this.initFrsId(data);
+    async initFrsId(data) {
+        this.frsIdSelectItem = {};
+        this.sourceIdSelectItem = {};
 
-				// const readParam: {
-				//     objectId: string;
-				// } = {
-				//     objectId: data
-				// };
-				//
-				// Loading.show();
-				// await this.$server
-				//     .C("/partner/frs/device", readParam)
-				//     .then((response: any) => {
-				//         ResponseFilter.successCheck(
-				//             this,
-				//             response,
-				//             (response: any) => {
-				//                 for (const returnValue of response) {
-				//                     this.$set(
-				//                         this.sourceIdSelectItem,
-				//                         returnValue.sourceid,
-				//                         returnValue.sourceid
-				//                     );
-				//                 }
-				//             },
-				//             this._("w_ErrorReadData")
-				//         );
-				//     })
-				//     .catch((e: any) => {
-				//         return ResponseFilter.catchError(
-				//             this,
-				//             e,
-				//             this._("w_ErrorReadData")
-				//         );
-				//     });
-			}
-		}
+        if (data !== undefined) {
+            const readParam: {
+                objectId: string;
+            } = {
+                objectId: data
+            };
 
-	}
+            Loading.show();
+            await this.$server
+                .C("/partner/frs-manager/device", readParam)
+                .then((response: any) => {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            for (const returnValue of response) {
+                                this.$set(
+                                    this.frsIdSelectItem,
+                                    returnValue.frsId,
+                                    returnValue.frsIp
+                                );
+                            }
 
-	async initFrsId(data) {
-
-		this.frsIdSelectItem = {};
-		this.sourceIdSelectItem = {};
-
-		if (data !== undefined) {
-			const readParam: {
-				objectId: string;
-			} = {
-				objectId: data
-			};
-
-			Loading.show();
-			await this.$server
-				.C("/partner/frs-manager/device", readParam)
-				.then((response: any) => {
-					ResponseFilter.successCheck(
-						this,
-						response,
-						(response: any) => {
-
-							for (const returnValue of response) {
-								this.$set(
-									this.frsIdSelectItem,
-									returnValue.frsId,
-									returnValue.frsIp
-								);
-							}
-
-							for (const returnValue of response) {
-								for (const value of returnValue.channels) {
-									this.$set(
-										this.sourceIdSelectItem,
-										value.sourceId,
-										value.sourceId
-									);
-								}
-
-							}
-
-						},
-						this._("w_ErrorReadData")
-					);
-				})
-				.catch((e: any) => {
-					return ResponseFilter.catchError(
-						this,
-						e,
-						this._("w_ErrorReadData")
-					);
-				});
-		}
-	}
+                            for (const returnValue of response) {
+                                for (const value of returnValue.channels) {
+                                    this.$set(
+                                        this.sourceIdSelectItem,
+                                        value.sourceId,
+                                        value.sourceId
+                                    );
+                                }
+                            }
+                        },
+                        this._("w_ErrorReadData")
+                    );
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_ErrorReadData")
+                    );
+                });
+        }
+    }
 
     async selectAreaId(data) {
         this.areaSelectItem = {};
@@ -784,8 +786,10 @@ export default class Demographic extends Vue {
             if (data !== undefined || data !== "") {
                 const readParam: {
                     siteId: string;
+                    paging: object;
                 } = {
-                    siteId: data
+                    siteId: data,
+                    paging: { all: true }
                 };
 
                 await this.$server
@@ -825,8 +829,10 @@ export default class Demographic extends Vue {
 
                 const readParam: {
                     siteId: string;
+                    paging: object;
                 } = {
-                    siteId: data
+                    siteId: data,
+                    paging: { all: true }
                 };
 
                 await this.$server
@@ -869,9 +875,11 @@ export default class Demographic extends Vue {
                 const readParam: {
                     areaId: string;
                     mode: string;
+                    paging: object;
                 } = {
                     areaId: data,
-                    mode: ECameraMode.demographic
+                    mode: ECameraMode.demographic,
+                    paging: { all: true }
                 };
 
                 await this.$server
@@ -907,9 +915,11 @@ export default class Demographic extends Vue {
                 const readParam: {
                     areaId: string;
                     mode: string;
+                    paging: object;
                 } = {
                     areaId: data,
-                    mode: ECameraMode.demographic
+                    mode: ECameraMode.demographic,
+                    paging: { all: true }
                 };
 
                 if (this.inputFormData.tempAreaId !== data) {
@@ -967,9 +977,9 @@ export default class Demographic extends Vue {
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
 
-	    await this.getInputData();
+        await this.getInputData();
 
-	    if (this.inputFormData.model === EAddStep.frs) {
+        if (this.inputFormData.model === EAddStep.frs) {
             this.addStep = EAddStep.frs;
             this.selectSourceIdAndLocation(this.inputFormData.serverId);
             this.transition.prevStep = this.transition.step;
@@ -983,7 +993,7 @@ export default class Demographic extends Vue {
             this.transition.step = 3;
         }
 
-	    await this.initSelectItemFRSServer();
+        await this.initSelectItemFRSServer();
         await this.initSelectItemDemographicServer();
         await this.initSelectItemSite();
         await this.selectAreaId(this.inputFormData.siteId);
@@ -995,7 +1005,6 @@ export default class Demographic extends Vue {
                 this.inputFormData.groupIds.map(item => item.objectId)
             )
         );
-
     }
 
     pageToView() {
@@ -1108,16 +1117,13 @@ export default class Demographic extends Vue {
     }
 
     async saveAddOrEditiSap(data) {
-
         if (this.addStep === EAddStep.frs) {
-
             const configFRSServerObject: IConfigiSap = {
                 serverId: data.serverId,
                 sourceid: data.sourceid
             };
 
             if (!this.inputFormData.objectId) {
-
                 const datas: any = [
                     {
                         customId: data.customId,
@@ -1126,7 +1132,8 @@ export default class Demographic extends Vue {
                         name: data.name,
                         areaId: data.areaId,
                         demoServerId: data.demoServerId,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        groupIds:
+                            data.groupIds !== undefined ? data.groupIds : [],
                         config: configFRSServerObject
                     }
                 ];
@@ -1166,7 +1173,8 @@ export default class Demographic extends Vue {
                         name: data.name,
                         areaId: data.areaId,
                         demoServerId: data.demoServerId,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        groupIds:
+                            data.groupIds !== undefined ? data.groupIds : [],
                         config: configFRSServerObject
                     }
                 ];
@@ -1198,28 +1206,26 @@ export default class Demographic extends Vue {
                         );
                     });
             }
-
         }
 
-
         if (this.addStep === EAddStep.frsManager) {
-
             const configFRSManagerObject: IConfigiSapFRSManager = {
                 serverId: data.serverId,
                 frsId: data.frsId,
-                sourceId: data.sourceId,
+                sourceId: data.sourceId
             };
 
-	        if (data.frsId) {
-		        for (const frsId in this.frsIdSelectItem) {
-			        if (data.frsId === frsId) {
-				        configFRSManagerObject.frsIp = this.frsIdSelectItem[frsId]
-			        }
-		        }
-	        }
+            if (data.frsId) {
+                for (const frsId in this.frsIdSelectItem) {
+                    if (data.frsId === frsId) {
+                        configFRSManagerObject.frsIp = this.frsIdSelectItem[
+                            frsId
+                        ];
+                    }
+                }
+            }
 
             if (!this.inputFormData.objectId) {
-
                 const datas: any = [
                     {
                         customId: data.customId,
@@ -1228,7 +1234,8 @@ export default class Demographic extends Vue {
                         name: data.name,
                         areaId: data.areaId,
                         demoServerId: data.demoServerId,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        groupIds:
+                            data.groupIds !== undefined ? data.groupIds : [],
                         config: configFRSManagerObject
                     }
                 ];
@@ -1270,7 +1277,8 @@ export default class Demographic extends Vue {
                         name: data.name,
                         areaId: data.areaId,
                         demoServerId: data.demoServerId,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        groupIds:
+                            data.groupIds !== undefined ? data.groupIds : [],
                         config: configFRSManagerObject
                     }
                 ];
@@ -1303,9 +1311,7 @@ export default class Demographic extends Vue {
                         );
                     });
             }
-
         }
-
     }
 
     async doDelete() {
@@ -1313,7 +1319,6 @@ export default class Demographic extends Vue {
             this._("w_VSDemographic_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-
                 let deleteParam: {
                     objectId: any;
                 } = {
@@ -1325,21 +1330,21 @@ export default class Demographic extends Vue {
                 }
 
                 Loading.show();
-                    this.$server
-                        .D("/device", deleteParam)
-                        .then((response: any) => {
-                            ResponseFilter.successCheck(
-                                this,
-                                response,
-                                (response: any) => {
-                                    this.pageToList();
-                                },
-                                this._("w_DeleteFailed")
-                            );
-                        })
-                        .catch((e: any) => {
-                            return ResponseFilter.catchError(this, e);
-                        });
+                this.$server
+                    .D("/device", deleteParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                this.pageToList();
+                            },
+                            this._("w_DeleteFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(this, e);
+                    });
 
                 Loading.hide();
             }
@@ -1376,10 +1381,7 @@ export default class Demographic extends Vue {
     }
 
     showLabelTitle(): string {
-        if (
-            this.pageStep === EPageStep.add &&
-            this.addStep === EAddStep.frs
-        ) {
+        if (this.pageStep === EPageStep.add && this.addStep === EAddStep.frs) {
             return this._("w_VSDemographic_AddisapUseFRS");
         }
 
@@ -1390,10 +1392,7 @@ export default class Demographic extends Vue {
             return this._("w_VSDemographic_AddisapUseFRSManger");
         }
 
-        if (
-            this.pageStep === EPageStep.edit &&
-            this.addStep === EAddStep.frs
-        ) {
+        if (this.pageStep === EPageStep.edit && this.addStep === EAddStep.frs) {
             return this._("w_VSDemographic_EditisapUseFRS");
         }
 
@@ -1506,8 +1505,8 @@ export default class Demographic extends Vue {
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiPlaceHolder - ${this._("w_SourceId")}
                  * @uiHidden - ${
-                        this.addStep === EAddStep.frsManager ? "true" : "false"
-                    }
+                     this.addStep === EAddStep.frsManager ? "true" : "false"
+                 }
                  */
                 sourceid: ${toEnumInterface(
                     this.sourceIdSelectItem as any,
@@ -1519,20 +1518,17 @@ export default class Demographic extends Vue {
                  * @uiLabel - ${this._("w_FRSId")}
                  * @uiPlaceHolder - ${this._("w_FRSId")}
                  * @uiHidden - ${
-                    this.addStep === EAddStep.frs ? "true" : "false"
-                }
+                     this.addStep === EAddStep.frs ? "true" : "false"
+                 }
                  */
-                frsId: ${toEnumInterface(
-                    this.frsIdSelectItem as any,
-                    false
-                )};
+                frsId: ${toEnumInterface(this.frsIdSelectItem as any, false)};
 
                /**
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiPlaceHolder - ${this._("w_SourceId")}
                  * @uiHidden - ${
-                        this.addStep === EAddStep.frs ? "true" : "false"
-                    }
+                     this.addStep === EAddStep.frs ? "true" : "false"
+                 }
                  */
                 sourceId: ${toEnumInterface(
                     this.sourceIdSelectItem as any,
@@ -1599,7 +1595,9 @@ export default class Demographic extends Vue {
                 /**
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiType - iv-form-label
-                 * @uiHidden - ${ this.addStep === EAddStep.frsManager ? "true" : "false" }
+                 * @uiHidden - ${
+                     this.addStep === EAddStep.frsManager ? "true" : "false"
+                 }
                  */
                 sourceidView?: string;
 
@@ -1607,7 +1605,9 @@ export default class Demographic extends Vue {
                 /**
                  * @uiLabel - ${this._("w_FRSId")}
                  * @uiType - iv-form-label
-                 * @uiHidden - ${ this.addStep === EAddStep.frs ? "true" : "false" }
+                 * @uiHidden - ${
+                     this.addStep === EAddStep.frs ? "true" : "false"
+                 }
                  */
                  */
                 frsIdView?: string;
@@ -1616,7 +1616,9 @@ export default class Demographic extends Vue {
                 /**
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiType - iv-form-label
-                 * @uiHidden - ${ this.addStep === EAddStep.frs ? "true" : "false" }
+                 * @uiHidden - ${
+                     this.addStep === EAddStep.frs ? "true" : "false"
+                 }
                  */
                  */
                 sourceIdView?: string;

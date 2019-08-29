@@ -167,13 +167,15 @@ export default class ReportCampaign extends Vue {
 
     async initSelectItemUsers() {
         let tempUserSelectItem = {};
-
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/user/user")
+            .R("/user/user", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    if (response.results != undefined &&
-                        response.results.length > 0) {
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
                         for (const returnValue of response.results) {
                             tempUserSelectItem[
                                 returnValue.objectId
@@ -191,9 +193,10 @@ export default class ReportCampaign extends Vue {
     async initSelectYear() {
         let tempResult: {};
         let tempYearSelectItem = {};
+        let param: any = { paging: { all: true } };
 
         tempResult = await this.$server
-            .R("/report/campaign/condition")
+            .R("/report/campaign/condition", param)
             .catch((e: any) => {
                 return ResponseFilter.catchError(this, e);
             });

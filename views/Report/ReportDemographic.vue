@@ -942,9 +942,11 @@ export default class ReportDemographic extends Vue {
 			let tempSitesSelectItem = {};
 
 			const readAllSiteParam: {
-				type: string;
+                type: string;
+                paging: object;
 			} = {
-				type: "all"
+                type: "all",
+                paging: { all: true }
 			};
 
 			await this.$server
@@ -966,10 +968,10 @@ export default class ReportDemographic extends Vue {
 		}
 
 		async initSelectItemTag() {
-			let tempTagSelectItem = {};
-
+            let tempTagSelectItem = {};
+            let param: any = { paging: { all: true } };
 			await this.$server
-				.R("/tag/all")
+				.R("/tag/all", param)
 				.then((response: any) => {
                     ResponseFilter.successCheck(this, response,
                         (response: any) => {
@@ -987,8 +989,9 @@ export default class ReportDemographic extends Vue {
 		}
 
 		async initSelectItemTree() {
+            let param: any = { paging: { all: true } };
 			await this.$server
-				.R("/location/tree")
+				.R("/location/tree", param)
 				.then((response: any) => {
                     ResponseFilter.successCheck(this, response, (response: any) => {
                         let tempTree = ReportService.resolveUserSite(
@@ -1010,9 +1013,11 @@ export default class ReportDemographic extends Vue {
 			let tempAreaSelectItem = {all: this._("w_AllAreas")};
 
 			const readParam: {
-				siteId: string;
+                siteId: string;
+                paging: object;
 			} = {
-				siteId: this.filterData.firstSiteId
+                siteId: this.filterData.firstSiteId,
+                paging: { all: true }
 			};
 
 			if (!this.filterData.firstSiteId) {
@@ -1045,10 +1050,12 @@ export default class ReportDemographic extends Vue {
 			let readParam: {
 				siteId: string;
 				areaId?: string;
-				mode: string;
+                mode: string;
+                paging: object;
 			} = {
 				siteId: this.filterData.firstSiteId,
-				mode: this.deviceMode
+                mode: this.deviceMode,
+                paging: { all: true }
             };
             
 			if (!this.filterData.firstSiteId) {
@@ -1087,10 +1094,12 @@ export default class ReportDemographic extends Vue {
 				siteId: string;
 				areaId?: string;
 				groupId?: string;
-				mode: string;
+                mode: string;
+                paging: object;
 			} = {
 				siteId: this.filterData.firstSiteId,
-				mode: this.deviceMode
+                mode: this.deviceMode,
+                paging: { all: true }
             };
             
 			if (!this.filterData.firstSiteId) {
@@ -1133,10 +1142,11 @@ export default class ReportDemographic extends Vue {
         }
 
 		async initSelectItemUsers() {
-			let tempUserSelectItem = {};
+            let tempUserSelectItem = {};
+            let param: any = { paging: { all: true } };
 
 			await this.$server
-				.R("/user/user")
+				.R("/user/user",param)
 				.then((response: any) => {
                     ResponseFilter.successCheck(this, response,
                         (response: any) => {

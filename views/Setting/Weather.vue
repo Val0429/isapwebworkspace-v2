@@ -221,8 +221,9 @@ export default class Weather extends Vue {
     }
 
     async readWeather() {
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/setting/weather")
+            .R("/setting/weather", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     this.inputWeatherData.secretKey = response.secretKey;

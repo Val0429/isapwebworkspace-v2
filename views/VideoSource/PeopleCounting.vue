@@ -578,7 +578,6 @@
 
             </iv-card>
 
-
             <!-- iSap -->
             <iv-auto-card
                 key="transition_5"
@@ -704,7 +703,11 @@ import { toEnumInterface } from "@/../core";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 // API Interface
-import { IConfig, IConfigiSap, IConfigiSapFRSManager } from "@/config/default/api/interfaces";
+import {
+    IConfig,
+    IConfigiSap,
+    IConfigiSapFRSManager
+} from "@/config/default/api/interfaces";
 
 // Region Tree
 import {
@@ -744,7 +747,7 @@ enum EAddStep {
     eocortex = "eocortex",
     brickstream = "brickstream",
     dahua = "dahua",
-    none = "none",
+    none = "none"
 }
 
 enum ECameraMode {
@@ -766,7 +769,6 @@ export default class PeopleCounting extends Vue {
 
     eAddStep = EAddStep;
     addStep: EAddStep = EAddStep.none;
-
 
     tableMultiple: boolean = true;
 
@@ -811,7 +813,7 @@ export default class PeopleCounting extends Vue {
         lines: "1",
         // FRS Manager
         frsId: "",
-        sourceId: "",
+        sourceId: ""
     };
 
     created() {}
@@ -841,7 +843,7 @@ export default class PeopleCounting extends Vue {
             lines: "1",
             // FRS Manager
             frsId: "",
-            sourceId: "",
+            sourceId: ""
         };
     }
 
@@ -855,8 +857,10 @@ export default class PeopleCounting extends Vue {
 
         const readAllSiteParam: {
             type: string;
+            paging: object;
         } = {
-            type: "all"
+            type: "all",
+            paging: { all: true }
         };
 
         await this.$server
@@ -878,8 +882,9 @@ export default class PeopleCounting extends Vue {
     }
 
     async initSelectItemTree() {
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/location/tree")
+            .R("/location/tree", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
@@ -895,37 +900,44 @@ export default class PeopleCounting extends Vue {
 
     async initSelectItemFRSServer() {
         this.serverIdSelectItem = {};
-
+        let param: any = { paging: { all: true } };
         if (this.addStep === EAddStep.frs) {
             await this.$server
-                .R("/partner/frs")
+                .R("/partner/frs", param)
                 .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        for (const returnValue of response.results) {
-                            this.serverIdSelectItem[returnValue.objectId] =
-                                returnValue.name;
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            for (const returnValue of response.results) {
+                                this.serverIdSelectItem[returnValue.objectId] =
+                                    returnValue.name;
+                            }
                         }
-                    });
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
                 });
         } else if (this.addStep === EAddStep.frsManager) {
             await this.$server
-                .R("/partner/frs-manager")
+                .R("/partner/frs-manager", param)
                 .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        for (const returnValue of response.results) {
-                            this.serverIdSelectItem[returnValue.objectId] =
-                                returnValue.name;
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            for (const returnValue of response.results) {
+                                this.serverIdSelectItem[returnValue.objectId] =
+                                    returnValue.name;
+                            }
                         }
-                    });
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
                 });
         }
-
     }
 
     selectedItem(data) {
@@ -1028,7 +1040,7 @@ export default class PeopleCounting extends Vue {
                 sourceIdView:
                     param.config && param.config.sourceId
                         ? param.config.sourceId
-                        : "",
+                        : ""
             };
         }
     }
@@ -1100,7 +1112,6 @@ export default class PeopleCounting extends Vue {
     }
 
     async selectSourceIdAndLocation(data) {
-
         this.sourceIdSelectItem = {};
 
         if (this.addStep === EAddStep.frs) {
@@ -1138,8 +1149,7 @@ export default class PeopleCounting extends Vue {
                         );
                     });
             }
-        } else if(this.addStep === EAddStep.frsManager) {
-
+        } else if (this.addStep === EAddStep.frsManager) {
             if (data !== undefined) {
                 await this.initFrsId(data);
 
@@ -1177,11 +1187,9 @@ export default class PeopleCounting extends Vue {
                 //     });
             }
         }
-
     }
 
     async initFrsId(data) {
-
         this.frsIdSelectItem = {};
         this.sourceIdSelectItem = {};
 
@@ -1200,7 +1208,6 @@ export default class PeopleCounting extends Vue {
                         this,
                         response,
                         (response: any) => {
-
                             for (const returnValue of response) {
                                 this.$set(
                                     this.frsIdSelectItem,
@@ -1217,9 +1224,7 @@ export default class PeopleCounting extends Vue {
                                         value.sourceId
                                     );
                                 }
-
                             }
-
                         },
                         this._("w_ErrorReadData")
                     );
@@ -1247,8 +1252,10 @@ export default class PeopleCounting extends Vue {
             if (data !== undefined || data !== "") {
                 const readParam: {
                     siteId: string;
+                    paging: object;
                 } = {
-                    siteId: data
+                    siteId: data,
+                    paging: { all: true }
                 };
 
                 await this.$server
@@ -1288,8 +1295,10 @@ export default class PeopleCounting extends Vue {
 
                 const readParam: {
                     siteId: string;
+                    paging: object;
                 } = {
-                    siteId: data
+                    siteId: data,
+                    paging: { all: true }
                 };
 
                 await this.$server
@@ -1332,9 +1341,11 @@ export default class PeopleCounting extends Vue {
                 const readParam: {
                     areaId: string;
                     mode: string;
+                    paging: object;
                 } = {
                     areaId: data,
-                    mode: ECameraMode.peopleCounting
+                    mode: ECameraMode.peopleCounting,
+                    paging: { all: true }
                 };
 
                 await this.$server
@@ -1370,9 +1381,11 @@ export default class PeopleCounting extends Vue {
                 const readParam: {
                     areaId: string;
                     mode: string;
+                    paging: object;
                 } = {
                     areaId: data,
-                    mode: ECameraMode.peopleCounting
+                    mode: ECameraMode.peopleCounting,
+                    paging: { all: true }
                 };
 
                 if (this.inputFormData.tempAreaId !== data) {
@@ -1463,7 +1476,6 @@ export default class PeopleCounting extends Vue {
                 this.inputFormData.groupIds.map(item => item.objectId)
             )
         );
-
     }
 
     pageToView() {
@@ -1537,7 +1549,7 @@ export default class PeopleCounting extends Vue {
     }
 
     async pageToAddByEocortex() {
-        console.log('pageToAddByEocortex ~ ')
+        console.log("pageToAddByEocortex ~ ");
         this.clearInputData();
         await this.initSelectItemSite();
         this.addStep = EAddStep.eocortex;
@@ -1547,7 +1559,7 @@ export default class PeopleCounting extends Vue {
     }
 
     async pageToAddByBrickstream() {
-        console.log('pageToAddByBrickstream ~ ')
+        console.log("pageToAddByBrickstream ~ ");
         this.clearInputData();
         await this.initSelectItemSite();
         this.addStep = EAddStep.brickstream;
@@ -1557,7 +1569,7 @@ export default class PeopleCounting extends Vue {
     }
 
     async pageToAddByDahua() {
-        console.log('pageToAddByDahua ~ ')
+        console.log("pageToAddByDahua ~ ");
         this.clearInputData();
         await this.initSelectItemSite();
         this.addStep = EAddStep.dahua;
@@ -1650,13 +1662,13 @@ export default class PeopleCounting extends Vue {
         let tempLine = [];
 
         switch (this.inputFormData.lines) {
-            case '1':
+            case "1":
                 tempLine = [1];
                 break;
-            case '2':
+            case "2":
                 tempLine = [2];
                 break;
-            case '1+2':
+            case "1+2":
                 tempLine = [1, 2];
                 break;
         }
@@ -1749,16 +1761,13 @@ export default class PeopleCounting extends Vue {
     }
 
     async saveAddOrEditiSap(data) {
-
         if (this.addStep === EAddStep.frs) {
-
             const configFRSServerObject: IConfigiSap = {
                 serverId: data.serverId,
                 sourceid: data.sourceid
             };
 
             if (!this.inputFormData.objectId) {
-
                 const datas: any = [
                     {
                         customId: data.customId,
@@ -1767,7 +1776,8 @@ export default class PeopleCounting extends Vue {
                         model: EAddStep.frs,
                         areaId: data.areaId,
                         direction: data.direction,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        groupIds:
+                            data.groupIds !== undefined ? data.groupIds : [],
                         config: configFRSServerObject
                     }
                 ];
@@ -1808,7 +1818,8 @@ export default class PeopleCounting extends Vue {
                         model: EAddStep.frs,
                         areaId: data.areaId,
                         direction: data.direction,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        groupIds:
+                            data.groupIds !== undefined ? data.groupIds : [],
                         config: configFRSServerObject
                     }
                 ];
@@ -1841,28 +1852,26 @@ export default class PeopleCounting extends Vue {
                         );
                     });
             }
-
         }
 
-
         if (this.addStep === EAddStep.frsManager) {
-
             const configFRSManagerObject: IConfigiSapFRSManager = {
                 serverId: data.serverId,
                 frsId: data.frsId,
-                sourceId: data.sourceId,
+                sourceId: data.sourceId
             };
 
             if (data.frsId) {
                 for (const frsId in this.frsIdSelectItem) {
                     if (data.frsId === frsId) {
-                        configFRSManagerObject.frsIp = this.frsIdSelectItem[frsId]
+                        configFRSManagerObject.frsIp = this.frsIdSelectItem[
+                            frsId
+                        ];
                     }
                 }
             }
 
             if (!this.inputFormData.objectId) {
-
                 const datas: any = [
                     {
                         customId: data.customId,
@@ -1871,7 +1880,8 @@ export default class PeopleCounting extends Vue {
                         model: EAddStep.frsManager,
                         areaId: data.areaId,
                         direction: data.direction,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        groupIds:
+                            data.groupIds !== undefined ? data.groupIds : [],
                         config: configFRSManagerObject
                     }
                 ];
@@ -1912,7 +1922,8 @@ export default class PeopleCounting extends Vue {
                         model: EAddStep.frsManager,
                         areaId: data.areaId,
                         direction: data.direction,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        groupIds:
+                            data.groupIds !== undefined ? data.groupIds : [],
                         config: configFRSManagerObject
                     }
                 ];
@@ -1945,7 +1956,6 @@ export default class PeopleCounting extends Vue {
                         );
                     });
             }
-
         }
     }
 
@@ -1954,7 +1964,6 @@ export default class PeopleCounting extends Vue {
             this._("w_VSPeopleCounting_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-
                 let deleteParam: {
                     objectId: any;
                 } = {
@@ -1967,21 +1976,21 @@ export default class PeopleCounting extends Vue {
 
                 Loading.show();
 
-                    this.$server
-                        .D("/device", deleteParam)
-                        .then((response: any) => {
-                            ResponseFilter.successCheck(
-                                this,
-                                response,
-                                (response: any) => {
-                                    this.pageToList();
-                                },
-                                this._("w_DeleteFailed")
-                            );
-                        })
-                        .catch((e: any) => {
-                            return ResponseFilter.catchError(this, e);
-                        });
+                this.$server
+                    .D("/device", deleteParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                this.pageToList();
+                            },
+                            this._("w_DeleteFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(this, e);
+                    });
 
                 Loading.hide();
             }
@@ -2018,10 +2027,7 @@ export default class PeopleCounting extends Vue {
     }
 
     showLabelTitle(): string {
-        if (
-            this.pageStep === EPageStep.add &&
-            this.addStep === EAddStep.frs
-        ) {
+        if (this.pageStep === EPageStep.add && this.addStep === EAddStep.frs) {
             return this._("w_VSPeopleCounting_AddisapUseFRS");
         }
 
@@ -2032,10 +2038,7 @@ export default class PeopleCounting extends Vue {
             return this._("w_VSPeopleCounting_AddisapUseFRSManger");
         }
 
-        if (
-            this.pageStep === EPageStep.edit &&
-            this.addStep === EAddStep.frs
-        ) {
+        if (this.pageStep === EPageStep.edit && this.addStep === EAddStep.frs) {
             return this._("w_VSPeopleCounting_EditisapUseFRS");
         }
 
@@ -2183,9 +2186,9 @@ export default class PeopleCounting extends Vue {
                  * @uiLabel - ${this._("w_Camera_lines")}
                  */
                 lines: ${toEnumInterface({
-                    '1': "1",
-                    '2': "2",
-                    '1+2': "1+2",
+                    "1": "1",
+                    "2": "2",
+                    "1+2": "1+2"
                 })};
 
                 /**
@@ -2343,20 +2346,17 @@ export default class PeopleCounting extends Vue {
                  * @uiLabel - ${this._("w_FRSId")}
                  * @uiPlaceHolder - ${this._("w_FRSId")}
                  * @uiHidden - ${
-                        this.addStep === EAddStep.frs ? "true" : "false"
-                    }
+                     this.addStep === EAddStep.frs ? "true" : "false"
+                 }
                  */
-                frsId: ${toEnumInterface(
-                    this.frsIdSelectItem as any,
-                    false
-                )};
+                frsId: ${toEnumInterface(this.frsIdSelectItem as any, false)};
 
                /**
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiPlaceHolder - ${this._("w_SourceId")}
                  * @uiHidden - ${
-                        this.addStep === EAddStep.frs ? "true" : "false"
-                    }
+                     this.addStep === EAddStep.frs ? "true" : "false"
+                 }
                  */
                 sourceId: ${toEnumInterface(
                     this.sourceIdSelectItem as any,
@@ -2428,7 +2428,9 @@ export default class PeopleCounting extends Vue {
                 /**
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiType - iv-form-label
-                 * @uiHidden - ${ this.addStep === EAddStep.frsManager ? "true" : "false" }
+                 * @uiHidden - ${
+                     this.addStep === EAddStep.frsManager ? "true" : "false"
+                 }
                  */
                 sourceidView?: string;
 
@@ -2436,7 +2438,9 @@ export default class PeopleCounting extends Vue {
                 /**
                  * @uiLabel - ${this._("w_FRSId")}
                  * @uiType - iv-form-label
-                 * @uiHidden - ${ this.addStep === EAddStep.frs ? "true" : "false" }
+                 * @uiHidden - ${
+                     this.addStep === EAddStep.frs ? "true" : "false"
+                 }
                  */
                  */
                 frsIdView?: string;
@@ -2445,7 +2449,9 @@ export default class PeopleCounting extends Vue {
                 /**
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiType - iv-form-label
-                 * @uiHidden - ${ this.addStep === EAddStep.frs ? "true" : "false" }
+                 * @uiHidden - ${
+                     this.addStep === EAddStep.frs ? "true" : "false"
+                 }
                  */
                  */
                 sourceIdView?: string;
