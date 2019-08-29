@@ -9,7 +9,6 @@ interface IParam {
 }
 
 interface IPeakhour {
-    siteId: string;
     date: Date;
     value: number;
 }
