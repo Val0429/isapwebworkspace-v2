@@ -5,92 +5,84 @@
             :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
             class="font-3xl"
         >
-            <div class="row">
-                <div class="col-lg-6 col-sm-6col-xs-6 col-xxs-6 p-2">
-                    <div class="box current-info-box">
-                        <div class="backgroundColor">
-                            <div class="clearfix">
-                                <span class="title">{{_("w_ReportDashboard_Traffic")}} {{_("w_DashboardOverview_Now")}}</span>
-                            </div>
-                            <div class="clearfix">
-                                <span class="date">{{anlysisData.traffic.total != null ? toPercent(anlysisData.traffic.total) : "N/A"}}</span>
-                            </div>
+            <div class="row information-div">
+                <div class="box current-info-box">
+                    <div class="backgroundColor">
+                        <div class="clearfix">
+                            <span class="title">{{_("w_ReportDashboard_Traffic")}} {{_("w_DashboardOverview_Now")}}</span>
+                        </div>
+                        <div class="clearfix">
+                            <span class="date">{{anlysisData.traffic.total != null ? toPercent(anlysisData.traffic.total) : "N/A"}}</span>
                         </div>
                     </div>
                 </div>
                 <!--/col-->
 
-                <div class="col-lg-6 col-sm-6col-xs-6 col-xxs-6 p-2">
-                    <div class="box current-info-box">
-                        <div class="backgroundColor">
-                            <div class="clearfix">
-                                <span class="title">{{_("w_ReportDashboard_AverageOccupancy")}} {{_("w_DashboardOverview_Now")}}</span>
-                            </div>
-                            <div class="clearfix">
-                                <span class="date">{{anlysisData.averageOccupancy.total != null ? numberWithCommas(anlysisData.averageOccupancy.total) : "N/A"}}</span>
-                            </div>
+                <div class="box current-info-box">
+                    <div class="backgroundColor">
+                        <div class="clearfix">
+                            <span class="title">{{_("w_ReportDashboard_AverageOccupancy")}} {{_("w_DashboardOverview_Now")}}</span>
+                        </div>
+                        <div class="clearfix">
+                            <span class="date">{{anlysisData.averageOccupancy.total != null ? numberWithCommas(anlysisData.averageOccupancy.total) : "N/A"}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!--/col-->
+            </div>
+            <div class="row information-div">
+                <div class="box current-info-box">
+                    <div class="backgroundColor">
+                        <div class="clearfix">
+                            <span class="title">{{_("w_ReportDashboard_AverageDwellTime")}} {{_("w_DashboardOverview_Now")}}</span>
+                        </div>
+                        <div class="clearfix">
+                            <span class="date">{{anlysisData.averageDwellTime.total != null ? numberWithCommas(anlysisData.averageDwellTime.total) : "N/A"}}</span>
                         </div>
                     </div>
                 </div>
                 <!--/col-->
 
-                <div class="col-lg-6 col-sm-6col-xs-6 col-xxs-6 p-2">
-                    <div class="box current-info-box">
-                        <div class="backgroundColor">
-                            <div class="clearfix">
-                                <span class="title">{{_("w_ReportDashboard_AverageDwellTime")}} {{_("w_DashboardOverview_Now")}}</span>
-                            </div>
-                            <div class="clearfix">
-                                <span class="date">{{anlysisData.averageDwellTime.total != null ? numberWithCommas(anlysisData.averageDwellTime.total) : "N/A"}}</span>
-                            </div>
+                <div class="box current-info-box">
+                    <div class="backgroundColor">
+                        <div class="clearfix">
+                            <span class="title">{{_("w_ReportDashboard_Demographic")}} {{_("w_DashboardOverview_Now")}}</span>
+                        </div>
+                        <div class="clearfix">
+                            <apexchart
+                                class="demographic-div"
+                                type=donut
+                                width=150
+                                :options="chartOptions.demographic"
+                                :series="chartOptions.demographic.series"
+                            />
                         </div>
                     </div>
                 </div>
                 <!--/col-->
-
-                <div class="col-lg-6 col-sm-6col-xs-6 col-xxs-6 p-2">
-                    <div class="box current-info-box">
-                        <div class="backgroundColor">
-                            <div class="clearfix">
-                                <span class="title">{{_("w_ReportDashboard_Demographic")}} {{_("w_DashboardOverview_Now")}}</span>
-                            </div>
-                            <div class="clearfix">
-                                <apexchart
-                                    class="demographic-div"
-                                    type=donut
-                                    width=150
-                                    :options="chartOptions.demographic"
-                                    :series="chartOptions.demographic.series"
-                                />
-                            </div>
+            </div>
+            <div class="row last-information-div">
+                <div class="box current-info-box">
+                    <div class="backgroundColor">
+                        <div class="clearfix">
+                            <span class="title">{{_("w_ReportDashboard_VIPBlacklist")}} {{_("w_DashboardOverview_Now")}}</span>
                         </div>
-                    </div>
-                </div>
-                <!--/col-->
-
-                <div class="col-lg-6 col-sm-6col-xs-6 col-xxs-6 p-2">
-                    <div class="box current-info-box">
-                        <div class="backgroundColor">
-                            <div class="clearfix">
-                                <span class="title">{{_("w_ReportDashboard_VIPBlacklist")}} {{_("w_DashboardOverview_Now")}}</span>
-                            </div>
-                            <div class="row clearfix">
-                                <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-6 vip-blackList-div">
-                                    <div class="right">
-                                        <div>
-                                            <span>{{anlysisData.vipBlacklist.value != null ? numberWithCommas(anlysisData.vipBlacklist.value) : "N/A"}} </span>
-                                        </div>
-                                        <img src="../../assets/images/vip.png">
+                        <div class="row clearfix">
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-6 vip-blackList-div">
+                                <div class="right">
+                                    <div>
+                                        <span>{{anlysisData.vipBlacklist.value != null ? numberWithCommas(anlysisData.vipBlacklist.value) : "N/A"}} </span>
                                     </div>
+                                    <img src="../../assets/images/vip.png">
                                 </div>
-                                <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-6 vip-blackList-div">
-                                    <div class="left">
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-xs-6 col-xxs-6 vip-blackList-div">
+                                <div class="left">
 
-                                        <div>
-                                            <span>{{anlysisData.vipBlacklist.value2 != null ? numberWithCommas(anlysisData.vipBlacklist.value2) : "N/A"}} </span>
-                                        </div>
-                                        <img src="../../assets/images/stranger.png">
+                                    <div>
+                                        <span>{{anlysisData.vipBlacklist.value2 != null ? numberWithCommas(anlysisData.vipBlacklist.value2) : "N/A"}} </span>
                                     </div>
+                                    <img src="../../assets/images/stranger.png">
                                 </div>
                             </div>
                         </div>
@@ -98,20 +90,18 @@
                 </div>
                 <!--/col-->
 
-                <div class="col-lg-6 col-sm-6col-xs-6 col-xxs-6 p-2">
-                    <div class="box current-info-box">
-                        <div class="backgroundColor">
-                            <div class="clearfix">
-                                <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}} {{_("w_DashboardOverview_Now")}}</span>
-                            </div>
-                            <div class="clearfix">
-                                <apexchart
-                                    type=radialBar
-                                    height=200
-                                    :options="chartOptions.repeatCustomer"
-                                    :series="chartOptions.repeatCustomer.series"
-                                />
-                            </div>
+                <div class="box current-info-box">
+                    <div class="backgroundColor">
+                        <div class="clearfix">
+                            <span class="title">{{_("w_ReportDashboard_RepeatCustomer")}} {{_("w_DashboardOverview_Now")}}</span>
+                        </div>
+                        <div class="clearfix">
+                            <apexchart
+                                type=radialBar
+                                height=200
+                                :options="chartOptions.repeatCustomer"
+                                :series="chartOptions.repeatCustomer.series"
+                            />
                         </div>
                     </div>
                 </div>
@@ -505,8 +495,8 @@ Vue.component("map-status-dashboard", MapStatusDashboard);
 }
 
 .current-info-box {
-    border: 1px solid #4d5256;
     margin: 0 0 30px 0;
+    width: 160px;
 
     .backgroundColor {
         padding: 10px;
@@ -520,9 +510,29 @@ Vue.component("map-status-dashboard", MapStatusDashboard);
     color: white;
 }
 
+.information-div {
+    .current-info-box:first-child {
+        border-right: 1px solid #4d5256;
+        border-bottom: 1px solid #4d5256;
+    }
+
+    .current-info-box:last-child {
+        border-bottom: 1px solid #4d5256;
+    }
+}
+
+.last-information-div {
+    .current-info-box:first-child {
+        border-right: 1px solid #4d5256;
+    }
+}
+
+.row {
+    margin-bottom: -30px;
+}
+
 .clearfix {
     text-align: center;
-
     .title {
         font-weight: bold;
         font-size: 12px;

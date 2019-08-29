@@ -6,6 +6,7 @@
             class="font-3xl"
         >
             <apexchart
+                v-if="chartItem.mount"
                 type=heatmap
                 :height="chartItem.height"
                 :options="chartItem.options"
@@ -51,6 +52,7 @@ export class Peakhour extends Vue {
     radioName: string = "Peakhour";
     peakHourDatas: IPeakhour[] = [];
     chartItem = {
+        mount: false,
         height: 483,
         options: {},
         series: []
@@ -64,21 +66,17 @@ export class Peakhour extends Vue {
 
     async initData() {
         // TODO: wait api to remove
+        console.log("!!! this.param.siteIds", this.param.siteIds);
         this.initDevelopData();
-        this.initCharts();
 
         // TODO: wait api
         // Loading.show();
         // await this.$server
         //     .C("/", timeParam)
         //     .then((response: any) => {
-        //         ResponseFilter.successCheck(
-        //             this,
-        //             response,
-        //             (response: any) => {
-        //             },
-        //             this._("w_Dialog_ErrorTitle")
-        //         );
+        //         ResponseFilter.successCheck(this, response, (response: any) => {
+        //             this.initCharts();
+        //         });
         //     })
         //     .catch((e: any) => {
         //         return ResponseFilter.catchError(
@@ -91,17 +89,49 @@ export class Peakhour extends Vue {
 
     initCharts() {
         this.chartItem.series = [];
+
         let chartRanges = [];
+        let weekList = [];
+
+        for (let i = 0; i < 7; i++) {
+            let iString = i.toString();
+            let xString = "";
+            switch (iString) {
+                case "0":
+                    xString = this._("mb_DateTime_ShortWeekDay0");
+                    break;
+                case "1":
+                    xString = this._("mb_DateTime_ShortWeekDay1");
+                    break;
+                case "2":
+                    xString = this._("mb_DateTime_ShortWeekDay2");
+                    break;
+                case "3":
+                    xString = this._("mb_DateTime_ShortWeekDay3");
+                    break;
+                case "4":
+                    xString = this._("mb_DateTime_ShortWeekDay4");
+                    break;
+                case "5":
+                    xString = this._("mb_DateTime_ShortWeekDay5");
+                    break;
+                case "6":
+                    xString = this._("mb_DateTime_ShortWeekDay6");
+                    break;
+            }
+            weekList.push({
+                x: xString,
+                y: -1
+            });
+        }
 
         for (let i = 23; i >= 0; i--) {
             let name = "";
             if (i == 0) {
                 name = "12" + this._("mb_DateTime_LowerAM");
-            }
-            // else if (i % 3 != 0) {
-            //     name = " ";
-            // }
-            else if (i == 12) {
+            } else if (i % 3 != 0) {
+                name = " ";
+            } else if (i == 12) {
                 name = "12" + this._("mb_DateTime_LowerPM");
             } else if (i > 12) {
                 name = (i - 12).toString() + this._("mb_DateTime_LowerPM");
@@ -109,13 +139,21 @@ export class Peakhour extends Vue {
                 name = i.toString() + this._("mb_DateTime_LowerAM");
             }
 
-            // TODO: wait data
-            let chartData = this.developData(7, { min: -30, max: 55 });
-
             this.chartItem.series.push({
                 name: name,
-                data: chartData
+                data: JSON.parse(JSON.stringify(weekList))
             });
+        }
+
+        console.log("!!!! series", this.chartItem.series);
+
+        for (let peakHour of this.peakHourDatas) {
+            let dataHour: number = peakHour.date.getHours();
+            let dateDay: number = peakHour.date.getDay();
+            if (this.chartItem.series[dataHour].data[dateDay].y == -1) {
+                this.chartItem.series[dataHour].data[dateDay].y = 0;
+            }
+            this.chartItem.series[dataHour].data[dateDay].y += peakHour.value;
         }
 
         // TODO: Wait API
@@ -173,6 +211,8 @@ export class Peakhour extends Vue {
                 }
             }
         };
+
+        this.chartItem.mount = true;
     }
 
     receiveSiteIds(siteIds: string[]) {
@@ -181,51 +221,45 @@ export class Peakhour extends Vue {
     }
 
     receiveTime(dateRange: IDateRange) {
-        this.param.dateRange = dateRange;
+        let startTime = !isNaN(dateRange.startDate.getTime())
+            ? dateRange.startDate.getTime()
+            : new Date().getTime();
+        let endTime = !isNaN(dateRange.endDate.getTime())
+            ? dateRange.endDate.getTime()
+            : new Date().getTime();
+        if (startTime > endTime) {
+            let tempTime = startTime;
+            startTime = endTime;
+            endTime = tempTime;
+        }
+        this.param.dateRange = {
+            startDate: new Date(startTime),
+            endDate: new Date(endTime)
+        };
         this.initData();
     }
 
     initDevelopData() {
+        this.peakHourDatas = [];
+
         let startTime: number = this.param.dateRange.startDate.getTime();
         let endTime: number = this.param.dateRange.endDate.getTime();
-    }
 
-    developData(count, yRange) {
-        let i = 0;
-        let series = [];
-        while (i < count) {
-            let weekDay = i.toString();
-            let x = "";
-            let y =
-                Math.floor(Math.random() * (yRange.max - yRange.min + 1)) +
-                yRange.min;
-            switch (weekDay) {
-                case "0":
-                    x = this._("mb_DateTime_ShortWeekDay0");
-                    break;
-                case "1":
-                    x = this._("mb_DateTime_ShortWeekDay1");
-                    break;
-                case "2":
-                    x = this._("mb_DateTime_ShortWeekDay2");
-                    break;
-                case "3":
-                    x = this._("mb_DateTime_ShortWeekDay3");
-                    break;
-                case "4":
-                    x = this._("mb_DateTime_ShortWeekDay4");
-                    break;
-                case "5":
-                    x = this._("mb_DateTime_ShortWeekDay5");
-                    break;
-                case "6":
-                    x = this._("mb_DateTime_ShortWeekDay6");
-                    break;
+        for (let siteId of this.param.siteIds) {
+            for (
+                let i = startTime;
+                i <= endTime;
+                i += Datetime.oneDayTimestamp
+            ) {
+                this.peakHourDatas.push({
+                    date: new Date(i),
+                    siteId: siteId,
+                    value: Math.floor(Math.random() * (55 + 30 + 1)) - 30
+                });
             }
-            series.push({ x: x, y: y });
-            i++;
         }
-        return series;
+
+        this.initCharts();
     }
 }
 
