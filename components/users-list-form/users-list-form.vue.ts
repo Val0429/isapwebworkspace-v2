@@ -55,6 +55,8 @@ export class UsersListForm extends Vue implements IFormQuick {
                      * @uiType - iv-form-password
                      * @uiColumnGroup - pwdGroup
                      * @uiHidden - ${type === EFormQuick.Edit ? true : false}
+                     * @uiValidation - (value, all) => value === all.password
+                     * @uiInvalidMessage - ${ this._('m_Password') }
                      */
                     comfirmPassword: string;
                     /*
@@ -63,19 +65,26 @@ export class UsersListForm extends Vue implements IFormQuick {
                     publicEmailAddress?: string;
                     /*
                      * @uiLabel - ${this._('w_User') + this._('w_Group')}
+                     * @uiDisabled - ${type === EFormQuick.Edit ? true : false}
+                     * @uiAttrs - { data: { "always-array": true} }
                      */
                     roles: ${
                         toEnumInterface(this.groupList)
                     };
+                    /**
+                     * @uiHidden - true
+                     */
+                    data: any;
+
                 }
                 `;
         }
     }
-    // preAdd() {
-    //     return {
-    //         title: "Default title"
-    //     }
-    // }
+    preAdd() {
+        return {
+            data: {}
+        }
+    }
     // postAdd(row: any) {
     //     row.service = "-";
     //     row.serviceType = "-";
@@ -87,13 +96,14 @@ export class UsersListForm extends Vue implements IFormQuick {
     // }
 
     preEdit?(row: any) {
-        row = { ...row, roles: row.roles[0].name };
+        row = { ...row, roles: row.roles.map(v => v.name) };
         return row;
     }
-    postEdit?(row: any) {
-        row = { ...row, roles: [row.roles] };
-        return row;
-    } 
+    // postEdit?(row: any) {
+    //     console.log(row)
+    //     // row = { ...row, roles: [row.roles] };
+    //     // return row;
+    // }
 
     // preEdit?(row: any) {
     //     throw new Error("Method not implemented.");

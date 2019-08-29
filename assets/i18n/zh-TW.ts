@@ -3,26 +3,30 @@ import { RegisterLanguage } from '@/../core/i18n';
 @RegisterLanguage('zh-TW', '正體中文')
 export default class LangObject {
     // Navagation
-    m_Dashboard = "Dashboard";
-    m_Navagation_Persons = "人員管理";
-    m_Navagation_Persons_Person = "人員";
-    m_Navagation_Persons_Stranger = "陌生人";
-    m_Navagation_Users = "使用者管理";
-    m_Navagation_Users_Users = "使用者";
-    m_Navagation_Users_Groups = "使用者群組";
-    m_Navagation_Region = " 區域管理";
-    m_Navagation_Region_Site = "工地";
+    m_Dashboard = 'Dashboard';
+    m_Navagation_Persons = '人員管理';
+    m_Navagation_Persons_Person = '人員';
+    m_Navagation_Persons_Stranger = '陌生人';
+    m_Navagation_Users = '使用者管理';
+    m_Navagation_Users_Users = '使用者';
+    m_Navagation_Users_Groups = '使用者群組';
+    m_Navagation_Region = ' 區域管理';
+    m_Navagation_Region_Site = '工地';
 
     // Card Header
-    m_Persons_Person_List = "人員列表";
-    m_Persons_Stranger_List = "陌生人列表";
-    m_Users_User_List = "用戶清單";
-    m_Users_Group_List = "群組清單";
-    m_Region_Site_Search = "工地查詢";
-    m_Region_Site_Detail = "工地細節";
-    m_Users_Add_User = "新增用戶";
-    m_Users_Edit_User = "修改用戶";
-    m_Users_Add_Group = "新增群組";
+    m_Persons_Person_List = '人員列表';
+    m_Persons_Person_Detail = '人員詳細資訊';
+    m_Persons_Person_Work_Station_Record = '工務所評分紀錄';
+    m_Persons_Person_Allow_Into_Site = '允許進入工地';
+    m_Persons_Person_Enter_Site_Record = '進入工地紀錄';
+    m_Persons_Stranger_List = '陌生人列表';
+    m_Users_User_List = '用戶清單';
+    m_Users_Group_List = '群組清單';
+    m_Region_Site_Search = '工地查詢';
+    m_Region_Site_Detail = '工地細節';
+    m_Users_Add_User = '新增用戶';
+    m_Users_Edit_User = '修改用戶';
+    m_Users_Add_Group = '新增群組';
 
     // Common
     w_User = '用戶';
@@ -47,20 +51,27 @@ export default class LangObject {
     w_Number = '編號';
     w_Card_Number = '卡號';
     w_Timestamp = '時間';
+    w_Date = '日期';
+    w_Get = '取得';
+    w_Close = '關閉';
+    w_Reason = '原因';
+    w_Enter = '進入';
+    w_Leave = '離開';
+    w_Stay = '停留';
+    w_Certificate = '證照';
+    w_Certificate_Expiry = '到期日';
+    w_Work_Station = '工務所';
+    w_Bad_Record = '不良紀錄';
+    w_Work_Record = '工作紀錄';
+    w_Is_Black = '是否為黑名單';
+    w_Company = '所屬公司';
 
     // Status
     w_Status_On = '開啟';
     w_Status_Off = '關閉';
 
-    // Date
-    w_Startdate = '開始日';
-    w_Enddate = '終了日';
-    w_CreatedAt = '建立日期';
-    w_UpdatedAt = '修改日期';
-
-    // Dialog
-    w_Dialog_ErrorTitle = 'Error';
-    w_Dialog_SuccessTitle = 'Success';
+    // Warn
+    m_Password = '密碼不一致';
 
     // Error
     w_Error_FailedToFetch = "We can't connect to server, please try again!"; // failed to fetch

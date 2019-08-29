@@ -10,7 +10,9 @@
         </div>
     </template>
     <template #view.actions>
-        <ivc-toolbox-actions />
+        <ivc-toolbox-actions
+            @click="readMore"
+            />
     </template>
     <!-- 51) custom edit / add template with <template #add.* /> -->
     </iv-form-quick>

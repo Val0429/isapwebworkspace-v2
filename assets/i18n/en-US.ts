@@ -3,26 +3,30 @@ import { RegisterLanguage } from '@/../core/i18n';
 @RegisterLanguage('en-US', 'English')
 export default class LangObject {
     // Navagation
-    m_Dashboard = "Dashboard";
-    w_Navagation_Persons = "Persons";
-    w_Navagation_Persons_Person = "Person";
-    w_Navagation_Persons_Stranger = "Stranger";
-    w_Navagation_Users = "Users Management";
-    w_Navagation_Users_Users = "Users";
-    w_Navagation_Users_Groups = "User Grpous";
-    w_Navagation_Region = "Region";
-    w_Navagation_Region_Site = "Site";
+    m_Dashboard = 'Dashboard';
+    m_Navagation_Persons = 'Persons';
+    m_Navagation_Persons_Person = 'Person';
+    m_Navagation_Persons_Stranger = 'Stranger';
+    m_Navagation_Users = 'Users Management';
+    m_Navagation_Users_Users = 'Users';
+    m_Navagation_Users_Groups = 'User Grpous';
+    m_Navagation_Region = 'Region';
+    m_Navagation_Region_Site = 'Site';
 
     // Card Header
-    m_Persons_Person_List = "Person List";
-    m_Persons_Stranger_List = "Stranger List";
-    m_Users_User_List = "User List";
-    m_Users_Group_List = "Group List";
-    m_Region_Site_Search = "Site Search";
-    m_Region_Site_Detail = "Site Detail";
-    m_Users_Add_User = "Add User";
-    m_Users_Edit_User = "Edit User";
-    m_Users_Add_Group = "Add Group";
+    m_Persons_Person_List = 'Person List';
+    m_Persons_Person_Detail = 'Person Detail';
+    m_Persons_Person_Work_Station_Record = 'Work Station Record';
+    m_Persons_Person_Allow_Into_Site = 'Allow Into Site';
+    m_Persons_Person_Enter_Site_Record = 'Enter Site Record';
+    m_Persons_Stranger_List = 'Stranger List';
+    m_Users_User_List = 'User List';
+    m_Users_Group_List = 'Group List';
+    m_Region_Site_Search = 'Site Search';
+    m_Region_Site_Detail = 'Site Detail';
+    m_Users_Add_User = 'Add User';
+    m_Users_Edit_User = 'Edit User';
+    m_Users_Add_Group = 'Add Group';
 
     // Common
     w_User = 'User';
@@ -47,20 +51,27 @@ export default class LangObject {
     w_Number = 'Number';
     w_Card_Number = 'Card Number';
     w_Timestamp = 'Time';
+    w_Date = 'Date';
+    w_Get = 'Get';
+    w_Close = 'Close';
+    w_Reason = 'Reason';
+    w_Enter = 'Enter';
+    w_Leave = 'Leave';
+    w_Stay = 'Stay';
+    w_Certificate = 'Certificate';
+    w_Certificate_Expiry = 'Expiry';
+    w_Work_Station = 'Work Station';
+    w_Bad_Record = 'Bad Record';
+    w_Work_Record = 'Work Record';
+    w_Is_Black = 'Black List';
+    w_Company = 'Company';
 
     // Status
     w_Status_On = 'On';
     w_Status_Off = 'Off';
 
-    // Dialog
-    w_Dialog_ErrorTitle = 'Error';
-    w_Dialog_SuccessTitle = 'Success';
-
-    // Date
-    w_Startdate = 'Start Date';
-    w_Enddate = 'End Date';
-    w_CreatedAt = 'Created Date';
-    w_UpdatedAt = 'Updated Date';
+    // Warn
+    m_Password = 'Confirm your password';
 
     // Error
     w_Error_FailedToFetch = "We can't connect to server, please try again!"; // failed to fetch

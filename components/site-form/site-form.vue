@@ -1,7 +1,6 @@
 <template>
     <iv-form-quick
-        ref="area-site"
-        @update:*="updateData()"
+        ref="site-form"
         >
     <!-- 50) custom view templates with <template #view.* /> -->
     <template #view.case_status="{$attrs, $listeners}">

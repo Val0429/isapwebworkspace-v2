@@ -20,55 +20,56 @@ export class SiteForm extends Vue implements IFormQuick {
             case EFormQuick.View:
             case EFormQuick.Edit:
                 return `
-                interface {
-                    /*
-                     * @uiLabel - ID
-                     * @uiHidden - ${type === EFormQuick.View ? false : true}
-                     */
-                    caseid: number;
-                    /*
-                     * @uiLabel - ${this._('w_Region')}
-                     * @uiHidden - ${type === EFormQuick.View ? false : true}
-                     */
-                    region: string;
-                    /*
-                     * @uiLabel - ${this._('w_Site') + this._('w_Title')}
-                     * @uiHidden - ${type === EFormQuick.View ? false : true}
-                     */
-                    name: string;
-                    /*
-                     * @uiLabel - ${this._('w_Work_Area')}
-                     * @uiHidden - ${type === EFormQuick.View ? false : true}
-                     */
-                    workarea: string;
-                    /*
-                     * @uiLabel - ${this._('w_Address')}
-                     * @uiHidden - ${type === EFormQuick.Edit ? false : true}
-                     */
-                    address?: string;
-                    /*
-                     * @uiLabel - ${this._('w_Lat')}
-                     * @uiHidden - ${type === EFormQuick.Edit ? false : true}
-                     */
-                    latitude?: number;
-                    /*
-                     * @uiLabel - ${this._('w_Lng')}
-                     * @uiHidden - ${type === EFormQuick.Edit ? false : true}
-                     */
-                    longitude?: number;
-                    /*
-                     * @uiLabel - ${this._('w_Status')}
-                     */
-                    case_status?: ${toEnumInterface({
-                        0: this._('w_Status_Off'),
-                        1: this._('w_Status_On')
-                    })};
-                    /*
-                     * @uiLabel - ${this._('w_Image')}
-                     * @uiType - ${type === EFormQuick.Edit ? 'iv-form-file' : ''}
-                     */
-                    images?: any;
-                }`;
+                    interface {
+                        /*
+                         * @uiLabel - ID
+                         * @uiHidden - ${type === EFormQuick.View ? false : true}
+                         */
+                        caseid: number;
+                        /*
+                         * @uiLabel - ${this._('w_Region')}
+                         * @uiHidden - ${type === EFormQuick.View ? false : true}
+                         */
+                        region: string;
+                        /*
+                         * @uiLabel - ${this._('w_Site') + this._('w_Title')}
+                         * @uiHidden - ${type === EFormQuick.View ? false : true}
+                         */
+                        name: string;
+                        /*
+                         * @uiLabel - ${this._('w_Work_Area')}
+                         * @uiHidden - ${type === EFormQuick.View ? false : true}
+                         */
+                        workarea: string;
+                        /*
+                         * @uiLabel - ${this._('w_Address')}
+                         * @uiHidden - ${type === EFormQuick.Edit ? false : true}
+                         */
+                        address?: string;
+                        /*
+                         * @uiLabel - ${this._('w_Lat')}
+                         * @uiHidden - ${type === EFormQuick.Edit ? false : true}
+                         */
+                        latitude?: number;
+                        /*
+                         * @uiLabel - ${this._('w_Lng')}
+                         * @uiHidden - ${type === EFormQuick.Edit ? false : true}
+                         */
+                        longitude?: number;
+                        /*
+                         * @uiLabel - ${this._('w_Status')}
+                         */
+                        case_status?: ${toEnumInterface({
+                            0: this._('w_Status_Off'),
+                            1: this._('w_Status_On')
+                        })};
+                        /*
+                         * @uiLabel - ${this._('w_Image')}
+                         * @uiType - ${type === EFormQuick.Edit ? 'iv-form-file' : ''}
+                         */
+                        images?: any;                        
+                    }
+                `;
         }
     }
     // preAdd() {
@@ -92,20 +93,8 @@ export class SiteForm extends Vue implements IFormQuick {
     //     throw new Error("Method not implemented.");
     // }
 
-    private sex = 0;
-    private isService: boolean = false;
-
-    private updateData(data) {
-        switch (data.key) {
-            case 'sex':
-                this.sex = data.value;
-            case 'service':
-                this.isService = data.value;
-        }
-    }
-    private sendData(arg) {
-        console.log('???');
-        console.log(arg);
+    private readMore() {
+        this.$emit('actionIsClick', true);
     }
 }
 export default SiteForm;

@@ -97,20 +97,8 @@ export class PersonListForm extends Vue implements IFormQuick {
     //     throw new Error("Method not implemented.");
     // }
 
-    private sex = 0;
-    private isService: boolean = false;
-
-    private updateData(data) {
-        switch (data.key) {
-            case 'sex':
-                this.sex = data.value;
-            case 'service':
-                this.isService = data.value;
-        }
-    }
-    private sendData(arg) {
-        console.log('???');
-        console.log(arg);
+    private readMore() {
+        this.$emit('actionIsClick', true);
     }
 }
 export default PersonListForm;
