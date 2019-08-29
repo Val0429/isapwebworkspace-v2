@@ -525,6 +525,14 @@ export class FilterStatusDashboard extends Vue {
             ],
             legend: {
                 show: false
+            },
+
+            colors: ["#5CCFFB", "#FD6893"],
+            dataLabels: {
+                dropShadow: { enabled: false },
+                style: {
+                    colors: ["#000", "#000"]
+                }
             }
         };
 
