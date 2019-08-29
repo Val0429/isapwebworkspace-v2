@@ -195,28 +195,30 @@ export class Peakhour extends Vue {
         ];
 
         let levelLength = this.chartItem.levelColors.length - 1;
-        for (let i = 0; i < levelLength; i++) {
-            chartRanges.push({
-                from:
-                    i == 0
-                        ? 0
-                        : ExcelChartLevel.Percentile(
-                              allValues,
-                              (1 / levelLength) * i
-                          ),
-                to:
-                    i == levelLength
-                        ? ExcelChartLevel.Percentile(
-                              allValues,
-                              (1 / levelLength) * (i + 1)
-                          ) * 10000
-                        : ExcelChartLevel.Percentile(
-                              allValues,
-                              (1 / levelLength) * (i + 1)
-                          ),
-                name: " ",
-                color: this.chartItem.levelColors[i + 1]
-            });
+        if (levelLength > 0) {
+            for (let i = 0; i < levelLength; i++) {
+                chartRanges.push({
+                    from:
+                        i == 0
+                            ? 0
+                            : ExcelChartLevel.Percentile(
+                                  allValues,
+                                  (1 / levelLength) * i
+                              ),
+                    to:
+                        i == levelLength - 1
+                            ? ExcelChartLevel.Percentile(
+                                  allValues,
+                                  (1 / levelLength) * (i + 1)
+                              ) * 10000
+                            : ExcelChartLevel.Percentile(
+                                  allValues,
+                                  (1 / levelLength) * (i + 1)
+                              ),
+                    name: " ",
+                    color: this.chartItem.levelColors[i + 1]
+                });
+            }
         }
 
         this.chartItem.options = {
@@ -264,10 +266,8 @@ export class Peakhour extends Vue {
 
     initDevelopData() {
         this.peakHourDatas = [];
-
         let startTime: number = this.param.dateRange.startDate.getTime();
         let endTime: number = this.param.dateRange.endDate.getTime();
-
         for (let siteId of this.param.siteIds) {
             for (
                 let i = startTime;
@@ -279,13 +279,11 @@ export class Peakhour extends Vue {
                     tempDate.setHours(j);
                     this.peakHourDatas.push({
                         date: tempDate,
-                        siteId: siteId,
                         value: Math.floor(Math.random() * (128 + 1))
                     });
                 }
             }
         }
-
         this.initCharts();
     }
 }
