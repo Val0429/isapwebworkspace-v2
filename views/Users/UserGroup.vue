@@ -191,7 +191,6 @@ export default class UserGroup extends Vue {
         step: 1
     };
 
-
     tableMultiple: boolean = true;
     selectedDetail: any = [];
     sitesSelectItem: any = {};
@@ -238,8 +237,10 @@ export default class UserGroup extends Vue {
 
         const readAllSiteParam: {
             type: string;
+            paging: object;
         } = {
-            type: "all"
+            type: "all",
+            paging: { all: true }
         };
 
         await this.$server
@@ -261,8 +262,9 @@ export default class UserGroup extends Vue {
     }
 
     async initSelectItemTree() {
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/location/tree")
+            .R("/location/tree", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
@@ -470,7 +472,6 @@ export default class UserGroup extends Vue {
             this._("w_UserGroup_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-
                 let deleteParam: {
                     objectId: any;
                 } = {
@@ -482,21 +483,21 @@ export default class UserGroup extends Vue {
                 }
 
                 Loading.show();
-                    this.$server
-                        .D("/user/group", deleteParam)
-                        .then((response: any) => {
-                            ResponseFilter.successCheck(
-                                this,
-                                response,
-                                (response: any) => {
-                                    this.pageToList();
-                                },
-                                this._("w_DeleteFailed")
-                            );
-                        })
-                        .catch((e: any) => {
-                            return ResponseFilter.catchError(this, e);
-                        });
+                this.$server
+                    .D("/user/group", deleteParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                this.pageToList();
+                            },
+                            this._("w_DeleteFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(this, e);
+                    });
 
                 Loading.hide();
             }

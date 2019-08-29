@@ -80,27 +80,27 @@
                     <iv-toolbox-back @click="pageToList" />
                 </template>
 
-<!--                <div class="font-weight-bold"> {{ _('w_iSap_Use') }}</div>-->
+                <!--                <div class="font-weight-bold"> {{ _('w_iSap_Use') }}</div>-->
 
-<!--                <b-button-->
-<!--                    class="button mt-3 mb-1"-->
-<!--                    size="md"-->
-<!--                    variant="success"-->
-<!--                    type="button"-->
-<!--                    @click="pageToAddByiSapFRS(eAddStep.frs)"-->
-<!--                >-->
-<!--                    {{ _('w_iSapFRS') }}-->
-<!--                </b-button>-->
+                <!--                <b-button-->
+                <!--                    class="button mt-3 mb-1"-->
+                <!--                    size="md"-->
+                <!--                    variant="success"-->
+                <!--                    type="button"-->
+                <!--                    @click="pageToAddByiSapFRS(eAddStep.frs)"-->
+                <!--                >-->
+                <!--                    {{ _('w_iSapFRS') }}-->
+                <!--                </b-button>-->
 
-<!--                <b-button-->
-<!--                    variant="link"-->
-<!--                    class="mt-4"-->
-<!--                    @click="goToSetFRSServer"-->
-<!--                >-->
-<!--                    {{ _('w_SetFRS') }}-->
-<!--                </b-button>-->
+                <!--                <b-button-->
+                <!--                    variant="link"-->
+                <!--                    class="mt-4"-->
+                <!--                    @click="goToSetFRSServer"-->
+                <!--                >-->
+                <!--                    {{ _('w_SetFRS') }}-->
+                <!--                </b-button>-->
 
-<!--                <br>-->
+                <!--                <br>-->
 
                 <b-button
                     class="button mt-3 mb-1"
@@ -268,7 +268,10 @@ import { toEnumInterface } from "@/../core";
 import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
 
 // API Interface
-import { IConfigiSap, IConfigiSapFRSManager } from "@/config/default/api/interfaces";
+import {
+    IConfigiSap,
+    IConfigiSapFRSManager
+} from "@/config/default/api/interfaces";
 
 // Region Tree
 import {
@@ -327,7 +330,6 @@ export default class FaceRecognition extends Vue {
     eAddStep = EAddStep;
     addStep: EAddStep = EAddStep.none;
 
-
     tableMultiple: boolean = true;
 
     selectedDetail: any = [];
@@ -359,16 +361,16 @@ export default class FaceRecognition extends Vue {
         siteId: "",
         groupIds: [],
         name: "",
-        demoServerId: "",   // FRS 和 FRS Manager 共用
-        serverId: "",   // FRS 和 FRS Manager 共用
+        demoServerId: "", // FRS 和 FRS Manager 共用
+        serverId: "", // FRS 和 FRS Manager 共用
         sourceid: "",
         location: "",
         objectId: "",
         // FRS Manager
         frsId: "",
         sourceId: "",
-        model: '',
-        brand: '',
+        model: "",
+        brand: ""
     };
 
     created() {}
@@ -383,16 +385,16 @@ export default class FaceRecognition extends Vue {
             siteId: "",
             groupIds: [],
             name: "",
-            demoServerId: "",   // FRS 和 FRS Manager 共用
-            serverId: "",   // FRS 和 FRS Manager 共用
+            demoServerId: "", // FRS 和 FRS Manager 共用
+            serverId: "", // FRS 和 FRS Manager 共用
             sourceid: "",
             location: "",
             objectId: "",
             // FRS Manager
             frsId: "",
             sourceId: "",
-            model: '',
-            brand: '',
+            model: "",
+            brand: ""
         };
     }
 
@@ -406,8 +408,10 @@ export default class FaceRecognition extends Vue {
 
         const readAllSiteParam: {
             type: string;
+            paging: object;
         } = {
-            type: "all"
+            type: "all",
+            paging: { all: true }
         };
 
         await this.$server
@@ -429,8 +433,9 @@ export default class FaceRecognition extends Vue {
     }
 
     async initSelectItemTree() {
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/location/tree")
+            .R("/location/tree", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
@@ -446,17 +451,21 @@ export default class FaceRecognition extends Vue {
 
     async initSelectItemFRSServer() {
         this.serverIdSelectItem = {};
-
+        let param: any = { paging: { all: true } };
         if (this.addStep === EAddStep.frs) {
             await this.$server
-                .R("/partner/frs")
+                .R("/partner/frs", param)
                 .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        for (const returnValue of response.results) {
-                            this.serverIdSelectItem[returnValue.objectId] =
-                                returnValue.name;
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            for (const returnValue of response.results) {
+                                this.serverIdSelectItem[returnValue.objectId] =
+                                    returnValue.name;
+                            }
                         }
-                    });
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
@@ -477,15 +486,13 @@ export default class FaceRecognition extends Vue {
             //         return ResponseFilter.catchError(this, e);
             //     });
         }
-
-
     }
 
     async initSelectItemDemographicServer() {
         this.demographicIdSelectItem = {};
-
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/partner/demographic")
+            .R("/partner/demographic", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
@@ -501,37 +508,46 @@ export default class FaceRecognition extends Vue {
 
     async initSelectItemFRSSManagerServer() {
         this.frsMangerIdSelectItem = {};
-
+        let param: any = { paging: { all: true } };
         if (this.addStep === EAddStep.frs) {
             await this.$server
-                .R("/partner/frs-manager")
+                .R("/partner/frs-manager", param)
                 .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        for (const returnValue of response.results) {
-                            this.frsMangerIdSelectItem[returnValue.objectId] =
-                                returnValue.name;
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            for (const returnValue of response.results) {
+                                this.frsMangerIdSelectItem[
+                                    returnValue.objectId
+                                ] = returnValue.name;
+                            }
                         }
-                    });
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
                 });
         } else if (this.addStep === EAddStep.frsManager) {
             await this.$server
-                .R("/partner/frs-manager")
+                .R("/partner/frs-manager", param)
                 .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        for (const returnValue of response.results) {
-                            this.frsMangerIdSelectItem[returnValue.objectId] =
-                                returnValue.name;
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            for (const returnValue of response.results) {
+                                this.frsMangerIdSelectItem[
+                                    returnValue.objectId
+                                ] = returnValue.name;
+                            }
                         }
-                    });
+                    );
                 })
                 .catch((e: any) => {
                     return ResponseFilter.catchError(this, e);
                 });
         }
-
     }
 
     selectedItem(data) {
@@ -621,7 +637,7 @@ export default class FaceRecognition extends Vue {
                 sourceIdView:
                     param.config && param.config.sourceId
                         ? param.config.sourceId
-                        : "",
+                        : ""
             };
         }
 
@@ -682,11 +698,10 @@ export default class FaceRecognition extends Vue {
     }
 
     async selectFrsMangerId(data) {
-         await this.initFrsId(data);
+        await this.initFrsId(data);
     }
 
     async initFrsId(data) {
-
         this.frsIdSelectItem = {};
         this.sourceIdSelectItem = {};
 
@@ -705,7 +720,6 @@ export default class FaceRecognition extends Vue {
                         this,
                         response,
                         (response: any) => {
-
                             for (const returnValue of response) {
                                 this.$set(
                                     this.frsIdSelectItem,
@@ -722,9 +736,7 @@ export default class FaceRecognition extends Vue {
                                         value.sourceId
                                     );
                                 }
-
                             }
-
                         },
                         this._("w_ErrorReadData")
                     );
@@ -764,7 +776,6 @@ export default class FaceRecognition extends Vue {
                                     returnValue.sourceid
                                 );
                             }
-
                         },
                         this._("w_ErrorReadData")
                     );
@@ -792,8 +803,10 @@ export default class FaceRecognition extends Vue {
             if (data !== undefined || data !== "") {
                 const readParam: {
                     siteId: string;
+                    paging: object;
                 } = {
-                    siteId: data
+                    siteId: data,
+                    paging: { all: true }
                 };
 
                 await this.$server
@@ -833,8 +846,10 @@ export default class FaceRecognition extends Vue {
 
                 const readParam: {
                     siteId: string;
+                    paging: object;
                 } = {
-                    siteId: data
+                    siteId: data,
+                    paging: { all: true }
                 };
 
                 await this.$server
@@ -877,9 +892,11 @@ export default class FaceRecognition extends Vue {
                 const readParam: {
                     areaId: string;
                     mode: string;
+                    paging: object;
                 } = {
                     areaId: data,
-                    mode: ECameraMode.visitor
+                    mode: ECameraMode.visitor,
+                    paging: { all: true }
                 };
 
                 await this.$server
@@ -915,9 +932,11 @@ export default class FaceRecognition extends Vue {
                 const readParam: {
                     areaId: string;
                     mode: string;
+                    paging: object;
                 } = {
                     areaId: data,
-                    mode: ECameraMode.visitor
+                    mode: ECameraMode.visitor,
+                    paging: { all: true }
                 };
 
                 if (this.inputFormData.tempAreaId !== data) {
@@ -976,21 +995,21 @@ export default class FaceRecognition extends Vue {
     async pageToEdit(stepType: string) {
         this.pageStep = EPageStep.edit;
 
-	    await this.getInputData();
+        await this.getInputData();
 
-	    if (this.inputFormData.model === EAddStep.frs) {
-		    this.addStep = EAddStep.frs;
-		    this.transition.prevStep = this.transition.step;
-		    this.transition.step = 3;
-	    }
+        if (this.inputFormData.model === EAddStep.frs) {
+            this.addStep = EAddStep.frs;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 3;
+        }
 
-	    if (this.inputFormData.model === EAddStep.frsManager) {
-		    this.addStep = EAddStep.frsManager;
-		    this.transition.prevStep = this.transition.step;
-		    this.transition.step = 3;
-	    }
+        if (this.inputFormData.model === EAddStep.frsManager) {
+            this.addStep = EAddStep.frsManager;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 3;
+        }
 
-	    await this.initSelectItemFRSServer();
+        await this.initSelectItemFRSServer();
         await this.initSelectItemFRSSManagerServer();
         await this.initSelectItemSite();
         await this.initSelectItemDemographicServer();
@@ -1003,7 +1022,6 @@ export default class FaceRecognition extends Vue {
                 this.inputFormData.groupIds.map(item => item.objectId)
             )
         );
-
     }
 
     pageToView() {
@@ -1024,7 +1042,6 @@ export default class FaceRecognition extends Vue {
     }
 
     async pageToAddByiSapFRS() {
-
         this.addStep = EAddStep.frsManager;
         this.clearInputData();
 
@@ -1034,7 +1051,6 @@ export default class FaceRecognition extends Vue {
         await this.initSelectItemSite();
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
-
     }
 
     async pageToAddByiSapFRSManager() {
@@ -1079,7 +1095,10 @@ export default class FaceRecognition extends Vue {
     }
 
     async pageToShowResult() {
-        console.log(' pageToShowResult this.inputFormData.stepType ~ ', this.inputFormData.stepType)
+        console.log(
+            " pageToShowResult this.inputFormData.stepType ~ ",
+            this.inputFormData.stepType
+        );
         if (this.inputFormData.stepType === EPageStep.add) {
             this.pageStep = EPageStep.add;
             this.transition.step = this.transition.prevStep;
@@ -1122,16 +1141,13 @@ export default class FaceRecognition extends Vue {
     }
 
     async saveAddOrEditiSap(data) {
-
         if (this.addStep === EAddStep.frs) {
-
             const configFRSServerObject: IConfigiSap = {
                 serverId: data.serverId,
                 sourceid: data.sourceid
             };
 
             if (!this.inputFormData.objectId) {
-
                 const datas: any = [
                     {
                         customId: data.customId,
@@ -1140,7 +1156,8 @@ export default class FaceRecognition extends Vue {
                         name: data.name,
                         areaId: data.areaId,
                         demoServerId: data.demoServerId,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        groupIds:
+                            data.groupIds !== undefined ? data.groupIds : [],
                         config: configFRSServerObject
                     }
                 ];
@@ -1157,7 +1174,9 @@ export default class FaceRecognition extends Vue {
                             response,
                             (response: any) => {
                                 Dialog.success(
-                                    this._("w_VSVIP_Stranger_Visitor_AddSuccess")
+                                    this._(
+                                        "w_VSVIP_Stranger_Visitor_AddSuccess"
+                                    )
                                 );
                                 this.pageToList();
                             },
@@ -1180,7 +1199,8 @@ export default class FaceRecognition extends Vue {
                         name: data.name,
                         areaId: data.areaId,
                         demoServerId: data.demoServerId,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        groupIds:
+                            data.groupIds !== undefined ? data.groupIds : [],
                         config: configFRSServerObject
                     }
                 ];
@@ -1197,7 +1217,9 @@ export default class FaceRecognition extends Vue {
                             response,
                             (response: any) => {
                                 Dialog.success(
-                                    this._("w_VSVIP_Stranger_Visitor_EditSuccess")
+                                    this._(
+                                        "w_VSVIP_Stranger_Visitor_EditSuccess"
+                                    )
                                 );
                                 this.pageToList();
                             },
@@ -1212,28 +1234,26 @@ export default class FaceRecognition extends Vue {
                         );
                     });
             }
-
         }
 
-
         if (this.addStep === EAddStep.frsManager) {
-
             const configFRSManagerObject: IConfigiSapFRSManager = {
                 serverId: data.serverId,
                 frsId: data.frsId,
-                sourceId: data.sourceId,
+                sourceId: data.sourceId
             };
 
             if (data.frsId) {
                 for (const frsId in this.frsIdSelectItem) {
                     if (data.frsId === frsId) {
-                        configFRSManagerObject.frsIp = this.frsIdSelectItem[frsId]
+                        configFRSManagerObject.frsIp = this.frsIdSelectItem[
+                            frsId
+                        ];
                     }
                 }
             }
 
             if (!this.inputFormData.objectId) {
-
                 const datas: any = [
                     {
                         customId: data.customId,
@@ -1242,7 +1262,8 @@ export default class FaceRecognition extends Vue {
                         name: data.name,
                         areaId: data.areaId,
                         demoServerId: data.demoServerId,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        groupIds:
+                            data.groupIds !== undefined ? data.groupIds : [],
                         config: configFRSManagerObject
                     }
                 ];
@@ -1260,7 +1281,9 @@ export default class FaceRecognition extends Vue {
                             response,
                             (response: any) => {
                                 Dialog.success(
-                                    this._("w_VSVIP_Stranger_Visitor_AddSuccess")
+                                    this._(
+                                        "w_VSVIP_Stranger_Visitor_AddSuccess"
+                                    )
                                 );
                                 this.pageToList();
                             },
@@ -1284,7 +1307,8 @@ export default class FaceRecognition extends Vue {
                         name: data.name,
                         areaId: data.areaId,
                         demoServerId: data.demoServerId,
-                        groupIds: data.groupIds !== undefined ? data.groupIds : [],
+                        groupIds:
+                            data.groupIds !== undefined ? data.groupIds : [],
                         config: configFRSManagerObject
                     }
                 ];
@@ -1302,7 +1326,9 @@ export default class FaceRecognition extends Vue {
                             response,
                             (response: any) => {
                                 Dialog.success(
-                                    this._("w_VSVIP_Stranger_Visitor_EditSuccess")
+                                    this._(
+                                        "w_VSVIP_Stranger_Visitor_EditSuccess"
+                                    )
                                 );
                                 this.pageToList();
                             },
@@ -1317,7 +1343,6 @@ export default class FaceRecognition extends Vue {
                         );
                     });
             }
-
         }
     }
 
@@ -1326,7 +1351,6 @@ export default class FaceRecognition extends Vue {
             this._("w_VSVIP_Stranger_Visitor_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-
                 let deleteParam: {
                     objectId: any;
                 } = {
@@ -1339,22 +1363,22 @@ export default class FaceRecognition extends Vue {
 
                 Loading.show();
 
-                    Loading.show();
-                    this.$server
-                        .D("/device", deleteParam)
-                        .then((response: any) => {
-                            ResponseFilter.successCheck(
-                                this,
-                                response,
-                                (response: any) => {
-                                    this.pageToList();
-                                },
-                                this._("w_DeleteFailed")
-                            );
-                        })
-                        .catch((e: any) => {
-                            return ResponseFilter.catchError(this, e);
-                        });
+                Loading.show();
+                this.$server
+                    .D("/device", deleteParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                this.pageToList();
+                            },
+                            this._("w_DeleteFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(this, e);
+                    });
 
                 Loading.hide();
             }
@@ -1391,10 +1415,7 @@ export default class FaceRecognition extends Vue {
     }
 
     showLabelTitle(): string {
-        if (
-            this.pageStep === EPageStep.add &&
-            this.addStep === EAddStep.frs
-        ) {
+        if (this.pageStep === EPageStep.add && this.addStep === EAddStep.frs) {
             return this._("w_VSVIP_Stranger_Visitor_AddisapUseFRS");
         }
 
@@ -1405,10 +1426,7 @@ export default class FaceRecognition extends Vue {
             return this._("w_VSVIP_Stranger_Visitor_AddisapUseFRSManger");
         }
 
-        if (
-            this.pageStep === EPageStep.edit &&
-            this.addStep === EAddStep.frs
-        ) {
+        if (this.pageStep === EPageStep.edit && this.addStep === EAddStep.frs) {
             return this._("w_VSVIP_Stranger_Visitor_EditisapUseFRS");
         }
 
@@ -1483,10 +1501,10 @@ export default class FaceRecognition extends Vue {
                  * @uiLabel - ${this._("w_Id")}
                  * @uiPlaceHolder - ${this._("w_Id")}
                  * @uiType - ${
-                        !this.inputFormData.objectId
-                            ? "iv-form-string"
-                            : "iv-form-label"
-                    }
+                     !this.inputFormData.objectId
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
                  */
                 customId: string;
 
@@ -1523,8 +1541,8 @@ export default class FaceRecognition extends Vue {
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiPlaceHolder - ${this._("w_SourceId")}
                  * @uiHidden - ${
-                        this.addStep === EAddStep.frsManager ? "true" : "false"
-                    }
+                     this.addStep === EAddStep.frsManager ? "true" : "false"
+                 }
                  */
                 sourceid: ${toEnumInterface(
                     this.sourceIdSelectItem as any,
@@ -1536,20 +1554,17 @@ export default class FaceRecognition extends Vue {
                  * @uiLabel - ${this._("w_FRSId")}
                  * @uiPlaceHolder - ${this._("w_FRSId")}
                  * @uiHidden - ${
-                        this.addStep === EAddStep.frs ? "true" : "false"
-                    }
+                     this.addStep === EAddStep.frs ? "true" : "false"
+                 }
                  */
-                frsId: ${toEnumInterface(
-                    this.frsIdSelectItem as any,
-                    false
-                )};
+                frsId: ${toEnumInterface(this.frsIdSelectItem as any, false)};
 
                /**
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiPlaceHolder - ${this._("w_SourceId")}
                  * @uiHidden - ${
-                        this.addStep === EAddStep.frs ? "true" : "false"
-                    }
+                     this.addStep === EAddStep.frs ? "true" : "false"
+                 }
                  */
                 sourceId: ${toEnumInterface(
                     this.sourceIdSelectItem as any,
@@ -1618,7 +1633,9 @@ export default class FaceRecognition extends Vue {
                 /**
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiType - iv-form-label
-                 * @uiHidden - ${ this.addStep === EAddStep.frsManager ? "true" : "false" }
+                 * @uiHidden - ${
+                     this.addStep === EAddStep.frsManager ? "true" : "false"
+                 }
                  */
                 sourceidView?: string;
 
@@ -1626,7 +1643,9 @@ export default class FaceRecognition extends Vue {
                 /**
                  * @uiLabel - ${this._("w_FRSId")}
                  * @uiType - iv-form-label
-                 * @uiHidden - ${ this.addStep === EAddStep.frs ? "true" : "false" }
+                 * @uiHidden - ${
+                     this.addStep === EAddStep.frs ? "true" : "false"
+                 }
                  */
                  */
                 frsIdView?: string;
@@ -1635,7 +1654,9 @@ export default class FaceRecognition extends Vue {
                 /**
                  * @uiLabel - ${this._("w_SourceId")}
                  * @uiType - iv-form-label
-                 * @uiHidden - ${ this.addStep === EAddStep.frs ? "true" : "false" }
+                 * @uiHidden - ${
+                     this.addStep === EAddStep.frs ? "true" : "false"
+                 }
                  */
                  */
                 sourceIdView?: string;

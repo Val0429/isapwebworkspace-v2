@@ -165,8 +165,9 @@ export default class SMS extends Vue {
     }
 
     async readSmsServer() {
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/setting/sgsms")
+            .R("/setting/sgsms", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     this.inputFormData.enable = response.enable;

@@ -217,7 +217,10 @@ export default class Region extends Vue {
 
     async pageToBindingSite() {
         let siteCount = 0;
-        let param = { type: "unbinding" };
+        let param = {
+            type: "unbinding",
+            paging: { all: true }
+        };
         this.cardBindingTitle = this.regionTreeItem.region.name;
         this.selectItem.site = [];
         this.regionTreeItem.region.sites = [];
@@ -277,20 +280,10 @@ export default class Region extends Vue {
     async initTagItem() {
         this.selectItem.tags = [];
 
-        let body: {
-            paging: {
-                page: number;
-                pageSize: number;
-            };
-        } = {
-            paging: {
-                page: 1,
-                pageSize: 999
-            }
-        };
+       let param: any = { paging: { all: true } };
 
         await this.$server
-            .R("/tag/all", body)
+            .R("/tag/all", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (let itme of response) {

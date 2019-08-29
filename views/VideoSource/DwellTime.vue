@@ -400,8 +400,10 @@ export default class DwellTime extends Vue {
 
         const readAllSiteParam: {
             type: string;
+            paging: object;
         } = {
-            type: "all"
+            type: "all",
+            paging: { all: true }
         };
 
         await this.$server
@@ -423,8 +425,9 @@ export default class DwellTime extends Vue {
     }
 
     async initSelectItemTree() {
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/location/tree")
+            .R("/location/tree", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
@@ -440,10 +443,10 @@ export default class DwellTime extends Vue {
 
 	async initSelectItemFRSServer() {
 		this.serverIdSelectItem = {};
-
+        let param: any = { paging: { all: true } };
 		if (this.addStep === EAddStep.frs) {
 			await this.$server
-				.R("/partner/frs")
+				.R("/partner/frs", param)
 				.then((response: any) => {
 					ResponseFilter.successCheck(this, response, (response: any) => {
 						for (const returnValue of response.results) {
@@ -477,9 +480,9 @@ export default class DwellTime extends Vue {
 
     async initSelectItemDemographicServer() {
         this.demographicIdSelectItem = {};
-
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/partner/demographic")
+            .R("/partner/demographic", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
@@ -495,10 +498,10 @@ export default class DwellTime extends Vue {
 
     async initSelectItemFRSSManagerServer() {
         this.frsMangerIdSelectItem = {};
-
+        let param: any = { paging: { all: true } };
         if (this.addStep === EAddStep.frs) {
             await this.$server
-                .R("/partner/frs-manager")
+                .R("/partner/frs-manager", param)
                 .then((response: any) => {
                     ResponseFilter.successCheck(this, response, (response: any) => {
                         for (const returnValue of response.results) {
@@ -512,7 +515,7 @@ export default class DwellTime extends Vue {
                 });
         } else if (this.addStep === EAddStep.frsManager) {
             await this.$server
-                .R("/partner/frs-manager")
+                .R("/partner/frs-manager", param)
                 .then((response: any) => {
                     ResponseFilter.successCheck(this, response, (response: any) => {
                         for (const returnValue of response.results) {
@@ -789,8 +792,10 @@ export default class DwellTime extends Vue {
             if (data !== undefined || data !== "") {
                 const readParam: {
                     siteId: string;
+                    paging: object;
                 } = {
-                    siteId: data
+                    siteId: data,
+                    paging: { all: true }
                 };
 
                 await this.$server
@@ -830,8 +835,10 @@ export default class DwellTime extends Vue {
 
                 const readParam: {
                     siteId: string;
+                    paging: object;
                 } = {
-                    siteId: data
+                    siteId: data,
+                    paging: { all: true }
                 };
 
                 await this.$server
@@ -874,9 +881,11 @@ export default class DwellTime extends Vue {
                 const readParam: {
                     areaId: string;
                     mode: string;
+                    paging: object;
                 } = {
                     areaId: data,
-                    mode: ECameraMode.dwellTime
+                    mode: ECameraMode.dwellTime,
+                    paging: { all: true }
                 };
 
                 await this.$server
@@ -912,9 +921,11 @@ export default class DwellTime extends Vue {
                 const readParam: {
                     areaId: string;
                     mode: string;
+                    paging: object;
                 } = {
                     areaId: data,
-                    mode: ECameraMode.dwellTime
+                    mode: ECameraMode.dwellTime,
+                    paging: { all: true }
                 };
 
                 if (this.inputFormData.tempAreaId !== data) {

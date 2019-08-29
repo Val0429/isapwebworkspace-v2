@@ -162,20 +162,10 @@ export class SiteForm extends Vue {
     async initManagerItem() {
         this.managerItem = [];
 
-        let body: {
-            paging: {
-                page: number;
-                pageSize: number;
-            };
-        } = {
-            paging: {
-                page: 1,
-                pageSize: 999
-            }
-        };
+        let param: any = { paging: { all: true } };
 
         await this.$server
-            .R("/user/user/all", body)
+            .R("/user/user/all", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (let user of response) {
@@ -192,20 +182,10 @@ export class SiteForm extends Vue {
     async initOfficeHourItem() {
         this.officeHourItem = [];
 
-        let body: {
-            paging: {
-                page: number;
-                pageSize: number;
-            };
-        } = {
-            paging: {
-                page: 1,
-                pageSize: 999
-            }
-        };
+        let param: any = { paging: { all: true } };
 
         await this.$server
-            .R("/office-hour/all", body)
+            .R("/office-hour/all", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (let itme of response) {
@@ -222,20 +202,10 @@ export class SiteForm extends Vue {
     async initTagItem() {
         this.tagItem = [];
 
-        let body: {
-            paging: {
-                page: number;
-                pageSize: number;
-            };
-        } = {
-            paging: {
-                page: 1,
-                pageSize: 999
-            }
-        };
+        let param: any = { paging: { all: true } };
 
         await this.$server
-            .R("/tag/all", body)
+            .R("/tag/all", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (let itme of response) {

@@ -115,7 +115,7 @@ import {
     RegionTreeItem,
     ERegionType
 } from "../RegionTree";
-import { EMode } from '.';
+import { EMode } from ".";
 
 @Component({
     components: {}
@@ -173,7 +173,6 @@ export class SiteAreaGroupDeviceFilter extends Vue {
             vip: this._("w_VIPAndBlackList_TableTitleVip"),
             black: this._("w_VIPAndBlackList_TableTitleBlacklist")
         };
-
     }
 
     initRegionTreeSelect() {
@@ -189,8 +188,10 @@ export class SiteAreaGroupDeviceFilter extends Vue {
     }
 
     async initSelectItemTree() {
+        let param: any = { paging: { all: true } };
+
         await this.$server
-            .R("/location/tree")
+            .R("/location/tree", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     let tempTree = ReportService.resolveUserSite(
@@ -214,23 +215,21 @@ export class SiteAreaGroupDeviceFilter extends Vue {
 
         this.selecteds = [];
 
-            for (const detail of this.siteSelectItem) {
-                if (this.inputFormData.siteId === detail.id) {
-                    let selectedsObject: IRegionTreeSelected = {
-                        objectId: detail.id,
-                        type: ERegionType.site,
-                        name: detail.text
-                    };
-                    this.selecteds.push(selectedsObject);
-                }
+        for (const detail of this.siteSelectItem) {
+            if (this.inputFormData.siteId === detail.id) {
+                let selectedsObject: IRegionTreeSelected = {
+                    objectId: detail.id,
+                    type: ERegionType.site,
+                    name: detail.text
+                };
+                this.selecteds.push(selectedsObject);
             }
-
+        }
     }
 
     async pageToShowResult() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
-
 
         // siteId clear
         this.inputFormData.siteId = "";
@@ -248,7 +247,7 @@ export class SiteAreaGroupDeviceFilter extends Vue {
 
     async updateInputFormData(data) {
         switch (data.key) {
-            case 'type':
+            case "type":
                 this.inputFormData.type = data.value;
                 this.$emit("filter-data", this.inputFormData);
                 break;
@@ -299,8 +298,10 @@ export class SiteAreaGroupDeviceFilter extends Vue {
 
         const readAllSiteParam: {
             type: string;
+            paging: object;
         } = {
-            type: "all"
+            type: "all",
+            paging: { all: true }
         };
 
         await this.$server
@@ -324,8 +325,10 @@ export class SiteAreaGroupDeviceFilter extends Vue {
 
         const readParam: {
             siteId: string;
+            paging: object;
         } = {
-            siteId: siteId
+            siteId: siteId,
+            paging: { all: true }
         };
 
         if (!siteId) {
@@ -356,10 +359,12 @@ export class SiteAreaGroupDeviceFilter extends Vue {
             siteId: string;
             areaId?: string;
             mode: string;
+            paging: object;
         } = {
             siteId: siteId,
             areaId: areaId,
-            mode: this.inputFormData.type
+            mode: this.inputFormData.type,
+            paging: { all: true }
         };
 
         if (!siteId && !areaId) {
@@ -395,11 +400,13 @@ export class SiteAreaGroupDeviceFilter extends Vue {
             areaId: string;
             deviceGroupId: string;
             mode: string;
+            paging: object;
         } = {
             siteId: siteId,
             areaId: areaId,
             deviceGroupId: deviceGroupId,
-            mode: this.inputFormData.type
+            mode: this.inputFormData.type,
+            paging: { all: true }
         };
 
         if (!siteId && !areaId && !deviceGroupId) {

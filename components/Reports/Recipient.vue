@@ -103,8 +103,10 @@ export class Recipient extends Vue {
     async initSelectItemUsers() {
         let tempUserSelectItem = {};
 
+        let param: any = { paging: { all: true } };
+
         await this.$server
-            .R("/user/user")
+            .R("/user/user", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {

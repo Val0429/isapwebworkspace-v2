@@ -168,8 +168,10 @@ export class SiteDeviceGroupForm extends Vue {
 
         let body: {
             siteId: string;
+            paging: object;
         } = {
-            siteId: this.site.objectId
+            siteId: this.site.objectId,
+            paging: { all: true }
         };
 
         await this.$server

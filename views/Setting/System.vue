@@ -24,7 +24,7 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
-import RegexService from '@/services/RegexServices';
+import RegexService from "@/services/RegexServices";
 
 interface IInputFormData {
     hosting: string;
@@ -34,12 +34,10 @@ interface IInputFormData {
     components: {}
 })
 export default class System extends Vue {
-
     // input框綁定model資料
     inputFormData: IInputFormData = {
-        hosting: "",
+        hosting: ""
     };
-
 
     created() {
         this.readHosting();
@@ -48,11 +46,12 @@ export default class System extends Vue {
     mounted() {}
 
     async readHosting() {
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/setting/system")
+            .R("/setting/system", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    this.inputFormData.hosting = response.hosting
+                    this.inputFormData.hosting = response.hosting;
                 });
             })
             .catch((e: any) => {
@@ -66,7 +65,6 @@ export default class System extends Vue {
 
     // 新增MailServer
     async saveSystemData(data) {
-
         /* test ok 
          http://172.16.10.21:6066
          https://172.16.10.21:4449
@@ -89,7 +87,7 @@ export default class System extends Vue {
         await this.$server
             .U("/setting/system", systemObject)
             .then((response: any) => {
-                 ResponseFilter.successCheck(this, response, (response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     Dialog.success(this._("w_System_Setting_Success"));
                 });
             })

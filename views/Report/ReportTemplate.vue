@@ -322,7 +322,6 @@ export default class ReportTemplate extends Vue {
         step: 1
     };
 
-
     tableMultiple: boolean = true;
 
     selectedDetail: any = [];
@@ -444,8 +443,10 @@ export default class ReportTemplate extends Vue {
 
         const readAllSiteParam: {
             type: string;
+            paging: object;
         } = {
-            type: "all"
+            type: "all",
+            paging: { all: true }
         };
 
         await this.$server
@@ -467,8 +468,9 @@ export default class ReportTemplate extends Vue {
     }
 
     async initSelectItemTree() {
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/location/tree")
+            .R("/location/tree", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
@@ -484,9 +486,9 @@ export default class ReportTemplate extends Vue {
 
     async initSelectItemTag() {
         let tempTagSelectItem = {};
-
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/tag/all")
+            .R("/tag/all", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
@@ -503,9 +505,9 @@ export default class ReportTemplate extends Vue {
 
     async initSelectItemUsers() {
         this.userSelectItem = {};
-
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/user/user")
+            .R("/user/user", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     if (
@@ -899,9 +901,7 @@ export default class ReportTemplate extends Vue {
                         startDate: Datetime.DateStart(
                             data.startDate
                         ).toISOString(),
-                        endDate: Datetime.DateStart(
-                            data.endDate
-                        ).toISOString(),
+                        endDate: Datetime.DateStart(data.endDate).toISOString(),
                         mode: data.mode,
                         sendDates: tempSendDates
                     }
@@ -968,9 +968,7 @@ export default class ReportTemplate extends Vue {
                         startDate: Datetime.DateStart(
                             data.startDate
                         ).toISOString(),
-                        endDate: Datetime.DateStart(
-                            data.endDate
-                        ).toISOString(),
+                        endDate: Datetime.DateStart(data.endDate).toISOString(),
                         mode: data.mode,
                         sendDates: tempSendDates
                     }
@@ -1032,7 +1030,6 @@ export default class ReportTemplate extends Vue {
             this._("w_ReportTemplate_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-
                 let deleteParam: {
                     objectId: any;
                 } = {
@@ -1045,21 +1042,21 @@ export default class ReportTemplate extends Vue {
 
                 Loading.show();
 
-                    this.$server
-                        .D("/report/template", deleteParam)
-                        .then((response: any) => {
-                            ResponseFilter.successCheck(
-                                this,
-                                response,
-                                (response: any) => {
-                                    this.pageToList();
-                                },
-                                this._("w_DeleteFailed")
-                            );
-                        })
-                        .catch((e: any) => {
-                            return ResponseFilter.catchError(this, e);
-                        });
+                this.$server
+                    .D("/report/template", deleteParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                this.pageToList();
+                            },
+                            this._("w_DeleteFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(this, e);
+                    });
 
                 Loading.hide();
             }

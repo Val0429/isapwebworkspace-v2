@@ -975,8 +975,10 @@ export default class ReportDwellTime extends Vue {
 
         const readAllSiteParam: {
             type: string;
+            paging: object;
         } = {
-            type: "all"
+            type: "all",
+            paging: { all: true }
         };
 
         await this.$server
@@ -997,9 +999,9 @@ export default class ReportDwellTime extends Vue {
 
     async initSelectItemTag() {
         let tempTagSelectItem = {};
-
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/tag/all")
+            .R("/tag/all", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
@@ -1015,8 +1017,9 @@ export default class ReportDwellTime extends Vue {
     }
 
     async initSelectItemTree() {
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/location/tree")
+            .R("/location/tree", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     let tempTree = ReportService.resolveUserSite(
@@ -1039,8 +1042,10 @@ export default class ReportDwellTime extends Vue {
 
         const readParam: {
             siteId: string;
+            paging: object;
         } = {
-            siteId: this.filterData.firstSiteId
+            siteId: this.filterData.firstSiteId,
+            paging: { all: true }
         };
 
         if (!this.filterData.firstSiteId) {
@@ -1071,9 +1076,11 @@ export default class ReportDwellTime extends Vue {
             siteId: string;
             areaId?: string;
             mode: string;
+            paging: object;
         } = {
             siteId: this.filterData.firstSiteId,
-            mode: this.deviceMode
+            mode: this.deviceMode,
+            paging: { all: true }
         };
         if (!this.filterData.firstSiteId) {
             return false;
@@ -1111,9 +1118,11 @@ export default class ReportDwellTime extends Vue {
             areaId?: string;
             groupId?: string;
             mode: string;
+            paging: object;
         } = {
             siteId: this.filterData.firstSiteId,
-            mode: this.deviceMode
+            mode: this.deviceMode,
+            paging: { all: true }
         };
 
         if (!this.filterData.firstSiteId) {
@@ -1157,9 +1166,10 @@ export default class ReportDwellTime extends Vue {
 
     async initSelectItemUsers() {
         let tempUserSelectItem = {};
+        let param: any = { paging: { all: true } };
 
         await this.$server
-            .R("/user/user")
+            .R("/user/user", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     if (
@@ -1270,7 +1280,7 @@ export default class ReportDwellTime extends Vue {
             }
         }
 
-          //追加沒有的資料site傳入陣列 以便chart 單店多店判斷
+        //追加沒有的資料site傳入陣列 以便chart 單店多店判斷
         for (const filterSiteId of this.filterData.siteIds) {
             if (this.sites.some(x => x.objectId == filterSiteId)) {
                 continue;

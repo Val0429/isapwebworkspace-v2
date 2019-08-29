@@ -177,8 +177,10 @@ export class ToolTrafficFilter extends Vue {
 
         const readAllSiteParam: {
             type: string;
+            paging: object;
         } = {
-            type: "all"
+            type: "all",
+            paging: { all: true }
         };
 
         await this.$server
@@ -202,8 +204,10 @@ export class ToolTrafficFilter extends Vue {
 
         const readParam: {
             siteId: string;
+            paging: object;
         } = {
-            siteId: siteId
+            siteId: siteId,
+            paging: { all: true }
         };
 
         if (!siteId) {
@@ -234,10 +238,12 @@ export class ToolTrafficFilter extends Vue {
             siteId: string;
             areaId?: string;
             mode: string;
+            paging: object;
         } = {
             siteId: siteId,
             areaId: areaId,
-            mode: EDeviceMode.peopleCounting
+            mode: EDeviceMode.peopleCounting,
+            paging: { all: true }
         };
 
         if (!siteId && !areaId) {
@@ -273,11 +279,13 @@ export class ToolTrafficFilter extends Vue {
             areaId: string;
             deviceGroupId: string;
             mode: string;
+            paging: object;
         } = {
             siteId: siteId,
             areaId: areaId,
             deviceGroupId: deviceGroupId,
-            mode: EDeviceMode.peopleCounting
+            mode: EDeviceMode.peopleCounting,
+            paging: { all: true }
         };
 
         if (!siteId && !areaId && !deviceGroupId) {

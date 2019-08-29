@@ -137,20 +137,9 @@ export class SiteView extends Vue {
     async initManagerItem() {
         this.managerItem = [];
 
-        let body: {
-            paging: {
-                page: number;
-                pageSize: number;
-            };
-        } = {
-            paging: {
-                page: 1,
-                pageSize: 999
-            }
-        };
-
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/user/user/all", body)
+            .R("/user/user/all", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (let user of response) {
@@ -166,23 +155,12 @@ export class SiteView extends Vue {
 
     async initOfficeHourItem() {
         this.officeHourItem = [];
-
-        let body: {
-            paging: {
-                page: number;
-                pageSize: number;
-            };
-        } = {
-            paging: {
-                page: 1,
-                pageSize: 999
-            }
-        };
+        let param: any = { paging: { all: true } };
 
         this.site.officeHour = [];
 
         await this.$server
-            .R("/office-hour/all", body)
+            .R("/office-hour/all", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (let itme of response) {
@@ -196,7 +174,7 @@ export class SiteView extends Vue {
             });
 
         await this.$server
-            .R("/office-hour", body)
+            .R("/office-hour", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (let item of response.results) {
@@ -217,22 +195,11 @@ export class SiteView extends Vue {
     async initTagItem() {
         this.tagItem = [];
 
-        let body: {
-            paging: {
-                page: number;
-                pageSize: number;
-            };
-        } = {
-            paging: {
-                page: 1,
-                pageSize: 999
-            }
-        };
-
+        let param: any = { paging: { all: true } };
         this.site.tag = [];
 
         await this.$server
-            .R("/tag/all", body)
+            .R("/tag/all", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (let itme of response) {
@@ -246,7 +213,7 @@ export class SiteView extends Vue {
             });
 
         await this.$server
-            .R("/tag", body)
+            .R("/tag", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (let item of response.results) {

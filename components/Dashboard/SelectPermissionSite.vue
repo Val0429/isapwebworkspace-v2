@@ -97,7 +97,7 @@ export class SelectPermissionSite extends Vue {
     // Prop
     @Prop({
         type: String, // Boolean, Number, String, Array, Object
-        default: ''
+        default: ""
     })
     radioName: string;
 
@@ -201,8 +201,10 @@ export class SelectPermissionSite extends Vue {
     }
 
     async initSelectItemTree() {
+        let param: any = { paging: { all: true } };
+
         await this.$server
-            .R("/location/tree")
+            .R("/location/tree", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     let tempTree = ReportService.resolveUserSite(

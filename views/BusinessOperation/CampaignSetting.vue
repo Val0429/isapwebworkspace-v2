@@ -212,7 +212,6 @@ export default class CampaignSetting extends Vue {
         step: 1
     };
 
-
     tableMultiple: boolean = true;
     selectedDetail: any = [];
     sitesSelectItem: any = {};
@@ -281,8 +280,10 @@ export default class CampaignSetting extends Vue {
 
         const readAllSiteParam: {
             type: string;
+            paging: object;
         } = {
-            type: "all"
+            type: "all",
+            paging: { all: true }
         };
 
         await this.$server
@@ -304,8 +305,9 @@ export default class CampaignSetting extends Vue {
     }
 
     async initSelectItemTree() {
+        let param: any = { paging: { all: true } };
         await this.$server
-            .R("/location/tree")
+            .R("/location/tree", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
@@ -451,9 +453,7 @@ export default class CampaignSetting extends Vue {
                     type: data.type,
                     budget: data.budget,
                     description: data.description,
-                    startDate: Datetime.DateStart(
-                        data.startDate
-                    ).toISOString(),
+                    startDate: Datetime.DateStart(data.startDate).toISOString(),
                     endDate: Datetime.DateStart(data.endDate).toISOString(),
                     siteIds: data.siteIds !== undefined ? data.siteIds : [],
                     year: parseInt(this.inputFormData.year)
@@ -493,9 +493,7 @@ export default class CampaignSetting extends Vue {
                     type: data.type,
                     budget: data.budget,
                     description: data.description,
-                    startDate: Datetime.DateStart(
-                        data.startDate
-                    ).toISOString(),
+                    startDate: Datetime.DateStart(data.startDate).toISOString(),
                     endDate: Datetime.DateStart(data.endDate).toISOString(),
                     siteIds: data.siteIds !== undefined ? data.siteIds : [],
                     year: parseInt(this.inputFormData.year)
@@ -535,7 +533,6 @@ export default class CampaignSetting extends Vue {
             this._("w_BOCampaign_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
-
                 let deleteParam: {
                     objectId: any;
                 } = {
@@ -547,21 +544,21 @@ export default class CampaignSetting extends Vue {
                 }
 
                 Loading.show();
-                    this.$server
-                        .D("/event/campaign", deleteParam)
-                        .then((response: any) => {
-                            ResponseFilter.successCheck(
-                                this,
-                                response,
-                                (response: any) => {
-                                    this.pageToList();
-                                },
-                                this._("w_DeleteFailed")
-                            );
-                        })
-                        .catch((e: any) => {
-                            return ResponseFilter.catchError(this, e);
-                        });
+                this.$server
+                    .D("/event/campaign", deleteParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                this.pageToList();
+                            },
+                            this._("w_DeleteFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(this, e);
+                    });
 
                 Loading.hide();
             }
