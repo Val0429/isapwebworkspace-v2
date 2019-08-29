@@ -456,19 +456,19 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
         this.inputFormData.active = active === "true";
     }
 
-    receiveSiteIds(siteIds: object) {
+    receiveSiteIds(siteIds: string[]) {
         this.inputFormData.siteIds = siteIds;
     }
 
-    receiveAreaIds(areaIds: object) {
+    receiveAreaIds(areaIds: string[]) {
         this.inputFormData.areaIds = areaIds;
     }
 
-    receiveDeviceGroupIds(deviceGroupIds: object) {
+    receiveDeviceGroupIds(deviceGroupIds: string[]) {
         this.inputFormData.deviceGroupIds = deviceGroupIds;
     }
 
-    receiveDeviceIds(deviceIds: object) {
+    receiveDeviceIds(deviceIds: string[]) {
         this.inputFormData.deviceIds = deviceIds;
     }
 
@@ -603,6 +603,9 @@ export default class RuleAndActionsRepeatVisitor extends Vue {
     //////////////////// Tina end 以上資料來自 step3 Actions   ////////////////////
 
     doSubmit(data) {
+
+        let param = JSON.parse(JSON.stringify(this.inputFormData));
+
         this.pageToList();
     }
 

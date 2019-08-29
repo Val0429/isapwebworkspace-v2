@@ -38,8 +38,6 @@
 						</iv-form-selection>
 					</template>
 
-
-
 					<!-- run time -->
 					<template #isAnytime="{ $attrs, $listeners }">
 
@@ -52,7 +50,7 @@
 								name="isAnyTime"
 								class="mb-3"
 								:options="isAnyTimeSelectItem"
-								@change="changeTimeSelect"
+								@input="changeTimeSelect"
 							></b-form-radio-group>
 						</b-col>
 					</template>
@@ -190,7 +188,7 @@
 								name="ifAllAreas"
 								class="mb-3"
 								:options="ifAllAreasSelectItem"
-								@change="changeAllAreasSelect"
+								@input="changeAllAreasSelect"
 							></b-form-radio-group>
 						</b-col>
 
@@ -225,7 +223,7 @@
 								name="ifAllGroups"
 								class="mb-3"
 								:options="ifAllGroupsSelectItem"
-								@change="changeAllGroupsSelect"
+								@input="changeAllGroupsSelect"
 							></b-form-radio-group>
 						</b-col>
 
@@ -260,7 +258,7 @@
 								name="ifAllDevice"
 								class="mb-3"
 								:options="ifAllDeviceSelectItem"
-								@change="changeAllDevicesSelect"
+								@input="changeAllDevicesSelect"
 							></b-form-radio-group>
 						</b-col>
 
@@ -395,8 +393,8 @@
 		inputFormData: any = {
 			name: '',
 			firstSiteId: '',
-			isActive: '',
-			isActiveApi: true,
+			isActive: undefined,
+			isActiveApi: undefined,
 			anytime: undefined,
 			selectTime: {},
 
@@ -674,12 +672,12 @@
 
 		////////////////////  以下為 radio button 相關   ////////////////////
 		changeTimeSelect(selected: string) {
-			this.isAnyTime = selected;
+
 			if (this.isAnyTime === ERunTimeType.anyTime) {
 				this.inputFormData.anytime = undefined;
 				this.$emit('time', this.inputFormData.anytime);
 
-			} else {
+			} else if (this.isAnyTime === ERunTimeType.startAndEnd) {
 				const startDate = new Date(
 					2000,
 					1,
@@ -780,8 +778,6 @@
 		}
 
 		updateActive(isActive: string) {
-			this.inputFormData.isActive = isActive;
-
 			this.$emit('active', this.inputFormData.isActive);
 		}
 
@@ -900,7 +896,6 @@
 			}
 
 			this.$emit('device-group-ids', this.inputFormData.groupIds);
-
 		}
 
 		changeDeviceIds() {
@@ -1045,7 +1040,7 @@
                  * @uiLabel - ${this._("w_Areas")}
                  * @uiColumnGroup - analysis
                  */
-                areaIds?: ${toEnumInterface(this.areaSelectItem as any, true)};
+                areaIds?: any;
 
 
                 /**
@@ -1058,10 +1053,7 @@
                  * @uiLabel - ${this._("w_DeviceGroups")}
                  * @uiColumnGroup - analysis
                  */
-                groupIds?: ${toEnumInterface(
-                    this.deviceGroupSelectItem as any,
-                    true
-                )};
+                groupIds?: any;
 
 
                 /**
@@ -1074,10 +1066,7 @@
                  * @uiLabel - ${this._("w_Devices")}
                  * @uiColumnGroup - analysis
                  */
-                deviceIds?: ${toEnumInterface(
-                    this.deviceSelectItem as any,
-                    true
-                )};
+                deviceIds?: any;
 
             }
         `;
