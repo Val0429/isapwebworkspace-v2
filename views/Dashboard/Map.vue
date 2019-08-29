@@ -98,7 +98,7 @@ export default class Map extends Vue {
 
 <style lang="scss" scoped>
 .l-map {
-    height: 700px;
+    height: 640px;
     margin: 0;
 }
 </style>
