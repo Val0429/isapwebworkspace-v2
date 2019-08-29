@@ -32,14 +32,14 @@
                     <iv-form-selection
                         v-on="$listeners"
                         v-model="inputFormData.siteIds"
-                        class="col-md-10 mt-2"
+                        class="col-md-9 mt-2"
                         :options="sitesSelectItem"
                         :multiple="true"
                         @input="changeSiteIds"
                     >
                     </iv-form-selection>
 
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <b-button
                             class="col-md-12"
                             variant="outline-secondary"

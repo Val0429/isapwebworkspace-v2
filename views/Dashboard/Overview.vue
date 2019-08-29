@@ -7,13 +7,11 @@
 
             <div class="row" >
                 <b-col cols="6">
-                    <div>
-                        <peak-hour class="col-md-12" />
-                    </div>
+                    <peak-hour class="col-md-12" />
                 </b-col>
                 <b-col cols="6">
-                    <top-5sites class="col-md-12 top5"/>
-                    <bottom-5sites class="col-md-12 bottom5" />
+                    <top-5sites class="col-md-12"/>
+                    <bottom-5sites class="col-md-12" />
                 </b-col>
 
             </div>

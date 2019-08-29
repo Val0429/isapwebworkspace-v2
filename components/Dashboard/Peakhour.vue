@@ -29,6 +29,7 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 /// install Highcharts
 import VueApexCharts from "vue-apexcharts";
 import Datetime from "@/services/Datetime";
+import {IPeakhour} from "@/components/Dashboard/models/IDashboard";
 Vue.component("apexchart", VueApexCharts);
 
 @Component({
@@ -45,8 +46,10 @@ export class Peakhour extends Vue {
     chartOptions: any = {};
     series: any = [];
 
+    tempChartData: IPeakhour[] = [];
+
     chartItem = {
-        height: 480
+        height: 483
     };
 
     created() {
@@ -138,74 +141,85 @@ export class Peakhour extends Vue {
 
     initCharts() {
         this.series = [];
+        let chartRanges = [];
+
         for (let i = 23; i >= 0; i--) {
             let name = "";
             if (i == 0) {
-                name = "12" + this._("mb_DateTime_LowerAM");
-            } else if (i % 3 != 0) {
-                name = " ";
-            } else if (i == 12) {
+                name = "0" + this._("mb_DateTime_LowerAM");
+            }
+            // else if (i % 3 != 0) {
+            //     name = " ";
+            // }
+            else if (i == 12) {
                 name = "12" + this._("mb_DateTime_LowerPM");
             } else if (i > 12) {
-                name = (i - 12).toString() + this._("mb_DateTime_LowerPM");
+                name = (i).toString() + this._("mb_DateTime_LowerPM");
             } else {
                  name = i.toString() + this._("mb_DateTime_LowerAM");
             }
 
+            // TODO: wait data
+            let chartData = this.developData(7, { min: -30, max: 55 });
+
             this.series.push({
                 name: name,
-                data: this.developData(7, { min: -30, max: 55 })
+                data: chartData
             });
         }
 
         // TODO: Wait API
+        chartRanges = [
+            {
+                from: -10000,
+                to: -1,
+                name: " ",
+                color: "#ececec"
+            },
+            {
+                from: 0,
+                to: 5,
+                name: " ",
+                color: "#F4F6F8"
+            },
+            {
+                from: 6,
+                to: 20,
+                name: " ",
+                color: "#D8E7F8"
+            },
+            {
+                from: 21,
+                to: 45,
+                name: " ",
+                color: "#B9CAFC"
+            },
+            {
+                from: 46,
+                to: 55,
+                name: " ",
+                color: "#5780F8"
+            },
+            {
+                from: 56,
+                to: 100000,
+                name: " ",
+                color: "#265BF6"
+            }
+        ];
+
+
+
         this.chartOptions = {
             title: { text: "" },
             chart: { toolbar: { show: false } },
             dataLabels: { enabled: false },
-            legend: { show: true },
+            legend: { show: false },
             plotOptions: {
                 heatmap: {
-                    shadeIntensity: 0.5,
+                    shadeIntensity: 0,
                     colorScale: {
-                        ranges: [
-                            {
-                                from: -10000,
-                                to: -1,
-                                name: "",
-                                color: "#ececec"
-                            },
-                            {
-                                from: 0,
-                                to: 5,
-                                name: "",
-                                color: "#F4F6F8"
-                            },
-                            {
-                                from: 6,
-                                to: 20,
-                                name: "",
-                                color: "#D8E7F8"
-                            },
-                            {
-                                from: 21,
-                                to: 45,
-                                name: "",
-                                color: "#B9CAFC"
-                            },
-                            {
-                                from: 46,
-                                to: 55,
-                                name: "",
-                                color: "#5780F8"
-                            },
-                            {
-                                from: 56,
-                                to: 1000,
-                                name: "",
-                                color: "#265BF6"
-                            }
-                        ]
+                        ranges: chartRanges
                     }
                 }
             }
