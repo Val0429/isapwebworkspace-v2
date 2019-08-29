@@ -81,162 +81,162 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Watch } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 
-    // Service
-    import ResponseFilter from "@/services/ResponseFilter";
-    import Dialog from "@/services/Dialog";
-    import Loading from "@/services/Loading";
+// Service
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
 
-    interface IInputFormData {
-        email: string;
-        testEmail: string;
-        host: string;
-        password: string;
-        port: number;
-        enable: boolean;
+interface IInputFormData {
+    email: string;
+    testEmail: string;
+    host: string;
+    password: string;
+    port: number;
+    enable: boolean;
+}
+
+@Component({
+    components: {}
+})
+export default class SetupsEmail extends Vue {
+    modalShow: boolean = false;
+
+    // input框綁定model資料
+    inputFormData: IInputFormData = {
+        email: "",
+        testEmail: "",
+        host: "",
+        password: "",
+        port: 0,
+        enable: true
+    };
+
+    inputTestEmail: string = "";
+
+    created() {
+        this.clearMailServerData();
     }
 
-    @Component({
-        components: {}
-    })
-    export default class SetupsEmail extends Vue {
-        modalShow: boolean = false;
+    mounted() {
+        this.readMailServer();
+    }
 
-        // input框綁定model資料
-        inputFormData: IInputFormData = {
-            email: "",
+    clearMailServerData() {
+        this.inputFormData = {
             testEmail: "",
             host: "",
             password: "",
-            port: 0,
+            email: "",
+            port: null,
             enable: true
         };
 
-        inputTestEmail: string = "";
+        this.inputTestEmail = "";
+    }
 
-        created() {
-            this.clearMailServerData();
-        }
+    pageToEmailTest() {
+        this.inputTestEmail = "";
+        this.modalShow = !this.modalShow;
+    }
 
-        mounted() {
-            this.readMailServer();
-        }
-
-        clearMailServerData() {
-            this.inputFormData = {
-                testEmail: "",
-                host: "",
-                password: "",
-                email: "",
-                port: null,
-                enable: true
-            };
-
-            this.inputTestEmail = "";
-        }
-
-        pageToEmailTest() {
-            this.inputTestEmail = "";
-            this.modalShow = !this.modalShow;
-        }
-
-        // 送出測試
-        async sendEmailTest() {
-            const mailServerObject: {
-                email: string;
-            } = {
-                email: this.inputTestEmail
-            };
-            Loading.show();
-            await this.$server
-                .C("/test/email", mailServerObject)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        Dialog.success(this._("w_MailServer_Test_Success"));
-                        this.modalShow = !this.modalShow;
-                    });
-                })
-                .catch((e: any) => {
+    // 送出測試
+    async sendEmailTest() {
+        let param: {
+            email: string;
+        } = {
+            email: this.inputTestEmail
+        };
+        Loading.show();
+        await this.$server
+            .C("/test/email", param)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    Dialog.success(this._("w_MailServer_Test_Success"));
                     this.modalShow = !this.modalShow;
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_MailServer_Read_FailMsg")
-                    );
                 });
+            })
+            .catch((e: any) => {
+                this.modalShow = !this.modalShow;
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_MailServer_Read_FailMsg")
+                );
+            });
+    }
+
+    async readMailServer() {
+        await this.$server
+            .R("/config")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    this.inputFormData.email = response.smtp.email;
+                    this.inputFormData.host = response.smtp.host;
+                    this.inputFormData.password = response.smtp.password;
+                    this.inputFormData.port = response.smtp.port;
+                    this.inputFormData.enable = response.smtp.enable;
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_MailServer_Read_Fail")
+                );
+            });
+    }
+
+    // 新增MailServer
+    async saveMailServer(data) {
+        // port正則
+        const portRegex = /^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/;
+
+        if (!portRegex.test(data.port)) {
+            Dialog.error(this._("w_Error_Port"));
+            return false;
         }
 
-        async readMailServer() {
-            await this.$server
-                .R("/config")
-                .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        this.inputFormData.email = response.smtp.email;
-                        this.inputFormData.host = response.smtp.host;
-                        this.inputFormData.password = response.smtp.password;
-                        this.inputFormData.port = response.smtp.port;
-                        this.inputFormData.enable = response.smtp.enable;
-                    });
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_MailServer_Read_Fail")
-                    );
-                });
-        }
+        const smtp: {
+            email: string;
+            host: string;
+            password: string;
+            port: number;
+            enable: string;
+        } = {
+            email: data.email,
+            host: data.host,
+            password: data.password,
+            port: data.port,
+            enable: data.enable
+        };
 
-        // 新增MailServer
-        async saveMailServer(data) {
-            // port正則
-            const portRegex = /^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/;
-
-            if (!portRegex.test(data.port)) {
-                Dialog.error(this._("w_Error_Port"));
-                return false;
+        const param = {
+            data: {
+                smtp
             }
+        };
 
-            const smtp: {
-                email: string;
-                host: string;
-                password: string;
-                port: number;
-                enable: string;
-            } = {
-                email: data.email,
-                host: data.host,
-                password: data.password,
-                port: data.port,
-                enable: data.enable
-            };
-
-            const addParam = {
-                data: {
-                    smtp
-                }
-            };
-
-            Loading.show();
-            await this.$server
-                .C("/config", addParam)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        Dialog.success(this._("w_MailSetting_EmailSuccess"));
-                    });
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_MailServer_Setting_Fail")
-                    );
+        Loading.show();
+        await this.$server
+            .C("/config", param)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    Dialog.success(this._("w_MailSetting_EmailSuccess"));
                 });
-        }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_MailServer_Setting_Fail")
+                );
+            });
+    }
 
-        IMailServerComponent() {
-            return `
+    IMailServerComponent() {
+        return `
              interface IMailServerComponent {
 
 
@@ -278,7 +278,7 @@
 
             }
         `;
-        }
     }
+}
 </script>
 

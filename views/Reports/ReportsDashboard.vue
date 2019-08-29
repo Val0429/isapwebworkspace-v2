@@ -192,11 +192,8 @@ export default class ReportsDashboard extends Vue {
     }
 
     async initKiosk() {
-        let param = {
-            paging: {
-                all: true
-            }
-        };
+        let param: any = { paging: { all: true } };
+        
         await this.$server
             .R("/kiosks", param)
             .then((response: any) => {

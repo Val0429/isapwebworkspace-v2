@@ -400,6 +400,7 @@ export default class SetupsAccount extends Vue {
 
     async initSelectItemCompany() {
         let param: any = { paging: { all: true } };
+
         await this.$server
             .R("/flow1/companies", param)
             .then((response: any) => {
@@ -430,6 +431,7 @@ export default class SetupsAccount extends Vue {
 
     async initSelectItemFloor() {
         let param: any = { paging: { all: true } };
+
         await this.$server
             .R("/flow1/floors", param)
             .then((response: any) => {
