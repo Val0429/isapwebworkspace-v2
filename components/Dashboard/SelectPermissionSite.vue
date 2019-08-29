@@ -137,6 +137,7 @@ export class SelectPermissionSite extends Vue {
             { value: EIfAllSelected.select, text: this._("w_SelectSites") }
         ];
         this.inputFormData.siteIds = this.inputFormData.allSiteIds;
+        this.$emit("siteIds", this.inputFormData.siteIds);
     }
 
     initRegionTreeSelect() {

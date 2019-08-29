@@ -10,39 +10,32 @@
 
         <template #notifyMethodSelect="{ $attrs, $listeners }">
 
-
             <b-form-checkbox
+                :value="true"
+                :unchecked-value="false"
                 :disabled="disabled"
-                v-for="option in notifyMethodSelectItem"
-                v-model="notifyMethodSelected"
-                :key="option.value"
-                :value="option.value"
-                name="notifyMethodSelected"
-                class="col-md-12 ml-4 mb-2"
-                inline
+                v-model="inputFormData.email"
+                class="col-md-12 ml-4"
+                name="notifyMethodSelect"
                 @input="changeNotifyMethod"
             >
-                {{ option.text }}
+                {{ _('w_RuleAndActions_Email') }}
             </b-form-checkbox>
 
-            <!--            <b-form-checkbox-group-->
-            <!--                v-model="notifyMethodSelected"-->
-            <!--                id="notifyMethodSelected"-->
-            <!--                name="notifyMethodSelected"-->
-            <!--                class="col-md-12 mb-2"-->
-            <!--                @input="changeNotifyMethod"-->
-            <!--            >-->
-            <!--                <b-form-checkbox-->
-            <!--                    value="email"-->
-            <!--                    class="col-md-12 ml-4"-->
-            <!--                >-->
-            <!--                    {{ _('w_RuleAndActions_Email') }}-->
-            <!--                </b-form-checkbox>-->
-            <!--                                <b-form-checkbox value="mobileApp">{{ _('w_RuleAndActions_MobileApp') }}</b-form-checkbox>-->
-            <!--                                <b-form-checkbox value="sms">{{ _('w_RuleAndActions_SMS') }}</b-form-checkbox>-->
-            <!--                                <b-form-checkbox value="httpCommand">{{ _('w_RuleAndActions_HttpCommand') }}</b-form-checkbox>-->
+<!--            <b-form-checkbox-->
+<!--                :disabled="disabled"-->
+<!--                v-for="option in notifyMethodSelectItem"-->
+<!--                v-model="notifyMethodSelected"-->
+<!--                :key="option.value"-->
+<!--                :value="option.value"-->
+<!--                name="notifyMethodSelected"-->
+<!--                class="col-md-12 ml-4 mb-2"-->
+<!--                inline-->
+<!--                @input="changeNotifyMethod"-->
+<!--            >-->
+<!--                {{ option.text }}-->
+<!--            </b-form-checkbox>-->
 
-            <!--            </b-form-checkbox-group>-->
 
         </template>
 
@@ -53,89 +46,93 @@
         <template #notifyTargetSelect>
 
             <b-form-checkbox
+                :value="true"
+                :unchecked-value="false"
                 :disabled="disabled"
-                v-for="option in notifyTargetSelectItem"
-                v-model="notifyTargetSelected"
-                :key="option.value"
-                :value="option.value"
-                name="notifyTargetSelected"
                 class="col-md-12 ml-4 mb-2"
-                inline
-                @input="changeNotifyTarget"
+                v-model="inputFormData.storeManager"
+                name="storeManager"
+                @input="changeStoreManager"
             >
-                {{ option.text }}
+                {{ _('w_RuleAndActions_StoreManager') }}
             </b-form-checkbox>
 
-            <!--            <b-form-checkbox-group-->
-            <!--                v-model="notifyTargetSelected"-->
-            <!--                id="notifyTargetSelected"-->
-            <!--                name="notifyTargetSelected"-->
-            <!--                class="col-md-12"-->
-            <!--                @input="changeNotifyTarget"-->
-            <!--            >-->
-            <!--                <b-form-checkbox-->
-            <!--                    value="storeManager"-->
-            <!--                    class="col-md-12 ml-4 mb-2"-->
-            <!--                >{{ _('w_RuleAndActions_StoreManager') }}</b-form-checkbox>-->
-            <!--                <b-form-checkbox-->
-            <!--                    value="permissionOfStore"-->
-            <!--                    class="col-md-12 ml-4 mb-2"-->
-            <!--                >{{ _('w_RuleAndActions_UsersHavePermission') }}</b-form-checkbox>-->
-            <!--                <b-form-checkbox-->
-            <!--                    value="users"-->
-            <!--                    class="col-md-12 ml-4 mb-2"-->
-            <!--                >{{ _('w_RuleAndActions_Users') }}</b-form-checkbox>-->
-            <!--                <b-form-checkbox-->
-            <!--                    value="userGroup"-->
-            <!--                    class="col-md-12 ml-4 mb-4"-->
-            <!--                >{{ _('w_RuleAndActions_UserGroup') }}</b-form-checkbox>-->
-            <!--            </b-form-checkbox-group>-->
+            <b-form-checkbox
+                :value="true"
+                :unchecked-value="false"
+                :disabled="disabled"
+                class="col-md-12 ml-4 mb-2"
+                v-model="inputFormData.permissionOfStore"
+                name="permissionOfStore"
+                @input="changePermissionOfStore"
+            >
+                {{ _('w_RuleAndActions_UsersHavePermission') }}
+            </b-form-checkbox>
 
-        </template>
 
-        <template #userIdsTitle="{ $attrs, $listeners }">
-            <p
-                v-if="notifyTargetSelected.filter(item => item === 'users').join() === 'users'"
-                class="col-md-12 mt-2"
-            >{{ _('w_RuleAndActions_Users1') }}</p>
-        </template>
-
-        <template #userIds="{ $attrs, $listeners }">
+            <!-- User -->
+            <b-form-checkbox
+                :value="true"
+                :unchecked-value="false"
+                :disabled="disabled"
+                class="col-md-12 ml-4 mb-2"
+                v-model="inputFormData.isUserId"
+                name="isUserId"
+            >
+                {{ _('w_RuleAndActions_Users') }}
+            </b-form-checkbox>
 
             <iv-form-selection
                 :disabled="disabled"
-                v-if="notifyTargetSelected.filter(item => item === 'users').join() === 'users'"
+                v-if="inputFormData.isUserId"
                 v-on="$listeners"
                 v-model="inputFormData.userIds"
-                class="col-md-12"
+                class="col-md-12 mt-2 ml-3"
                 :options="userSelectItem"
                 :multiple="true"
                 @input="selectUserIds"
             >
             </iv-form-selection>
-        </template>
 
-        <template #groupIdsTitle="{ $attrs, $listeners }">
 
-            <p
-                v-if="notifyTargetSelected.filter(item => item === 'userGroup').join() === 'userGroup'"
-                class="col-md-12 mt-2"
-            >{{ _('w_RuleAndActions_UserGroup1') }}</p>
-        </template>
-
-        <template #groupIds="{ $attrs, $listeners }">
+            <!-- UserGroup -->
+            <b-form-checkbox
+                :value="true"
+                :unchecked-value="false"
+                :disabled="disabled"
+                class="col-md-12 ml-4 mb-2"
+                v-model="inputFormData.isUserGroupId"
+                name="isUserGroupId"
+            >
+                {{ _('w_RuleAndActions_UserGroup') }}
+            </b-form-checkbox>
 
             <iv-form-selection
                 :disabled="disabled"
-                v-if="notifyTargetSelected.filter(item => item === 'userGroup').join() === 'userGroup'"
+                v-if="inputFormData.isUserGroupId"
                 v-on="$listeners"
                 v-model="inputFormData.groupIds"
-                class="col-md-12"
+                class="col-md-12 mt-2 ml-3"
                 :options="userGroupSelectItem"
                 :multiple="true"
                 @input="selectUserGroupIds"
             >
             </iv-form-selection>
+
+<!--            <b-form-checkbox-->
+<!--                :disabled="disabled"-->
+<!--                v-for="option in notifyTargetSelectItem"-->
+<!--                v-model="notifyTargetSelected"-->
+<!--                :key="option.value"-->
+<!--                :value="option.value"-->
+<!--                name="notifyTargetSelected"-->
+<!--                class="col-md-12 ml-4 mb-2"-->
+<!--                inline-->
+<!--                @input="changeNotifyTarget"-->
+<!--            >-->
+<!--                {{ option.text }}-->
+<!--            </b-form-checkbox>-->
+
         </template>
 
         <template #minutes="{ $attrs, $listeners }">
@@ -195,6 +192,8 @@ export class Actions extends Vue {
         email: undefined,
         storeManager: undefined,
         permissionOfStore: undefined,
+        isUserId: undefined,
+        isUserGroupId: undefined,
 
         userIds: [],
         groupIds: [],
@@ -284,47 +283,22 @@ export class Actions extends Vue {
     }
 
     changeNotifyMethod() {
-
-        if (this.notifyMethodSelected.filter(item => item === ENotifyMethod.email).join() === ENotifyMethod.email) {
-            this.inputFormData.email = true;
-        } else {
-            this.inputFormData.email = false;
-
-        }
-
         this.$emit("email", this.inputFormData.email);
     }
 
-    changeNotifyTarget() {
-
-        this.inputFormData.storeManager = this.notifyTargetSelected.filter(item => item === EWhoNotify.storeManager).join() === EWhoNotify.storeManager;
-
-        this.inputFormData.permissionOfStore = this.notifyTargetSelected.filter(item => item === EWhoNotify.permissionOfStore).join() === EWhoNotify.permissionOfStore;
-
-        if (
-            this.notifyTargetSelected
-                .filter(item => item === EWhoNotify.users)
-                .join() !== EWhoNotify.users
-        ) {
-            this.inputFormData.userIds = [];
-        } else if (
-            this.notifyTargetSelected
-                .filter(item => item === EWhoNotify.userGroup)
-                .join() !== EWhoNotify.userGroup
-        ) {
-            this.inputFormData.groupIds = [];
-        }
-
+    changeStoreManager() {
         this.$emit("store-manager", this.inputFormData.storeManager);
+    }
+    changePermissionOfStore() {
         this.$emit("permission-of-store", this.inputFormData.permissionOfStore);
     }
 
-    selectUserIds(selected: object) {
+    selectUserIds(selected: string[]) {
         this.inputFormData.userIds = selected;
         this.$emit("user-ids", this.inputFormData.userIds);
     }
 
-    selectUserGroupIds(selected: object) {
+    selectUserGroupIds(selected: string[]) {
         this.inputFormData.groupIds = selected;
         this.$emit("user-group-ids", this.inputFormData.groupIds);
     }
@@ -345,30 +319,6 @@ export class Actions extends Vue {
                 notifyTargetTitle?: any;
 
                 notifyTargetSelect?: any;
-
-                /**
-                 * @uiLabel - ${this._("w_RuleAndActions_Users1")}
-                 */
-                userIdsTitle?: any;
-
-
-                userIds?: ${toEnumInterface(this.userSelectItem as any, true)};
-
-
-                /**
-                 * @uiLabel - ${this._("w_RuleAndActions_UserGroup1")}
-                 */
-                groupIdsTitle?: any;
-
-
-                /**
-                 * @uiLabel - ${this._("w_RuleAndActions_UserGroup1")}
-                 */
-                groupIds?: ${toEnumInterface(
-                    this.userGroupSelectItem as any,
-                    true
-                )};
-
 
                 /**
                  * @uiLabel - ${this._("w_RuleAndActions_Frequently") +
