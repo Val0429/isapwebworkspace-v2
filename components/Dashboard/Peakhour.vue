@@ -8,15 +8,15 @@
             <apexchart
                 type=heatmap
                 :height="chartItem.height"
-                :options="chartOptions"
-                :series="series"
+                :options="chartItem.options"
+                :series="chartItem.series"
             />
             <select-permission-site
-                @siteIds="receiveSiteIds"
                 :radioName="radioName"
+                @siteIds="receiveSiteIds"
             ></select-permission-site>
             <select-time
-                :timeParam="timeParam"
+                :timeParam="param.dateRange"
                 @updateTime="receiveTime"
             ></select-time>
         </iv-card>
@@ -29,55 +29,43 @@ import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 /// install Highcharts
 import VueApexCharts from "vue-apexcharts";
 import Datetime from "@/services/Datetime";
-import {IPeakhour} from "@/components/Dashboard/models/IDashboard";
+import {
+    IDateRange,
+    IParam,
+    IPeakhour
+} from "@/components/Dashboard/models/IDashboard";
 Vue.component("apexchart", VueApexCharts);
 
 @Component({
     components: { apexchart: VueApexCharts }
 })
 export class Peakhour extends Vue {
-    timeParam: any = {
-        startDate: new Date(),
-        endDate: new Date()
+    param: IParam = {
+        siteIds: [],
+        dateRange: {
+            startDate: new Date(),
+            endDate: new Date()
+        }
     };
 
     radioName: string = "Peakhour";
-
-    chartOptions: any = {};
-    series: any = [];
-
-    tempChartData: IPeakhour[] = [];
-
+    peakHourDatas: IPeakhour[] = [];
     chartItem = {
-        height: 483
+        height: 483,
+        options: {},
+        series: []
     };
 
-    created() {
-        this.initData();
+    created() {}
+
+    async mounted() {
+        await this.initData();
     }
 
-    mounted() {
+    async initData() {
+        // TODO: wait api to remove
+        this.initDevelopData();
         this.initCharts();
-    }
-
-    initData() {
-        this.timeParam = {
-            // TODO: wait api
-            startDate: Datetime.DateStart(new Date()),
-            endDate: Datetime.DateStart(new Date())
-
-            // startDate: Datetime.DateStart(new Date(Datetime.ThisYearStartDate())),
-            // endDate: Datetime.DateStart(new Date(Datetime.ThisYearEndDate()))
-        };
-    }
-
-    receiveSiteIds(siteIds: object) {
-        console.log("siteIds ~ ", siteIds);
-    }
-
-    async receiveTime(time: object) {
-        this.timeParam = time;
-        let timeParam = JSON.parse(JSON.stringify(this.timeParam));
 
         // TODO: wait api
         // Loading.show();
@@ -101,52 +89,14 @@ export class Peakhour extends Vue {
         //     });
     }
 
-    developData(count, yRange) {
-        let i = 0;
-        let series = [];
-        while (i < count) {
-            let weekDay = i.toString();
-            let x = "";
-            let y =
-                Math.floor(Math.random() * (yRange.max - yRange.min + 1)) +
-                yRange.min;
-            switch (weekDay) {
-                case "0":
-                    x = this._("mb_DateTime_ShortWeekDay0");
-                    break;
-                case "1":
-                    x = this._("mb_DateTime_ShortWeekDay1");
-                    break;
-                case "2":
-                    x = this._("mb_DateTime_ShortWeekDay2");
-                    break;
-                case "3":
-                    x = this._("mb_DateTime_ShortWeekDay3");
-                    break;
-                case "4":
-                    x = this._("mb_DateTime_ShortWeekDay4");
-                    break;
-                case "5":
-                    x = this._("mb_DateTime_ShortWeekDay5");
-                    break;
-                case "6":
-                    x = this._("mb_DateTime_ShortWeekDay6");
-                    break;
-            }
-            series.push({ x: x, y: y });
-            i++;
-        }
-        return series;
-    }
-
     initCharts() {
-        this.series = [];
+        this.chartItem.series = [];
         let chartRanges = [];
 
         for (let i = 23; i >= 0; i--) {
             let name = "";
             if (i == 0) {
-                name = "0" + this._("mb_DateTime_LowerAM");
+                name = "12" + this._("mb_DateTime_LowerAM");
             }
             // else if (i % 3 != 0) {
             //     name = " ";
@@ -154,15 +104,15 @@ export class Peakhour extends Vue {
             else if (i == 12) {
                 name = "12" + this._("mb_DateTime_LowerPM");
             } else if (i > 12) {
-                name = (i).toString() + this._("mb_DateTime_LowerPM");
+                name = (i - 12).toString() + this._("mb_DateTime_LowerPM");
             } else {
-                 name = i.toString() + this._("mb_DateTime_LowerAM");
+                name = i.toString() + this._("mb_DateTime_LowerAM");
             }
 
             // TODO: wait data
             let chartData = this.developData(7, { min: -30, max: 55 });
 
-            this.series.push({
+            this.chartItem.series.push({
                 name: name,
                 data: chartData
             });
@@ -208,13 +158,12 @@ export class Peakhour extends Vue {
             }
         ];
 
-
-
-        this.chartOptions = {
+        this.chartItem.options = {
             title: { text: "" },
             chart: { toolbar: { show: false } },
             dataLabels: { enabled: false },
             legend: { show: false },
+            // tooltip: { enabled: false },
             plotOptions: {
                 heatmap: {
                     shadeIntensity: 0,
@@ -224,6 +173,59 @@ export class Peakhour extends Vue {
                 }
             }
         };
+    }
+
+    receiveSiteIds(siteIds: string[]) {
+        this.param.siteIds = siteIds;
+        this.initData();
+    }
+
+    receiveTime(dateRange: IDateRange) {
+        this.param.dateRange = dateRange;
+        this.initData();
+    }
+
+    initDevelopData() {
+        let startTime: number = this.param.dateRange.startDate.getTime();
+        let endTime: number = this.param.dateRange.endDate.getTime();
+    }
+
+    developData(count, yRange) {
+        let i = 0;
+        let series = [];
+        while (i < count) {
+            let weekDay = i.toString();
+            let x = "";
+            let y =
+                Math.floor(Math.random() * (yRange.max - yRange.min + 1)) +
+                yRange.min;
+            switch (weekDay) {
+                case "0":
+                    x = this._("mb_DateTime_ShortWeekDay0");
+                    break;
+                case "1":
+                    x = this._("mb_DateTime_ShortWeekDay1");
+                    break;
+                case "2":
+                    x = this._("mb_DateTime_ShortWeekDay2");
+                    break;
+                case "3":
+                    x = this._("mb_DateTime_ShortWeekDay3");
+                    break;
+                case "4":
+                    x = this._("mb_DateTime_ShortWeekDay4");
+                    break;
+                case "5":
+                    x = this._("mb_DateTime_ShortWeekDay5");
+                    break;
+                case "6":
+                    x = this._("mb_DateTime_ShortWeekDay6");
+                    break;
+            }
+            series.push({ x: x, y: y });
+            i++;
+        }
+        return series;
     }
 }
 
