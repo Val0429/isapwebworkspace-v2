@@ -1,12 +1,14 @@
 import Utility from '../Utility';
 
 enum DatetimeFormat {
-    'default' = 'YYYY-MM-DD HH:mm:ss',
+    'default' = 'YYYY/MM/DD HH:mm:ss',
+    date = 'DD-MM-YYYY',
+    time = 'HH:mm:ss',
+    newDateTime = 'YYYY/MM/DD HH:mm:ss',
+    newDate = 'YYYY/MM/DD',
+    newTime = 'HH:mm:ss',
 }
 
-enum DateFormat {
-    'default' = 'YYYY-MM-DD',
-}
 class Datetime {
     private _formats: string[] = ['dddd', 'ddd', 'DD', 'D', 'hh', 'h', 'HH', 'H', 'mm', 'm', 'MMMM', 'MMM', 'MM', 'M', 'ss', 's', 'A', 'a', 'YYYY', 'YY', 'ZZ', 'Z'];
     private _days: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -17,6 +19,30 @@ class Datetime {
 
     get oneDayTimestamp() {
         return this._oneDayTimestamp;
+    }
+
+    get DateTimeFormat(): string {
+        return DatetimeFormat.default;
+    }
+
+    get DateFormat(): string {
+        return DatetimeFormat.date;
+    }
+
+    get TimeFormat(): string {
+        return DatetimeFormat.time;
+    }
+
+    get NewDateTimeFormat(): string {
+        return DatetimeFormat.newDateTime;
+    }
+
+    get NewDateFormat(): string {
+        return DatetimeFormat.newDate;
+    }
+
+    get NewTimeFormat(): string {
+        return DatetimeFormat.newTime;
     }
 
     /**
@@ -418,7 +444,7 @@ class Datetime {
         return date;
     }
 
-    // 以今天為基準，計算往前、往後的幾天
+    // 計算往前、往後的幾天
     DatePlus(date: Date, addDayCount: number): Date {
         let newDate = new Date(date.getTime());
         date.setDate(date.getDate() + addDayCount);
