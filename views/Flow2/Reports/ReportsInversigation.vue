@@ -239,11 +239,7 @@ export default class ReportsInversigation extends Vue {
     }
 
     async initSelectItemPurpose() {
-        let param: any = {
-            paging: {
-                pageSize: 10000
-            }
-        };
+        let param: any = { paging: { all: true } };
 
         param = RegexServices.trim(param);
         await this.$server
@@ -265,11 +261,7 @@ export default class ReportsInversigation extends Vue {
     }
 
     async initSelectItemKiosk() {
-        let param: any = {
-            paging: {
-                pageSize: 10000
-            }
-        };
+        let param: any = { paging: { all: true } };
 
         param = RegexServices.trim(param);
         await this.$server

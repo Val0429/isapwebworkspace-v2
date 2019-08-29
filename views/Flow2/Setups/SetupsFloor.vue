@@ -198,8 +198,10 @@ export default class SetupsFloor extends Vue {
 
     async initSelectionBuilding() {
         this.selectionItem.building = {};
+        let param: any = { paging: { all: true } };
+
         await this.$server
-            .R("/flow2/buildings")
+            .R("/flow2/buildings", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {

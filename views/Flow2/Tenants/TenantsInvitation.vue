@@ -167,10 +167,8 @@
                         <b-row>
                             <b-col></b-col>
                             <b-col>
-                                <b-button
-                                    @click="downloadExample"
-                                >
-                                {{ _('w_TenantsInvitation_Download') }}
+                                <b-button @click="downloadExample">
+                                    {{ _('w_TenantsInvitation_Download') }}
                                 </b-button>
                             </b-col>
                             <b-col></b-col>
@@ -190,7 +188,7 @@
                             </b-col>
                             <b-col></b-col>
                         </b-row>
-                       
+
                     </template>
 
                     <template #3-title>{{ _('w_TenantsInvitation_Step3') }}</template>
@@ -478,8 +476,10 @@ export default class TenantsInvitation extends Vue {
     }
 
     async initSelectItemPurpose() {
+        let param: any = { paging: { all: true } };
+
         await this.$server
-            .R("/flow2/purposes")
+            .R("/flow2/purposes", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
@@ -593,8 +593,6 @@ export default class TenantsInvitation extends Vue {
         }
         return result;
     }
-
-    
 
     getInputData() {
         for (const param of this.selectedDetail) {
@@ -893,6 +891,14 @@ export default class TenantsInvitation extends Vue {
         this.inputFormData.endDate = Datetime.DateEnd(
             this.inputFormData.endDate
         );
+
+        if (
+            Datetime.DateStart(this.inputFormData.startDate).getTime() <
+            Datetime.DateStart(new Date()).getTime()
+        ) {
+            Dialog.error(this._("w_TenantsInvitation_ErrorStartEarilyToday"));
+            return false;
+        }
 
         if (!isEmail) {
             Dialog.error(this._("w_TenantsInvitation_ErrorEmailFormat"));
