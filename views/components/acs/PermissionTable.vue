@@ -334,7 +334,7 @@ export default class PermissionTable extends Vue {
         this.permissionName = PermissionName.member;
         this.canAdd = this.$user.permissions.find(x=>x.access.C === true && x.of.identifier == this.permissionName) != undefined;
         this.canEdit = this.$user.permissions.find(x=>x.access.U === true && x.of.identifier == this.permissionName) != undefined;
-        this.canDelete = this.$user.permissions.find(x=>x.access.D === true && x.of.identifier == this.permissionName) != undefined;        
+        this.canDelete = false;// this.$user.permissions.find(x=>x.access.D === true && x.of.identifier == this.permissionName) != undefined;        
     }
     isMounted:boolean=false;
     doMounted(){
