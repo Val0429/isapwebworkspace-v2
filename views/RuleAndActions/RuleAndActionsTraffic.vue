@@ -13,15 +13,15 @@
                 <iv-card :label="_('w_RuleAndActions_RuleList')">
                     <template #toolbox>
                         <iv-toolbox-view
-                            :disabled="isSelected.length !== 1"
+                            :disabled="selectedDetail.length !== 1"
                             @click="pageToView"
                         />
                         <iv-toolbox-edit
-                            :disabled="isSelected.length !== 1"
+                            :disabled="selectedDetail.length !== 1"
                             @click="pageToEdit"
                         />
                         <iv-toolbox-delete
-                            :disabled="isSelected.length === 0"
+                            :disabled="selectedDetail.length === 0"
                             @click="doDelete"
                         />
                         <iv-toolbox-divider />
@@ -39,7 +39,7 @@
                         <template #Actions="{$attrs, $listeners}">
                             <iv-toolbox-more
                                 size="sm"
-                                :disabled="isSelected.length !== 1"
+                                :disabled="selectedDetail.length !== 1"
                             >
                                 <iv-toolbox-view @click="pageToView" />
                                 <iv-toolbox-edit @click="pageToEdit" />
@@ -328,7 +328,7 @@ export default class RuleAndActionsTraffic extends Vue {
         this.isMounted = true;
     }
 
-    isSelected: any = [];
+
     tableMultiple: boolean = true;
     selectedDetail: any = [];
 
@@ -467,10 +467,25 @@ export default class RuleAndActionsTraffic extends Vue {
     }
 
     selectedItem(data) {
-        this.isSelected = data;
+        this.selectedDetail = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
     }
+
+    getInputData() {
+        // for (const param of this.selectedDetail) {
+        //     this.inputFormData = {
+        //         objectId: param.objectId,
+        //         name: param.name,
+        //         description: param.description,
+        //         siteIds: param.sites,
+        //         regionIds: param.regions,
+        //         siteIdsText: this.idsToText(param.sites),
+        //         regionIdsText: this.idsToText(param.regions)
+        //     };
+        // }
+    }
+
 
     ////////////////////  Tina start  以下資料來自 step1 choose-metrics   ////////////////////
     receiveName(name: string) {

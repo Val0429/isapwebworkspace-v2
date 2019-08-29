@@ -15,15 +15,15 @@
                 <template #toolbox>
 
                     <iv-toolbox-view
-                        :disabled="isSelected.length !== 1"
+                        :disabled="selectedDetail.length !== 1"
                         @click="pageToView"
                     />
                     <iv-toolbox-edit
-                        :disabled="isSelected.length !== 1"
+                        :disabled="selectedDetail.length !== 1"
                         @click="pageToEdit(ePageStep.edit)"
                     />
                     <iv-toolbox-delete
-                        :disabled="isSelected.length === 0"
+                        :disabled="selectedDetail.length === 0"
                         @click="doDelete"
                     />
                     <iv-toolbox-divider />
@@ -54,7 +54,7 @@
                     </template>
 
                     <template #Actions="{$attrs, $listeners}">
-                        <iv-toolbox-more :disabled="isSelected.length !== 1">
+                        <iv-toolbox-more :disabled="selectedDetail.length !== 1">
                             <iv-toolbox-view @click="pageToView" />
                             <iv-toolbox-edit @click="pageToEdit(ePageStep.edit)" />
                             <iv-toolbox-delete @click="doDelete" />
@@ -322,7 +322,7 @@ export default class Demographic extends Vue {
     eAddStep = EAddStep;
     addStep: EAddStep = EAddStep.none;
 
-    isSelected: any = [];
+
     tableMultiple: boolean = true;
 
     selectedDetail: any = [];
@@ -492,7 +492,7 @@ export default class Demographic extends Vue {
     }
 
     selectedItem(data) {
-        this.isSelected = data;
+        this.selectedDetail = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
     }
@@ -563,14 +563,13 @@ export default class Demographic extends Vue {
                         ? param.area["objectId"]
                         : "",
 
-                // TODO: check param
                 frsId:
                     param.config && param.config.frsId
                         ? param.config.frsId
                         : "",
                 frsIdView:
-                    param.config && param.config.frsId
-                        ? param.config.frsId
+                    param.config && param.config.frsIp
+                        ? param.config.frsIp
                         : "",
                 sourceId:
                     param.config && param.config.sourceId

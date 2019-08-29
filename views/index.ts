@@ -177,19 +177,19 @@ $({ path: '/region', name: "_('w_Navigation_Region')" })(Region);
 // Server
 $({ path: '/server', name: "_('w_Navigation_Server')", icon: 'fa-code', redirect: '/server/cms_server' })();
 $({ path: '/server/cms_server', name: "_('w_Navigation_Server_CMSServer')", icon: 'fa-check' })(CMSServer);
-$({ path: '/server/frs_manager_server', name: "_('w_Navigation_Server_FRSManagerServer')", icon: 'fa-question' })(FRSManager);
+$({ path: '/server/frs_manager_server', name: "_('w_Navigation_Server_FRSManagerServer')", icon: 'fa-code' })(FRSManager);
 $({ path: '/server/frs_server', name: "_('w_Navigation_Server_FRSServer')", icon: 'fa-check' })(FRSServer);
 $({ path: '/server/demographic_server', name: "_('w_Navigation_Server_DemographicServer')", icon: 'fa-check' })(DemographicServer);
 $({ path: '/server/hd_server', name: "_('w_Navigation_Server_HDServer')", icon: 'fa-check' })(HumanDetectionServer);
 
 // Video Source (c)
 $({ path: '/video_sources', name: "_('w_Navigation_VideoSources')", icon: 'fa-code', redirect: '/login' })();
-$({ path: '/video_sources/people_counting', name: "_('w_Navigation_VideoSources_PeopleCounting')", icon: 'fa-check' })(PeopleCounting);
+$({ path: '/video_sources/people_counting', name: "_('w_Navigation_VideoSources_PeopleCounting')", icon: 'fa-code' })(PeopleCounting);
 $({ path: '/video_sources/demographic', name: "_('w_Navigation_VideoSources_Demographic')", icon: 'fa-check' })(Demographic);
 $({ path: '/video_sources/dwell_time', name: "_('w_Navigation_VideoSources_DwellTime')", icon: 'fa-check' })(DwellTime);
 $({ path: '/video_sources/human_detection', name: "_('w_Navigation_VideoSources_HumanDetection')", icon: 'fa-check' })(HumanDetection);
 $({ path: '/video_sources/heatmap', name: "_('w_Navigation_VideoSources_Heatmap')", icon: 'fa-check' })(Heatmap);
-$({ path: '/video_sources/face_recognition', name: "_('w_Navigation_VideoSources_FaceRecognition')", icon: 'fa-code' })(FaceRecognition);
+$({ path: '/video_sources/face_recognition', name: "_('w_Navigation_VideoSources_FaceRecognition')", icon: 'fa-check' })(FaceRecognition);
 
 // Rule Engine
 $({ path: '/rule_actions', name: "_('w_Navigation_RuleAndActions')", icon: 'fa-code', redirect: '/rule_actions/traffic' })();

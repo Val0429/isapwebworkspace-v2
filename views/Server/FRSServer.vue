@@ -15,15 +15,15 @@
                 <template #toolbox>
 
                     <iv-toolbox-view
-                        :disabled="isSelected.length !== 1"
+                        :disabled="selectedDetail.length !== 1"
                         @click="pageToView"
                     />
                     <iv-toolbox-edit
-                        :disabled="isSelected.length !== 1"
+                        :disabled="selectedDetail.length !== 1"
                         @click="pageToEdit()"
                     />
                     <iv-toolbox-delete
-                        :disabled="isSelected.length === 0"
+                        :disabled="selectedDetail.length === 0"
                         @click="doDelete"
                     />
                     <iv-toolbox-divider />
@@ -41,7 +41,7 @@
 
                     <template #Actions="{$attrs, $listeners}">
 
-                        <iv-toolbox-more :disabled="isSelected.length !== 1">
+                        <iv-toolbox-more :disabled="selectedDetail.length !== 1">
                             <iv-toolbox-view @click="pageToView" />
                             <iv-toolbox-edit @click="pageToEdit()" />
                             <iv-toolbox-delete @click="doDelete" />
@@ -174,7 +174,7 @@ export default class FRSServer extends Vue {
         step: 1
     };
 
-    isSelected: any = [];
+
     tableMultiple: boolean = true;
 
     selectedDetail: any = [];
@@ -222,7 +222,7 @@ export default class FRSServer extends Vue {
     }
 
     selectedItem(data) {
-        this.isSelected = data;
+        this.selectedDetail = data;
         this.selectedDetail = [];
         this.selectedDetail = data;
     }
@@ -271,7 +271,7 @@ export default class FRSServer extends Vue {
             return false;
         } else {
             for (const result of this.groupData) {
-                console.log('result.name ~ ', result.name)
+                // console.log('result.name ~ ', result.name)
                 switch (result.name) {
                     case "Blacklist":
                         tempBlacklist[result.objectId] = result.name;

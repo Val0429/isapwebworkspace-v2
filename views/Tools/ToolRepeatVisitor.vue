@@ -113,7 +113,7 @@ export default class ToolRepeatVisitor extends Vue {
 
     tabelParam: object = {};
 
-    isSelected: any = [];
+
 
     modalShow: boolean = false;
 
