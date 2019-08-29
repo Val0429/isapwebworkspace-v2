@@ -251,8 +251,10 @@ export default class SetupsLicense extends Vue {
     mounted() {}
 
     async initMacSelectItem() {
+        let param: any = { paging: { all: true } };
+
         await this.$server
-            .R("/mac")
+            .R("/mac", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {

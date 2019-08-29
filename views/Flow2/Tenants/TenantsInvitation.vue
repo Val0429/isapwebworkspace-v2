@@ -476,8 +476,10 @@ export default class TenantsInvitation extends Vue {
     }
 
     async initSelectItemPurpose() {
+        let param: any = { paging: { all: true } };
+
         await this.$server
-            .R("/flow2/purposes")
+            .R("/flow2/purposes", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
