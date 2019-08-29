@@ -2,7 +2,7 @@ import Utility from '../Utility';
 
 enum DatetimeFormat {
     'default' = 'YYYY/MM/DD HH:mm:ss',
-    date = 'DD-MM-YYYY',
+    date = 'YYYY/MM/DD',
     time = 'HH:mm:ss',
     newDateTime = 'YYYY/MM/DD HH:mm:ss',
     newDate = 'YYYY/MM/DD',
