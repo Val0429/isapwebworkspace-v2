@@ -38,7 +38,6 @@ import {EMode} from "@/components/Dashboard/models/EDashboard";
                 :options="chartOptions"
             ></highcharts>
 
-
             <select-time
                 :timeParam="timeParam"
                 @updateTime="receiveTime"
@@ -49,15 +48,15 @@ import {EMode} from "@/components/Dashboard/models/EDashboard";
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from "vue-property-decorator";
-    /// install Highcharts
-    import HighchartsVue from "highcharts-vue";
-    import Datetime from "@/services/Datetime";
-    import {EMode} from "@/components/Dashboard/index";
+import { Component, Vue } from "vue-property-decorator";
+/// install Highcharts
+import HighchartsVue from "highcharts-vue";
+import Datetime from "@/services/Datetime";
+import { EMode } from "@/components/Dashboard/index";
 
-    Vue.use(HighchartsVue);
+Vue.use(HighchartsVue);
 
-    @Component({
+@Component({
     components: {}
 })
 export class Top5sites extends Vue {
@@ -88,8 +87,9 @@ export class Top5sites extends Vue {
     };
 
     created() {
-        this.initCharts();
+        this.updateCharts();
         this.initData();
+        this.initTime();
     }
 
     mounted() {}
@@ -99,7 +99,9 @@ export class Top5sites extends Vue {
             type: EMode.peopleCounting,
             modeTitle: this._("w_Navigation_RuleAndActions_Traffic")
         };
+    }
 
+    initTime() {
         this.timeParam = {
             // TODO: wait api
             startDate: Datetime.DateStart(new Date()),
@@ -118,16 +120,18 @@ export class Top5sites extends Vue {
 
         if (this.currentDevice.isDwellTime) {
             this.modeParam.type = EMode.dwellTime;
-            this.modeParam.modeTitle = this._("w_Dashboard_Minutes")
+            this.modeParam.modeTitle = this._("w_Dashboard_Minutes");
         } else {
             this.modeParam.type = EMode.peopleCounting;
-            this.modeParam.modeTitle = this._("w_Navigation_RuleAndActions_Traffic")
+            this.modeParam.modeTitle = this._(
+                "w_Navigation_RuleAndActions_Traffic"
+            );
         }
 
-        this.initCharts();
+        this.updateCharts();
     }
 
-    initCharts() {
+    updateCharts() {
         // 整理 xAxis（y軸）的 site
         let tempCategories: string[] = [];
         let tempData: number[] = [];
@@ -146,6 +150,8 @@ export class Top5sites extends Vue {
             subtitle: { text: null },
 
             xAxis: {
+                // TODO : wait api
+                // categories: tempCategories,
                 categories: ["Africa", "America", "Asia", "Europe", "Oceania"],
                 title: null
             },
@@ -155,13 +161,15 @@ export class Top5sites extends Vue {
             },
             credits: { enabled: false },
             legend: { enabled: false },
-            colors:['#5C94FB'],
+            colors: ["#5C94FB"],
             series: [
                 {
                     name: tempName,
+                    // TODO : wait api
+                    // data: tempData
                     data: [107, 31, 635, 203, 2]
                 }
-            ],
+            ]
         };
     }
 
@@ -215,7 +223,7 @@ export class Top5sites extends Vue {
         //         );
         //     });
 
-        this.initCharts();
+        this.updateCharts();
     }
 }
 

@@ -88,8 +88,9 @@ import {EMode} from "@/components/Dashboard/models/EDashboard";
         };
 
         created() {
-            this.initCharts();
+            this.updateCharts();
             this.initData();
+            this.initTime();
         }
 
         mounted() {}
@@ -100,6 +101,9 @@ import {EMode} from "@/components/Dashboard/models/EDashboard";
                 modeTitle: this._("w_Navigation_RuleAndActions_Traffic")
             };
 
+        }
+
+        initTime() {
             this.timeParam = {
                 // TODO: wait api
                 startDate: Datetime.DateStart(new Date()),
@@ -124,10 +128,10 @@ import {EMode} from "@/components/Dashboard/models/EDashboard";
                 this.modeParam.modeTitle = this._("w_Navigation_RuleAndActions_Traffic")
             }
 
-            this.initCharts();
+            this.updateCharts();
         }
 
-        initCharts() {
+        updateCharts() {
             // 整理 xAxis（y軸）的 site
             let tempCategories: string[] = [];
             let tempData: number[] = [];
@@ -145,6 +149,8 @@ import {EMode} from "@/components/Dashboard/models/EDashboard";
                 title: { text: null },
                 subtitle: { text: null },
                 xAxis: {
+                    // TODO : wait api
+                    // categories: tempCategories,
                     categories: ["Africa", "America", "Asia", "Europe", "Oceania"],
                     title: null
                 },
@@ -158,6 +164,8 @@ import {EMode} from "@/components/Dashboard/models/EDashboard";
                 series: [
                     {
                         name: tempName,
+                        // TODO : wait api
+                        // data: tempData
                         data: [107, 31, 635, 203, 2]
                     }
                 ]
@@ -214,7 +222,7 @@ import {EMode} from "@/components/Dashboard/models/EDashboard";
             //         );
             //     });
 
-            this.initCharts();
+            this.updateCharts();
         }
     }
 
