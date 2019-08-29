@@ -1,10 +1,27 @@
 <template>
     <div>
         <iv-card
-            :label="_('w_Information')"
+            :label="data.title ?  data.title : ''"
             :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
             class="font-3xl"
         >
+
+            <template>
+
+                <div class="information-data-div">
+                    <label> {{_('w_Manager')}}</label>
+                    <label>{{data.manager}}</label>
+                </div>
+                <div class="information-data-div">
+                    <label> {{_('w_Address')}}</label>
+                    <label> {{data.address}}</label>
+                </div>
+
+                <div class="information-data-div">
+                    <label> {{_('w_Tag1')}}</label>
+                    <label class="blue"> <template v-for="(tag, index) in data.tags"> #{{tag}}</template> </label>
+                </div>
+            </template>
             <div class="row information-div">
                 <div class="box current-info-box">
                     <div class="backgroundColor">
@@ -146,6 +163,13 @@ import {
     components: {}
 })
 export class MapStatusDashboard extends Vue {
+    // Prop
+    @Prop({
+        type: Object, // Boolean, Number, String, Array, Object
+        default: () => {}
+    })
+    data: object;
+
     anlysisData = new ReportDashboard();
 
     // chart options
@@ -531,6 +555,18 @@ Vue.component("map-status-dashboard", MapStatusDashboard);
     margin-bottom: -30px;
 }
 
+.information-data-div {
+    font-size: 14px;
+    label:first-child {
+        width: 25%;
+        float: left;
+    }
+
+    label:last-child {
+        width: 75%;
+    }
+}
+
 .clearfix {
     text-align: center;
     .title {
@@ -568,5 +604,9 @@ Vue.component("map-status-dashboard", MapStatusDashboard);
     .vip-blackList-div {
         margin-top: 20px;
     }
+}
+
+.blue {
+    color: #008fff;
 }
 </style>

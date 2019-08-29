@@ -101,6 +101,8 @@ export default class LangObject {
     w_Sites1 = '* Store(s)';
     w_Tag = '* Tag(s)';
     w_Tag1 = 'Tag';
+    w_Manager = 'Manager';
+    w_Address = 'Address';
     w_Site = 'Store';
     w_Group = 'Entrance';
     w_Camera = 'Camera';
