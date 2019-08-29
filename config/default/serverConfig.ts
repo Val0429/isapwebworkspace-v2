@@ -8,10 +8,10 @@ import { Config } from '@/../config/default/serverConfig';
 
 var config: Config = {
     // 皓全
-    ip: '172.16.10.155',
+    // ip: '172.16.10.155',
 
     // Min server
-    // ip: '172.16.10.21',
+    ip: '172.16.10.21',
 
     // Rebaca server
     // ip: '172.16.10.194',
