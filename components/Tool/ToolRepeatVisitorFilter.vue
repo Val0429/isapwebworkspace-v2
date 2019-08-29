@@ -95,21 +95,22 @@ export class ToolRepeatVisitorFilter extends Vue {
 
     updateInputFormData(data) {
         switch (data.key) {
+            case 'siteIds':
+                this.inputFormData.siteIds = data.value;
+                break;
             case 'startDate':
-                if (!Datetime.CheckDate(data.value, new Date(this.inputFormData.endDate))) {
+                if (!Datetime.CheckDate(Datetime.DateStart(data.value), Datetime.DateStart(new Date(this.inputFormData.endDate)))) {
                     Dialog.error(this._("w_ReportDateError"));
-                    this.inputFormData.startDate = new Date();
-                    this.inputFormData.endDate = new Date();
                     return false;
                 }
+                this.inputFormData.startDate = data.value;
                 break;
             case 'endDate':
-                if (!Datetime.CheckDate(new Date(this.inputFormData.endDate), data.value)) {
+                if (!Datetime.CheckDate(Datetime.DateStart(new Date(this.inputFormData.startDate)), Datetime.DateStart(data.value))) {
                     Dialog.error(this._("w_ReportDateError"));
-                    this.inputFormData.startDate = new Date();
-                    this.inputFormData.endDate = new Date();
                     return false;
                 }
+                this.inputFormData.endDate = data.value;
                 break;
         }
     }
@@ -127,11 +128,14 @@ export class ToolRepeatVisitorFilter extends Vue {
             this.inputFormData.startDate = new Date();
             this.inputFormData.endDate = new Date();
             return false;
+        } if (Datetime.DateStart(data.endDate).getTime() === Datetime.DateStart(data.startDate).getTime()) {
+            submitParam.startDate = Datetime.DateStart(data.startDate).toISOString();
+            submitParam.endDate = Datetime.DateEnd(data.endDate).toISOString();
         } else {
             submitParam.startDate = Datetime.DateStart(data.startDate).toISOString();
             submitParam.endDate = Datetime.DateStart(data.endDate).toISOString();
         }
-
+        
         this.visible = false;
         this.$emit('filter', submitParam)
     }
