@@ -229,9 +229,10 @@ export default class SetupsCompany extends Vue {
     async initSelectItemFloor() {
         this.floorsSelectItem = {};
         let tempFloorSelectItem = {};
+        let param: any = { paging: { all: true } };
 
         await this.$server
-            .R("/flow2/floors")
+            .R("/flow2/floors", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
@@ -322,7 +323,14 @@ export default class SetupsCompany extends Vue {
     }
 
     addContactNumber() {
+        console.log(this.inputFormData.contactNumber);
+
         if (!this.inputFormData.contactNumber) {
+            return false;
+        }
+
+        if (!RegexServices.number(this.inputFormData.contactNumber)) {
+            Dialog.error(this._("w_Company_ErrorContactNumberNotNumber"));
             return false;
         }
 

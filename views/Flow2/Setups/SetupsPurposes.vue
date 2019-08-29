@@ -217,7 +217,6 @@ export default class SetupsPurposes extends Vue {
         };
 
         // add
-
         if (!this.inputFormData.objectId) {
             Loading.show();
             param = RegexServices.trim(param);

@@ -70,9 +70,9 @@
                                     <td>{{ value.kioskName }}</td>
                                     <td>{{ value.event }}</td>
                                     <td>{{ value.eventDateString }}</td>
-                                    <td >{{ value.data && value.data.company && value.data.company.name ? value.data.company.name : "" }}</td>
-                                    <td >{{ value.data && value.data.visitor && value.data.visitor.email ? value.data.visitor.email : "" }}</td>
-                                    <td >{{ value.data && value.data.visitor && value.data.visitor.phone ? value.data.visitor.phone : "" }}</td>
+                                    <td>{{ value.companyName }}</td>
+                                    <td>{{ value.email }}</td>
+                                    <td>{{ value.phone }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -120,6 +120,9 @@ interface ITableItem {
     event: string;
     eventDate: Date;
     eventDateString: string;
+    companyName: string;
+    email: string;
+    phone: string;
 }
 
 enum EWsType {
@@ -236,11 +239,7 @@ export default class ReportsInversigation extends Vue {
     }
 
     async initSelectItemPurpose() {
-        let param: any = {
-            paging: {
-                pageSize: 10000
-            }
-        };
+        let param: any = { paging: { all: true } };
 
         param = RegexServices.trim(param);
         await this.$server
@@ -262,11 +261,7 @@ export default class ReportsInversigation extends Vue {
     }
 
     async initSelectItemKiosk() {
-        let param: any = {
-            paging: {
-                pageSize: 10000
-            }
-        };
+        let param: any = { paging: { all: true } };
 
         param = RegexServices.trim(param);
         await this.$server
@@ -372,6 +367,22 @@ export default class ReportsInversigation extends Vue {
             eventTextArray.length > 0
                 ? this.resolveEventString(eventTextArray[0])
                 : "";
+        let visitorName =
+            data.data && data.data.visitor && data.data.visitor.name
+                ? data.data.visitor.name
+                : "";
+        let companyName =
+            data.data && data.data.company && data.data.company.name
+                ? data.data.company.name
+                : "";
+        let email =
+            data.data && data.data.visitor && data.data.visitor.email
+                ? data.data.visitor.email
+                : "";
+        let phone =
+            data.data && data.data.visitor && data.data.visitor.phone
+                ? data.data.visitor.phone
+                : "";
 
         if (purposeId != "") {
             for (let selItem of this.selectItem.purposes) {
@@ -393,7 +404,7 @@ export default class ReportsInversigation extends Vue {
 
         let tempItem: ITableItem = {
             objectId: data.objectId,
-            visitorName: data.data.visitorName,
+            visitorName: visitorName,
             purposeId: purposeId,
             purposeName: purposeName,
             kioskId: kioskId,
@@ -403,7 +414,10 @@ export default class ReportsInversigation extends Vue {
                 new Date(data.createdAt),
                 this.eventTimeFormat
             ),
-            eventDate: new Date(data.createdAt)
+            eventDate: new Date(data.createdAt),
+            companyName: companyName,
+            email: email,
+            phone: phone
         };
 
         let haveTableData = false;
@@ -419,6 +433,9 @@ export default class ReportsInversigation extends Vue {
                 this.tableDatas[i].event = tempItem.event;
                 this.tableDatas[i].eventDateString = tempItem.eventDateString;
                 this.tableDatas[i].eventDate = tempItem.eventDate;
+                this.tableDatas[i].companyName = tempItem.companyName;
+                this.tableDatas[i].email = tempItem.email;
+                this.tableDatas[i].phone = tempItem.phone;
             }
         }
         if (!haveTableData && this.checkFilterData(tempItem)) {

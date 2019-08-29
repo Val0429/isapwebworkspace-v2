@@ -185,7 +185,7 @@
                 comPort: data.comPort,
             };
 
-            const addParam = {
+            const param = {
                 data: {
                     sms
                 }
@@ -193,7 +193,7 @@
 
             Loading.show();
             await this.$server
-                .C("/config", addParam)
+                .C("/config", param)
                 .then((response: any) => {
                     ResponseFilter.successCheck(this, response, (response: any) => {
                         Dialog.success(this._("w_SMSSetting_EmailSuccess"));

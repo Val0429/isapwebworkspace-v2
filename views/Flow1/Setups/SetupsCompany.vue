@@ -228,9 +228,10 @@ export default class SetupsCompany extends Vue {
     async initSelectItemFloor() {
         this.floorsSelectItem = {};
         let tempFloorSelectItem = {};
+        let param: any = { paging: { all: true } };
 
         await this.$server
-            .R("/flow1/floors")
+            .R("/flow1/floors", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {

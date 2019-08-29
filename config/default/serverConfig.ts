@@ -21,12 +21,13 @@ switch (PackageJSON.flow) {
         config.ip = '172.16.10.122';
         config.port = 6060;
         break;
+
     case '/flow2':
         // Val
-        // config.ip = '172.16.10.122';
+        config.ip = '172.16.10.122';
 
         // QA Tina
-        config.ip = '172.16.10.51';
+        // config.ip = '172.16.10.51';
 
         config.port = 6060;
         break;

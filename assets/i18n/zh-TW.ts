@@ -64,6 +64,7 @@ export default class LangObject implements LangObject {
     w_Login_Login = 'Login';
     w_Login_LoginTitle = '登入';
     w_Login_ForgotPassword = '忘記密碼';
+    w_Login_Error_401 = 'Incorrect username or password';
 
     // Logout
     w_Logout = '登出';
@@ -292,6 +293,8 @@ export default class LangObject implements LangObject {
     w_Company_ContactNumber = '聯絡號碼';
     w_Company_Floor = '樓層';
 
+    w_Company_ErrorContactNumberNotNumber = 'Please check contact only digits';
+
     ////////////////// Kiosk //////////////////
     w_Kiosk_List = '設備清單';
     w_Kiosk_Add = '新增設備';
@@ -335,6 +338,7 @@ export default class LangObject implements LangObject {
     w_TenantsInvitation_ErrorFileType = 'Please upload xlsx';
     w_TenantsInvitation_ErrorFileResolve = 'File resolve error';
     w_TenantsInvitation_Cencel = 'Cancel Invitation';
+    w_TenantsInvitation_ErrorStartEarilyToday = 'Start earlier than today';
 
     ////////////////// Tenants Visitor //////////////////
     w_Tenants_VisitorList = '訪客清單';

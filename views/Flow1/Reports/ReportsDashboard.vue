@@ -186,11 +186,8 @@ export default class ReportsDashboard extends Vue {
     }
 
     async initKiosk() {
-        let param = {
-            paging: {
-                all: true
-            }
-        };
+        let param: any = { paging: { all: true } };
+
         await this.$server
             .R("/kiosks", param)
             .then((response: any) => {
@@ -230,6 +227,7 @@ export default class ReportsDashboard extends Vue {
             start: this.inputFormData.startDate.toISOString(),
             end: this.inputFormData.endDate.toISOString()
         };
+
         await this.$server
             .R("/flow1/reports/recurring", param)
             .then((response: any) => {

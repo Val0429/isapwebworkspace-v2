@@ -80,147 +80,137 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Watch } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 
-    // Service
-    import ResponseFilter from "@/services/ResponseFilter";
-    import Dialog from "@/services/Dialog";
-    import Loading from "@/services/Loading";
+// Service
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
 
-    interface IInputFormData {
-        enable: boolean;
-        url: string;
-        username: string;
-        password: string;
+interface IInputFormData {
+    enable: boolean;
+    url: string;
+    username: string;
+    password: string;
+}
+
+@Component({
+    components: {}
+})
+export default class SetupsSMSOnline extends Vue {
+    modalShow: boolean = false;
+
+    // input框綁定model資料
+    inputFormData: IInputFormData = {
+        enable: true,
+        url: "",
+        username: "",
+        password: ""
+    };
+
+    inputTestSmsPhone: string = "";
+
+    created() {
+        this.clearLicenseData();
+        this.readSmsServer();
     }
 
-    @Component({
-        components: {}
-    })
-    export default class SetupsSMSOnline extends Vue {
-        modalShow: boolean = false;
+    mounted() {
+        this.readSmsServer();
+    }
 
-        // input框綁定model資料
-        inputFormData: IInputFormData = {
+    clearLicenseData() {
+        this.inputFormData = {
             enable: true,
             url: "",
             username: "",
             password: ""
         };
 
-        inputTestSmsPhone: string = "";
+        this.inputTestSmsPhone = "";
+    }
 
-        created() {
-            this.clearLicenseData();
-            this.readSmsServer();
-        }
+    pageToSmsTest() {
+        this.inputTestSmsPhone = "";
+        this.modalShow = !this.modalShow;
+    }
 
-        mounted() {
-            this.readSmsServer();
-        }
-
-        clearLicenseData() {
-            this.inputFormData = {
-                enable: true,
-                url: "",
-                username: "",
-                password: ""
-            };
-
-            this.inputTestSmsPhone = "";
-        }
-
-        pageToSmsTest() {
-            this.inputTestSmsPhone = "";
-            this.modalShow = !this.modalShow;
-        }
-
-        // 送出測試
-        async sendSmsTest() {
-            const smsObject: {
-                phone: string;
-            } = {
-                phone: this.inputTestSmsPhone
-            };
-            Loading.show();
-            await this.$server
-                .C("/test/sgsms", smsObject)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        this.modalShow = !this.modalShow;
-                        Dialog.success(this._("w_SmsServer_Setting_Test_Success"));
-                    });
-                })
-                .catch((e: any) => {
+    // 送出測試
+    async sendSmsTest() {
+        let param: {
+            phone: string;
+        } = {
+            phone: this.inputTestSmsPhone
+        };
+        Loading.show();
+        await this.$server
+            .C("/test/sgsms", param)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
                     this.modalShow = !this.modalShow;
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_SmsServer_Setting_Test_Fail")
-                    );
+                    Dialog.success(this._("w_SmsServer_Setting_Test_Success"));
                 });
-        }
+            })
+            .catch((e: any) => {
+                this.modalShow = !this.modalShow;
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_SmsServer_Setting_Test_Fail")
+                );
+            });
+    }
 
-        async readSmsServer() {
-            await this.$server
-                .R("/config")
-                .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        this.inputFormData.enable = response.sgsms.enable;
-                        this.inputFormData.url = response.sgsms.url;
-                        this.inputFormData.username = response.sgsms.username;
-                        this.inputFormData.password = response.sgsms.password;
-                    });
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_SmsServer_Read_Fail")
-                    );
+    async readSmsServer() {
+        await this.$server
+            .R("/config")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    this.inputFormData.enable = response.sgsms.enable;
+                    this.inputFormData.url = response.sgsms.url;
+                    this.inputFormData.username = response.sgsms.username;
+                    this.inputFormData.password = response.sgsms.password;
                 });
-        }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_SmsServer_Read_Fail")
+                );
+            });
+    }
 
-        // 新增SmsServer
-        async saveSmsServer(data) {
-
-            const sgsms: {
-                enable: string;
-                url: string;
-                username: string;
-                password: string;
-            } = {
+    // 新增SmsServer
+    async saveSmsServer(data) {
+        let param = {
+            data: {
                 enable: data.enable,
                 url: data.url,
                 username: data.username,
-                password: data.password,
-            };
+                password: data.password
+            }
+        };
 
-            const addParam = {
-                data: {
-                    sgsms
-                }
-            };
-
-            Loading.show();
-            await this.$server
-                .C("/config", addParam)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        Dialog.success(this._("w_SMSSetting_EmailSuccess"));
-                    });
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_SmsServer_Setting_Fail")
-                    );
+        Loading.show();
+        await this.$server
+            .C("/config", param)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    Dialog.success(this._("w_SMSSetting_EmailSuccess"));
                 });
-        }
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_SmsServer_Setting_Fail")
+                );
+            });
+    }
 
-        ISmsServerComponent() {
-            return `
+    ISmsServerComponent() {
+        return `
             interface ISmsServerComponent {
 
                 /**
@@ -253,7 +243,7 @@
 
             }
         `;
-        }
     }
+}
 </script>
 
