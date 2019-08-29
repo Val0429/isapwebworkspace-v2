@@ -27,14 +27,19 @@
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Model } from "vue-property-decorator";
 
-/// install Highcharts
-import VueApexCharts from "vue-apexcharts";
-import Datetime from "@/services/Datetime";
+// Custom
 import {
     IDateRange,
     IParam,
     IPeakhour
 } from "@/components/Dashboard/models/IDashboard";
+
+// Services
+import Datetime from "@/services/Datetime";
+import ExcelChartLevel from "@/services/ExcelChartLevel";
+
+/// install apexcharts
+import VueApexCharts from "vue-apexcharts";
 Vue.component("apexchart", VueApexCharts);
 
 @Component({
@@ -52,6 +57,14 @@ export class Peakhour extends Vue {
     radioName: string = "Peakhour";
     peakHourDatas: IPeakhour[] = [];
     chartItem = {
+        levelColors: [
+            "#ECECEC",
+            "#F4F6F8",
+            "#D8E7F8",
+            "#B9CAFC",
+            "#5780F8",
+            "#265BF6"
+        ],
         mount: false,
         height: 483,
         options: {},
@@ -66,7 +79,6 @@ export class Peakhour extends Vue {
 
     async initData() {
         // TODO: wait api to remove
-        console.log("!!! this.param.siteIds", this.param.siteIds);
         this.initDevelopData();
 
         // TODO: wait api
@@ -88,10 +100,12 @@ export class Peakhour extends Vue {
     }
 
     initCharts() {
+        this.chartItem.mount = false;
         this.chartItem.series = [];
 
         let chartRanges = [];
         let weekList = [];
+        let allValues = [];
 
         for (let i = 0; i < 7; i++) {
             let iString = i.toString();
@@ -145,9 +159,13 @@ export class Peakhour extends Vue {
             });
         }
 
-        console.log("!!!! series", this.chartItem.series);
-
         for (let peakHour of this.peakHourDatas) {
+            if (isNaN(peakHour.date.getTime())) {
+                continue;
+            }
+            if (typeof peakHour.value != "number") {
+                continue;
+            }
             let dataHour: number = peakHour.date.getHours();
             let dateDay: number = peakHour.date.getDay();
             if (this.chartItem.series[dataHour].data[dateDay].y == -1) {
@@ -156,52 +174,57 @@ export class Peakhour extends Vue {
             this.chartItem.series[dataHour].data[dateDay].y += peakHour.value;
         }
 
-        // TODO: Wait API
+        for (let i in this.chartItem.series) {
+            for (let j in this.chartItem.series[i].data) {
+                if (
+                    typeof this.chartItem.series[i].data[j].y == "number" &&
+                    this.chartItem.series[i].data[j].y > -1
+                ) {
+                    allValues.push(this.chartItem.series[i].data[j].y);
+                }
+            }
+        }
+
         chartRanges = [
             {
-                from: -10000,
+                from: -2,
                 to: -1,
                 name: " ",
-                color: "#ececec"
-            },
-            {
-                from: 0,
-                to: 5,
-                name: " ",
-                color: "#F4F6F8"
-            },
-            {
-                from: 6,
-                to: 20,
-                name: " ",
-                color: "#D8E7F8"
-            },
-            {
-                from: 21,
-                to: 45,
-                name: " ",
-                color: "#B9CAFC"
-            },
-            {
-                from: 46,
-                to: 55,
-                name: " ",
-                color: "#5780F8"
-            },
-            {
-                from: 56,
-                to: 100000,
-                name: " ",
-                color: "#265BF6"
+                color: this.chartItem.levelColors[0]
             }
         ];
+
+        let levelLength = this.chartItem.levelColors.length - 1;
+        for (let i = 0; i < levelLength; i++) {
+            chartRanges.push({
+                from:
+                    i == 0
+                        ? 0
+                        : ExcelChartLevel.Percentile(
+                              allValues,
+                              (1 / levelLength) * i
+                          ),
+                to:
+                    i == levelLength
+                        ? ExcelChartLevel.Percentile(
+                              allValues,
+                              (1 / levelLength) * (i + 1)
+                          ) * 10000
+                        : ExcelChartLevel.Percentile(
+                              allValues,
+                              (1 / levelLength) * (i + 1)
+                          ),
+                name: " ",
+                color: this.chartItem.levelColors[i + 1]
+            });
+        }
 
         this.chartItem.options = {
             title: { text: "" },
             chart: { toolbar: { show: false } },
             dataLabels: { enabled: false },
             legend: { show: false },
-            // tooltip: { enabled: false },
+            tooltip: { enabled: false },
             plotOptions: {
                 heatmap: {
                     shadeIntensity: 0,
@@ -251,11 +274,15 @@ export class Peakhour extends Vue {
                 i <= endTime;
                 i += Datetime.oneDayTimestamp
             ) {
-                this.peakHourDatas.push({
-                    date: new Date(i),
-                    siteId: siteId,
-                    value: Math.floor(Math.random() * (55 + 30 + 1)) - 30
-                });
+                for (let j = 0; j < 24; j++) {
+                    let tempDate = new Date(i);
+                    tempDate.setHours(j);
+                    this.peakHourDatas.push({
+                        date: tempDate,
+                        siteId: siteId,
+                        value: Math.floor(Math.random() * (128 + 1))
+                    });
+                }
             }
         }
 
