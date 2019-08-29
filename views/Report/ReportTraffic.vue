@@ -1474,7 +1474,7 @@ export default class ReportTraffic extends Vue {
 
             // one day
             for (let i = 0; i < 24; i++) {
-                let tempDate = Datetime.DateToZero(this.filterData.startDate);
+                let tempDate = Datetime.DateStart(this.filterData.startDate);
                 tempDate.setHours(i);
                 let tempDateChartData = {
                     date: tempDate,

@@ -1396,7 +1396,7 @@ export default class ReportOccupancy extends Vue {
                 // single day
                 isOneDay = true;
                 for (let i = 0; i < 24; i++) {
-                    let tempDate = Datetime.DateToZero(
+                    let tempDate = Datetime.DateStart(
                         this.filterData.startDate
                     );
                     tempDate.setHours(i);
@@ -1549,7 +1549,7 @@ export default class ReportOccupancy extends Vue {
                 // single day
                 isOneDay = true;
                 for (let i = 0; i < 24; i++) {
-                    let tempDate = Datetime.DateToZero(
+                    let tempDate = Datetime.DateStart(
                         this.filterData.startDate
                     );
                     tempDate.setHours(i);

@@ -683,8 +683,8 @@ export default class ReportHeatmap extends Vue {
 
     checkDateTheSameDay(startDate: Date, endDate: Date): boolean {
         return (
-            Datetime.DateToZero(endDate).getTime() ===
-            Datetime.DateToZero(startDate).getTime()
+            Datetime.DateStart(endDate).getTime() ===
+            Datetime.DateStart(startDate).getTime()
         );
     }
 
@@ -696,8 +696,8 @@ export default class ReportHeatmap extends Vue {
         const fromApiDate = Datetime.DateTime2String(new Date(apiDate), "HH");
 
         return (
-            Datetime.DateToZero(new Date(selectedDate)).getTime() ===
-            Datetime.DateToZero(new Date(fromApiDate)).getTime()
+            Datetime.DateStart(new Date(selectedDate)).getTime() ===
+            Datetime.DateStart(new Date(fromApiDate)).getTime()
         );
     }
 

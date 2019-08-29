@@ -420,8 +420,8 @@ export class FilterConditionHeatMap extends Vue {
             // tagIds: string[];
             type: ETimeMode;
         } = {
-            startDate: Datetime.DateToZero(new Date()),
-            endDate: Datetime.DateToZero(new Date()),
+            startDate: Datetime.DateStart(new Date()),
+            endDate: Datetime.DateStart(new Date()),
             type: ETimeMode.none,
             firstSiteId: "",
             siteId: this.inputFormData.siteIds
@@ -464,18 +464,18 @@ export class FilterConditionHeatMap extends Vue {
                     )
                 )
             ) {
-                doSubmitParam.startDate = Datetime.DateToZero(
+                doSubmitParam.startDate = Datetime.DateStart(
                     this.inputFormData.startDate
                 );
-                doSubmitParam.endDate = Datetime.DateToZero(
+                doSubmitParam.endDate = Datetime.DateStart(
                     this.inputFormData.endDate
                 );
                 doSubmitParam.type = ETimeMode.hour;
             } else {
-                doSubmitParam.startDate = Datetime.DateToZero(
+                doSubmitParam.startDate = Datetime.DateStart(
                     this.inputFormData.startDate
                 );
-                doSubmitParam.endDate = Datetime.DateToZero(
+                doSubmitParam.endDate = Datetime.DateStart(
                     this.inputFormData.endDate
                 );
                 doSubmitParam.type = ETimeMode.day;
@@ -485,120 +485,120 @@ export class FilterConditionHeatMap extends Vue {
         } else if (this.selectPeriodAddWay === "designation") {
             switch (this.inputFormData.designationPeriod) {
                 case "today":
-                    doSubmitParam.startDate = Datetime.DateToZero(
+                    doSubmitParam.startDate = Datetime.DateStart(
                         new Date(Datetime.CountDateNumber(0))
                     );
-                    doSubmitParam.endDate = Datetime.DateToZero(
+                    doSubmitParam.endDate = Datetime.DateStart(
                         new Date(Datetime.CountDateNumber(0))
                     );
                     doSubmitParam.type = ETimeMode.hour;
                     designationPeriod = EDesignationPeriod.today;
                     break;
                 case "yesterday":
-                    doSubmitParam.startDate = Datetime.DateToZero(
+                    doSubmitParam.startDate = Datetime.DateStart(
                         new Date(Datetime.CountDateNumber(-1))
                     );
-                    doSubmitParam.endDate = Datetime.DateToZero(
+                    doSubmitParam.endDate = Datetime.DateStart(
                         new Date(Datetime.CountDateNumber(-1))
                     );
                     doSubmitParam.type = ETimeMode.hour;
                     designationPeriod = EDesignationPeriod.yesterday;
                     break;
                 case "last7days":
-                    doSubmitParam.startDate = Datetime.DateToZero(
+                    doSubmitParam.startDate = Datetime.DateStart(
                         new Date(Datetime.CountDateNumber(-6))
                     );
-                    doSubmitParam.endDate = Datetime.DateToZero(
+                    doSubmitParam.endDate = Datetime.DateStart(
                         new Date(Datetime.CountDateNumber(0))
                     );
                     doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.last7days;
                     break;
                 case "thisWeek":
-                    doSubmitParam.startDate = Datetime.DateToZero(
+                    doSubmitParam.startDate = Datetime.DateStart(
                         new Date(Datetime.ThisWeekStartDate())
                     );
-                    doSubmitParam.endDate = Datetime.DateToZero(
+                    doSubmitParam.endDate = Datetime.DateStart(
                         new Date(Datetime.ThisWeekEndDate())
                     );
                     doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.thisWeek;
                     break;
                 case "lastWeek":
-                    doSubmitParam.startDate = Datetime.DateToZero(
+                    doSubmitParam.startDate = Datetime.DateStart(
                         new Date(Datetime.LastWeekStartDate())
                     );
-                    doSubmitParam.endDate = Datetime.DateToZero(
+                    doSubmitParam.endDate = Datetime.DateStart(
                         new Date(Datetime.LastWeekEndDate())
                     );
                     doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.lastWeek;
                     break;
                 case "thisMonth":
-                    doSubmitParam.startDate = Datetime.DateToZero(
+                    doSubmitParam.startDate = Datetime.DateStart(
                         new Date(Datetime.ThisMonthStartDate())
                     );
-                    doSubmitParam.endDate = Datetime.DateToZero(
+                    doSubmitParam.endDate = Datetime.DateStart(
                         new Date(Datetime.ThisMonthEndDate())
                     );
                     doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.thisMonth;
                     break;
                 case "lastMonth":
-                    doSubmitParam.startDate = Datetime.DateToZero(
+                    doSubmitParam.startDate = Datetime.DateStart(
                         new Date(Datetime.LastMonthStartDate())
                     );
-                    doSubmitParam.endDate = Datetime.DateToZero(
+                    doSubmitParam.endDate = Datetime.DateStart(
                         new Date(Datetime.LastMonthEndDate())
                     );
                     doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.lastMonth;
                     break;
                 case "q1":
-                    doSubmitParam.startDate = Datetime.DateToZero(
+                    doSubmitParam.startDate = Datetime.DateStart(
                         new Date(Datetime.Q1StartDate())
                     );
-                    doSubmitParam.endDate = Datetime.DateToZero(
+                    doSubmitParam.endDate = Datetime.DateStart(
                         new Date(Datetime.Q1EndDate())
                     );
                     doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.q1;
                     break;
                 case "q2":
-                    doSubmitParam.startDate = Datetime.DateToZero(
+                    doSubmitParam.startDate = Datetime.DateStart(
                         new Date(Datetime.Q2StartDate())
                     );
-                    doSubmitParam.endDate = Datetime.DateToZero(
+                    doSubmitParam.endDate = Datetime.DateStart(
                         new Date(Datetime.Q2EndDate())
                     );
                     doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.q2;
                     break;
                 case "q3":
-                    doSubmitParam.startDate = Datetime.DateToZero(
+                    doSubmitParam.startDate = Datetime.DateStart(
                         new Date(Datetime.Q3StartDate())
                     );
-                    doSubmitParam.endDate = Datetime.DateToZero(
+                    doSubmitParam.endDate = Datetime.DateStart(
                         new Date(Datetime.Q3EndDate())
                     );
                     doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.q3;
                     break;
                 case "q4":
-                    doSubmitParam.startDate = Datetime.DateToZero(
+                    doSubmitParam.startDate = Datetime.DateStart(
                         new Date(Datetime.Q4StartDate())
                     );
-                    doSubmitParam.endDate = Datetime.DateToZero(
+                    doSubmitParam.endDate = Datetime.DateStart(
                         new Date(Datetime.Q4EndDate())
                     );
                     doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.q4;
                     break;
                 case "thisYear":
-                    doSubmitParam.startDate = Datetime.DateToZero(
+                    doSubmitParam.startDate = Datetime.DateStart(
                         new Date(Datetime.ThisYearStartDate())
                     );
-                    doSubmitParam.endDate = Datetime.DateToZero(
+                    doSubmitParam.endDate = Datetime.DateStart(
                         new Date(Datetime.ThisYearEndDate())
                     );
                     doSubmitParam.type = ETimeMode.day;

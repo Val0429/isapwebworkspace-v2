@@ -60,11 +60,11 @@ export class Peakhour extends Vue {
     initData() {
         this.timeParam = {
             // TODO: wait api
-            startDate: Datetime.DateToZero(new Date()),
-            endDate: Datetime.DateToZero(new Date())
+            startDate: Datetime.DateStart(new Date()),
+            endDate: Datetime.DateStart(new Date())
 
-            // startDate: Datetime.DateToZero(new Date(Datetime.ThisYearStartDate())),
-            // endDate: Datetime.DateToZero(new Date(Datetime.ThisYearEndDate()))
+            // startDate: Datetime.DateStart(new Date(Datetime.ThisYearStartDate())),
+            // endDate: Datetime.DateStart(new Date(Datetime.ThisYearEndDate()))
         };
     }
 

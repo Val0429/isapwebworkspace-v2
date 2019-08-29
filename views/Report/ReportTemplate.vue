@@ -546,10 +546,10 @@ export default class ReportTemplate extends Vue {
         if (this.$route.query.reportToTemplateData !== undefined) {
             this.reportToTemplateData = JSON.parse(this.$route.query
                 .reportToTemplateData as string);
-            this.reportToTemplateData.startDate = Datetime.DateToZero(
+            this.reportToTemplateData.startDate = Datetime.DateStart(
                 new Date(this.reportToTemplateData.startDate)
             );
-            this.reportToTemplateData.endDate = Datetime.DateToZero(
+            this.reportToTemplateData.endDate = Datetime.DateStart(
                 new Date(this.reportToTemplateData.endDate)
             );
             this.reportToTemplateData.siteIds = JSON.parse(
@@ -896,10 +896,10 @@ export default class ReportTemplate extends Vue {
                             data.sendUserIds !== undefined
                                 ? data.sendUserIds
                                 : [],
-                        startDate: Datetime.DateToZero(
+                        startDate: Datetime.DateStart(
                             data.startDate
                         ).toISOString(),
-                        endDate: Datetime.DateToZero(
+                        endDate: Datetime.DateStart(
                             data.endDate
                         ).toISOString(),
                         mode: data.mode,
@@ -965,10 +965,10 @@ export default class ReportTemplate extends Vue {
                             data.sendUserIds !== undefined
                                 ? data.sendUserIds
                                 : [],
-                        startDate: Datetime.DateToZero(
+                        startDate: Datetime.DateStart(
                             data.startDate
                         ).toISOString(),
-                        endDate: Datetime.DateToZero(
+                        endDate: Datetime.DateStart(
                             data.endDate
                         ).toISOString(),
                         mode: data.mode,

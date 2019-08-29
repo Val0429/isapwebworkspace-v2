@@ -451,10 +451,10 @@ export default class CampaignSetting extends Vue {
                     type: data.type,
                     budget: data.budget,
                     description: data.description,
-                    startDate: Datetime.DateToZero(
+                    startDate: Datetime.DateStart(
                         data.startDate
                     ).toISOString(),
-                    endDate: Datetime.DateToZero(data.endDate).toISOString(),
+                    endDate: Datetime.DateStart(data.endDate).toISOString(),
                     siteIds: data.siteIds !== undefined ? data.siteIds : [],
                     year: parseInt(this.inputFormData.year)
                 }
@@ -493,10 +493,10 @@ export default class CampaignSetting extends Vue {
                     type: data.type,
                     budget: data.budget,
                     description: data.description,
-                    startDate: Datetime.DateToZero(
+                    startDate: Datetime.DateStart(
                         data.startDate
                     ).toISOString(),
-                    endDate: Datetime.DateToZero(data.endDate).toISOString(),
+                    endDate: Datetime.DateStart(data.endDate).toISOString(),
                     siteIds: data.siteIds !== undefined ? data.siteIds : [],
                     year: parseInt(this.inputFormData.year)
                 }
