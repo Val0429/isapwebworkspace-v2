@@ -3,11 +3,11 @@
     "project": {
         "/flow1": {
             "name": "One Raffie Link",
-            "version": "3.00.17"
+            "version": "3.00.19"
         },
         "/flow2": {
             "name": "Suntec City",
-            "version": "3.01.10"
+            "version": "3.01.11"
         }
     },
     "name": "visitor-management-service",
