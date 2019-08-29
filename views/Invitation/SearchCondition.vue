@@ -161,9 +161,10 @@ export class SearchCondition extends Vue {
     async initTenantSelectItem() {
         this.tenantSelectItem = {};
         let tempTenantSelectItem = {};
+        let param: any = { paging: { all: true } };
 
         await this.$server
-            .R("/flow1/companies")
+            .R("/flow1/companies", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
@@ -181,9 +182,10 @@ export class SearchCondition extends Vue {
     async initWorkCategorySelectItem() {
         this.workCategorySelectItem = {};
         let tempWorkCategorySelectItem = {};
+        let param: any = { paging: { all: true } };
 
         await this.$server
-            .R("/flow1/purposes")
+            .R("/flow1/purposes", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {

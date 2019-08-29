@@ -70,8 +70,10 @@ export default class GeneralSettings extends Vue {
     }
 
     async initRemoveWorkerDays() {
+        let param: any = { paging: { all: true } };
+
         await this.$server
-            .R("/flow1/crms/remove_worker_data_days")
+            .R("/flow1/crms/remove_worker_data_days", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     if (response.days != undefined) {
@@ -112,6 +114,7 @@ export default class GeneralSettings extends Vue {
         let param: any = {
             days: this.inputFormData.removeWorkerDays
         };
+
         await this.$server
             .U("/flow1/crms/remove_worker_data_days", param)
             .then((response: any) => {

@@ -275,9 +275,10 @@ export default class Invitation extends Vue {
     async initWorkDescriptionSelectItem() {
         this.workDescriptionSelectItem = {};
         let tempDescriptionSelectItem = {};
+        let param: any = { paging: { all: true } };
 
         await this.$server
-            .R("/flow1/purposes")
+            .R("/flow1/purposes", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
@@ -347,15 +348,11 @@ export default class Invitation extends Vue {
     }
 
     async exportAllExcel() {
-        let parms = JSON.parse(JSON.stringify(this.flow1Params));
-        let paging = {
-            pageSize: 100000,
-            page: 1
-        };
-        parms.paging = paging;
+        let param = JSON.parse(JSON.stringify(this.flow1Params));
+        param.paging = { all: true };
 
         await this.$server
-            .R("/flow1/crms", parms)
+            .R("/flow1/crms", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     this.exportExcelByApi(response.results);

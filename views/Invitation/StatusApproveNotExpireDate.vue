@@ -801,7 +801,6 @@ export class StatusApproveNotExpireDate extends Vue {
     }
 
     async doSubmit() {
-
         // if (this.isChange) {
         //     Dialog.confirm(
         //         this._("w_Save_Checked"),
@@ -816,9 +815,7 @@ export class StatusApproveNotExpireDate extends Vue {
 
         let stepRef: any = this.$refs.step;
 
-        if (
-            this.inputFormData.accessGroups.length === 0
-        ) {
+        if (this.inputFormData.accessGroups.length === 0) {
             stepRef.currentStep = 8;
             Dialog.error(this._("w_ViewPTW_Step_ErrorTip"));
             return false;

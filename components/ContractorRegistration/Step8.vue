@@ -142,9 +142,10 @@ export class Step8 extends Vue {
     async initAccessGroupSelectItem() {
         this.accessGroupSelectItem = {};
         let tempAccessGroupSelectItem = {};
+        let param: any = { paging: { all: true } };
 
         await this.$server
-            .R("/flow1/crms/access-group")
+            .R("/flow1/crms/access-group", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response) {
