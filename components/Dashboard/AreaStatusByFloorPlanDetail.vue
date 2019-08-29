@@ -5,7 +5,8 @@
              currentStatus.isOccupancy ? _('w_ReportDashboard_AverageOccupancy') :
              currentStatus.isDwellTime ? _('w_ReportDashboard_AverageDwellTime') :
              currentStatus.isDemographic ? _('w_ReportDashboard_Demographic') :
-             currentStatus.isVipBlacklist ? _('w_ReportDashboard_VIPBlacklist') :
+             currentStatus.isVip ? _('w_ReportDashboard_VIP') :
+                   currentStatus.isBlacklist ? _('w_ReportDashboard_Blacklist') :
              _('w_ReportDashboard_RepeatCustomer')"
             :data="{ 'header-bg-variant': 'transparent', 'hide-collapse-button': true, 'border-variant': 'white' }"
             class="font-lg font-weight-bold"
@@ -30,9 +31,13 @@
                         :iconDisabled="currentStatus.isDemographic"
                         @click="changeStatus('isDemographic')"
                     />
-                    <iv-toolbox-dashboard-vipblacklist
-                        :iconDisabled="currentStatus.isVipBlacklist"
-                        @click="changeStatus('isVipBlacklist')"
+                    <iv-toolbox-dashboard-vip
+                        :iconDisabled="currentStatus.isVip"
+                        @click="changeStatus('isVip')"
+                    />
+                    <iv-toolbox-dashboard-blacklist
+                        :iconDisabled="currentStatus.isBlacklist"
+                        @click="changeStatus('isBlacklist')"
                     />
                     <iv-toolbox-dashboard-repeatcustomer
                         :iconDisabled="currentStatus.isRepeatCustomer"
@@ -142,14 +147,16 @@ export class AreaStatusByFloorPlanDetail extends Vue {
         isOccupancy: boolean;
         isDwellTime: boolean;
         isDemographic: boolean;
-        isVipBlacklist: boolean;
+        isVip: boolean;
+        isBlacklist: boolean;
         isRepeatCustomer: boolean;
     } = {
         isTraffic: true,
         isOccupancy: false,
         isDwellTime: false,
         isDemographic: false,
-        isVipBlacklist: false,
+        isVip: false,
+        isBlacklist: false,
         isRepeatCustomer: false
     };
 
