@@ -655,21 +655,43 @@ export class HighchartsRepeatVisitor extends Vue {
                     break;
             }
 
-            // set percentage count
+            // set percentage count, cal person
             if (val.maleCount > 0 || val.femaleCount > 0) {
-                countItem.times++;
+                countItem.times += val.maleCount;
+                countItem.times += val.femaleCount;
                 if (val.repeatCount == 1) {
-                    countItem.m1++;
+                    countItem.m1 += val.maleCount;
+                    countItem.m1 += val.femaleCount;
                 } else if (val.repeatCount == 2) {
-                    countItem.m2++;
+                    countItem.m2 += val.maleCount;
+                    countItem.m2 += val.femaleCount;
                 } else if (val.repeatCount == 3) {
-                    countItem.m3++;
+                    countItem.m3 += val.maleCount;
+                    countItem.m3 += val.femaleCount;
                 } else if (val.repeatCount == 4) {
-                    countItem.m4++;
+                    countItem.m4 += val.maleCount;
+                    countItem.m4 += val.femaleCount;
                 } else {
-                    countItem.m5++;
+                    countItem.m5 += val.maleCount;
+                    countItem.m5 += val.femaleCount;
                 }
             }
+
+            // set percentage count, cal times
+            // if (val.maleCount > 0 || val.femaleCount > 0) {
+            //     countItem.times++;
+            //     if (val.repeatCount == 1) {
+            //         countItem.m1++;
+            //     } else if (val.repeatCount == 2) {
+            //         countItem.m2++;
+            //     } else if (val.repeatCount == 3) {
+            //         countItem.m3++;
+            //     } else if (val.repeatCount == 4) {
+            //         countItem.m4++;
+            //     } else {
+            //         countItem.m5++;
+            //     }
+            // }
         }
 
         // calculate detail
