@@ -101,6 +101,8 @@ export default class LangObject {
     w_Sites1 = '* Store(s)';
     w_Tag = '* Tag(s)';
     w_Tag1 = 'Tag';
+    w_Manager = 'Manager';
+    w_Address = 'Address';
     w_Site = 'Store';
     w_Group = 'Entrance';
     w_Camera = 'Camera';
@@ -1029,6 +1031,8 @@ export default class LangObject {
     w_ReportDashboard_AverageDwellTime2 = 'AVERAGE DWELL';
     w_ReportDashboard_Demographic = 'DEMOGRAPHIC';
     w_ReportDashboard_VIPBlacklist = 'VIP/BLACKLIST';
+    w_ReportDashboard_VIP = 'VIP';
+    w_ReportDashboard_Blacklist = 'BLACKLIST';
     w_ReportDashboard_RepeatCustomer = 'REPEAT CUSTOMER';
     w_ReportDashboard_RepeatCustomer1 = 'Repeat Customer';
     w_ReportDashboard_Revenue = 'REVENUE';

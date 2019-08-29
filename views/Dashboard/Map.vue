@@ -15,11 +15,15 @@
                         :lat-lng="marker"
                         @click="click($event)"
                     ></l-marker>
+                    <l-marker
+                        :lat-lng="marker2"
+                        @click="click($event)"
+                    ></l-marker>
                 </l-map>
             </div>
 
             <div class="col-md-3">
-                <map-status-dashboard />
+                <map-status-dashboard :data="currentData" />
             </div>
         </div>
     </div>
@@ -61,21 +65,40 @@ export default class Map extends Vue {
     attribution =
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
     marker = latLng(25.041629, 121.543767);
+    marker2 = latLng(25.030629, 121.533767);
+
+    currentData = {};
 
     created() {}
 
     mounted() {}
 
     click(data) {
-        console.log("click", data);
-        alert(JSON.stringify(data.latlng));
+        // this.currentData = data;
+
+        //TODO false data
+        if (this.marker === data.latlng) {
+            this.currentData = {
+                title: "HK001 台北總店",
+                address: "103 Zhengzhou Road, Datong District, Taipei City",
+                manager: "Ben",
+                tags: ["Caption 01", "New"]
+            };
+        } else {
+            this.currentData = {
+                title: "HK002 尖沙咀總店",
+                address: "201 PiDu Road, Datong District, HongKong City",
+                manager: "Jhon",
+                tags: ["Business district", "Flagship Store"]
+            };
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
 .l-map {
-    height: 700px;
+    height: 640px;
     margin: 0;
 }
 </style>
