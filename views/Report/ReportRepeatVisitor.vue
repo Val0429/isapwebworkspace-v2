@@ -653,12 +653,12 @@ export default class ReportRepeatVisitor extends Vue {
     ): boolean {
         let tempDate1 =
             typeof date1 === "string"
-                ? Datetime.DateToZero(new Date(date1))
-                : Datetime.DateToZero(date1);
+                ? Datetime.DateStart(new Date(date1))
+                : Datetime.DateStart(date1);
         let tempDate2 =
             typeof date2 === "string"
-                ? Datetime.DateToZero(new Date(date2))
-                : Datetime.DateToZero(date2);
+                ? Datetime.DateStart(new Date(date2))
+                : Datetime.DateStart(date2);
 
         return (
             Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===

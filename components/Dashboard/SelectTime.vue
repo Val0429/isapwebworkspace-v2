@@ -104,9 +104,9 @@ export class SelectTime extends Vue {
 
     numberOfDaysDifference(start_Date: Date, end_Date: Date) {
         let result = 0;
-        let startDate = Datetime.DateToZero(new Date(start_Date)).getTime();
-        let endDate = Datetime.DateToZero(new Date(end_Date)).getTime();
-        let today = Datetime.DateToZero(new Date()).getTime();
+        let startDate = Datetime.DateStart(new Date(start_Date)).getTime();
+        let endDate = Datetime.DateStart(new Date(end_Date)).getTime();
+        let today = Datetime.DateStart(new Date()).getTime();
 
         if (startDate && endDate) {
             result = (endDate - startDate) / (1000 * 60 * 60 * 24);
@@ -154,84 +154,84 @@ export class SelectTime extends Vue {
             startDate: Date;
             endDate: Date;
         } = {
-            startDate: Datetime.DateToZero(new Date()),
-            endDate: Datetime.DateToZero(new Date())
+            startDate: Datetime.DateStart(new Date()),
+            endDate: Datetime.DateStart(new Date())
         };
 
         switch (data) {
             case ETime.today:
-                submitParam.startDate = Datetime.DateToZero(new Date());
-                submitParam.endDate = Datetime.DateToZero(new Date());
+                submitParam.startDate = Datetime.DateStart(new Date());
+                submitParam.endDate = Datetime.DateStart(new Date());
                 break;
             case ETime.yesterday:
-                submitParam.startDate = Datetime.DateToZero(
+                submitParam.startDate = Datetime.DateStart(
                     new Date(Datetime.CountDateNumber(-1))
                 );
-                submitParam.endDate = Datetime.DateToZero(
+                submitParam.endDate = Datetime.DateStart(
                     new Date(Datetime.CountDateNumber(-1))
                 );
                 break;
             case ETime.last7day:
-                submitParam.startDate = Datetime.DateToZero(
+                submitParam.startDate = Datetime.DateStart(
                     new Date(Datetime.CountDateNumber(-6))
                 );
-                submitParam.endDate = Datetime.DateToZero(
+                submitParam.endDate = Datetime.DateStart(
                     new Date(Datetime.CountDateNumber(0))
                 );
                 break;
             case ETime.last14day:
-                submitParam.startDate = Datetime.DateToZero(
+                submitParam.startDate = Datetime.DateStart(
                     new Date(Datetime.CountDateNumber(-13))
                 );
-                submitParam.endDate = Datetime.DateToZero(
+                submitParam.endDate = Datetime.DateStart(
                     new Date(Datetime.CountDateNumber(0))
                 );
                 break;
             case ETime.last28day:
-                submitParam.startDate = Datetime.DateToZero(
+                submitParam.startDate = Datetime.DateStart(
                     new Date(Datetime.CountDateNumber(-27))
                 );
-                submitParam.endDate = Datetime.DateToZero(
+                submitParam.endDate = Datetime.DateStart(
                     new Date(Datetime.CountDateNumber(0))
                 );
                 break;
             case ETime.last30day:
-                submitParam.startDate = Datetime.DateToZero(
+                submitParam.startDate = Datetime.DateStart(
                     new Date(Datetime.CountDateNumber(-29))
                 );
-                submitParam.endDate = Datetime.DateToZero(
+                submitParam.endDate = Datetime.DateStart(
                     new Date(Datetime.CountDateNumber(0))
                 );
                 break;
             case ETime.last60day:
-                submitParam.startDate = Datetime.DateToZero(
+                submitParam.startDate = Datetime.DateStart(
                     new Date(Datetime.CountDateNumber(-59))
                 );
-                submitParam.endDate = Datetime.DateToZero(
+                submitParam.endDate = Datetime.DateStart(
                     new Date(Datetime.CountDateNumber(0))
                 );
                 break;
             case ETime.last90day:
-                submitParam.startDate = Datetime.DateToZero(
+                submitParam.startDate = Datetime.DateStart(
                     new Date(Datetime.CountDateNumber(-89))
                 );
-                submitParam.endDate = Datetime.DateToZero(
+                submitParam.endDate = Datetime.DateStart(
                     new Date(Datetime.CountDateNumber(0))
                 );
                 break;
             case ETime.last180day:
-                submitParam.startDate = Datetime.DateToZero(
+                submitParam.startDate = Datetime.DateStart(
                     new Date(Datetime.CountDateNumber(-179))
                 );
-                submitParam.endDate = Datetime.DateToZero(
+                submitParam.endDate = Datetime.DateStart(
                     new Date(Datetime.CountDateNumber(0))
                 );
                 break;
             case ETime.thisYear:
-                submitParam.startDate = Datetime.DateToZero(
+                submitParam.startDate = Datetime.DateStart(
                     new Date(Datetime.ThisYearStartDate())
                 );
-                submitParam.endDate = Datetime.DateToZero(
+                submitParam.endDate = Datetime.DateStart(
                     new Date(Datetime.ThisYearEndDate())
                 );
                 break;

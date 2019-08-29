@@ -128,8 +128,8 @@ export class ToolRepeatVisitorFilter extends Vue {
             this.inputFormData.endDate = new Date();
             return false;
         } else {
-            submitParam.startDate = Datetime.DateToZero(data.startDate).toISOString();
-            submitParam.endDate = Datetime.DateToZero(data.endDate).toISOString();
+            submitParam.startDate = Datetime.DateStart(data.startDate).toISOString();
+            submitParam.endDate = Datetime.DateStart(data.endDate).toISOString();
         }
 
         this.visible = false;

@@ -213,7 +213,7 @@ class Datetime {
         let date = new Date(value.getTime());
         date.setMonth(0);
         date.setDate(1);
-        return this.DateToZero(date);
+        return this.DateStart(date);
     }
 
     YearEnd(value: Date): Date {
@@ -221,7 +221,7 @@ class Datetime {
         date.setFullYear(date.getFullYear() + 1);
         date.setMonth(0);
         date.setDate(1);
-        date = this.DateToZero(date);
+        date = this.DateStart(date);
         date.setSeconds(date.getSeconds() - 1);
         return date;
     }
@@ -239,7 +239,7 @@ class Datetime {
         let quartStartMonth = (quarterNumber - 1) * 3;
         date.setMonth(quartStartMonth);
         date.setDate(1);
-        return this.DateToZero(date);
+        return this.DateStart(date);
     }
 
     QuarterEnd(value: Date): Date {
@@ -248,7 +248,7 @@ class Datetime {
         let quartNextStartMonth = quarterNumber * 3;
         date.setMonth(quartNextStartMonth);
         date.setDate(1);
-        date = this.DateToZero(date);
+        date = this.DateStart(date);
         date.setSeconds(date.getSeconds() - 1);
         return date;
     }
@@ -257,14 +257,14 @@ class Datetime {
     MonthStart(value: Date): Date {
         let date = new Date(value.getTime());
         date.setDate(1);
-        return this.DateToZero(date);
+        return this.DateStart(date);
     }
 
     MonthEnd(value: Date): Date {
         let date = new Date(value.getTime());
         date.setMonth(date.getMonth() + 1);
         date.setDate(1);
-        date = this.DateToZero(date);
+        date = this.DateStart(date);
         date.setSeconds(date.getSeconds() - 1);
         return date;
     }
@@ -302,62 +302,56 @@ class Datetime {
         let date = new Date(value.getTime());
         let day = date.getDay();
         let diff = date.getDate() - day - 7;
-        return this.DateToZero(new Date(date.setDate(diff)));
+        return this.DateStart(new Date(date.setDate(diff)));
     }
 
     WeekThisSunday(value: Date): Date {
         let date = new Date(value.getTime());
         let day = date.getDay();
         let diff = date.getDate() - day;
-        return this.DateToZero(new Date(date.setDate(diff)));
+        return this.DateStart(new Date(date.setDate(diff)));
     }
 
     WeekNextSunday(value: Date): Date {
         let date = new Date(value.getTime());
         let day = date.getDay();
         let diff = date.getDate() - day + 7;
-        return this.DateToZero(new Date(date.setDate(diff)));
+        return this.DateStart(new Date(date.setDate(diff)));
     }
 
     WeekPrevMonday(value: Date): Date {
         let date = new Date(value.getTime());
         let day = date.getDay();
         let diff = date.getDate() - day + (day == 0 ? -13 : -6);
-        return this.DateToZero(new Date(date.setDate(diff)));
+        return this.DateStart(new Date(date.setDate(diff)));
     }
 
     WeekThisMonday(value: Date): Date {
         let date = new Date(value.getTime());
         let day = date.getDay();
         let diff = date.getDate() - day + (day == 0 ? -6 : 1);
-        return this.DateToZero(new Date(date.setDate(diff)));
+        return this.DateStart(new Date(date.setDate(diff)));
     }
 
     WeekNextMonday(value: Date): Date {
         let date = new Date(value.getTime());
         let day = date.getDay();
         let diff = date.getDate() - day + (day == 0 ? 1 : 8);
-        return this.DateToZero(new Date(date.setDate(diff)));
+        return this.DateStart(new Date(date.setDate(diff)));
     }
 
     // date
     DateStart(value: Date): Date {
         let date = new Date(value.getTime());
-        return this.DateToZero(date);
+        date.setHours(0, 0, 0, 0);
+        return date;
     }
 
     DateEnd(value: Date): Date {
         let date = new Date(value.getTime());
         date.setDate(date.getDate() + 1);
-        date = this.DateToZero(date);
+        date = this.DateStart(date);
         date.setSeconds(date.getSeconds() - 1);
-        return date;
-    }
-
-    // set Date to 00:00:00
-    DateToZero(value: Date): Date {
-        let date = new Date(value.getTime());
-        date.setHours(0, 0, 0, 0);
         return date;
     }
 
@@ -398,7 +392,7 @@ class Datetime {
 
     // 檢查日期的結束時間不能小於開始值間
     CheckDate(startDate: Date, endDate: Date) {
-        return this.DateToZero(endDate).getTime() >= this.DateToZero(startDate).getTime();
+        return this.DateStart(endDate).getTime() >= this.DateStart(startDate).getTime();
     }
 
     // 檢查日期的開始和結束時間是否為同一天
