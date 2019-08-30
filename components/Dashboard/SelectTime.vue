@@ -51,73 +51,88 @@ export class SelectTime extends Vue {
                 id: ETime.today,
                 text: `${this._(
                     "w_Dashboard_Today"
-                )} ( ${Datetime.CountDateNumber(
-                    0
-                )} ~ ${Datetime.CountDateNumber(0)} )`
+                )} ( ${Datetime.DateTime2String(
+                    new Date(),
+                    "YYYY/MM/DD"
+                )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`
             },
             {
                 id: ETime.yesterday,
                 text: `${this._(
                     "w_Dashboard_Yesterday"
-                )} ( ${Datetime.CountDateNumber(
-                    -1
-                )} ~ ${Datetime.CountDateNumber(-1)} )`
+                )} ( ${Datetime.DateTime2String(
+                    Datetime.DatePlus(new Date(), -1),
+                    "YYYY/MM/DD"
+                )} ~ ${Datetime.DateTime2String(
+                    Datetime.DatePlus(new Date(), -1),
+                    "YYYY/MM/DD"
+                )} )`
             },
             {
                 id: ETime.last7day,
                 text: `${this._(
                     "w_Dashboard_Last7Day"
-                )} ( ${Datetime.CountDateNumber(
-                    -6
-                )} ~ ${Datetime.CountDateNumber(0)} )`
+                )} ( ${Datetime.DateTime2String(
+                    Datetime.DatePlus(new Date(), -6),
+                    Datetime.DateFormat
+                )} ~ ${Datetime.DateTime2String(
+                    new Date(),
+                    Datetime.DateFormat
+                )} )`
             },
             {
                 id: ETime.last14day,
                 text: `${this._(
                     "w_Dashboard_Last14Day"
-                )} ( ${Datetime.CountDateNumber(
-                    -13
-                )} ~ ${Datetime.CountDateNumber(0)} )`
+                )} ( ${Datetime.DateTime2String(
+                    Datetime.DatePlus(new Date(), -13),
+                    "YYYY/MM/DD"
+                )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`
             },
             {
                 id: ETime.last28day,
                 text: `${this._(
                     "w_Dashboard_Last28Day"
-                )} ( ${Datetime.CountDateNumber(
-                    -27
-                )} ~ ${Datetime.CountDateNumber(0)} )`
+                )} ( ${Datetime.DateTime2String(
+                    Datetime.DatePlus(new Date(), -27),
+                    "YYYY/MM/DD"
+                )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`
             },
             {
                 id: ETime.last30day,
                 text: `${this._(
                     "w_Dashboard_Last30Day"
-                )} ( ${Datetime.CountDateNumber(
-                    -29
-                )} ~ ${Datetime.CountDateNumber(0)} )`
+                )} ( ${Datetime.DateTime2String(
+                    Datetime.DatePlus(new Date(), -29),
+                    "YYYY/MM/DD"
+                )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`
             },
             {
                 id: ETime.last60day,
                 text: `${this._(
                     "w_Dashboard_Last60Day"
-                )} ( ${Datetime.CountDateNumber(
-                    -59
-                )} ~ ${Datetime.CountDateNumber(0)} )`
+                )} ( ${Datetime.DateTime2String(
+                    Datetime.DatePlus(new Date(), -59),
+                    "YYYY/MM/DD"
+                )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`
             },
             {
                 id: ETime.last90day,
                 text: `${this._(
                     "w_Dashboard_Last90Day"
-                )} ( ${Datetime.CountDateNumber(
-                    -89
-                )} ~ ${Datetime.CountDateNumber(0)} )`
+                )} ( ${Datetime.DateTime2String(
+                    Datetime.DatePlus(new Date(), -89),
+                    "YYYY/MM/DD"
+                )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`
             },
             {
                 id: ETime.last180day,
                 text: `${this._(
                     "w_Dashboard_Last180Day"
-                )} ( ${Datetime.CountDateNumber(
-                    -179
-                )} ~ ${Datetime.CountDateNumber(0)} )`
+                )} ( ${Datetime.DateTime2String(
+                    Datetime.DatePlus(new Date(), -179),
+                    "YYYY/MM/DD"
+                )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`
             },
             {
                 id: ETime.thisYear,
@@ -199,68 +214,36 @@ export class SelectTime extends Vue {
                 submitParam.endDate = Datetime.DateStart(new Date());
                 break;
             case ETime.yesterday:
-                submitParam.startDate = Datetime.DateStart(
-                    new Date(Datetime.CountDateNumber(-1))
-                );
-                submitParam.endDate = Datetime.DateStart(
-                    new Date(Datetime.CountDateNumber(-1))
-                );
+                submitParam.startDate = Datetime.DatePlus(new Date(), -1);
+                submitParam.endDate = Datetime.DatePlus(new Date(), -1);
                 break;
             case ETime.last7day:
-                submitParam.startDate = Datetime.DateStart(
-                    new Date(Datetime.CountDateNumber(-6))
-                );
-                submitParam.endDate = Datetime.DateStart(
-                    new Date(Datetime.CountDateNumber(0))
-                );
+                submitParam.startDate = Datetime.DatePlus(new Date(), -6);
+                submitParam.endDate = Datetime.DateStart(new Date());
                 break;
             case ETime.last14day:
-                submitParam.startDate = Datetime.DateStart(
-                    new Date(Datetime.CountDateNumber(-13))
-                );
-                submitParam.endDate = Datetime.DateStart(
-                    new Date(Datetime.CountDateNumber(0))
-                );
+                submitParam.startDate = Datetime.DatePlus(new Date(), -13);
+                submitParam.endDate = Datetime.DateStart(new Date());
                 break;
             case ETime.last28day:
-                submitParam.startDate = Datetime.DateStart(
-                    new Date(Datetime.CountDateNumber(-27))
-                );
-                submitParam.endDate = Datetime.DateStart(
-                    new Date(Datetime.CountDateNumber(0))
-                );
+                submitParam.startDate = Datetime.DatePlus(new Date(), -27);
+                submitParam.endDate = Datetime.DateStart(new Date());
                 break;
             case ETime.last30day:
-                submitParam.startDate = Datetime.DateStart(
-                    new Date(Datetime.CountDateNumber(-29))
-                );
-                submitParam.endDate = Datetime.DateStart(
-                    new Date(Datetime.CountDateNumber(0))
-                );
+                submitParam.startDate = Datetime.DatePlus(new Date(), -29);
+                submitParam.endDate = Datetime.DateStart(new Date());
                 break;
             case ETime.last60day:
-                submitParam.startDate = Datetime.DateStart(
-                    new Date(Datetime.CountDateNumber(-59))
-                );
-                submitParam.endDate = Datetime.DateStart(
-                    new Date(Datetime.CountDateNumber(0))
-                );
+                submitParam.startDate = Datetime.DatePlus(new Date(), -59);
+                submitParam.endDate = Datetime.DateStart(new Date());
                 break;
             case ETime.last90day:
-                submitParam.startDate = Datetime.DateStart(
-                    new Date(Datetime.CountDateNumber(-89))
-                );
-                submitParam.endDate = Datetime.DateStart(
-                    new Date(Datetime.CountDateNumber(0))
-                );
+                submitParam.startDate = Datetime.DatePlus(new Date(), -89);
+                submitParam.endDate = Datetime.DateStart(new Date());
                 break;
             case ETime.last180day:
-                submitParam.startDate = Datetime.DateStart(
-                    new Date(Datetime.CountDateNumber(-179))
-                );
-                submitParam.endDate = Datetime.DateStart(
-                    new Date(Datetime.CountDateNumber(0))
-                );
+                submitParam.startDate = Datetime.DatePlus(new Date(), -179);
+                submitParam.endDate = Datetime.DateStart(new Date());
                 break;
             case ETime.thisYear:
                 submitParam.startDate = Datetime.YearStart(new Date());

@@ -229,24 +229,38 @@ export class FilterConditionVIPAndBlacklist extends Vue {
         ];
 
         this.designationPeriodSelectItem = {
-            today: `${this._("w_Today")} ( ${Datetime.CountDateNumber(
-                0
-            )} ~ ${Datetime.CountDateNumber(0)} )`,
-            yesterday: `${this._("w_Yesterday")} ( ${Datetime.CountDateNumber(
-                -1
-            )} ~ ${Datetime.CountDateNumber(-1)} )`,
-            last7days: `${this._("w_last7days")} ( ${Datetime.CountDateNumber(
-                -6
-            )} ~ ${Datetime.CountDateNumber(0)} )`,
-            thisWeek: `${this._(
-                "w_thisWeek"
-            )} ( ${Datetime.ThisWeekStartDate()} ~ ${Datetime.ThisWeekEndDate()} )`,
+            today: `${this._("w_Today")} ( ${Datetime.DateTime2String(
+                new Date(),
+                "YYYY/MM/DD"
+            )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`,
+            yesterday: `${this._("w_Yesterday")} ( ${Datetime.DateTime2String(
+                Datetime.DatePlus(new Date(), -1),
+                "YYYY/MM/DD"
+            )} ~ ${Datetime.DateTime2String(
+                Datetime.DatePlus(new Date(), -1),
+                "YYYY/MM/DD"
+            )} )`,
+            last7days: `${this._("w_last7days")} ( ${Datetime.DateTime2String(
+                Datetime.DatePlus(new Date(), -6),
+                "YYYY/MM/DD"
+            )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`,
+            thisWeek: `${this._("w_thisWeek")} ( ${Datetime.DateTime2String(
+                Datetime.WeekStart(new Date()),
+                "YYYY/MM/DD"
+            )} ~ ${Datetime.DateTime2String(
+                Datetime.WeekEnd(new Date()),
+                "YYYY/MM/DD"
+            )} )`,
             lastWeek: `${this._(
                 "w_lastWeek"
             )} ( ${Datetime.LastWeekStartDate()} ~ ${Datetime.LastWeekEndDate()} )`,
-            thisMonth: `${this._(
-                "w_thisMonth"
-            )} ( ${Datetime.ThisMonthStartDate()} ~ ${Datetime.ThisMonthEndDate()} )`,
+            thisMonth: `${this._("w_thisMonth")} ( ${Datetime.DateTime2String(
+                Datetime.MonthStart(new Date()),
+                "YYYY/MM/DD"
+            )} ~ ${Datetime.DateTime2String(
+                Datetime.MonthEnd(new Date()),
+                "YYYY/MM/DD"
+            )} )`,
             lastMonth: `${this._("w_lastMonth")} ( ${Datetime.DateTime2String(
                 Datetime.LastMonthStart(new Date()),
                 "YYYY/MM/DD"
@@ -479,39 +493,23 @@ export class FilterConditionVIPAndBlacklist extends Vue {
         } else if (this.selectPeriodAddWay === "designation") {
             switch (this.inputFormData.designationPeriod) {
                 case "today":
-                    doSubmitParam.startDate = Datetime.DateStart(
-                        new Date(Datetime.CountDateNumber(0))
-                    );
-                    doSubmitParam.endDate = Datetime.DateStart(
-                        new Date(Datetime.CountDateNumber(0))
-                    );
+                    doSubmitParam.startDate = Datetime.DateStart(new Date());
+                    doSubmitParam.endDate = Datetime.DateStart(new Date());
                     designationPeriod = EDesignationPeriod.today;
                     break;
                 case "yesterday":
-                    doSubmitParam.startDate = Datetime.DateStart(
-                        new Date(Datetime.CountDateNumber(-1))
-                    );
-                    doSubmitParam.endDate = Datetime.DateStart(
-                        new Date(Datetime.CountDateNumber(-1))
-                    );
+                    doSubmitParam.startDate = Datetime.DatePlus(new Date(), -1);
+                    doSubmitParam.endDate = Datetime.DatePlus(new Date(), -1);
                     designationPeriod = EDesignationPeriod.yesterday;
                     break;
                 case "last7days":
-                    doSubmitParam.startDate = Datetime.DateStart(
-                        new Date(Datetime.CountDateNumber(-6))
-                    );
-                    doSubmitParam.endDate = Datetime.DateStart(
-                        new Date(Datetime.CountDateNumber(0))
-                    );
+                    doSubmitParam.startDate = Datetime.DatePlus(new Date(), -6);
+                    doSubmitParam.endDate = Datetime.DateStart(new Date());
                     designationPeriod = EDesignationPeriod.last7days;
                     break;
                 case "thisWeek":
-                    doSubmitParam.startDate = Datetime.DateStart(
-                        new Date(Datetime.ThisWeekStartDate())
-                    );
-                    doSubmitParam.endDate = Datetime.DateStart(
-                        new Date(Datetime.ThisWeekEndDate())
-                    );
+                    doSubmitParam.startDate = Datetime.WeekStart(new Date());
+                    doSubmitParam.endDate = Datetime.WeekEnd(new Date());
                     designationPeriod = EDesignationPeriod.thisWeek;
                     break;
                 case "lastWeek":
@@ -524,21 +522,15 @@ export class FilterConditionVIPAndBlacklist extends Vue {
                     designationPeriod = EDesignationPeriod.lastWeek;
                     break;
                 case "thisMonth":
-                    doSubmitParam.startDate = Datetime.DateStart(
-                        new Date(Datetime.ThisMonthStartDate())
-                    );
-                    doSubmitParam.endDate = Datetime.DateStart(
-                        new Date(Datetime.ThisMonthEndDate())
-                    );
+                    doSubmitParam.startDate = Datetime.MonthStart(new Date());
+                    doSubmitParam.endDate = Datetime.MonthEnd(new Date());
                     designationPeriod = EDesignationPeriod.thisMonth;
                     break;
                 case "lastMonth":
                     doSubmitParam.startDate = Datetime.LastMonthStart(
                         new Date()
                     );
-                    doSubmitParam.endDate = Datetime.LastMonthEnd(
-                        new Date()
-                    );
+                    doSubmitParam.endDate = Datetime.LastMonthEnd(new Date());
                     designationPeriod = EDesignationPeriod.lastMonth;
                     break;
                 case "q1":
