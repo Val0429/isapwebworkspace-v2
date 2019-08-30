@@ -49,7 +49,14 @@ export class VisitorDetailsTable extends Vue {
         type: Array,
         default: () => []
     })
+
     thresholdDetailTableContent: [];
+
+    @Prop({
+        type: Object,
+        default: () => {}
+    })
+    filterData: any;
 
     thresholdDetailTableTitle: any = [];
 
@@ -60,6 +67,9 @@ export class VisitorDetailsTable extends Vue {
         }
     })
     dayXSiteX: EChartMode;
+
+    @Watch("filterData", { deep: true })
+    private filterDataChanged(newVal, oldVal) {}
 
     created() {
         this.initDate();
@@ -87,11 +97,11 @@ export class VisitorDetailsTable extends Vue {
             case EChartMode.siteXDay1:
                 return Datetime.DateTime2String(
                     new Date(time),
-                    "YYYY-MM-DD HH:mm"
+                    "YYYY/MM/DD"
                 );
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
-                return Datetime.DateTime2String(new Date(time), "YYYY-MM-DD");
+                return `${Datetime.DateTime2String(new Date(this.filterData.startDate), "YYYY/MM/DD")} ~ ${Datetime.DateTime2String(new Date(this.filterData.endDate), "YYYY/MM/DD")}`;
         }
     }
 
