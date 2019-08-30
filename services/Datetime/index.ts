@@ -2,13 +2,15 @@ import Utility from '../Utility';
 
 enum DatetimeFormat {
     'default' = 'YYYY/MM/DD HH:mm:ss',
-    date = 'DD-MM-YYYY',
+    date = 'YYYY/MM/DD',
     time = 'HH:mm:ss',
     newDateTime = 'YYYY/MM/DD HH:mm:ss',
     newDate = 'YYYY/MM/DD',
     newTime = 'HH:mm:ss',
+    checkDateTime = 'YYYY/MM/DD HH:mm:ss',
+    checkDate = 'YYYY-MM-DD',
+    checkTime = 'HH:mm:ss',
 }
-
 class Datetime {
     private _formats: string[] = ['dddd', 'ddd', 'DD', 'D', 'hh', 'h', 'HH', 'H', 'mm', 'm', 'MMMM', 'MMM', 'MM', 'M', 'ss', 's', 'A', 'a', 'YYYY', 'YY', 'ZZ', 'Z'];
     private _days: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -21,28 +23,40 @@ class Datetime {
         return this._oneDayTimestamp;
     }
 
-    get DateTimeFormat(): string {
+    get FormatDateTime(): string {
         return DatetimeFormat.default;
     }
 
-    get DateFormat(): string {
+    get FormatDate(): string {
         return DatetimeFormat.date;
     }
 
-    get TimeFormat(): string {
+    get FormatTime(): string {
         return DatetimeFormat.time;
     }
 
-    get NewDateTimeFormat(): string {
+    get FormatNewDateTime(): string {
         return DatetimeFormat.newDateTime;
     }
 
-    get NewDateFormat(): string {
+    get FormatNewDate(): string {
         return DatetimeFormat.newDate;
     }
 
-    get NewTimeFormat(): string {
+    get FormatNewTime(): string {
         return DatetimeFormat.newTime;
+    }
+
+    get FormatCheckDateTime(): string {
+        return DatetimeFormat.checkDateTime;
+    }
+
+    get FormatCheckDate(): string {
+        return DatetimeFormat.checkDate;
+    }
+
+    get FormatCheckTime(): string {
+        return DatetimeFormat.checkTime;
     }
 
     /**
@@ -283,7 +297,7 @@ class Datetime {
     }
 
     // 獲得Q1開始日期
-    Q1StartDate(date: Date): Date {
+    Q1Start(date: Date): Date {
         return this.DateStart(new Date(date.getFullYear(), 0, 1));
     }
 
