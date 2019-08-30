@@ -53,10 +53,10 @@ export class SelectTime extends Vue {
                     "w_Dashboard_Today"
                 )} ( ${Datetime.DateTime2String(
                     new Date(),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} ~ ${Datetime.DateTime2String(
                     new Date(),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} )`
             },
             {
@@ -65,10 +65,10 @@ export class SelectTime extends Vue {
                     "w_Dashboard_Yesterday"
                 )} ( ${Datetime.DateTime2String(
                     Datetime.DatePlus(new Date(), -1),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} ~ ${Datetime.DateTime2String(
                     Datetime.DatePlus(new Date(), -1),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} )`
             },
             {
@@ -77,10 +77,10 @@ export class SelectTime extends Vue {
                     "w_Dashboard_Last7Day"
                 )} ( ${Datetime.DateTime2String(
                     Datetime.DatePlus(new Date(), -6),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} ~ ${Datetime.DateTime2String(
                     new Date(),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} )`
             },
             {
@@ -89,10 +89,10 @@ export class SelectTime extends Vue {
                     "w_Dashboard_Last14Day"
                 )} ( ${Datetime.DateTime2String(
                     Datetime.DatePlus(new Date(), -13),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} ~ ${Datetime.DateTime2String(
                     new Date(),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} )`
             },
             {
@@ -101,10 +101,10 @@ export class SelectTime extends Vue {
                     "w_Dashboard_Last28Day"
                 )} ( ${Datetime.DateTime2String(
                     Datetime.DatePlus(new Date(), -27),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} ~ ${Datetime.DateTime2String(
                     new Date(),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} )`
             },
             {
@@ -113,10 +113,10 @@ export class SelectTime extends Vue {
                     "w_Dashboard_Last30Day"
                 )} ( ${Datetime.DateTime2String(
                     Datetime.DatePlus(new Date(), -29),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} ~ ${Datetime.DateTime2String(
                     new Date(),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} )`
             },
             {
@@ -125,10 +125,10 @@ export class SelectTime extends Vue {
                     "w_Dashboard_Last60Day"
                 )} ( ${Datetime.DateTime2String(
                     Datetime.DatePlus(new Date(), -59),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} ~ ${Datetime.DateTime2String(
                     new Date(),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} )`
             },
             {
@@ -137,10 +137,10 @@ export class SelectTime extends Vue {
                     "w_Dashboard_Last90Day"
                 )} ( ${Datetime.DateTime2String(
                     Datetime.DatePlus(new Date(), -89),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} ~ ${Datetime.DateTime2String(
                     new Date(),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} )`
             },
             {
@@ -149,20 +149,20 @@ export class SelectTime extends Vue {
                     "w_Dashboard_Last180Day"
                 )} ( ${Datetime.DateTime2String(
                     Datetime.DatePlus(new Date(), -179),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} ~ ${Datetime.DateTime2String(
                     new Date(),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} )`
             },
             {
                 id: ETime.thisYear,
                 text: `${this._("w_thisYear")} ( ${Datetime.DateTime2String(
                     Datetime.YearStart(new Date()),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} ~ ${Datetime.DateTime2String(
                     Datetime.YearEnd(new Date()),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} )`
             }
         ];

@@ -1439,11 +1439,11 @@ export default class ReportTraffic extends Vue {
 
         title += `${this._("w_Title_StartDate")} ${Datetime.DateTime2String(
             this.filterData.startDate,
-            Datetime.DateFormat
+            Datetime.FormatDate
         )}. `;
         title += `${this._("w_Title_EndDate")} ${Datetime.DateTime2String(
             this.filterData.endDate,
-            Datetime.DateFormat
+            Datetime.FormatDate
         )}. `;
 
         if (this.filterData.tagIds.length === 1) {
@@ -1537,22 +1537,22 @@ export default class ReportTraffic extends Vue {
             let summaryDateFormat = isOneDay
                 ? Datetime.DateTime2String(
                       new Date(summary.date),
-                      `${Datetime.checkDateFormat} HH`
+                      `${Datetime.FormatCheckDate} HH`
                   )
                 : Datetime.DateTime2String(
                       new Date(summary.date),
-                      Datetime.checkDateFormat
+                      Datetime.FormatCheckDate
                   );
 
             for (let tempChartData of tempChartDatas) {
                 let tempDateFormat = isOneDay
                     ? Datetime.DateTime2String(
                           tempChartData.date,
-                          `${Datetime.checkDateFormat} HH`
+                          `${Datetime.FormatCheckDate} HH`
                       )
                     : Datetime.DateTime2String(
                           tempChartData.date,
-                          Datetime.checkDateFormat
+                          Datetime.FormatCheckDate
                       );
                 if (
                     summaryDateFormat == tempDateFormat &&
@@ -1584,21 +1584,21 @@ export default class ReportTraffic extends Vue {
             let saleDateFormat = isOneDay
                 ? Datetime.DateTime2String(
                       new Date(saleRecord.date),
-                      `${Datetime.checkDateFormat} HH`
+                      `${Datetime.FormatCheckDate} HH`
                   )
                 : Datetime.DateTime2String(
                       new Date(saleRecord.date),
-                      Datetime.checkDateFormat
+                      Datetime.FormatCheckDate
                   );
             for (let tempChartData of tempChartDatas) {
                 let tempDateFormat = isOneDay
                     ? Datetime.DateTime2String(
                           tempChartData.date,
-                          `${Datetime.checkDateFormat} HH`
+                          `${Datetime.FormatCheckDate} HH`
                       )
                     : Datetime.DateTime2String(
                           tempChartData.date,
-                          Datetime.checkDateFormat
+                          Datetime.FormatCheckDate
                       );
                 if (
                     saleDateFormat == tempDateFormat &&
@@ -1615,22 +1615,22 @@ export default class ReportTraffic extends Vue {
             let tempDateFormat = isOneDay
                 ? Datetime.DateTime2String(
                       tempChartData.date,
-                      `${Datetime.checkDateFormat} HH`
+                      `${Datetime.FormatCheckDate} HH`
                   )
                 : Datetime.DateTime2String(
                       tempChartData.date,
-                      Datetime.checkDateFormat
+                      Datetime.FormatCheckDate
                   );
             for (let i in this.responseData.weathers) {
                 let weather = this.responseData.weathers[i];
                 let weatherDateFormat = isOneDay
                     ? Datetime.DateTime2String(
                           new Date(weather.date),
-                          `${Datetime.checkDateFormat} HH`
+                          `${Datetime.FormatCheckDate} HH`
                       )
                     : Datetime.DateTime2String(
                           new Date(weather.date),
-                          Datetime.checkDateFormat
+                          Datetime.FormatCheckDate
                       );
                 if (
                     weatherDateFormat == tempDateFormat &&
@@ -2058,7 +2058,7 @@ export default class ReportTraffic extends Vue {
         let [fileName, fileType, sheetName] = [
             this._("w_Navigation_VideoSources_Demographic"),
             fType,
-            Datetime.DateTime2String(this.startDate, Datetime.checkDateFormat)
+            Datetime.DateTime2String(this.startDate, Datetime.FormatCheckDate)
         ];
         toExcel({ th, data, fileName, fileType, sheetName });
     }

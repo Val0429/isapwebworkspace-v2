@@ -1119,7 +1119,7 @@ export default class ReportTemplate extends Vue {
     }
 
     dateToYYYY_MM_DD(value) {
-        return Datetime.DateTime2String(new Date(value), Datetime.checkDateFormat);
+        return Datetime.DateTime2String(new Date(value), Datetime.FormatCheckDate);
     }
 
     getMode(data: string): string {

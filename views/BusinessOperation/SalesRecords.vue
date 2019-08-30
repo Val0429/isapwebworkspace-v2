@@ -407,7 +407,7 @@ export default class SalesRecords extends Vue {
                                     recordFile.datetime = tempDate;
                                     recordFile.datetimeText = Datetime.DateTime2String(
                                         recordFile.datetime,
-                                        Datetime.checkDateTimeFormat
+                                        Datetime.FormatCheckDateTime
                                     );
                                 }
                             } else if (DateArray.length >= 3) {
@@ -457,7 +457,7 @@ export default class SalesRecords extends Vue {
                                     // get Date relay string
                                     recordFile.datetime = Datetime.String2DateTime(
                                         tempDatetimeString,
-                                        Datetime.checkDateTimeFormat
+                                        Datetime.FormatCheckDateTime
                                     );
                                 }
                             } else {
@@ -469,7 +469,7 @@ export default class SalesRecords extends Vue {
                             if (!isNaN(recordFile.datetime.getTime())) {
                                 recordFile.datetimeText = Datetime.DateTime2String(
                                     recordFile.datetime,
-                                    Datetime.checkDateTimeFormat
+                                    Datetime.FormatCheckDateTime
                                 );
                             }
                         } catch (e) {

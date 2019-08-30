@@ -624,7 +624,7 @@ export default class CampaignSetting extends Vue {
     }
 
     dateToYYYY_MM_DD(value) {
-        return Datetime.DateTime2String(new Date(value), Datetime.checkDateFormat);
+        return Datetime.DateTime2String(new Date(value), Datetime.FormatCheckDate);
     }
 
     ITableList() {

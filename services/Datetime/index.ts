@@ -24,39 +24,39 @@ class Datetime {
         return this._oneDayTimestamp;
     }
 
-    get DateTimeFormat(): string {
+    get FormatDateTime(): string {
         return DatetimeFormat.default;
     }
 
-    get DateFormat(): string {
+    get FormatDate(): string {
         return DatetimeFormat.date;
     }
 
-    get TimeFormat(): string {
+    get FormatTime(): string {
         return DatetimeFormat.time;
     }
 
-    get NewDateTimeFormat(): string {
+    get FormatNewDateTime(): string {
         return DatetimeFormat.newDateTime;
     }
 
-    get NewDateFormat(): string {
+    get FormatNewDate(): string {
         return DatetimeFormat.newDate;
     }
 
-    get NewTimeFormat(): string {
+    get FormatNewTime(): string {
         return DatetimeFormat.newTime;
     }
 
-    get checkDateTimeFormat(): string {
+    get FormatCheckDateTime(): string {
         return DatetimeFormat.checkDateTime;
     }
 
-    get checkDateFormat(): string {
+    get FormatCheckDate(): string {
         return DatetimeFormat.checkDate;
     }
 
-    get checkTimeFormat(): string {
+    get FormatCheckTime(): string {
         return DatetimeFormat.checkTime;
     }
 

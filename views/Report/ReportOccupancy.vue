@@ -766,11 +766,11 @@ export default class ReportOccupancy extends Vue {
 
         title += `${this._("w_Title_StartDate")} ${Datetime.DateTime2String(
             this.filterData.startDate,
-            Datetime.DateFormat
+            Datetime.FormatDate
         )}. `;
         title += `${this._("w_Title_EndDate")} ${Datetime.DateTime2String(
             this.filterData.endDate,
-            Datetime.DateFormat
+            Datetime.FormatDate
         )}. `;
 
         if (this.filterData.tagIds.length === 1) {
@@ -2074,7 +2074,7 @@ export default class ReportOccupancy extends Vue {
         let [fileName, fileType, sheetName] = [
             this._("w_Navigation_Report_Occupancy"),
             fType,
-            Datetime.DateTime2String(this.startDate, Datetime.checkDateFormat)
+            Datetime.DateTime2String(this.startDate, Datetime.FormatCheckDate)
         ];
         toExcel({ th, data, fileName, fileType, sheetName });
     }

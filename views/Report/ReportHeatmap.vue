@@ -678,11 +678,11 @@ export default class ReportHeatmap extends Vue {
 
         title += `${this._("w_Title_StartDate")} ${Datetime.DateTime2String(
             this.filterData.startDate,
-            Datetime.DateFormat
+            Datetime.FormatDate
         )}. `;
         title += `${this._("w_Title_EndDate")} ${Datetime.DateTime2String(
             this.filterData.endDate,
-            Datetime.DateFormat
+            Datetime.FormatDate
         )}. `;
 
         this.visible = true;

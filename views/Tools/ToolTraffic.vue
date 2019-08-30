@@ -94,7 +94,7 @@ export default class ToolTraffic extends Vue {
     showTime(date) {
         return Datetime.DateTime2String(
             new Date(date),
-            `${Datetime.checkDateFormat} HH:mm`
+            `${Datetime.FormatCheckDate} HH:mm`
         );
     }
 

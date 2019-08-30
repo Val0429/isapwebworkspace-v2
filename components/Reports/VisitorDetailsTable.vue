@@ -96,16 +96,16 @@ export class VisitorDetailsTable extends Vue {
             case EChartMode.siteXDay1:
                 return Datetime.DateTime2String(
                     new Date(time),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 );
             case EChartMode.site1DayX:
             case EChartMode.siteXDayX:
                 return `${Datetime.DateTime2String(
                     new Date(this.filterData.startDate),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )} ~ ${Datetime.DateTime2String(
                     new Date(this.filterData.endDate),
-                    Datetime.DateFormat
+                    Datetime.FormatDate
                 )}`;
         }
     }

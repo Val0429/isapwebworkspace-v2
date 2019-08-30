@@ -330,11 +330,11 @@ export default class ReportVIPTracking extends Vue {
 
         title += `${this._("w_Title_StartDate")} ${Datetime.DateTime2String(
             this.filterData.startDate,
-            Datetime.DateFormat
+            Datetime.FormatDate
         )}. `;
         title += `${this._("w_Title_EndDate")} ${Datetime.DateTime2String(
             this.filterData.endDate,
-            Datetime.DateFormat
+            Datetime.FormatDate
         )}. `;
 
         this.visible = true;
@@ -414,7 +414,7 @@ export default class ReportVIPTracking extends Vue {
         // let [fileName, fileType, sheetName] = [
         //     this._("w_Navigation_VideoSources_Demographic"),
         //     fType,
-        //     Datetime.DateTime2String(this.startDate, Datetime.checkDateFormat)
+        //     Datetime.DateTime2String(this.startDate, Datetime.FormatCheckDate)
         // ];
         // toExcel({ th, data, fileName, fileType, sheetName });
     }

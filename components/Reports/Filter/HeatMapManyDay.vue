@@ -92,7 +92,7 @@ export class HeatMapManyDay extends Vue {
     dateAndWeekDay(dateStr: string): string {
         const dateResult = Datetime.DateTime2String(
             new Date(dateStr),
-            Datetime.DateFormat
+            Datetime.FormatDate
         );
         let weekResult = "";
 
