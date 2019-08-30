@@ -7,12 +7,7 @@ import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
         'leaf-map': LMap,
         'leaf-tile-layer': LTileLayer,
         'leaf-marker': LMarker
-    },
-    props: {
-        newLocalData: Array,
-        isClick: Boolean
     }
-
 })
 export class SitesMap extends Vue {
 
@@ -25,7 +20,13 @@ export class SitesMap extends Vue {
         return center;
     }
 
-    get _lat () {
+    @Prop({ type: Array })
+    newLocalData: number[];
+
+    @Prop({ type: Boolean })
+    isClick: Boolean;
+
+    get _lat (): number {
         let _lat = this.newLocalData.length > 0 ? this.newLocalData[0] : 23.973875;
         return _lat;
     }

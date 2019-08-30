@@ -9,7 +9,7 @@
             <div class="sites-list">
                 <div class="d-flex flex-row sites-list-head">
                     <dl
-                        class="col-md-3 px-3 my-5 border-left"
+                        class="col-md-3 px-3 py-1 my-5 border-left"
                         :class="`${ index == 1 ? 'border-primary' : index == 2 ? 'border-success' : index == 3 ? 'border-info' : 'border-danger' }`"
                         v-for="(item, index) in sites_list_head"
                         :key="'list_head' + (index ++)"
@@ -20,7 +20,7 @@
                             {{ item['title'] }}
                         </dt>
                         <dd
-                            class="text-black font-weight-bold"
+                            class="text-black font-weight-bold mb-0"
                             >
                             {{ item['sum_number'] }}
                         </dd>
@@ -121,11 +121,16 @@ import { Component, Vue } from 'vue-property-decorator';
 import { RegisterRouter } from '@/../core/router';
 import { toEnumInterface } from '@/../core';
 
+interface IRtn {
+    title: string;
+    sum_number: number;
+}
+
 @Component
 export default class Components extends Vue {
     private newLocalData: any[] = [];
     private isClick: boolean = false;
-    private sites_list_head = [
+    private sites_list_head: IRtn[] = [
         {
             title: '現在人數',
             sum_number: 0
@@ -175,6 +180,9 @@ export default class Components extends Vue {
             position: absolute;
             left: 1rem;
             display: block;
+        }
+        dd {
+            font-size: 20px;
         }
     }
 }

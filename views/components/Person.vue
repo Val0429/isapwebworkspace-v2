@@ -24,9 +24,7 @@
                         :interface="personList()"
                         >
                         <template #photo_base64="{ $attrs, $listeners }">
-                            <div class="user-photo">
-                                <img :src="'data:image/jpg;base64,' + $attrs.value" alt="">
-                            </div>
+                            <img :src="'data:image/jpg;base64,' + $attrs.value" style="max-width:50px; max-height: 50px;">
                         </template>
                         <template #actions="{ $attrs, $listeners }">
                             <ivc-toolbox-actions
@@ -37,9 +35,22 @@
                 </iv-auto-card>
             </template>
             <template v-else-if="step === 2">
-                <ivc-person-list-detail
-                    key="personListDetail"
-                    />
+                <iv-auto-card
+                    key="tableDeatil"
+                    :label="_('m_Persons_Person_Detail')"
+                    >
+                    
+                    <iv-table
+                        ref="tableDeatil"
+                        :interface="basicData()"
+                        :value="personListData"
+                        >
+                        {{ this.$refs.table.pid }}
+                    </iv-table>
+                </iv-auto-card>
+                <!-- <ivc-person-list-detail
+                    :personListData="personListData"
+                    /> -->
             </template>
         </iv-auto-transition>
     </div>
@@ -102,6 +113,16 @@ export default class Components extends Vue {
             }
         `
     }
+    private basicData() {
+        return `
+            interface: {
+                photo_base64: any;
+                name_zh: string;
+                pid: string;
+                workcard_type: string;
+            }
+        `
+    }
     private async doSearch(val) {
         this.personFilter = val;
         console.log(this.defaultValue)
@@ -111,15 +132,8 @@ export default class Components extends Vue {
     }
     private async mounted() {
         let data:any = {} = await this.$server.R('/continental/workcards');
-        this.personListData = data.results;
+        this.personListData = data;
+        console.log('main', this.personListData)
     }
 }
 </script>
-<style lang="scss" scope>
-.user-photo {
-    height: 50px;
-    img {
-        height: 100%;
-    }
-}
-</style>

@@ -38,41 +38,6 @@ export class StrangerListForm extends Vue implements IFormQuick {
                         channel: string;
                     }
                 `;
-                // return `
-                // interface {
-                //     /**
-                //      * @uiLabel - ${this._("w_Service_Description")}
-                //      * @uiType - iv-form-textarea
-                //      * @uiHidden - ${ this.isService == true ? false : true }
-                //      */
-                //     description: string;
-                // }
-                // `;
-                // return `
-                // interface {
-                //     /**
-                //      * @uiLabel - ${this._("w_Sex")}
-                //      * @uiType - iv-form-label
-                //      */
-                //     sex: boolean;
-                //     /**
-                //      * @uiLabel - ${this._("w_Service")}
-                //      * @uiType - iv-form-switch
-                //      * @uiDisabled - true
-                //      */
-                //     service?: boolean;
-                //     /**
-                //      * @uiLabel - ${this._("w_Service_Type")}
-                //      * @uiType - iv-form-label
-                //      */
-                //     serviceType?: number;
-                //     /**
-                //      * @uiLabel - ${this._("w_Service_Description")}
-                //      * @uiType - iv-form-label
-                //      */
-                //     description?: string;
-                // }
-                // `;
         }
     }
     // preAdd() {
@@ -96,20 +61,9 @@ export class StrangerListForm extends Vue implements IFormQuick {
     //     throw new Error("Method not implemented.");
     // }
 
-    private sex = 0;
-    private isService: boolean = false;
-
-    private updateData(data) {
-        switch (data.key) {
-            case 'sex':
-                this.sex = data.value;
-            case 'service':
-                this.isService = data.value;
-        }
-    }
-    private sendData(arg) {
-        console.log('???');
-        console.log(arg);
+    private getSnapshotUrl(snapshot: string) {
+        let ref = this.$server.Url("/persons/snapshotimage" as any, {}).replace(/\?$/, "");
+        return `${ref}/image=${snapshot}`;
     }
 }
 export default StrangerListForm;

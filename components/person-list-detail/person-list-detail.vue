@@ -5,7 +5,8 @@
         >
         <iv-table
             :interface="basicData()"
-            />
+            >
+        </iv-table>
     </iv-auto-card>
 </template>
 
