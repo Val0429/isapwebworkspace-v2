@@ -247,24 +247,48 @@ export class FilterConditionVIPAndBlacklist extends Vue {
             thisMonth: `${this._(
                 "w_thisMonth"
             )} ( ${Datetime.ThisMonthStartDate()} ~ ${Datetime.ThisMonthEndDate()} )`,
-            lastMonth: `${this._(
-                "w_lastMonth"
-            )} ( ${Datetime.LastMonthStartDate()} ~ ${Datetime.LastMonthEndDate()} )`,
-            q1: `${this._(
-                "w_q1"
-            )} ( ${Datetime.Q1StartDate()} ~ ${Datetime.Q1EndDate()} )`,
-            q2: `${this._(
-                "w_q2"
-            )} ( ${Datetime.Q2StartDate()} ~ ${Datetime.Q2EndDate()} )`,
-            q3: `${this._(
-                "w_q3"
-            )} ( ${Datetime.Q3StartDate()} ~ ${Datetime.Q3EndDate()} )`,
-            q4: `${this._(
-                "w_q4"
-            )} ( ${Datetime.Q4StartDate()} ~ ${Datetime.Q4EndDate()} )`,
-            thisYear: `${this._(
-                "w_thisYear"
-            )} ( ${Datetime.ThisYearStartDate()} ~ ${Datetime.ThisYearEndDate()} )`
+            lastMonth: `${this._("w_lastMonth")} ( ${Datetime.DateTime2String(
+                Datetime.LastMonthStart(new Date()),
+                "YYYY/MM/DD"
+            )} ~ ${Datetime.DateTime2String(
+                Datetime.LastMonthEnd(new Date()),
+                "YYYY/MM/DD"
+            )} )`,
+            q1: `${this._("w_q1")} ( ${Datetime.DateTime2String(
+                Datetime.Q1Start(new Date()),
+                "YYYY/MM/DD"
+            )} ~ ${Datetime.DateTime2String(
+                Datetime.Q1End(new Date()),
+                "YYYY/MM/DD"
+            )} )`,
+            q2: `${this._("w_q2")} ( ${Datetime.DateTime2String(
+                Datetime.Q2Start(new Date()),
+                "YYYY/MM/DD"
+            )} ~ ${Datetime.DateTime2String(
+                Datetime.Q2End(new Date()),
+                "YYYY/MM/DD"
+            )} )`,
+            q3: `${this._("w_q3")} ( ${Datetime.DateTime2String(
+                Datetime.Q3Start(new Date()),
+                "YYYY/MM/DD"
+            )} ~ ${Datetime.DateTime2String(
+                Datetime.Q3End(new Date()),
+                "YYYY/MM/DD"
+            )} )`,
+            q4: `${this._("w_q4")} ( ${Datetime.DateTime2String(
+                Datetime.Q4Start(new Date()),
+                "YYYY/MM/DD"
+            )} ~ ${Datetime.DateTime2String(
+                Datetime.Q4End(new Date()),
+                "YYYY/MM/DD"
+            )} )`,
+            thisYear: `${this._("w_thisYear")} ( ${Datetime.DateTime2String(
+                Datetime.YearStart(new Date()),
+                "YYYY/MM/DD"
+            )} ~ ${Datetime.DateTime2String(
+                Datetime.YearEnd(new Date()),
+                "YYYY/MM/DD"
+            )} )`
         };
     }
 
@@ -509,57 +533,37 @@ export class FilterConditionVIPAndBlacklist extends Vue {
                     designationPeriod = EDesignationPeriod.thisMonth;
                     break;
                 case "lastMonth":
-                    doSubmitParam.startDate = Datetime.DateStart(
-                        new Date(Datetime.LastMonthStartDate())
+                    doSubmitParam.startDate = Datetime.LastMonthStart(
+                        new Date()
                     );
-                    doSubmitParam.endDate = Datetime.DateStart(
-                        new Date(Datetime.LastMonthEndDate())
+                    doSubmitParam.endDate = Datetime.LastMonthEnd(
+                        new Date()
                     );
                     designationPeriod = EDesignationPeriod.lastMonth;
                     break;
                 case "q1":
-                    doSubmitParam.startDate = Datetime.DateStart(
-                        new Date(Datetime.Q1StartDate())
-                    );
-                    doSubmitParam.endDate = Datetime.DateStart(
-                        new Date(Datetime.Q1EndDate())
-                    );
+                    doSubmitParam.startDate = Datetime.Q1Start(new Date());
+                    doSubmitParam.endDate = Datetime.Q1End(new Date());
                     designationPeriod = EDesignationPeriod.q1;
                     break;
                 case "q2":
-                    doSubmitParam.startDate = Datetime.DateStart(
-                        new Date(Datetime.Q2StartDate())
-                    );
-                    doSubmitParam.endDate = Datetime.DateStart(
-                        new Date(Datetime.Q2EndDate())
-                    );
+                    doSubmitParam.startDate = Datetime.Q2Start(new Date());
+                    doSubmitParam.endDate = Datetime.Q2End(new Date());
                     designationPeriod = EDesignationPeriod.q2;
                     break;
                 case "q3":
-                    doSubmitParam.startDate = Datetime.DateStart(
-                        new Date(Datetime.Q3StartDate())
-                    );
-                    doSubmitParam.endDate = Datetime.DateStart(
-                        new Date(Datetime.Q3EndDate())
-                    );
+                    doSubmitParam.startDate = Datetime.Q3Start(new Date());
+                    doSubmitParam.endDate = Datetime.Q3End(new Date());
                     designationPeriod = EDesignationPeriod.q3;
                     break;
                 case "q4":
-                    doSubmitParam.startDate = Datetime.DateStart(
-                        new Date(Datetime.Q4StartDate())
-                    );
-                    doSubmitParam.endDate = Datetime.DateStart(
-                        new Date(Datetime.Q4EndDate())
-                    );
+                    doSubmitParam.startDate = Datetime.Q4Start(new Date());
+                    doSubmitParam.endDate = Datetime.Q4End(new Date());
                     designationPeriod = EDesignationPeriod.q4;
                     break;
                 case "thisYear":
-                    doSubmitParam.startDate = Datetime.DateStart(
-                        new Date(Datetime.ThisYearStartDate())
-                    );
-                    doSubmitParam.endDate = Datetime.DateStart(
-                        new Date(Datetime.ThisYearEndDate())
-                    );
+                    doSubmitParam.startDate = Datetime.YearStart(new Date());
+                    doSubmitParam.endDate = Datetime.YearEnd(new Date());
                     designationPeriod = EDesignationPeriod.thisYear;
                     break;
             }

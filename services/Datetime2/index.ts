@@ -237,6 +237,8 @@ class Datetime {
         return new Date(year, month, day, hour, minute, second);
     }
 
+    //////////////////////////////////////////////////////////////
+
     // Year
     YearStart(value: Date): Date {
         let date = new Date(value.getTime());
@@ -288,37 +290,37 @@ class Datetime {
     }
 
     // 獲得Q1結束日期
-    Q1EndDate(date: Date): Date {
+    Q1End(date: Date): Date {
         return this.DateEnd(new Date(date.getFullYear(), 2, 31));
     }
 
     // 獲得Q2開始日期
-    Q2StartDate(date: Date): Date {
+    Q2Start(date: Date): Date {
         return this.DateStart(new Date(date.getFullYear(), 3, 1));
     }
 
     // 獲得Q2結束日期
-    Q2EndDate(date: Date): Date {
+    Q2End(date: Date): Date {
         return this.DateEnd(new Date(date.getFullYear(), 5, 30));
     }
 
     // 獲得Q3開始日期
-    Q3StartDate(date: Date): Date {
+    Q3Start(date: Date): Date {
         return this.DateStart(new Date(date.getFullYear(), 6, 1));
     }
 
     //獲得Q3結束日期
-    Q3EndDate(date: Date): Date {
+    Q3End(date: Date): Date {
         return this.DateEnd(new Date(date.getFullYear(), 8, 30));
     }
 
     // 獲得Q4開始日期
-    Q4StartDate(date: Date): Date {
+    Q4Start(date: Date): Date {
         return this.DateStart(new Date(date.getFullYear(), 9, 1));
     }
 
     // 獲得Q4結束日期
-    Q4EndDate(date: Date): Date {
+    Q4End(date: Date): Date {
         return this.DateEnd(new Date(date.getFullYear(), 11, 31));
     }
 
@@ -339,12 +341,12 @@ class Datetime {
     }
 
     //獲得上月開始日期
-    LastMonthStartDate(date: Date): Date {
+    LastMonthStart(date: Date): Date {
         return this.DateStart(new Date(date.getFullYear(), date.getMonth() - 1, 1));
     }
 
     // 獲得上月結束日期
-    LastMonthEndDate(date: Date): Date {
+    LastMonthEnd(date: Date): Date {
         return this.MonthEnd(new Date(date.getFullYear(), date.getMonth() - 1));
     }
 
@@ -355,7 +357,7 @@ class Datetime {
 
     // 獲得上月的天數
     LastMonthCount(date: Date): number {
-        return this.LastMonthEndDate(date).getDate();
+        return this.LastMonthEnd(date).getDate();
     }
 
     // Week

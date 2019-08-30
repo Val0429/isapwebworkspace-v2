@@ -19,12 +19,12 @@
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from "vue-property-decorator";
-    import Datetime from "@/services/Datetime";
+import { Component, Prop, Vue } from "vue-property-decorator";
+import Datetime from "@/services/Datetime";
 
-    import {ETime} from "@/components/Dashboard/index";
+import { ETime } from "@/components/Dashboard/index";
 
-    @Component({
+@Component({
     components: {}
 })
 export class SelectTime extends Vue {
@@ -46,55 +46,90 @@ export class SelectTime extends Vue {
     mounted() {}
 
     initSelectItem() {
-
         this.timeSelectItem = [
-            { id: ETime.today, text: `${this._("w_Dashboard_Today")} ( ${Datetime.CountDateNumber(
+            {
+                id: ETime.today,
+                text: `${this._(
+                    "w_Dashboard_Today"
+                )} ( ${Datetime.CountDateNumber(
                     0
-                )} ~ ${Datetime.CountDateNumber(0)} )`},
-            { id: ETime.yesterday, text:  `${this._(
+                )} ~ ${Datetime.CountDateNumber(0)} )`
+            },
+            {
+                id: ETime.yesterday,
+                text: `${this._(
                     "w_Dashboard_Yesterday"
-                )} ( ${Datetime.CountDateNumber(-1)} ~ ${Datetime.CountDateNumber(
+                )} ( ${Datetime.CountDateNumber(
                     -1
-                )} )`},
-            { id: ETime.last7day, text: `${this._(
+                )} ~ ${Datetime.CountDateNumber(-1)} )`
+            },
+            {
+                id: ETime.last7day,
+                text: `${this._(
                     "w_Dashboard_Last7Day"
-                )} ( ${Datetime.CountDateNumber(-6)} ~ ${Datetime.CountDateNumber(
-                    0
-                )} )`},
-            { id: ETime.last14day, text: `${this._(
+                )} ( ${Datetime.CountDateNumber(
+                    -6
+                )} ~ ${Datetime.CountDateNumber(0)} )`
+            },
+            {
+                id: ETime.last14day,
+                text: `${this._(
                     "w_Dashboard_Last14Day"
-                )} ( ${Datetime.CountDateNumber(-13)} ~ ${Datetime.CountDateNumber(
-                    0
-                )} )`},
-            { id: ETime.last28day, text:  `${this._(
+                )} ( ${Datetime.CountDateNumber(
+                    -13
+                )} ~ ${Datetime.CountDateNumber(0)} )`
+            },
+            {
+                id: ETime.last28day,
+                text: `${this._(
                     "w_Dashboard_Last28Day"
-                )} ( ${Datetime.CountDateNumber(-27)} ~ ${Datetime.CountDateNumber(
-                    0
-                )} )`},
-            { id: ETime.last30day, text: `${this._(
+                )} ( ${Datetime.CountDateNumber(
+                    -27
+                )} ~ ${Datetime.CountDateNumber(0)} )`
+            },
+            {
+                id: ETime.last30day,
+                text: `${this._(
                     "w_Dashboard_Last30Day"
-                )} ( ${Datetime.CountDateNumber(-29)} ~ ${Datetime.CountDateNumber(
-                    0
-                )} )`},
-            { id: ETime.last60day, text:  `${this._(
+                )} ( ${Datetime.CountDateNumber(
+                    -29
+                )} ~ ${Datetime.CountDateNumber(0)} )`
+            },
+            {
+                id: ETime.last60day,
+                text: `${this._(
                     "w_Dashboard_Last60Day"
-                )} ( ${Datetime.CountDateNumber(-59)} ~ ${Datetime.CountDateNumber(
-                    0
-                )} )` },
-            { id: ETime.last90day, text: `${this._(
+                )} ( ${Datetime.CountDateNumber(
+                    -59
+                )} ~ ${Datetime.CountDateNumber(0)} )`
+            },
+            {
+                id: ETime.last90day,
+                text: `${this._(
                     "w_Dashboard_Last90Day"
-                )} ( ${Datetime.CountDateNumber(-89)} ~ ${Datetime.CountDateNumber(
-                    0
-                )} )`},
-            { id: ETime.last180day, text: `${this._(
+                )} ( ${Datetime.CountDateNumber(
+                    -89
+                )} ~ ${Datetime.CountDateNumber(0)} )`
+            },
+            {
+                id: ETime.last180day,
+                text: `${this._(
                     "w_Dashboard_Last180Day"
-                )} ( ${Datetime.CountDateNumber(-179)} ~ ${Datetime.CountDateNumber(
-                    0
-                )} )`},
-            { id: ETime.thisYear, text: `${this._(
-                    "w_thisYear"
-                )} ( ${Datetime.ThisYearStartDate()} ~ ${Datetime.ThisYearEndDate()} )`},
-        ]
+                )} ( ${Datetime.CountDateNumber(
+                    -179
+                )} ~ ${Datetime.CountDateNumber(0)} )`
+            },
+            {
+                id: ETime.thisYear,
+                text: `${this._("w_thisYear")} ( ${Datetime.DateTime2String(
+                    Datetime.YearStart(new Date()),
+                    "YYYY/MM/DD"
+                )} ~ ${Datetime.DateTime2String(
+                    Datetime.YearEnd(new Date()),
+                    "YYYY/MM/DD"
+                )} )`
+            }
+        ];
 
         this.numberOfDaysDifference(
             this.timeParam.startDate,
@@ -228,12 +263,8 @@ export class SelectTime extends Vue {
                 );
                 break;
             case ETime.thisYear:
-                submitParam.startDate = Datetime.DateStart(
-                    new Date(Datetime.ThisYearStartDate())
-                );
-                submitParam.endDate = Datetime.DateStart(
-                    new Date(Datetime.ThisYearEndDate())
-                );
+                submitParam.startDate = Datetime.YearStart(new Date());
+                submitParam.endDate = Datetime.YearEnd(new Date());
                 break;
         }
 
