@@ -120,7 +120,7 @@ export class CampaingEventTable extends Vue {
     }
 
     initDatetime(date1, date2 ): string {
-        return `${ Datetime.DateTime2String(new Date(date1), 'YYYY/MM/DD') } ~ ${ Datetime.DateTime2String(new Date(date2), 'YYYY/MM/DD') }`
+        return `${ Datetime.DateTime2String(new Date(date1), Datetime.FormatDate) } ~ ${ Datetime.DateTime2String(new Date(date2), Datetime.FormatDate) }`
     }
 
     initFormatNumber(number: string): string {

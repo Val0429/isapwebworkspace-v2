@@ -113,8 +113,6 @@ export default class ToolRepeatVisitor extends Vue {
 
     tabelParam: object = {};
 
-
-
     modalShow: boolean = false;
 
     tableDetailTitle: any = [];
@@ -133,7 +131,10 @@ export default class ToolRepeatVisitor extends Vue {
     }
 
     showTime(date) {
-        return Datetime.DateTime2String(new Date(date), "YYYY-MM-DD HH:mm");
+        return Datetime.DateTime2String(
+            new Date(date),
+            `${Datetime.FormatCheckDate} HH:mm`
+        );
     }
 
     pageToView(data) {

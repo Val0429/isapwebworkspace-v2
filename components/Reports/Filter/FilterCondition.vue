@@ -267,73 +267,83 @@ export class FilterCondition extends Vue {
         this.designationPeriodSelectItem = {
             today: `${this._("w_Today")} ( ${Datetime.DateTime2String(
                 new Date(),
-                "YYYY/MM/DD"
-            )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`,
+                Datetime.FormatDate
+            )} ~ ${Datetime.DateTime2String(
+                new Date(),
+                Datetime.FormatDate
+            )} )`,
             yesterday: `${this._("w_Yesterday")} ( ${Datetime.DateTime2String(
                 Datetime.DatePlus(new Date(), -1),
-                "YYYY/MM/DD"
+                Datetime.FormatDate
             )} ~ ${Datetime.DateTime2String(
                 Datetime.DatePlus(new Date(), -1),
-                "YYYY/MM/DD"
+                Datetime.FormatDate
             )} )`,
             last7days: `${this._("w_last7days")} ( ${Datetime.DateTime2String(
                 Datetime.DatePlus(new Date(), -6),
-                "YYYY/MM/DD"
-            )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`,
+                Datetime.FormatDate
+            )} ~ ${Datetime.DateTime2String(
+                new Date(),
+                Datetime.FormatDate
+            )} )`,
             thisWeek: `${this._("w_thisWeek")} ( ${Datetime.DateTime2String(
                 Datetime.WeekStart(new Date()),
-                "YYYY/MM/DD"
+                Datetime.FormatDate
             )} ~ ${Datetime.DateTime2String(
                 Datetime.WeekStart(new Date()),
-                "YYYY/MM/DD"
+                Datetime.FormatDate
             )} )`,
             lastWeek: `${this._(
                 "w_lastWeek"
             )} ( ${Datetime.LastWeekStartDate()} ~ ${Datetime.LastWeekEndDate()} )`,
-            thisMonth: `${this._(
-                "w_thisMonth"
-            )} ( ${Datetime.DateTime2String(Datetime.MonthStart(new Date()), 'YYYY/MM/DD')} ~ ${Datetime.DateTime2String(Datetime.MonthEnd(new Date()), 'YYYY/MM/DD')} )`,
+            thisMonth: `${this._("w_thisMonth")} ( ${Datetime.DateTime2String(
+                Datetime.MonthStart(new Date()),
+                Datetime.FormatDate
+            )} ~ ${Datetime.DateTime2String(
+                Datetime.MonthEnd(new Date()),
+                Datetime.FormatDate
+            )} )`,
             lastMonth: `${this._("w_lastMonth")} ( ${Datetime.DateTime2String(
                 Datetime.LastMonthStart(new Date()),
-                "YYYY/MM/DD"
+                Datetime.FormatDate
             )} ~ ${Datetime.DateTime2String(
                 Datetime.LastMonthEnd(new Date()),
-                "YYYY/MM/DD"
+                Datetime.FormatDate
             )} )`,
             q1: `${this._("w_q1")} ( ${Datetime.DateTime2String(
                 Datetime.Q1Start(new Date()),
-                "YYYY/MM/DD"
+                Datetime.FormatDate
             )} ~ ${Datetime.DateTime2String(
                 Datetime.Q1End(new Date()),
-                "YYYY/MM/DD"
+                Datetime.FormatDate
             )} )`,
             q2: `${this._("w_q2")} ( ${Datetime.DateTime2String(
                 Datetime.Q2Start(new Date()),
-                "YYYY/MM/DD"
+                Datetime.FormatDate
             )} ~ ${Datetime.DateTime2String(
                 Datetime.Q2End(new Date()),
-                "YYYY/MM/DD"
+                Datetime.FormatDate
             )} )`,
             q3: `${this._("w_q3")} ( ${Datetime.DateTime2String(
                 Datetime.Q3Start(new Date()),
-                "YYYY/MM/DD"
+                Datetime.FormatDate
             )} ~ ${Datetime.DateTime2String(
                 Datetime.Q3End(new Date()),
-                "YYYY/MM/DD"
+                Datetime.FormatDate
             )} )`,
             q4: `${this._("w_q4")} ( ${Datetime.DateTime2String(
                 Datetime.Q4Start(new Date()),
-                "YYYY/MM/DD"
+                Datetime.FormatDate
             )} ~ ${Datetime.DateTime2String(
                 Datetime.Q4End(new Date()),
-                "YYYY/MM/DD"
+                Datetime.FormatDate
             )} )`,
             thisYear: `${this._("w_thisYear")} ( ${Datetime.DateTime2String(
                 Datetime.YearStart(new Date()),
-                "YYYY/MM/DD"
+                Datetime.FormatDate
             )} ~ ${Datetime.DateTime2String(
                 Datetime.YearEnd(new Date()),
-                "YYYY/MM/DD"
+                Datetime.FormatDate
             )} )`
         };
     }
@@ -551,11 +561,11 @@ export class FilterCondition extends Vue {
                 Datetime.CheckTheSameDate(
                     Datetime.DateTime2String(
                         this.inputFormData.startDate,
-                        "YYYY-MM-DD"
+                        Datetime.FormatCheckDate
                     ),
                     Datetime.DateTime2String(
                         this.inputFormData.endDate,
-                        "YYYY-MM-DD"
+                        Datetime.FormatCheckDate
                     )
                 )
             ) {
@@ -598,7 +608,7 @@ export class FilterCondition extends Vue {
                     designationPeriod = EDesignationPeriod.last7days;
                     break;
                 case "thisWeek":
-                    doSubmitParam.startDate = Datetime.WeekStart(new Date()) 
+                    doSubmitParam.startDate = Datetime.WeekStart(new Date());
                     doSubmitParam.endDate = Datetime.WeekEnd(new Date());
                     doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.thisWeek;

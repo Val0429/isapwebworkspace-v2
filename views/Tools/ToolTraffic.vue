@@ -92,7 +92,10 @@ export default class ToolTraffic extends Vue {
     }
 
     showTime(date) {
-        return Datetime.DateTime2String(new Date(date), "YYYY-MM-DD HH:mm");
+        return Datetime.DateTime2String(
+            new Date(date),
+            `${Datetime.FormatCheckDate} HH:mm`
+        );
     }
 
     // Todo: wait api
