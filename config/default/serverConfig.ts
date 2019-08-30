@@ -5,7 +5,7 @@
  */
 
 import { Config } from '@/../config/default/serverConfig';
-import PackageJSON from '@/package.json';
+import FlowService from '@/services/FlowService';
 
 var config: Config = {
     ip: 'localhost',
@@ -16,7 +16,7 @@ var config: Config = {
     hideDefaultServerErrorModal: true,
 };
 
-switch (PackageJSON.flow) {
+switch (FlowService.flow) {
     case '/flow1':
         config.ip = '172.16.10.122';
         config.port = 6060;

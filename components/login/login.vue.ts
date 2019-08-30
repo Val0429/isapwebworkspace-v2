@@ -4,8 +4,8 @@ import { EUserRole } from '@/services/Role';
 import Dialog from '@/services/Dialog';
 import Loading from '@/services/Loading';
 import RemeberMe from '@/services/RemeberMe';
-import PackeageJSON from '@/package.json';
-import RegexServices from '@/services/RegexServices';
+import PackageJSON from '@/package.json';
+import FlowService from '@/services/FlowService';
 
 enum ERemeberMe {
     rememberMe = 'rememberMe',
@@ -19,11 +19,12 @@ enum ERemeberMe {
 })
 @Component
 export default class Login extends Vue {
-    private version = `${PackeageJSON.description} ${PackeageJSON.project[PackeageJSON.flow].version}`;
+    private version: string = `${PackageJSON.description} ${PackageJSON.version}`;
     private username: string = '';
     private password: string = '';
     private remeberMe: string = ERemeberMe.noRemeberMe;
     private eRemeberMe: any = ERemeberMe;
+    private projectFlow: string = FlowService.flow;
 
     created() {
         this.showProject();
@@ -35,7 +36,7 @@ export default class Login extends Vue {
 
     showForgotPassword() {
         let result = false;
-        switch (PackeageJSON.flow) {
+        switch (this.projectFlow) {
             case '/flow2':
                 result = true;
                 break;
@@ -47,7 +48,7 @@ export default class Login extends Vue {
     }
 
     showProject() {
-        console.log(`Project: ${PackeageJSON.project[PackeageJSON.flow].name}`);
+        console.log(`Project: ${PackageJSON.project[this.projectFlow].name}`);
     }
 
     initLoginInfo() {

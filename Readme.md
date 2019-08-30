@@ -28,3 +28,9 @@ Because first time try 2 web connect 1 server
 <Solution>
 Update production port always 6060
 ```
+
+# Append code
+```bash
+/public/index.html
+<script type="text/javascript" src="/public/window.js"></script>
+```

@@ -1,5 +1,7 @@
 import { RegisterRouter as $ } from '@/../core';
-import packageJson from '@/package.json';
+import FlowService from '@/services/FlowService';
+
+let projectFlow: string = FlowService.flow;
 
 ///////////////////////////////////////////////////////////////////
 
@@ -17,7 +19,7 @@ $({ path: '/registration/potrait', name: "_('w_Navigation_Registration_Potrait')
 // MyProfile
 import Flow1MyProfile from './Flow1/MyProfile/MyProfile.vue';
 import Flow2MyProfile from './Flow2/MyProfile/MyProfile.vue';
-switch (packageJson.flow) {
+switch (projectFlow) {
     case '/flow2':
         $({ path: '/my_profile', name: "_('w_Navigation_MyProfile')", icon: 'fa-user' })(Flow2MyProfile);
         break;
@@ -37,8 +39,8 @@ import Flow1ReportsInversigation from './Flow1/Reports/ReportsInversigation.vue'
 import Flow2ReportsDashboard from './Flow2/Reports/ReportsDashboard.vue';
 import Flow2ReportsInversigation from './Flow2/Reports/ReportsInversigation.vue';
 
-$({ path: '/reports', name: "_('w_Navigation_Reports')", icon: 'fa-flag', redirect: `/reports/dashboard${packageJson.flow}` })();
-switch (packageJson.flow) {
+$({ path: '/reports', name: "_('w_Navigation_Reports')", icon: 'fa-flag', redirect: `/reports/dashboard${projectFlow}` })();
+switch (projectFlow) {
     case '/flow2':
         $({ path: '/reports/dashboard', name: "_('w_Navigation_Reports_Dashboard')", icon: 'fa-tachometer' })(Flow2ReportsDashboard);
         $({ path: '/reports/investigation', name: "_('w_Navigation_Reports_Investigation')", icon: 'fa-eye' })(Flow2ReportsInversigation);
@@ -74,14 +76,14 @@ import Flow2SetupsFloor from './Flow2/Setups/SetupsFloor.vue';
 import Flow2SetupsKiosk from './Flow2/Setups/SetupsKiosk.vue';
 import Flow2SetupsOther from './Flow2/Setups/SetupsOther.vue';
 
-$({ path: '/setups', name: "_('w_Navigation_Setups')", icon: 'fa-cog', redirect: `/setups/account${packageJson.flow}` })();
+$({ path: '/setups', name: "_('w_Navigation_Setups')", icon: 'fa-cog', redirect: `/setups/account${projectFlow}` })();
 $({ path: '/setups/license', name: "_('w_Navigation_Setups_License')", icon: 'fa-certificate' })(SetupsLicense);
 $({ path: '/setups/frs', name: "_('w_Navigation_Setups_FRS')", icon: 'fa-server' })(SetupsFRS);
 $({ path: '/setups/email', name: "_('w_Navigation_Setups_Email')", icon: 'fa-inbox' })(SetupsEmail);
 $({ path: '/setups/sms', name: "_('w_Navigation_Setups_SMS')", icon: 'fa-envelope' })(SetupsSMS);
 $({ path: '/setups/sms_online', name: "_('w_Navigation_Setups_SMSOnline')", icon: 'fa-cloud' })(SetupsSMSOnline);
 
-switch (packageJson.flow) {
+switch (projectFlow) {
     case '/flow2':
         $({ path: '/setups/account', name: "_('w_Navigation_Setups_Account')", icon: 'fa-user' })(Flow2SetupsAccount);
         $({ path: '/setups/purposes', name: "_('w_Navigation_Setups_Purposes')", icon: 'fa-tag' })(Flow2SetupsPurposes);

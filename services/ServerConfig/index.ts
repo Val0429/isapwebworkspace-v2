@@ -1,5 +1,5 @@
 import config from '@/config/default/serverConfig';
-import packageJson from '@/package.json';
+import FlowService from '@/services/FlowService';
 
 interface IDeveloperServer {
     host: string;
@@ -17,7 +17,7 @@ export class ServerConfig {
     private _host: string = window.location.hostname;
     private _port: string = window.location.port;
     private _url: string = '';
-    private _flow: string = packageJson.flow;
+    private _flow: string = FlowService.flow;
 
     constructor() {
         this.initServerConfig();

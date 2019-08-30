@@ -78,7 +78,6 @@ import { ITransition } from "@/services/Transition";
 import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
 import ResponseFilter from "@/services/ResponseFilter";
-import packageJson from "@/package.json";
 import RegexServices from "@/services/RegexServices";
 
 /// install Highcharts
