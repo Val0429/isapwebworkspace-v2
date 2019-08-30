@@ -94,12 +94,12 @@
             </highcharts-traffic>
 
             <!-- Ben -->
-            <peak-time-range
+            <new-peak-hour
                 :siteItems="siteItem"
                 :dayXSiteX="pDayXxSiteX"
                 :timeRangeData="pData"
             >
-            </peak-time-range>
+            </new-peak-hour>
 
             <!-- Ben -->
             <report-table
