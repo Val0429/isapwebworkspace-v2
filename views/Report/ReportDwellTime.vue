@@ -2188,7 +2188,7 @@ export default class ReportDwellTime extends Vue {
         let [fileName, fileType, sheetName] = [
             this._("w_Navigation_Report_DwellTime"),
             fType,
-            Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
+            Datetime.DateTime2String(this.startDate, Datetime.checkDateFormat)
         ];
         toExcel({ th, data, fileName, fileType, sheetName });
     }
