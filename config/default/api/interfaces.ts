@@ -12,6 +12,7 @@ interface IConfig {
     port: number;
     account: string;
     password: string;
+    lines?: number[];
 }
 
 interface IConfigiSap {

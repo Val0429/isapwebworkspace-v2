@@ -228,7 +228,7 @@ export default class LangObject {
     w_SelectSiteTree = 'Store Tree';
     w_SelectRegionTree = 'Region Tree';
 
-    w_Camera_lines = 'Camera Lines';
+    w_Camera_lines = 'Lines';
 
     w_Mon = 'Mon';
     w_Tue = 'Tue';

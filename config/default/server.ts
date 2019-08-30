@@ -177,7 +177,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/report/sales-record': [SalesRecordCreate.Input, SalesRecordCreate.Output, false];
 
         // Video Source People Counting
-        '/device/people-counting': [VSPeopleCountingCreate.Input, VSPeopleCountingCreate.Output, false];
+        '/device/people-counting': [any, VSPeopleCountingCreate.Output, false];
 
         // Video Source People Counting
         '/device/demographic': [VSDemographicCreate.Input, VSDemographicCreate.Output, false];
@@ -393,7 +393,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/event/campaign': [CampaignUpdate.Input, CampaignUpdate.Output, false];
 
         // Video Source People Counting
-        '/device/people-counting': [VSPeopleCountingUpdate.Input, VSPeopleCountingUpdate.Output, false];
+        '/device/people-counting': [any, VSPeopleCountingUpdate.Output, false];
 
         // Video Source People Counting
         '/device/demographic': [VSDemographicUpdate.Input, VSDemographicUpdate.Output, false];
