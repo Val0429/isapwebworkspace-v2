@@ -214,6 +214,7 @@ import {
     ESign,
     ETimeMode
 } from "@/components/Reports";
+import Datetime from '@/services/Datetime';
 
 @Component({
     components: {}
@@ -496,6 +497,16 @@ export class FilterStatusDashboard extends Vue {
         //         return ResponseFilter.catchError(this, e);
         //     });
 
+
+
+        let dayRange: string = '';
+        if (Datetime.DateStart(this.timeParam.startDate).getTime() === Datetime.DateStart(this.timeParam.endDate).getTime()) {
+            dayRange = Datetime.DateTime2String(this.timeParam.startDate, 'YYYY/MM/DD');
+        } else {
+            dayRange = `${Datetime.DateTime2String(this.timeParam.startDate, 'YYYY/MM/DD')} ~ ${Datetime.DateTime2String(this.timeParam.endDate, 'YYYY/MM/DD')}`
+        }
+
+
         let demographicData = [
             {
                 name: "male",
@@ -600,18 +611,46 @@ export class FilterStatusDashboard extends Vue {
                     name: "traffic",
                     data: [40, 30, 50, 20, 60]
                 }
-            ]
+            ],
+            tooltip: {
+                backgroundColor: '#000',
+                borderColor: 'transplant',
+                borderRadius: 10,
+                borderWidth: 3,
+                shadow: false,
+                animation: true,
+                style: { color: "#fff" },
+                formatter: function(tooltip: any) {
+                    let self: any = this;
+
+                    let result = "";
+
+                        try {
+                            // set value
+                            result += `${dayRange}<br>`;
+                            result += `Traffic: ${123}<br>`;
+                            result += `Revenue: ${456123}<br>`;
+                            result += `Transaction: ${50}<br>`;
+                            result += `Conversion: ${10}%<br>`;
+
+                        } catch (e) {
+                            console.log(e);
+                        }
+
+                    return result;
+                }
+            }
         };
     }
 
     async receiveTime(time: object) {
         this.timeParam = time;
-        let timeParam = JSON.parse(JSON.stringify(this.timeParam));
+        let timeParams = JSON.parse(JSON.stringify(this.timeParam));
 
         // TODO: wait api
         // Loading.show();
         // await this.$server
-        //     .C("/", timeParam)
+        //     .C("/", timeParams)
         //     .then((response: any) => {
         //         ResponseFilter.successCheck(
         //             this,
@@ -628,6 +667,8 @@ export class FilterStatusDashboard extends Vue {
         //             this._("w_Dialog_ErrorTitle")
         //         );
         //     });
+
+        this.initData();
     }
 
     numberWithCommas(number) {

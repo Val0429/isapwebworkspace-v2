@@ -169,7 +169,16 @@ export class Top5sites extends Vue {
                     // data: tempData
                     data: [107, 31, 635, 203, 2]
                 }
-            ]
+            ],
+            tooltip: {
+                backgroundColor: '#000',
+                borderColor: 'transplant',
+                borderRadius: 10,
+                borderWidth: 3,
+                shadow: false,
+                animation: true,
+                style: { color: "#fff" },
+            }
         };
     }
 
