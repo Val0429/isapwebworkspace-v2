@@ -175,9 +175,14 @@ import {EMode} from "@/components/Dashboard/models/EDashboard";
                     borderRadius: 10,
                     borderWidth: 3,
                     shadow: false,
+                    useHTML: true,
                     animation: true,
                     style: { color: "#fff" },
-                }
+                    formatter: function() {
+                        let self: any = this;
+                        return `${ self.point.series.name } : ${ self.y }`;
+                    }
+        }
             };
         }
 

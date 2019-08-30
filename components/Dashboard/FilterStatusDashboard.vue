@@ -618,20 +618,20 @@ export class FilterStatusDashboard extends Vue {
                 borderRadius: 10,
                 borderWidth: 3,
                 shadow: false,
+                useHTML: true,
                 animation: true,
                 style: { color: "#fff" },
-                formatter: function(tooltip: any) {
+                formatter: () => {
+                    let result = "";
                     let self: any = this;
 
-                    let result = "";
-
-                        try {
+                    try {
                             // set value
                             result += `${dayRange}<br>`;
-                            result += `Traffic: ${123}<br>`;
-                            result += `Revenue: ${456123}<br>`;
-                            result += `Transaction: ${50}<br>`;
-                            result += `Conversion: ${10}%<br>`;
+                            result += `${self._('w_Navigation_RuleAndActions_Traffic')}: ${ 101 }<br>`;
+                            result += `${self._('w_revenue')}: ${456123}<br>`;
+                            result += `${self._('w_transaction')}: ${50}<br>`;
+                            result += `${self._('w_conversion')}: ${10}%<br>`;
 
                         } catch (e) {
                             console.log(e);
