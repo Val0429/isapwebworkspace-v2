@@ -1218,19 +1218,19 @@ export default class ReportDwellTime extends Vue {
             businessChartType: EBusinessChart.revenue
         };
 
-        // Loading.show();
-        // await this.$server
-        //     .C("/report/demographic/summary", param)
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             this.responseData = response;
-        //             this.officeHourItemDetail = this.responseData.officeHours;
-        //             this.resolveSummary();
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(this, e);
-        //     });
+        Loading.show();
+        await this.$server
+            .C("/report/dwell-time/summary", param)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    this.responseData = response;
+                    this.officeHourItemDetail = this.responseData.officeHours;
+                    this.resolveSummary();
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     resolveSummary() {
@@ -1302,7 +1302,7 @@ export default class ReportDwellTime extends Vue {
         this.endDate = new Date(this.filterData.endDate);
         this.timeMode = this.filterData.type;
         this.areaMode = EAreaMode.all;
-        this.sortOutChartData(this.responseData.summaryDatas);
+        this.sortOutChartData(this.responseData.summaryRangeDatas);
 
         //Ben
         this.initDashboardData();
@@ -1366,6 +1366,7 @@ export default class ReportDwellTime extends Vue {
     }
 
     sortOutChartData(datas: any) {
+
         let tempChartDatas: IChartDwellTimeData[] = [];
         let isOneDay = false;
         this.chartDatas = [];
@@ -1390,6 +1391,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.lower20,
+                    dwellTimeRange: EDwellTimeRange.lower5,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
@@ -1402,6 +1404,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.m21_30,
+                    dwellTimeRange: EDwellTimeRange.m5_15,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
@@ -1414,6 +1417,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.m31_40,
+                    dwellTimeRange: EDwellTimeRange.m15_30,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
@@ -1426,6 +1430,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.m41_50,
+                    dwellTimeRange: EDwellTimeRange.m30_60,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
@@ -1438,6 +1443,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.m51_60,
+                    dwellTimeRange: EDwellTimeRange.m60_120,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
@@ -1450,6 +1456,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.upper61,
+                    dwellTimeRange: EDwellTimeRange.upper120,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
@@ -1530,6 +1537,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.lower20,
+                    dwellTimeRange: EDwellTimeRange.lower5,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
@@ -1542,6 +1550,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.m21_30,
+                    dwellTimeRange: EDwellTimeRange.m15_30,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
@@ -1554,6 +1563,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.m31_40,
+                    dwellTimeRange: EDwellTimeRange.m30_60,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
@@ -1566,6 +1576,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.m41_50,
+                    dwellTimeRange: EDwellTimeRange.m60_120,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
@@ -1578,6 +1589,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.m51_60,
+                    dwellTimeRange: EDwellTimeRange.m60_120,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
@@ -1590,6 +1602,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.upper61,
+                    dwellTimeRange: EDwellTimeRange.upper120,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
@@ -1668,7 +1681,7 @@ export default class ReportDwellTime extends Vue {
                       ReportService.datetimeFormat.date
                   );
 
-            // 計算 maleCount、femaleCount
+            // 計算 maleCount、femaleCount、maleRanges、femaleRanges
             for (let summary of datas) {
                 let summaryDateFormat = isOneDay
                     ? Datetime.DateTime2String(
@@ -1680,10 +1693,9 @@ export default class ReportDwellTime extends Vue {
                           ReportService.datetimeFormat.date
                       );
 
-                if (
-                    summaryDateFormat == tempDateFormat &&
-                    summary.site.objectId == tempChartData.siteObjectId
-                ) {
+
+
+
                     let ageRangeIndex = 0;
                     switch (tempChartData.ageRange) {
                         case EAgeRange.lower20:
@@ -1740,7 +1752,7 @@ export default class ReportDwellTime extends Vue {
                         tempChartData.femaleCount -=
                             summary.femaleEmployeeRanges[ageRangeIndex];
                     }
-                }
+
             }
 
             for (let saleRecord of this.responseData.salesRecords) {
@@ -1812,7 +1824,7 @@ export default class ReportDwellTime extends Vue {
 
         // 依照單一area篩選
         if (this.inputFormData.areaId && this.inputFormData.areaId !== "all") {
-            for (const singleData of this.responseData.summaryDatas) {
+            for (const singleData of this.responseData.summaryRangeDatas) {
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
                     if (detailKey === "area") {
@@ -1842,7 +1854,7 @@ export default class ReportDwellTime extends Vue {
             this.inputFormData.areaId &&
             this.inputFormData.areaId === "all"
         ) {
-            this.sortOutChartData(this.responseData.summaryDatas);
+            this.sortOutChartData(this.responseData.summaryRangeDatas);
             this.areaMode = EAreaMode.all;
 
             this.inputFormData.groupId = "";
@@ -1857,7 +1869,7 @@ export default class ReportDwellTime extends Vue {
 
             // 清除area篩選
         } else if (!this.inputFormData.areaId) {
-            this.sortOutChartData(this.responseData.summaryDatas);
+            this.sortOutChartData(this.responseData.summaryRangeDatas);
             this.areaMode = EAreaMode.all;
 
             this.inputFormData.areaId = "";
@@ -2100,7 +2112,7 @@ export default class ReportDwellTime extends Vue {
 
         // 單一site
         if (this.filterData.firstSiteId) {
-            this.sortOutChartData(this.responseData.summaryDatas);
+            this.sortOutChartData(this.responseData.summaryRangeDatas);
 
             this.inputFormData.areaId = "";
             this.inputFormData.groupId = "";
@@ -2121,7 +2133,7 @@ export default class ReportDwellTime extends Vue {
 
         // 單一site
         if (this.filterData.firstSiteId) {
-            this.sortOutChartData(this.responseData.summaryDatas);
+            this.sortOutChartData(this.responseData.summaryRangeDatas);
 
             this.inputFormData.areaId = "";
             this.inputFormData.groupId = "";
