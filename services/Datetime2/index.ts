@@ -237,6 +237,8 @@ class Datetime {
         return new Date(year, month, day, hour, minute, second);
     }
 
+    //////////////////////////////////////////////////////////////
+
     // Year
     YearStart(value: Date): Date {
         let date = new Date(value.getTime());
