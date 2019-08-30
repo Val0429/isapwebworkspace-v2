@@ -95,7 +95,10 @@ export default class ToolDemographic extends Vue {
     }
 
     showTime(date) {
-        return Datetime.DateTime2String(new Date(date), "YYYY-MM-DD HH:mm");
+        return Datetime.DateTime2String(
+            new Date(date),
+            `${Datetime.FormatCheckDate} HH:mm`
+        );
     }
 
     ITableList() {

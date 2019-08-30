@@ -7,6 +7,9 @@ enum DatetimeFormat {
     newDateTime = 'YYYY/MM/DD HH:mm:ss',
     newDate = 'YYYY/MM/DD',
     newTime = 'HH:mm:ss',
+    checkDateTime = 'YYYY/MM/DD HH:mm:ss',
+    checkDate = 'YYYY-MM-DD',
+    checkTime = 'HH:mm:ss',
 }
 
 class Datetime {
@@ -21,28 +24,40 @@ class Datetime {
         return this._oneDayTimestamp;
     }
 
-    get DateTimeFormat(): string {
+    get FormatDateTime(): string {
         return DatetimeFormat.default;
     }
 
-    get DateFormat(): string {
+    get FormatDate(): string {
         return DatetimeFormat.date;
     }
 
-    get TimeFormat(): string {
+    get FormatTime(): string {
         return DatetimeFormat.time;
     }
 
-    get NewDateTimeFormat(): string {
+    get FormatNewDateTime(): string {
         return DatetimeFormat.newDateTime;
     }
 
-    get NewDateFormat(): string {
+    get FormatNewDate(): string {
         return DatetimeFormat.newDate;
     }
 
-    get NewTimeFormat(): string {
+    get FormatNewTime(): string {
         return DatetimeFormat.newTime;
+    }
+
+    get FormatCheckDateTime(): string {
+        return DatetimeFormat.checkDateTime;
+    }
+
+    get FormatCheckDate(): string {
+        return DatetimeFormat.checkDate;
+    }
+
+    get FormatCheckTime(): string {
+        return DatetimeFormat.checkTime;
     }
 
     /**
@@ -396,6 +411,14 @@ class Datetime {
         return this.DateStart(new Date(date.setDate(diff)));
     }
 
+    WeekPrevSaturday(value: Date): Date {
+        let date = new Date(value.getTime());
+        let day = date.getDay();
+        let diff = date.getDate() - day - 1;
+        return this.DateStart(new Date(date.setDate(diff)));
+    }
+
+
     WeekThisSunday(value: Date): Date {
         let date = new Date(value.getTime());
         let day = date.getDay();
@@ -496,8 +519,8 @@ class Datetime {
     }
 
     // 檢查日期的開始和結束時間是否為同一天
-    CheckTheSameDate(startDate: string, endDate: string): boolean {
-        return Date.parse(endDate) === Date.parse(startDate);
+    CheckTheSameDate(startDate: Date, endDate: Date): boolean {
+        return this.DateStart(endDate).getTime() === this.DateStart(startDate).getTime();
     }
 
     // Excel Date to JS Date
@@ -539,35 +562,6 @@ class Datetime {
 
         const weekEndDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek - 1);
         return this.DateTime2String(weekEndDate, 'YYYY/MM/DD');
-    }
-
-    // 以今年為基準，取得前後五年，2019 --> 2014-2024
-    FiveYearsIdText(): any {
-        let tempYearArray = [];
-
-        for (let i = 0; i < 6; i++) {
-            let year = new Date().getFullYear();
-
-            let tempYearReduce = {
-                id: (year - i).toString(),
-                text: (year - i).toString(),
-            };
-
-            let tempYearAdd = {
-                id: (year + i).toString(),
-                text: (year + i).toString(),
-            };
-
-            tempYearArray.push(tempYearAdd, tempYearReduce);
-        }
-
-        // 去掉重複的值
-        let resultYearArray = [...new Set(tempYearArray.map((item) => JSON.stringify(item)))].map((item) => JSON.parse(item));
-
-        // 排序陣列
-        resultYearArray = resultYearArray.sort((a, b) => a.id - b.id);
-
-        return resultYearArray;
     }
 }
 

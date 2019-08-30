@@ -140,7 +140,7 @@ export class SiteList extends Vue {
     }
 
     showTime(data) {
-        return Datetime.DateTime2String(new Date(data), "YYYY-MM-DD");
+        return Datetime.DateTime2String(new Date(data), Datetime.FormatCheckDate);
     }
 
     showDeviceGroup(data, type) {
@@ -247,7 +247,7 @@ export class SiteList extends Vue {
                 /**
                 * @uiLabel - ${this._("w_Site_Establishment")}
                 * @uiType - iv-cell-date
-                * @uiAttrs - { format: "YYYY/MM/DD" }
+                * @uiAttrs - { format: "${Datetime.FormatDate}" }
                 */
                 establishment: date;
 

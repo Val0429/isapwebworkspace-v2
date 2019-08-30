@@ -604,11 +604,11 @@ export default class ReportRepeatVisitor extends Vue {
 
         title += `${this._("w_Title_StartDate")} ${Datetime.DateTime2String(
             this.filterData.startDate,
-            "YYYY/MM/DD"
+            Datetime.FormatDate
         )}. `;
         title += `${this._("w_Title_EndDate")} ${Datetime.DateTime2String(
             this.filterData.endDate,
-            "YYYY/MM/DD"
+            Datetime.FormatDate
         )}. `;
 
         if (this.filterData.tagIds.length === 1) {
@@ -672,8 +672,8 @@ export default class ReportRepeatVisitor extends Vue {
                 : Datetime.DateStart(date2);
 
         return (
-            Datetime.DateTime2String(tempDate1, "YYYY/MM/DD HH:mm:ss") ===
-                Datetime.DateTime2String(tempDate2, "YYYY/MM/DD HH:mm:ss") &&
+            Datetime.DateTime2String(tempDate1, Datetime.FormatDateTime) ===
+                Datetime.DateTime2String(tempDate2, Datetime.FormatDateTime) &&
             siteId1 === siteId2
         );
     }
@@ -1116,7 +1116,7 @@ export default class ReportRepeatVisitor extends Vue {
         let [fileName, fileType, sheetName] = [
             this._("w_Navigation_Report_RepeatVisitor"),
             fType,
-            Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
+            Datetime.DateTime2String(this.startDate, Datetime.FormatCheckDate)
         ];
         toExcel({ th, data, fileName, fileType, sheetName });
     }

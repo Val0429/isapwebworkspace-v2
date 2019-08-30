@@ -90,20 +90,6 @@
 
                 <hr>
 
-                <!-- Eocortex -->
-                <div class="font-weight-bold"> {{ _('w_VSPeopleCounting_AddEocortex') }}</div>
-
-                <b-button
-                    class="button mt-3 mb-1"
-                    size="md"
-                    variant="success"
-                    type="button"
-                    @click="pageToAddByEocortex(eAddStep.eocortex)"
-                >
-                    {{ _('w_Eocortex') }}
-                </b-button>
-
-                <hr>
 
                 <!-- Brickstream -->
                 <div class="font-weight-bold"> {{ _('w_VSPeopleCounting_AddBrickstream') }}</div>
@@ -116,6 +102,21 @@
                     @click="pageToAddByBrickstream(eAddStep.brickstream)"
                 >
                     {{ _('w_Brickstream') }}
+                </b-button>
+
+                <hr>
+
+                <!-- Eocortex -->
+                <div class="font-weight-bold"> {{ _('w_VSPeopleCounting_AddEocortex') }}</div>
+
+                <b-button
+                    class="button mt-3 mb-1"
+                    size="md"
+                    variant="success"
+                    type="button"
+                    @click="pageToAddByEocortex(eAddStep.eocortex)"
+                >
+                    {{ _('w_Eocortex') }}
                 </b-button>
 
                 <hr>
@@ -780,7 +781,7 @@ export default class PeopleCounting extends Vue {
     serverIdSelectItem: any = {};
     sourceIdSelectItem: any = {};
     frsIdSelectItem: any = {};
-    frsMangerIdSelectItem: any = {};
+    modelSelectItem: any = {};
 
     params: any = {
         mode: ECameraMode.peopleCounting
@@ -799,7 +800,7 @@ export default class PeopleCounting extends Vue {
         groupIds: [],
         name: "",
         brand: "",
-        model: "xnd6020r",
+        model: "",
         protocol: "http",
         ip: "",
         port: null,
@@ -820,6 +821,24 @@ export default class PeopleCounting extends Vue {
 
     mounted() {}
 
+    initSelect() {
+        // TODO wait model
+        switch (this.addStep) {
+            case EAddStep.hanwha:
+                this.modelSelectItem = { xnd6020r: "xnd6020r" };
+                break;
+            case EAddStep.brickstream:
+                this.modelSelectItem = { brickstream: "brickstream" };
+                break;
+            case EAddStep.dahua:
+                this.modelSelectItem = { dahua: "dahua" };
+                break;
+            case EAddStep.eocortex:
+                this.modelSelectItem = { eocortex: "eocortex" };
+                break;
+        }
+    }
+
     clearInputData() {
         this.inputFormData = {
             stepType: "",
@@ -829,7 +848,7 @@ export default class PeopleCounting extends Vue {
             groupIds: [],
             name: "",
             brand: "",
-            model: "xnd6020r",
+            model: "",
             protocol: "http",
             ip: "",
             port: null,
@@ -1040,7 +1059,16 @@ export default class PeopleCounting extends Vue {
                 sourceIdView:
                     param.config && param.config.sourceId
                         ? param.config.sourceId
-                        : ""
+                        : "",
+
+                lines:
+                    param.config && param.config.lines
+                    ? param.config.lines
+                    : "",
+                linesView:
+                    param.config && param.config.lines
+                        ? this.sortLines(param.config.lines)
+                        : "",
             };
         }
     }
@@ -1094,6 +1122,9 @@ export default class PeopleCounting extends Vue {
                 break;
             case "frsId":
                 this.inputFormData.frsId = data.value;
+                break;
+            case "lines":
+                this.inputFormData.lines = data.value;
                 break;
         }
 
@@ -1446,7 +1477,6 @@ export default class PeopleCounting extends Vue {
 
         if (this.inputFormData.brand === EAddStep.hanwha) {
             this.addStep = EAddStep.hanwha;
-            this.selectSourceIdAndLocation(this.inputFormData.serverId);
             this.transition.prevStep = this.transition.step;
             this.transition.step = 3;
         }
@@ -1465,10 +1495,29 @@ export default class PeopleCounting extends Vue {
             this.transition.step = 5;
         }
 
+        if (this.inputFormData.brand === EAddStep.eocortex) {
+            this.addStep = EAddStep.eocortex;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 8;
+        }
+
+        if (this.inputFormData.brand === EAddStep.brickstream) {
+            this.addStep = EAddStep.brickstream;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 10;
+        }
+
+        if (this.inputFormData.brand === EAddStep.dahua) {
+            this.addStep = EAddStep.dahua;
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 12;
+        }
+
         await this.initSelectItemFRSServer();
         await this.initSelectItemSite();
         await this.selectAreaId(this.inputFormData.siteId);
         await this.selectGroupDeviceId(this.inputFormData.areaId);
+        this.initSelect();
 
         this.inputFormData.stepType = stepType;
         this.inputFormData.groupIds = JSON.parse(
@@ -1520,11 +1569,13 @@ export default class PeopleCounting extends Vue {
 
     async pageToAddByHanwha() {
         this.clearInputData();
-        await this.initSelectItemSite();
         this.addStep = EAddStep.hanwha;
         this.inputFormData.stepType = EPageStep.add;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
+        await this.initSelectItemSite();
+        this.initSelect();
+
     }
 
     async pageToAddByiSapFRS() {
@@ -1549,33 +1600,35 @@ export default class PeopleCounting extends Vue {
     }
 
     async pageToAddByEocortex() {
-        console.log("pageToAddByEocortex ~ ");
         this.clearInputData();
-        await this.initSelectItemSite();
         this.addStep = EAddStep.eocortex;
         this.inputFormData.stepType = EPageStep.add;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 8;
+        await this.initSelectItemSite();
+        this.initSelect();
+
     }
 
     async pageToAddByBrickstream() {
-        console.log("pageToAddByBrickstream ~ ");
         this.clearInputData();
-        await this.initSelectItemSite();
         this.addStep = EAddStep.brickstream;
         this.inputFormData.stepType = EPageStep.add;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 10;
+        await this.initSelectItemSite();
+        this.initSelect();
+
     }
 
     async pageToAddByDahua() {
-        console.log("pageToAddByDahua ~ ");
         this.clearInputData();
-        await this.initSelectItemSite();
         this.addStep = EAddStep.dahua;
         this.inputFormData.stepType = EPageStep.add;
         this.transition.prevStep = this.transition.step;
         this.transition.step = 12;
+        await this.initSelectItemSite();
+        this.initSelect();
     }
 
     pageStepBackward() {
@@ -1656,7 +1709,7 @@ export default class PeopleCounting extends Vue {
             ip: data.ip,
             port: data.port,
             account: data.account,
-            password: data.password
+            password: data.password,
         };
 
         let tempLine = [];
@@ -1673,23 +1726,53 @@ export default class PeopleCounting extends Vue {
                 break;
         }
 
-        if (this.inputFormData.stepType === EPageStep.add) {
-            const datas: any = [
-                {
-                    customId: data.customId,
-                    name: data.name,
-                    brand: EAddStep.hanwha,
-                    model: data.model,
-                    areaId: data.areaId,
-                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                    config: configObject,
-                    lines: tempLine
-                }
-            ];
+        let datas: {
+            customId?: string,
+            objectId?: string,
+            name: string,
+            brand: string,
+            model: string,
+            areaId: string,
+            groupIds: string[],
+            config: object,
+        } = {
+            name: data.name,
+            areaId: data.areaId,
+            groupIds: data.groupIds !== undefined ? data.groupIds : [],
+            brand: '',
+            model: '',
+            config: configObject,
+        };
 
+
+        if (!this.inputFormData.objectId) {
+            datas.customId = data.customId;
+            switch (this.addStep) {
+                case EAddStep.hanwha:
+                    configObject.lines = tempLine;
+                    datas.brand = EAddStep.hanwha;
+                    datas.model = data.model;
+                    break;
+                case EAddStep.brickstream:
+                    configObject.lines = tempLine;
+                    datas.brand = EAddStep.brickstream;
+                    datas.model = data.model;
+                    break;
+                case EAddStep.dahua:
+                    datas.brand = EAddStep.dahua;
+                    datas.model = data.model;
+                    break;
+                case EAddStep.eocortex:
+                    datas.brand = EAddStep.eocortex;
+                    datas.model = data.model;
+                    break;
+            }
             const addParam = {
                 datas
             };
+
+            // console.log(' ~ ', addParam)
+            // return false;
 
             Loading.show();
             await this.$server
@@ -1714,21 +1797,29 @@ export default class PeopleCounting extends Vue {
                         this._("w_VSPeopleCounting_ADDFailed")
                     );
                 });
-        }
 
-        if (this.inputFormData.stepType === EPageStep.edit) {
-            const datas: any = [
-                {
-                    objectId: data.objectId,
-                    name: data.name,
-                    brand: EAddStep.hanwha,
-                    model: data.model,
-                    areaId: data.areaId,
-                    groupIds: data.groupIds !== undefined ? data.groupIds : [],
-                    config: configObject,
-                    lines: tempLine
+        } else if (this.inputFormData.objectId) {
+                datas.objectId = this.inputFormData.objectId;
+                switch (this.inputFormData.model) {
+                    case EAddStep.hanwha:
+                        configObject.lines = tempLine;
+                        datas.brand = EAddStep.hanwha;
+                        datas.model = data.model;
+                        break;
+                    case EAddStep.brickstream:
+                        configObject.lines = tempLine;
+                        datas.brand = EAddStep.brickstream;
+                        datas.model = data.model;
+                        break;
+                    case EAddStep.dahua:
+                        datas.brand = EAddStep.dahua;
+                        datas.model = data.model;
+                        break;
+                    case EAddStep.eocortex:
+                        datas.brand = EAddStep.eocortex;
+                        datas.model = data.model;
+                        break;
                 }
-            ];
 
             const editParam = {
                 datas
@@ -1758,7 +1849,7 @@ export default class PeopleCounting extends Vue {
                     );
                 });
         }
-    }
+        }
 
     async saveAddOrEditiSap(data) {
         if (this.addStep === EAddStep.frs) {
@@ -2052,6 +2143,27 @@ export default class PeopleCounting extends Vue {
         return "";
     }
 
+    sortLines(data) {
+        let result: string = '';
+
+        if (data.config.lines != undefined){
+            if (data.config.lines.length === 2) {
+                result = '1+2';
+            } else if (data.config.lines.length === 1) {
+                if (data.config.lines[0] === 1) {
+                    result = '1';
+                } else {
+                    result = '2'
+                }
+            } else  {
+                result = '0';
+            }
+        } else {
+            result = '0';
+        }
+        return result;
+    }
+
     ITableList() {
         return `
             interface {
@@ -2137,9 +2249,7 @@ export default class PeopleCounting extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Model")}
                  */
-                model: ${toEnumInterface({
-                    xnd6020r: "xnd6020r"
-                })};
+                model: ${toEnumInterface((this.modelSelectItem as any), false)};
 
 
                 /**
@@ -2184,7 +2294,10 @@ export default class PeopleCounting extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Camera_lines")}
-                 */
+                 * @uiHidden - ${
+                        (this.addStep === EAddStep.eocortex || this.addStep === EAddStep.dahua) ? "true" : "false"
+                    }
+                 */                 */
                 lines: ${toEnumInterface({
                     "1": "1",
                     "2": "2",
@@ -2268,6 +2381,17 @@ export default class PeopleCounting extends Vue {
                  * @uiType - iv-form-label
                  */
                 port?: number;
+
+
+
+                /**
+                 * @uiLabel - ${this._("w_Camera_lines")}
+                 * @uiType - iv-form-label
+                 * @uiHidden - ${
+                        (this.addStep === EAddStep.eocortex || this.addStep === EAddStep.dahua) ? "true" : "false"
+                    }
+                 */
+                linesView: string;
 
 
                 /**
