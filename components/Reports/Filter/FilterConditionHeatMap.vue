@@ -252,38 +252,38 @@ export class FilterConditionHeatMap extends Vue {
                 "w_thisMonth"
             )} ( ${Datetime.ThisMonthStartDate()} ~ ${Datetime.ThisMonthEndDate()} )`,
              lastMonth: `${this._("w_lastMonth")} ( ${Datetime.DateTime2String(
-                Datetime.LastMonthStartDate(new Date()),
+                Datetime.LastMonthStart(new Date()),
                 "YYYY/MM/DD"
             )} ~ ${Datetime.DateTime2String(
-                Datetime.LastMonthEndDate(new Date()),
+                Datetime.LastMonthEnd(new Date()),
                 "YYYY/MM/DD"
             )} )`,
             q1: `${this._("w_q1")} ( ${Datetime.DateTime2String(
-                Datetime.Q1StartDate(new Date()),
+                Datetime.Q1Start(new Date()),
                 "YYYY/MM/DD"
             )} ~ ${Datetime.DateTime2String(
-                Datetime.Q1EndDate(new Date()),
+                Datetime.Q1End(new Date()),
                 "YYYY/MM/DD"
             )} )`,
             q2: `${this._("w_q2")} ( ${Datetime.DateTime2String(
-                Datetime.Q2StartDate(new Date()),
+                Datetime.Q2Start(new Date()),
                 "YYYY/MM/DD"
             )} ~ ${Datetime.DateTime2String(
-                Datetime.Q2EndDate(new Date()),
+                Datetime.Q2End(new Date()),
                 "YYYY/MM/DD"
             )} )`,
             q3: `${this._("w_q3")} ( ${Datetime.DateTime2String(
-                Datetime.Q3StartDate(new Date()),
+                Datetime.Q3Start(new Date()),
                 "YYYY/MM/DD"
             )} ~ ${Datetime.DateTime2String(
-                Datetime.Q3EndDate(new Date()),
+                Datetime.Q3End(new Date()),
                 "YYYY/MM/DD"
             )} )`,
             q4: `${this._("w_q4")} ( ${Datetime.DateTime2String(
-                Datetime.Q4StartDate(new Date()),
+                Datetime.Q4Start(new Date()),
                 "YYYY/MM/DD"
             )} ~ ${Datetime.DateTime2String(
-                Datetime.Q4EndDate(new Date()),
+                Datetime.Q4End(new Date()),
                 "YYYY/MM/DD"
             )} )`,
             thisYear: `${this._("w_thisYear")} ( ${Datetime.DateTime2String(
@@ -569,32 +569,32 @@ export class FilterConditionHeatMap extends Vue {
                     designationPeriod = EDesignationPeriod.thisMonth;
                     break;
                 case "lastMonth":
-                  doSubmitParam.startDate = Datetime.LastMonthStartDate(new Date());
-                    doSubmitParam.endDate = Datetime.LastMonthEndDate(new Date());
+                  doSubmitParam.startDate = Datetime.LastMonthStart(new Date());
+                    doSubmitParam.endDate = Datetime.LastMonthEnd(new Date());
                     doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.lastMonth;
                     break;
                 case "q1":
-                    doSubmitParam.startDate = Datetime.Q1StartDate(new Date());
-                    doSubmitParam.endDate = Datetime.Q1EndDate(new Date());
+                    doSubmitParam.startDate = Datetime.Q1Start(new Date());
+                    doSubmitParam.endDate = Datetime.Q1End(new Date());
                     doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.q1;
                     break;
                 case "q2":
-                    doSubmitParam.startDate = Datetime.Q2StartDate(new Date());
-                    doSubmitParam.endDate = Datetime.Q2EndDate(new Date());
+                    doSubmitParam.startDate = Datetime.Q2Start(new Date());
+                    doSubmitParam.endDate = Datetime.Q2End(new Date());
                     doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.q2;
                     break;
                 case "q3":
-                    doSubmitParam.startDate = Datetime.Q3StartDate(new Date());
-                    doSubmitParam.endDate = Datetime.Q3EndDate(new Date());
+                    doSubmitParam.startDate = Datetime.Q3Start(new Date());
+                    doSubmitParam.endDate = Datetime.Q3End(new Date());
                     doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.q3;
                     break;
                 case "q4":
-                    doSubmitParam.startDate = Datetime.Q4StartDate(new Date());
-                    doSubmitParam.endDate = Datetime.Q4EndDate(new Date());
+                    doSubmitParam.startDate = Datetime.Q4Start(new Date());
+                    doSubmitParam.endDate = Datetime.Q4End(new Date());
                     doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.q4;
                     break;
