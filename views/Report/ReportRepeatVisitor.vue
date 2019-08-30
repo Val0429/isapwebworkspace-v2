@@ -68,12 +68,14 @@
             </highcharts-repeat-visitor>
 
             <!-- Ben -->
-            <!--            <vistor-details-table-->
-            <!--                :thresholdDetailTableContent="rData"-->
-            <!--                :dayXSiteX="rDayXxSiteX"-->
-            <!--                ref="reportTable"-->
-            <!--            >-->
-            <!--            </vistor-details-table>-->
+            <vistor-details-table
+                :thresholdDetailTableContent="rData"
+                :dayXSiteX="rDayXxSiteX"
+                :filterData="filterData"
+                ref="reportTable"
+            >
+
+            </vistor-details-table>
 
         </iv-card>
 
