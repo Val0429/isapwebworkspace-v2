@@ -39,13 +39,14 @@
                     key="tableDeatil"
                     :label="_('m_Persons_Person_Detail')"
                     >
-                    
+                    <template #toolbox>
+                        <ivc-toolbox-goback @click="step = 1" />
+                    </template>
                     <iv-table
                         ref="tableDeatil"
                         :interface="basicData()"
                         :value="personListData"
                         >
-                        {{ this.$refs.table.pid }}
                     </iv-table>
                 </iv-auto-card>
                 <!-- <ivc-person-list-detail
