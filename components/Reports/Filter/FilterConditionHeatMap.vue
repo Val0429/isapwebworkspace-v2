@@ -236,7 +236,10 @@ export class FilterConditionHeatMap extends Vue {
             today: `${this._("w_Today")} ( ${Datetime.DateTime2String(
                 new Date(),
                 Datetime.FormatDate
-            )} ~ ${Datetime.DateTime2String(new Date(), Datetime.FormatDate)} )`,
+            )} ~ ${Datetime.DateTime2String(
+                new Date(),
+                Datetime.FormatDate
+            )} )`,
             yesterday: `${this._("w_Yesterday")} ( ${Datetime.DateTime2String(
                 Datetime.DatePlus(new Date(), -1),
                 Datetime.FormatDate
@@ -247,7 +250,10 @@ export class FilterConditionHeatMap extends Vue {
             last7days: `${this._("w_last7days")} ( ${Datetime.DateTime2String(
                 Datetime.DatePlus(new Date(), -6),
                 Datetime.FormatDate
-            )} ~ ${Datetime.DateTime2String(new Date(), Datetime.FormatDate)} )`,
+            )} ~ ${Datetime.DateTime2String(
+                new Date(),
+                Datetime.FormatDate
+            )} )`,
             thisWeek: `${this._("w_thisWeek")} ( ${Datetime.DateTime2String(
                 Datetime.WeekStart(new Date()),
                 Datetime.FormatDate
@@ -255,9 +261,13 @@ export class FilterConditionHeatMap extends Vue {
                 Datetime.WeekEnd(new Date()),
                 Datetime.FormatDate
             )} )`,
-            lastWeek: `${this._(
-                "w_lastWeek"
-            )} ( ${Datetime.LastWeekStartDate()} ~ ${Datetime.LastWeekEndDate()} )`,
+            lastWeek: `${this._("w_lastWeek")} ( ${Datetime.DateTime2String(
+                Datetime.WeekPrevSunday(new Date()),
+                Datetime.FormatDate
+            )} ~ ${Datetime.DateTime2String(
+                Datetime.WeekPrevSaturday(new Date()),
+                Datetime.FormatDate
+            )} )`,
             thisMonth: `${this._("w_thisMonth")} ( ${Datetime.DateTime2String(
                 Datetime.MonthStart(new Date()),
                 Datetime.FormatDate
@@ -492,14 +502,8 @@ export class FilterConditionHeatMap extends Vue {
 
             if (
                 Datetime.CheckTheSameDate(
-                    Datetime.DateTime2String(
-                        this.inputFormData.startDate,
-                        Datetime.FormatCheckDate
-                    ),
-                    Datetime.DateTime2String(
-                        this.inputFormData.endDate,
-                        Datetime.FormatCheckDate
-                    )
+                    this.inputFormData.startDate,
+                    this.inputFormData.endDate
                 )
             ) {
                 doSubmitParam.startDate = Datetime.DateStart(
@@ -547,11 +551,11 @@ export class FilterConditionHeatMap extends Vue {
                     designationPeriod = EDesignationPeriod.thisWeek;
                     break;
                 case "lastWeek":
-                    doSubmitParam.startDate = Datetime.DateStart(
-                        new Date(Datetime.LastWeekStartDate())
+                    doSubmitParam.startDate = Datetime.WeekPrevSunday(
+                        new Date()
                     );
-                    doSubmitParam.endDate = Datetime.DateStart(
-                        new Date(Datetime.LastWeekEndDate())
+                    doSubmitParam.endDate = Datetime.WeekPrevSaturday(
+                        new Date()
                     );
                     doSubmitParam.type = ETimeMode.day;
                     designationPeriod = EDesignationPeriod.lastWeek;

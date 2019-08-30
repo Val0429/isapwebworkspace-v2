@@ -957,6 +957,7 @@ export default class LangObject {
 
     // Report VIP Tracking
     w_ReportVipTrackin_VipTrackingChart = 'VIP & Black List Chart';
+    w_ReportVipTrackin_VipTrackingDetail = 'VIP & Black Detail List';
 
     // Report Repeat Visitor
     w_ReportRepeatVisitor_NumberOfVisit = 'Number of Visit ';

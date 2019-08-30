@@ -25,9 +25,9 @@
 
         <b-modal
             v-model="modalShow"
-            hide-header
             hide-footer
-            size="lg"
+            size="xl"
+            :title="_('w_ReportVipTrackin_VipTrackingDetail')"
         >
             <table
                 ref="reportTable"
@@ -70,6 +70,16 @@
                     v-model="vipTrackingDetail.paging.currentPage"
                 />
             </div>
+
+            <hr>
+
+            <b-button
+                class="float-right"
+                variant="secondary"
+                type="button"
+                @click="modalShow = !modalShow"
+            >{{ _('w_Back') }}
+            </b-button>
 
         </b-modal>
 

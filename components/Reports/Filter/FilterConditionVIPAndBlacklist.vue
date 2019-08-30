@@ -257,9 +257,13 @@ export class FilterConditionVIPAndBlacklist extends Vue {
                 Datetime.WeekEnd(new Date()),
                 Datetime.FormatDate
             )} )`,
-            lastWeek: `${this._(
-                "w_lastWeek"
-            )} ( ${Datetime.LastWeekStartDate()} ~ ${Datetime.LastWeekEndDate()} )`,
+            lastWeek: `${this._("w_lastWeek")} ( ${Datetime.DateTime2String(
+                Datetime.WeekPrevSunday(new Date()),
+                Datetime.FormatDate
+            )} ~ ${Datetime.DateTime2String(
+                Datetime.WeekPrevSaturday(new Date()),
+                Datetime.FormatDate
+            )} )`,
             thisMonth: `${this._("w_thisMonth")} ( ${Datetime.DateTime2String(
                 Datetime.MonthStart(new Date()),
                 Datetime.FormatDate
@@ -470,14 +474,8 @@ export class FilterConditionVIPAndBlacklist extends Vue {
 
             if (
                 Datetime.CheckTheSameDate(
-                    Datetime.DateTime2String(
-                        this.inputFormData.startDate,
-                        Datetime.FormatCheckDate
-                    ),
-                    Datetime.DateTime2String(
-                        this.inputFormData.endDate,
-                        Datetime.FormatCheckDate
-                    )
+                    this.inputFormData.startDate,
+                    this.inputFormData.endDate
                 )
             ) {
                 doSubmitParam.startDate = Datetime.DateStart(
@@ -519,11 +517,11 @@ export class FilterConditionVIPAndBlacklist extends Vue {
                     designationPeriod = EDesignationPeriod.thisWeek;
                     break;
                 case "lastWeek":
-                    doSubmitParam.startDate = Datetime.DateStart(
-                        new Date(Datetime.LastWeekStartDate())
+                    doSubmitParam.startDate = Datetime.WeekPrevSunday(
+                        new Date()
                     );
-                    doSubmitParam.endDate = Datetime.DateStart(
-                        new Date(Datetime.LastWeekEndDate())
+                    doSubmitParam.endDate = Datetime.WeekPrevSaturday(
+                        new Date()
                     );
                     designationPeriod = EDesignationPeriod.lastWeek;
                     break;

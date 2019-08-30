@@ -411,6 +411,14 @@ class Datetime {
         return this.DateStart(new Date(date.setDate(diff)));
     }
 
+    WeekPrevSaturday(value: Date): Date {
+        let date = new Date(value.getTime());
+        let day = date.getDay();
+        let diff = date.getDate() - day - 1;
+        return this.DateStart(new Date(date.setDate(diff)));
+    }
+
+
     WeekThisSunday(value: Date): Date {
         let date = new Date(value.getTime());
         let day = date.getDay();
@@ -511,8 +519,8 @@ class Datetime {
     }
 
     // 檢查日期的開始和結束時間是否為同一天
-    CheckTheSameDate(startDate: string, endDate: string): boolean {
-        return Date.parse(endDate) === Date.parse(startDate);
+    CheckTheSameDate(startDate: Date, endDate: Date): boolean {
+        return this.DateStart(endDate).getTime() === this.DateStart(startDate).getTime();
     }
 
     // Excel Date to JS Date
