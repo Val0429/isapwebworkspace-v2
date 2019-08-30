@@ -1,7 +1,7 @@
 {
     "name": "workspace-master",
-    "version": "1.0.0",
-    "description": "Workspace Master",
+    "version": "1.00.01",
+    "description": "ISap",
     "scripts": {
         "start": "npm run start --prefix ../",
         "build": "npm run build --prefix ../",

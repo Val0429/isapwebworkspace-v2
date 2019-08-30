@@ -1,9 +1,13 @@
 <template>
     <CoreUIBase>
         <template #header>
-            <div v-if="$user && $user.user" class="container-fluid role">
+            <div
+                v-if="$user && $user.user"
+                class="container-fluid role"
+            >
                 {{ $user.user.username }}
                 <i class="fa fa-user-circle" />
+                <b-button @click="logout">Logout</b-button>
             </div>
         </template>
 
@@ -22,7 +26,7 @@
                 <SidebarNavTitle :label="_('m_Navagation_Users')" />
                 <SidebarNavItem url="/users/user" />
                 <SidebarNavItem url="/users/userGroup" />
-                
+
                 <SidebarNavTitle :label="_('m_Navagation_Region')" />
                 <SidebarNavItem url="/region/site" />
 
@@ -33,18 +37,31 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { CoreUI as CoreUIBase,
-    SidebarHeader, SidebarNav, SidebarNavTitle, SidebarNavDivider, SidebarNavItem
-} from '@/../containers/CoreUI';
+import { Component, Vue } from "vue-property-decorator";
+import {
+    CoreUI as CoreUIBase,
+    SidebarHeader,
+    SidebarNav,
+    SidebarNavTitle,
+    SidebarNavDivider,
+    SidebarNavItem
+} from "@/../containers/CoreUI";
 
 @Component({
     components: {
         CoreUIBase,
-        SidebarHeader, SidebarNav, SidebarNavTitle, SidebarNavDivider, SidebarNavItem
+        SidebarHeader,
+        SidebarNav,
+        SidebarNavTitle,
+        SidebarNavDivider,
+        SidebarNavItem
     }
 })
 export default class CoreUI extends Vue {
+    private async logout() {
+        await this.$logout();
+        this.$goHome();
+    }
 }
 </script>
 
@@ -55,7 +72,10 @@ export default class CoreUI extends Vue {
     line-height: 20px;
     i {
         font-size: 20px;
-        padding-left: 2px;
+        padding: {
+            left: 2px;
+            right: 20px;
+        }
     }
 }
 </style>
