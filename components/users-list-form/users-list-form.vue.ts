@@ -23,11 +23,11 @@ export class UsersListForm extends Vue implements IFormQuick {
                     /*
                      * @uiLabel - ${this._('w_User') + this._('w_Name')}
                      */
-                    username: string;
+                    data['firstname']: string;
                     /*
                      * @uiLabel - ${this._('w_User') + this._('w_Group')}
                      */
-                    roles: string;
+                    data: string;
                     /*
                      * @uiLabel - ${this._('w_Email')}
                      */
@@ -65,16 +65,21 @@ export class UsersListForm extends Vue implements IFormQuick {
                     publicEmailAddress?: string;
                     /*
                      * @uiLabel - ${this._('w_User') + this._('w_Group')}
+                     * @uiHidden - ${type === EFormQuick.Add ? true : false}
                      * @uiDisabled - ${type === EFormQuick.Edit ? true : false}
+                     * @uiAttrs - { data: { "always-array": true} }
+                     */
+                    groups: ${
+                        toEnumInterface(this.groupList)
+                    };
+                    /*
+                     * @uiLabel - ${this._('w_User') + this._('w_Group')}
+                     * @uiHidden - ${type === EFormQuick.Edit ? true : false}
                      * @uiAttrs - { data: { "always-array": true} }
                      */
                     roles: ${
                         toEnumInterface(this.groupList)
                     };
-                    /**
-                     * @uiHidden - true
-                     */
-                    data: any;
 
                 }
                 `;
@@ -96,7 +101,9 @@ export class UsersListForm extends Vue implements IFormQuick {
     // }
 
     preEdit?(row: any) {
-        row = { ...row, roles: row.roles.map(v => v.name) };
+        // row = { ...row, roles: row.roles.map(v => v.name) };
+        row = { ...row.data, groups: row.data.groups.map(v => v.name) }
+
         return row;
     }
     // postEdit?(row: any) {
@@ -113,18 +120,12 @@ export class UsersListForm extends Vue implements IFormQuick {
     // }
 
     private groupList: any = {};
-    private updateData(data) {
-        console.log('data')
-        console.log(data)
-    }
     private async doMounted() {
         let data: any = await this.$server.R('/roles');
-        //this.groupList = {...data}
         this.groupList = data.reduce( (final, value) => {
             final[value] = value;
             return final;
         }, {});
-        console.log('grouplist', this.groupList);
     }
 }
 export default UsersListForm;

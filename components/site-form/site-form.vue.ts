@@ -67,7 +67,7 @@ export class SiteForm extends Vue implements IFormQuick {
                          * @uiLabel - ${this._('w_Image')}
                          * @uiType - ${type === EFormQuick.Edit ? 'iv-form-file' : ''}
                          */
-                        images?: any;                        
+                        picture?: any;                        
                     }
                 `;
         }
