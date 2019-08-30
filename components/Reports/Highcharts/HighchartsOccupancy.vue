@@ -660,7 +660,7 @@ export class HighchartsOccupancy extends Vue {
                 siteObjectId: site.objectId,
                 siteName: site.name,
                 date: tempDate,
-                dateString: Datetime.DateTime2String(tempDate, "YYYY/MM/DD"),
+                dateString: Datetime.DateTime2String(tempDate, Datetime.DateFormat),
                 occupancy: tempSeries[0].data[i]
             };
             tempCategories.push(

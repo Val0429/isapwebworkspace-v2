@@ -1329,11 +1329,11 @@ export default class ReportDwellTime extends Vue {
 
         title += `${this._("w_Title_StartDate")} ${Datetime.DateTime2String(
             this.filterData.startDate,
-            "YYYY/MM/DD"
+            Datetime.DateFormat
         )}. `;
         title += `${this._("w_Title_EndDate")} ${Datetime.DateTime2String(
             this.filterData.endDate,
-            "YYYY/MM/DD"
+            Datetime.DateFormat
         )}. `;
 
         if (this.filterData.tagIds.length === 1) {
@@ -1747,21 +1747,21 @@ export default class ReportDwellTime extends Vue {
                 let saleDateFormat = isOneDay
                     ? Datetime.DateTime2String(
                           new Date(saleRecord.date),
-                          "YYYY-MM-DD HH"
+                          `${Datetime.checkDateFormat} HH`
                       )
                     : Datetime.DateTime2String(
                           new Date(saleRecord.date),
-                          "YYYY-MM-DD"
+                          Datetime.checkDateFormat
                       );
                 for (let tempChartData of tempChartDatas) {
                     let tempDateFormat = isOneDay
                         ? Datetime.DateTime2String(
                               tempChartData.date,
-                              "YYYY-MM-DD HH"
+                              `${Datetime.checkDateFormat} HH`
                           )
                         : Datetime.DateTime2String(
                               tempChartData.date,
-                              "YYYY-MM-DD"
+                              Datetime.checkDateFormat
                           );
                     if (
                         saleDateFormat == tempDateFormat &&

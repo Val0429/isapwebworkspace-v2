@@ -322,7 +322,36 @@ export default class CampaignSetting extends Vue {
     }
 
     initYear() {
-        this.yearSelectItem = Datetime.FiveYearsIdText();
+        this.yearSelectItem = this.FiveYearsIdText();
+    }
+
+     // 以今年為基準，取得前後五年，2019 --> 2014-2024
+    FiveYearsIdText(): any {
+        let tempYearArray = [];
+
+        for (let i = 0; i < 6; i++) {
+            let year = new Date().getFullYear();
+
+            let tempYearReduce = {
+                id: (year - i).toString(),
+                text: (year - i).toString(),
+            };
+
+            let tempYearAdd = {
+                id: (year + i).toString(),
+                text: (year + i).toString(),
+            };
+
+            tempYearArray.push(tempYearAdd, tempYearReduce);
+        }
+
+        // 去掉重複的值
+        let resultYearArray = [...new Set(tempYearArray.map((item) => JSON.stringify(item)))].map((item) => JSON.parse(item));
+
+        // 排序陣列
+        resultYearArray = resultYearArray.sort((a, b) => a.id - b.id);
+
+        return resultYearArray;
     }
 
     selectedItem(data) {
@@ -595,7 +624,7 @@ export default class CampaignSetting extends Vue {
     }
 
     dateToYYYY_MM_DD(value) {
-        return Datetime.DateTime2String(new Date(value), "YYYY-MM-DD");
+        return Datetime.DateTime2String(new Date(value), Datetime.checkDateFormat);
     }
 
     ITableList() {

@@ -254,7 +254,10 @@ export class SiteView extends Vue {
     }
 
     showTime(data) {
-        return Datetime.DateTime2String(new Date(data), "YYYY-MM-DD");
+        return Datetime.DateTime2String(
+            new Date(data),
+            Datetime.checkDateFormat
+        );
     }
 
     googleMapMapping() {

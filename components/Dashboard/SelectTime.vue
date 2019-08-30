@@ -53,8 +53,11 @@ export class SelectTime extends Vue {
                     "w_Dashboard_Today"
                 )} ( ${Datetime.DateTime2String(
                     new Date(),
-                    "YYYY/MM/DD"
-                )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`
+                    Datetime.DateFormat
+                )} ~ ${Datetime.DateTime2String(
+                    new Date(),
+                    Datetime.DateFormat
+                )} )`
             },
             {
                 id: ETime.yesterday,
@@ -62,10 +65,10 @@ export class SelectTime extends Vue {
                     "w_Dashboard_Yesterday"
                 )} ( ${Datetime.DateTime2String(
                     Datetime.DatePlus(new Date(), -1),
-                    "YYYY/MM/DD"
+                    Datetime.DateFormat
                 )} ~ ${Datetime.DateTime2String(
                     Datetime.DatePlus(new Date(), -1),
-                    "YYYY/MM/DD"
+                    Datetime.DateFormat
                 )} )`
             },
             {
@@ -86,8 +89,11 @@ export class SelectTime extends Vue {
                     "w_Dashboard_Last14Day"
                 )} ( ${Datetime.DateTime2String(
                     Datetime.DatePlus(new Date(), -13),
-                    "YYYY/MM/DD"
-                )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`
+                    Datetime.DateFormat
+                )} ~ ${Datetime.DateTime2String(
+                    new Date(),
+                    Datetime.DateFormat
+                )} )`
             },
             {
                 id: ETime.last28day,
@@ -95,8 +101,11 @@ export class SelectTime extends Vue {
                     "w_Dashboard_Last28Day"
                 )} ( ${Datetime.DateTime2String(
                     Datetime.DatePlus(new Date(), -27),
-                    "YYYY/MM/DD"
-                )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`
+                    Datetime.DateFormat
+                )} ~ ${Datetime.DateTime2String(
+                    new Date(),
+                    Datetime.DateFormat
+                )} )`
             },
             {
                 id: ETime.last30day,
@@ -104,8 +113,11 @@ export class SelectTime extends Vue {
                     "w_Dashboard_Last30Day"
                 )} ( ${Datetime.DateTime2String(
                     Datetime.DatePlus(new Date(), -29),
-                    "YYYY/MM/DD"
-                )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`
+                    Datetime.DateFormat
+                )} ~ ${Datetime.DateTime2String(
+                    new Date(),
+                    Datetime.DateFormat
+                )} )`
             },
             {
                 id: ETime.last60day,
@@ -113,8 +125,11 @@ export class SelectTime extends Vue {
                     "w_Dashboard_Last60Day"
                 )} ( ${Datetime.DateTime2String(
                     Datetime.DatePlus(new Date(), -59),
-                    "YYYY/MM/DD"
-                )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`
+                    Datetime.DateFormat
+                )} ~ ${Datetime.DateTime2String(
+                    new Date(),
+                    Datetime.DateFormat
+                )} )`
             },
             {
                 id: ETime.last90day,
@@ -122,8 +137,11 @@ export class SelectTime extends Vue {
                     "w_Dashboard_Last90Day"
                 )} ( ${Datetime.DateTime2String(
                     Datetime.DatePlus(new Date(), -89),
-                    "YYYY/MM/DD"
-                )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`
+                    Datetime.DateFormat
+                )} ~ ${Datetime.DateTime2String(
+                    new Date(),
+                    Datetime.DateFormat
+                )} )`
             },
             {
                 id: ETime.last180day,
@@ -131,17 +149,20 @@ export class SelectTime extends Vue {
                     "w_Dashboard_Last180Day"
                 )} ( ${Datetime.DateTime2String(
                     Datetime.DatePlus(new Date(), -179),
-                    "YYYY/MM/DD"
-                )} ~ ${Datetime.DateTime2String(new Date(), "YYYY/MM/DD")} )`
+                    Datetime.DateFormat
+                )} ~ ${Datetime.DateTime2String(
+                    new Date(),
+                    Datetime.DateFormat
+                )} )`
             },
             {
                 id: ETime.thisYear,
                 text: `${this._("w_thisYear")} ( ${Datetime.DateTime2String(
                     Datetime.YearStart(new Date()),
-                    "YYYY/MM/DD"
+                    Datetime.DateFormat
                 )} ~ ${Datetime.DateTime2String(
                     Datetime.YearEnd(new Date()),
-                    "YYYY/MM/DD"
+                    Datetime.DateFormat
                 )} )`
             }
         ];

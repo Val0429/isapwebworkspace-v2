@@ -1300,8 +1300,8 @@ export default class ReportDemographic extends Vue {
 				title += `${this._('w_Title_Many_Site_Start')} ${this.filterData.siteIds.length} ${this._('w_Title_Many_Site_End')} `;
 			}
 
-			title += `${this._('w_Title_StartDate')} ${Datetime.DateTime2String(this.filterData.startDate, "YYYY/MM/DD")}. `;
-			title += `${this._('w_Title_EndDate')} ${Datetime.DateTime2String(this.filterData.endDate, "YYYY/MM/DD")}. `;
+			title += `${this._('w_Title_StartDate')} ${Datetime.DateTime2String(this.filterData.startDate, Datetime.DateFormat)}. `;
+			title += `${this._('w_Title_EndDate')} ${Datetime.DateTime2String(this.filterData.endDate, Datetime.DateFormat)}. `;
 
 			if (this.filterData.tagIds.length === 1) {
 				for (const tagId in this.tagSelectItem) {
@@ -2018,7 +2018,7 @@ export default class ReportDemographic extends Vue {
 			let [fileName, fileType, sheetName] = [
 				this._("w_Navigation_VideoSources_Demographic"),
 				fType,
-				Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
+				Datetime.DateTime2String(this.startDate, Datetime.checkDateFormat)
             ];
 			toExcel({th, data, fileName, fileType, sheetName});
 		}

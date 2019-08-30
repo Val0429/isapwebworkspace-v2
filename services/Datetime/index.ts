@@ -7,6 +7,9 @@ enum DatetimeFormat {
     newDateTime = 'YYYY/MM/DD HH:mm:ss',
     newDate = 'YYYY/MM/DD',
     newTime = 'HH:mm:ss',
+    checkDateTime = 'YYYY/MM/DD HH:mm:ss',
+    checkDate = 'YYYY-MM-DD',
+    checkTime = 'HH:mm:ss',
 }
 
 class Datetime {
@@ -43,6 +46,18 @@ class Datetime {
 
     get NewTimeFormat(): string {
         return DatetimeFormat.newTime;
+    }
+
+    get checkDateTimeFormat(): string {
+        return DatetimeFormat.checkDateTime;
+    }
+
+    get checkDateFormat(): string {
+        return DatetimeFormat.checkDate;
+    }
+
+    get checkTimeFormat(): string {
+        return DatetimeFormat.checkTime;
     }
 
     /**
@@ -539,35 +554,6 @@ class Datetime {
 
         const weekEndDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek - 1);
         return this.DateTime2String(weekEndDate, 'YYYY/MM/DD');
-    }
-
-    // 以今年為基準，取得前後五年，2019 --> 2014-2024
-    FiveYearsIdText(): any {
-        let tempYearArray = [];
-
-        for (let i = 0; i < 6; i++) {
-            let year = new Date().getFullYear();
-
-            let tempYearReduce = {
-                id: (year - i).toString(),
-                text: (year - i).toString(),
-            };
-
-            let tempYearAdd = {
-                id: (year + i).toString(),
-                text: (year + i).toString(),
-            };
-
-            tempYearArray.push(tempYearAdd, tempYearReduce);
-        }
-
-        // 去掉重複的值
-        let resultYearArray = [...new Set(tempYearArray.map((item) => JSON.stringify(item)))].map((item) => JSON.parse(item));
-
-        // 排序陣列
-        resultYearArray = resultYearArray.sort((a, b) => a.id - b.id);
-
-        return resultYearArray;
     }
 }
 
