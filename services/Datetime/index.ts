@@ -1,11 +1,15 @@
 import Utility from '../Utility';
 
 enum DatetimeFormat {
-    'default' = 'YYYY-MM-DD HH:mm:ss',
-}
-
-enum DateFormat {
-    'default' = 'YYYY-MM-DD',
+    'default' = 'YYYY/MM/DD HH:mm:ss',
+    date = 'YYYY/MM/DD',
+    time = 'HH:mm:ss',
+    newDateTime = 'YYYY/MM/DD HH:mm:ss',
+    newDate = 'YYYY/MM/DD',
+    newTime = 'HH:mm:ss',
+    checkDateTime = 'YYYY/MM/DD HH:mm:ss',
+    checkDate = 'YYYY-MM-DD',
+    checkTime = 'HH:mm:ss',
 }
 class Datetime {
     private _formats: string[] = ['dddd', 'ddd', 'DD', 'D', 'hh', 'h', 'HH', 'H', 'mm', 'm', 'MMMM', 'MMM', 'MM', 'M', 'ss', 's', 'A', 'a', 'YYYY', 'YY', 'ZZ', 'Z'];
@@ -16,6 +20,42 @@ class Datetime {
 
     get oneDayTimestamp() {
         return this._oneDayTimestamp;
+    }
+
+    get FormatDateTime(): string {
+        return DatetimeFormat.default;
+    }
+
+    get FormatDate(): string {
+        return DatetimeFormat.date;
+    }
+
+    get FormatTime(): string {
+        return DatetimeFormat.time;
+    }
+
+    get FormatNewDateTime(): string {
+        return DatetimeFormat.newDateTime;
+    }
+
+    get FormatNewDate(): string {
+        return DatetimeFormat.newDate;
+    }
+
+    get FormatNewTime(): string {
+        return DatetimeFormat.newTime;
+    }
+
+    get FormatCheckDateTime(): string {
+        return DatetimeFormat.checkDateTime;
+    }
+
+    get FormatCheckDate(): string {
+        return DatetimeFormat.checkDate;
+    }
+
+    get FormatCheckTime(): string {
+        return DatetimeFormat.checkTime;
     }
 
     /**
