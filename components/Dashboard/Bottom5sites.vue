@@ -180,7 +180,7 @@ import {EMode} from "@/components/Dashboard/models/EDashboard";
                     style: { color: "#fff" },
                     formatter: function() {
                         let self: any = this;
-                        return `${ self.point.series.name } : ${ self.y }`;
+                        return `${ self.key } <br> ${ self.point.series.name } : ${ self.y }`;
                     }
         }
             };

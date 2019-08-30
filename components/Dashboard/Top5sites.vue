@@ -181,7 +181,7 @@ export class Top5sites extends Vue {
                 style: { color: "#fff" },
                 formatter: function() {
                     let self: any = this;
-                    return `${ self.point.series.name } : ${ self.y }`;
+                    return `${ self.key } <br> ${ self.point.series.name } : ${ self.y }`;
                 }
             }
         };

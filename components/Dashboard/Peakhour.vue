@@ -79,7 +79,41 @@ export class Peakhour extends Vue {
 
     async initData() {
         // TODO: wait api to remove
-        this.initDevelopData();
+        // this.initDevelopData();
+
+        let tempData = {
+            "peakHours": [
+                {
+                    "site": {
+                        "objectId": "iVTCTzctbF",
+                        "name": "台北店"
+                    },
+                    "date": "2019-08-28T16:00:00.000Z",
+                    "peakHourDatas": [
+                        {
+                            "date": "2019-08-29T00:00:00.000Z",
+                            "level": 122
+                        },
+                        {
+                            "date": "2019-08-29T01:00:00.000Z",
+                            "level": 112
+                        },
+                        {
+                            "date": "2019-08-29T02:00:00.000Z",
+                            "level": 30
+                        },
+                        {
+                            "date": "2019-08-29T03:00:00.000Z",
+                            "level": 71
+                        }
+                    ]
+                }
+            ]
+        };
+
+
+
+        this.formatChartData(tempData.peakHours);
 
         // TODO: wait api
         // Loading.show();
@@ -87,7 +121,7 @@ export class Peakhour extends Vue {
         //     .C("/", timeParam)
         //     .then((response: any) => {
         //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             this.initCharts();
+        //             this.formatChartData();
         //         });
         //     })
         //     .catch((e: any) => {
@@ -238,6 +272,19 @@ export class Peakhour extends Vue {
         };
 
         this.chartItem.mount = true;
+    }
+
+    formatChartData(value: any) {
+        for (const data of value) {
+            for (const detail of data.peakHourDatas) {
+                let peakHour = {
+                    date: new Date(detail.date),
+                    value: detail.level
+                };
+                this.peakHourDatas.push(peakHour)
+            }
+        }
+        this.initCharts();
     }
 
     receiveSiteIds(siteIds: string[]) {
