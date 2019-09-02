@@ -553,7 +553,11 @@ export class HighchartsDwellTime extends Vue {
                                     // set value
                                     result += `${newValue.i18n.time}:${newValue.timeString}<br>`;
                                     result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime}<br>`;
+                                    result += `${newValue.i18n.maleCountPercent}: ${newValue.maleCountPercent} %<br>`;
+                                    result += `${newValue.i18n.femaleCountPercent}: ${newValue.femaleCountPercent} %<br>`;
                                     result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
+                                    result += `${newValue.i18n.transaction}: ${newValue.transaction}<br>`;
+                                    result += `${newValue.i18n.conversion}: ${newValue.conversion}<br>`;
                                 } catch (e) {
                                     console.log(e);
                                 }
@@ -938,6 +942,8 @@ export class HighchartsDwellTime extends Vue {
                                     result += `${newValue.i18n.startDate}: ${newValue.dateStartString}<br>`;
                                     result += `${newValue.i18n.endDate}: ${newValue.dateEndString}<br>`;
                                     result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime}<br>`;
+                                    result += `${newValue.i18n.maleCountPercent}: ${newValue.maleCountPercent} %<br>`;
+                                    result += `${newValue.i18n.femaleCountPercent}: ${newValue.femaleCountPercent} %<br>`;
                                     result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
                                     result += `${newValue.i18n.transaction}: ${newValue.transaction}<br>`;
                                     result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
@@ -950,6 +956,8 @@ export class HighchartsDwellTime extends Vue {
                                     result += `${newValue.i18n.temperatureMin}: ${newValue.temperatureMin}°C<br>`;
                                     result += `${newValue.i18n.temperatureMax}: ${newValue.temperatureMax}°C<br>`;
                                     result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime}<br>`;
+                                    result += `${newValue.i18n.maleCountPercent}: ${newValue.maleCountPercent} %<br>`;
+                                    result += `${newValue.i18n.femaleCountPercent}: ${newValue.femaleCountPercent} %<br>`;
                                     result += `${newValue.i18n.dwellTimeAVG}: ${newValue.dwellTimeAVG}<br>`;
                                     result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
                                     result += `${newValue.i18n.transaction}: ${newValue.transaction}<br>`;
@@ -1808,6 +1816,7 @@ export class HighchartsDwellTime extends Vue {
             temperatureMax: 0,
             weather: EWeather.none,
 
+            dwellTime: 0,
             ageRange: EAgeRange.none,
             dwellTimeRange: EDwellTimeRange.none,
             maleCount: 0,
@@ -1815,7 +1824,6 @@ export class HighchartsDwellTime extends Vue {
             revenue: 0,
             transaction: 0,
 
-            dwellTime: 0,
             conversion: 0,
             asp: 0,
             dwellTimeAVG: 0,
@@ -1856,8 +1864,6 @@ export class HighchartsDwellTime extends Vue {
     private anysislyChartValue(item: IChartDwellTimeData): IChartDwellTimeData {
         let value = JSON.parse(JSON.stringify(item));
         value.date = new Date(value.date);
-
-        value.dwellTime = value.maleCount + value.femaleCount;
 
         value.maleCountPercent = 0;
         value.femaleCountPercent = 0;
@@ -1949,7 +1955,9 @@ export class HighchartsDwellTime extends Vue {
             revenue: this._("w_ReportTraffic_TrafficRevenue"),
             transaction: this._("w_ReportTraffic_TrafficTransaction"),
             conversion: this._("w_ReportTraffic_TrafficConversion"),
-            asp: this._("w_ReportTraffic_TrafficASP")
+            asp: this._("w_ReportTraffic_TrafficASP"),
+            maleCountPercent: this._("w_Male"),
+            femaleCountPercent: this._("w_Female"),
         };
         return result;
     }

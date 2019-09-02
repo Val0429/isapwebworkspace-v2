@@ -93,6 +93,7 @@ interface IChartTrafficData extends IChart, IChartWeather, ITimeMode, IAreaMode 
 }
 
 interface IChartDwellTimeData extends IChart, IChartWeather, ITimeMode, IAreaMode {
+    dwellTime: number;
     ageRange: EAgeRange;
     dwellTimeRange: EDwellTimeRange;
     maleCount: number;
@@ -100,7 +101,6 @@ interface IChartDwellTimeData extends IChart, IChartWeather, ITimeMode, IAreaMod
     revenue: number;
     transaction: number;
 
-    dwellTime?: number;
     dwellTimeAVG?: number;
     maleCountPercent?: number;
     femaleCountPercent?: number;

@@ -323,12 +323,6 @@ export class AnalysisFilterTraffic extends Vue {
                 deviceId?: ${toEnumInterface(this.deviceSelectItem as any, false)};
 
 
-                /**
-                 * @uiColumnGroup - analysis
-                 * @uiHidden - true
-                 */
-                submitButton?: any;
-
 
                 /**
                  * @uiLabel - ${this._("w_countSelect")}
@@ -361,6 +355,12 @@ export class AnalysisFilterTraffic extends Vue {
             }
         `;
     }
+
+    // /**
+    //  * @uiColumnGroup - analysis
+    //  * @uiHidden - true
+    //  */
+    // submitButton?: any;
 }
 
 export default AnalysisFilterTraffic;
