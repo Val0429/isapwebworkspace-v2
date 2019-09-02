@@ -120,6 +120,13 @@ class ReportService {
         if (prevValue == null) {
             return 0;
         }
+
+        if (isNaN(value)) {
+            return 0;
+        }
+        if (isNaN(prevValue)) {
+            return 0;
+        }
         if (value == 0) {
             return 0;
         }

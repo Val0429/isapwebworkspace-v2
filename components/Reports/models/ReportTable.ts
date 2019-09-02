@@ -15,19 +15,23 @@ class ReportTableData {
         //row total
         for (let item of this._body) {
             //item1 item2
-            item.item1Total = this.showRowTotal(item.item1);
-            item.item2Total = this.showRowTotal(item.item2);
-            for (let subItem of item.item1) {
-                subItem.sign = ESign.none;
-                if (subItem.valueRatio != 0) {
-                    subItem.sign = subItem.valueRatio > 0 ? ESign.positive : ESign.negative;
+            if (item.item1) {
+                item.item1Total = this.showRowTotal(item.item1);
+
+                for (let subItem of item.item1) {
+                    subItem.sign = ESign.none;
+                    if (subItem.valueRatio != 0) {
+                        subItem.sign = subItem.valueRatio > 0 ? ESign.positive : ESign.negative;
+                    }
                 }
             }
-
-            for (let subItem of item.item2) {
-                subItem.sign = ESign.none;
-                if (subItem.valueRatio != 0) {
-                    subItem.sign = subItem.valueRatio > 0 ? ESign.positive : ESign.negative;
+            if (item.item2) {
+                item.item2Total = this.showRowTotal(item.item2);
+                for (let subItem of item.item2) {
+                    subItem.sign = ESign.none;
+                    if (subItem.valueRatio != 0) {
+                        subItem.sign = subItem.valueRatio > 0 ? ESign.positive : ESign.negative;
+                    }
                 }
             }
 
@@ -65,7 +69,6 @@ class ReportTableData {
                     item1Total: this.showColTotal(this._body, index, 'item1'),
                     item2Total: this.showColTotal(this._body, index, 'item2'),
                 };
-
                 this._foot.push(total);
             }
         }
@@ -124,6 +127,9 @@ class ReportTableData {
             value: 0,
             valueRatio: 0,
         };
+        if (!data[0][key]) {
+            return total;
+        }
         total.value = data.reduce((ty, u) => ty + u[key][index].value, 0);
         total.valueRatio = data.reduce((ty, u) => ty + u[key][index].valueRatio, 0);
         if (total.valueRatio != 0) {

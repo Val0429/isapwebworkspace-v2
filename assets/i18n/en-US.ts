@@ -121,6 +121,8 @@ export default class LangObject {
     w_Female = 'Female';
     w_MaleTotal = 'MaleTotal';
     w_FemaleTotal = 'Female Total';
+    w_DwellTime = 'Dwell Time';
+    w_DwellTimeTotal = 'Dwell Time Total';
     w_Regions = 'Region(s)';
     w_PreviousPassword = 'Previous Password';
     w_CurrentPassword = 'Current Password';
