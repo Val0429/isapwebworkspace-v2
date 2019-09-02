@@ -127,9 +127,12 @@ class ReportTableData {
             value: 0,
             valueRatio: 0,
         };
-        if (!data[0][key]) {
-            return total;
+        for (let datum of data) {
+            if (!datum[key] || datum[key].length == 0) {
+                return total;
+            }
         }
+
         total.value = data.reduce((ty, u) => ty + u[key][index].value, 0);
         total.valueRatio = data.reduce((ty, u) => ty + u[key][index].valueRatio, 0);
         if (total.valueRatio != 0) {
