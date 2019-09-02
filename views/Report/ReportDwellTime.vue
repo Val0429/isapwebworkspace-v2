@@ -1302,7 +1302,7 @@ export default class ReportDwellTime extends Vue {
         this.endDate = new Date(this.filterData.endDate);
         this.timeMode = this.filterData.type;
         this.areaMode = EAreaMode.all;
-        this.sortOutChartData(this.responseData.summaryRangeDatas);
+        this.sortOutChartData(this.responseData.summaryDatas);
 
         //Ben
         this.initDashboardData();
@@ -1384,78 +1384,84 @@ export default class ReportDwellTime extends Vue {
             for (let i = 0; i < 24; i++) {
                 let tempDate = Datetime.DateStart(this.filterData.startDate);
                 tempDate.setHours(i);
-                let tempDateChartDataLower20 = {
+
+                let tempDateChartDataLower5 = {
                     date: tempDate,
                     siteObjectId: "",
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
-                    ageRange: EAgeRange.lower20,
+                    ageRange: EAgeRange.none,
                     dwellTimeRange: EDwellTimeRange.lower5,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
                     transaction: 0
                 };
-                let tempDateChartDataM21_30 = {
+
+                let tempDateChartDataM5_15 = {
                     date: tempDate,
                     siteObjectId: "",
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
-                    ageRange: EAgeRange.m21_30,
+                    ageRange: EAgeRange.none,
                     dwellTimeRange: EDwellTimeRange.m5_15,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
                     transaction: 0
                 };
-                let tempDateChartDataM31_40 = {
+
+                let tempDateChartDataM15_30 = {
                     date: tempDate,
                     siteObjectId: "",
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
-                    ageRange: EAgeRange.m31_40,
+                    ageRange: EAgeRange.none,
                     dwellTimeRange: EDwellTimeRange.m15_30,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
                     transaction: 0
                 };
-                let tempDateChartDataM41_50 = {
+
+                let tempDateChartDataM30_60 = {
                     date: tempDate,
                     siteObjectId: "",
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
-                    ageRange: EAgeRange.m41_50,
+                    ageRange: EAgeRange.none,
                     dwellTimeRange: EDwellTimeRange.m30_60,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
                     transaction: 0
                 };
-                let tempDateChartDataM51_60 = {
+
+                let tempDateChartDataM60_120 = {
                     date: tempDate,
                     siteObjectId: "",
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
-                    ageRange: EAgeRange.m51_60,
+                    ageRange: EAgeRange.none,
                     dwellTimeRange: EDwellTimeRange.m60_120,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
                     transaction: 0
                 };
-                let tempDateChartDataUpper61 = {
+
+                let tempDateChartDataUpper120 = {
                     date: tempDate,
                     siteObjectId: "",
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
-                    ageRange: EAgeRange.upper61,
+                    ageRange: EAgeRange.none,
                     dwellTimeRange: EDwellTimeRange.upper120,
                     maleCount: 0,
                     femaleCount: 0,
@@ -1464,63 +1470,300 @@ export default class ReportDwellTime extends Vue {
                 };
 
                 for (let siteId of this.filterData.siteIds) {
-                    let tempSiteChartDataLower20 = JSON.parse(
-                        JSON.stringify(tempDateChartDataLower20)
-                    );
-                    tempSiteChartDataLower20.date = new Date(
-                        tempSiteChartDataLower20.date
-                    );
-                    tempSiteChartDataLower20.siteObjectId = siteId;
-
-                    let tempSiteChartDataM21_30 = JSON.parse(
-                        JSON.stringify(tempDateChartDataM21_30)
-                    );
-                    tempSiteChartDataM21_30.date = new Date(
-                        tempSiteChartDataM21_30.date
-                    );
-                    tempSiteChartDataM21_30.siteObjectId = siteId;
-
-                    let tempSiteChartDataM31_40 = JSON.parse(
-                        JSON.stringify(tempDateChartDataM31_40)
-                    );
-                    tempSiteChartDataM31_40.date = new Date(
-                        tempSiteChartDataM31_40.date
-                    );
-                    tempSiteChartDataM31_40.siteObjectId = siteId;
-
-                    let tempSiteChartDataM41_50 = JSON.parse(
-                        JSON.stringify(tempDateChartDataM41_50)
-                    );
-                    tempSiteChartDataM41_50.date = new Date(
-                        tempSiteChartDataM41_50.date
-                    );
-                    tempSiteChartDataM41_50.siteObjectId = siteId;
-
-                    let tempSiteChartDataM51_60 = JSON.parse(
-                        JSON.stringify(tempDateChartDataM51_60)
-                    );
-                    tempSiteChartDataM51_60.date = new Date(
-                        tempSiteChartDataM51_60.date
-                    );
-                    tempSiteChartDataM51_60.siteObjectId = siteId;
-
-                    let tempSiteChartDataUpper61 = JSON.parse(
-                        JSON.stringify(tempDateChartDataUpper61)
-                    );
-                    tempSiteChartDataUpper61.date = new Date(
-                        tempSiteChartDataUpper61.date
-                    );
-                    tempSiteChartDataUpper61.siteObjectId = siteId;
-
-                    tempChartDatas.push(
-                        tempSiteChartDataLower20,
-                        tempSiteChartDataM21_30,
-                        tempSiteChartDataM31_40,
-                        tempSiteChartDataM41_50,
-                        tempSiteChartDataM51_60,
-                        tempSiteChartDataUpper61
-                    );
+                    for (let j = 0; j < 6; j++) {
+                        switch (j) {
+                            case 0:
+                                for (let k = 0; k < 6; k++) {
+                                    switch (k) {
+                                        case 0:
+                                            let tempLower20 = JSON.parse(JSON.stringify(tempDateChartDataLower5));
+                                            tempLower20.ageRange = EAgeRange.lower20;
+                                            tempLower20.date = new Date(tempLower20.date);
+                                            tempLower20.siteObjectId = siteId;
+                                            tempChartDatas.push(tempLower20);
+                                            break;
+                                        case 1:
+                                            let tempM21_30 = JSON.parse(JSON.stringify(tempDateChartDataLower5));
+                                            tempM21_30.ageRange = EAgeRange.m21_30;
+                                            tempM21_30.date = new Date(tempM21_30.date);
+                                            tempM21_30.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM21_30);
+                                            break;
+                                        case 2:
+                                            let tempM31_40 = JSON.parse(JSON.stringify(tempDateChartDataLower5));
+                                            tempM31_40.ageRange = EAgeRange.m31_40;
+                                            tempM31_40.date = new Date(tempM31_40.date);
+                                            tempM31_40.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM31_40);
+                                            break;
+                                        case 3:
+                                            let tempM41_50 = JSON.parse(JSON.stringify(tempDateChartDataLower5));
+                                            tempM41_50.ageRange = EAgeRange.m41_50;
+                                            tempM41_50.date = new Date(tempM41_50.date);
+                                            tempM41_50.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM41_50);
+                                            break;
+                                        case 4:
+                                            let tempM51_60 = JSON.parse(JSON.stringify(tempDateChartDataLower5));
+                                            tempM51_60.ageRange = EAgeRange.m51_60;
+                                            tempM51_60.date = new Date(tempM51_60.date);
+                                            tempM51_60.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM51_60);
+                                            break;
+                                        case 5:
+                                            let tempUpper61 = JSON.parse(JSON.stringify(tempDateChartDataLower5));
+                                            tempUpper61.ageRange = EAgeRange.upper61;
+                                            tempUpper61.date = new Date(tempUpper61.date);
+                                            tempUpper61.siteObjectId = siteId;
+                                            tempChartDatas.push(tempUpper61);
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 1:
+                                for (let k = 0; k < 6; k++) {
+                                    switch (k) {
+                                        case 0:
+                                            let tempLower20 = JSON.parse(JSON.stringify(tempDateChartDataM5_15));
+                                            tempLower20.ageRange = EAgeRange.lower20;
+                                            tempLower20.date = new Date(tempLower20.date);
+                                            tempLower20.siteObjectId = siteId;
+                                            tempChartDatas.push(tempLower20);
+                                            break;
+                                        case 1:
+                                            let tempM21_30 = JSON.parse(JSON.stringify(tempDateChartDataM5_15));
+                                            tempM21_30.ageRange = EAgeRange.m21_30;
+                                            tempM21_30.date = new Date(tempM21_30.date);
+                                            tempM21_30.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM21_30);
+                                            break;
+                                        case 2:
+                                            let tempM31_40 = JSON.parse(JSON.stringify(tempDateChartDataM5_15));
+                                            tempM31_40.ageRange = EAgeRange.m31_40;
+                                            tempM31_40.date = new Date(tempM31_40.date);
+                                            tempM31_40.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM31_40);
+                                            break;
+                                        case 3:
+                                            let tempM41_50 = JSON.parse(JSON.stringify(tempDateChartDataM5_15));
+                                            tempM41_50.ageRange = EAgeRange.m41_50;
+                                            tempM41_50.date = new Date(tempM41_50.date);
+                                            tempM41_50.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM41_50);
+                                            break;
+                                        case 4:
+                                            let tempM51_60 = JSON.parse(JSON.stringify(tempDateChartDataM5_15));
+                                            tempM51_60.ageRange = EAgeRange.m51_60;
+                                            tempM51_60.date = new Date(tempM51_60.date);
+                                            tempM51_60.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM51_60);
+                                            break;
+                                        case 5:
+                                            let tempUpper61 = JSON.parse(JSON.stringify(tempDateChartDataM5_15));
+                                            tempUpper61.ageRange = EAgeRange.upper61;
+                                            tempUpper61.date = new Date(tempUpper61.date);
+                                            tempUpper61.siteObjectId = siteId;
+                                            tempChartDatas.push(tempUpper61);
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 2:
+                                for (let k = 0; k < 6; k++) {
+                                    switch (k) {
+                                        case 0:
+                                            let tempLower20 = JSON.parse(JSON.stringify(tempDateChartDataM15_30));
+                                            tempLower20.ageRange = EAgeRange.lower20;
+                                            tempLower20.date = new Date(tempLower20.date);
+                                            tempLower20.siteObjectId = siteId;
+                                            tempChartDatas.push(tempLower20);
+                                            break;
+                                        case 1:
+                                            let tempM21_30 = JSON.parse(JSON.stringify(tempDateChartDataM15_30));
+                                            tempM21_30.ageRange = EAgeRange.m21_30;
+                                            tempM21_30.date = new Date(tempM21_30.date);
+                                            tempM21_30.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM21_30);
+                                            break;
+                                        case 2:
+                                            let tempM31_40 = JSON.parse(JSON.stringify(tempDateChartDataM15_30));
+                                            tempM31_40.ageRange = EAgeRange.m31_40;
+                                            tempM31_40.date = new Date(tempM31_40.date);
+                                            tempM31_40.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM31_40);
+                                            break;
+                                        case 3:
+                                            let tempM41_50 = JSON.parse(JSON.stringify(tempDateChartDataM15_30));
+                                            tempM41_50.ageRange = EAgeRange.m41_50;
+                                            tempM41_50.date = new Date(tempM41_50.date);
+                                            tempM41_50.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM41_50);
+                                            break;
+                                        case 4:
+                                            let tempM51_60 = JSON.parse(JSON.stringify(tempDateChartDataM15_30));
+                                            tempM51_60.ageRange = EAgeRange.m51_60;
+                                            tempM51_60.date = new Date(tempM51_60.date);
+                                            tempM51_60.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM51_60);
+                                            break;
+                                        case 5:
+                                            let tempUpper61 = JSON.parse(JSON.stringify(tempDateChartDataM15_30));
+                                            tempUpper61.ageRange = EAgeRange.upper61;
+                                            tempUpper61.date = new Date(tempUpper61.date);
+                                            tempUpper61.siteObjectId = siteId;
+                                            tempChartDatas.push(tempUpper61);
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 3:
+                                for (let k = 0; k < 6; k++) {
+                                    switch (k) {
+                                        case 0:
+                                            let tempLower20 = JSON.parse(JSON.stringify(tempDateChartDataM30_60));
+                                            tempLower20.ageRange = EAgeRange.lower20;
+                                            tempLower20.date = new Date(tempLower20.date);
+                                            tempLower20.siteObjectId = siteId;
+                                            tempChartDatas.push(tempLower20);
+                                            break;
+                                        case 1:
+                                            let tempM21_30 = JSON.parse(JSON.stringify(tempDateChartDataM30_60));
+                                            tempM21_30.ageRange = EAgeRange.m21_30;
+                                            tempM21_30.date = new Date(tempM21_30.date);
+                                            tempM21_30.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM21_30);
+                                            break;
+                                        case 2:
+                                            let tempM31_40 = JSON.parse(JSON.stringify(tempDateChartDataM30_60));
+                                            tempM31_40.ageRange = EAgeRange.m31_40;
+                                            tempM31_40.date = new Date(tempM31_40.date);
+                                            tempM31_40.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM31_40);
+                                            break;
+                                        case 3:
+                                            let tempM41_50 = JSON.parse(JSON.stringify(tempDateChartDataM30_60));
+                                            tempM41_50.ageRange = EAgeRange.m41_50;
+                                            tempM41_50.date = new Date(tempM41_50.date);
+                                            tempM41_50.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM41_50);
+                                            break;
+                                        case 4:
+                                            let tempM51_60 = JSON.parse(JSON.stringify(tempDateChartDataM30_60));
+                                            tempM51_60.ageRange = EAgeRange.m51_60;
+                                            tempM51_60.date = new Date(tempM51_60.date);
+                                            tempM51_60.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM51_60);
+                                            break;
+                                        case 5:
+                                            let tempUpper61 = JSON.parse(JSON.stringify(tempDateChartDataM30_60));
+                                            tempUpper61.ageRange = EAgeRange.upper61;
+                                            tempUpper61.date = new Date(tempUpper61.date);
+                                            tempUpper61.siteObjectId = siteId;
+                                            tempChartDatas.push(tempUpper61);
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 4:
+                                for (let k = 0; k < 6; k++) {
+                                    switch (k) {
+                                        case 0:
+                                            let tempLower20 = JSON.parse(JSON.stringify(tempDateChartDataM60_120));
+                                            tempLower20.ageRange = EAgeRange.lower20;
+                                            tempLower20.date = new Date(tempLower20.date);
+                                            tempLower20.siteObjectId = siteId;
+                                            tempChartDatas.push(tempLower20);
+                                            break;
+                                        case 1:
+                                            let tempM21_30 = JSON.parse(JSON.stringify(tempDateChartDataM60_120));
+                                            tempM21_30.ageRange = EAgeRange.m21_30;
+                                            tempM21_30.date = new Date(tempM21_30.date);
+                                            tempM21_30.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM21_30);
+                                            break;
+                                        case 2:
+                                            let tempM31_40 = JSON.parse(JSON.stringify(tempDateChartDataM60_120));
+                                            tempM31_40.ageRange = EAgeRange.m31_40;
+                                            tempM31_40.date = new Date(tempM31_40.date);
+                                            tempM31_40.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM31_40);
+                                            break;
+                                        case 3:
+                                            let tempM41_50 = JSON.parse(JSON.stringify(tempDateChartDataM60_120));
+                                            tempM41_50.ageRange = EAgeRange.m41_50;
+                                            tempM41_50.date = new Date(tempM41_50.date);
+                                            tempM41_50.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM41_50);
+                                            break;
+                                        case 4:
+                                            let tempM51_60 = JSON.parse(JSON.stringify(tempDateChartDataM60_120));
+                                            tempM51_60.ageRange = EAgeRange.m51_60;
+                                            tempM51_60.date = new Date(tempM51_60.date);
+                                            tempM51_60.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM51_60);
+                                            break;
+                                        case 5:
+                                            let tempUpper61 = JSON.parse(JSON.stringify(tempDateChartDataM60_120));
+                                            tempUpper61.ageRange = EAgeRange.upper61;
+                                            tempUpper61.date = new Date(tempUpper61.date);
+                                            tempUpper61.siteObjectId = siteId;
+                                            tempChartDatas.push(tempUpper61);
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 5:
+                                for (let k = 0; k < 6; k++) {
+                                    switch (k) {
+                                        case 0:
+                                            let tempLower20 = JSON.parse(JSON.stringify(tempDateChartDataUpper120));
+                                            tempLower20.ageRange = EAgeRange.lower20;
+                                            tempLower20.date = new Date(tempLower20.date);
+                                            tempLower20.siteObjectId = siteId;
+                                            tempChartDatas.push(tempLower20);
+                                            break;
+                                        case 1:
+                                            let tempM21_30 = JSON.parse(JSON.stringify(tempDateChartDataUpper120));
+                                            tempM21_30.ageRange = EAgeRange.m21_30;
+                                            tempM21_30.date = new Date(tempM21_30.date);
+                                            tempM21_30.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM21_30);
+                                            break;
+                                        case 2:
+                                            let tempM31_40 = JSON.parse(JSON.stringify(tempDateChartDataUpper120));
+                                            tempM31_40.ageRange = EAgeRange.m31_40;
+                                            tempM31_40.date = new Date(tempM31_40.date);
+                                            tempM31_40.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM31_40);
+                                            break;
+                                        case 3:
+                                            let tempM41_50 = JSON.parse(JSON.stringify(tempDateChartDataUpper120));
+                                            tempM41_50.ageRange = EAgeRange.m41_50;
+                                            tempM41_50.date = new Date(tempM41_50.date);
+                                            tempM41_50.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM41_50);
+                                            break;
+                                        case 4:
+                                            let tempM51_60 = JSON.parse(JSON.stringify(tempDateChartDataUpper120));
+                                            tempM51_60.ageRange = EAgeRange.m51_60;
+                                            tempM51_60.date = new Date(tempM51_60.date);
+                                            tempM51_60.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM51_60);
+                                            break;
+                                        case 5:
+                                            let tempUpper61 = JSON.parse(JSON.stringify(tempDateChartDataUpper120));
+                                            tempUpper61.ageRange = EAgeRange.upper61;
+                                            tempUpper61.date = new Date(tempUpper61.date);
+                                            tempUpper61.siteObjectId = siteId;
+                                            tempChartDatas.push(tempUpper61);
+                                            break;
+                                    }
+                                }
+                                break;
+                        }
+                    }
                 }
+
             }
         } else {
             // multiple days
@@ -1530,78 +1773,84 @@ export default class ReportDwellTime extends Vue {
             );
 
             for (let dateItem of dateList) {
-                let tempDateChartDataLower20 = {
+
+                let tempDateChartDataLower5 = {
                     date: new Date(dateItem.getTime()),
                     siteObjectId: "",
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
-                    ageRange: EAgeRange.lower20,
+                    ageRange: EAgeRange.none,
                     dwellTimeRange: EDwellTimeRange.lower5,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
                     transaction: 0
                 };
-                let tempDateChartDataM21_30 = {
+
+                let tempDateChartDataM5_15 = {
                     date: new Date(dateItem.getTime()),
                     siteObjectId: "",
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
-                    ageRange: EAgeRange.m21_30,
+                    ageRange: EAgeRange.none,
+                    dwellTimeRange: EDwellTimeRange.m5_15,
+                    maleCount: 0,
+                    femaleCount: 0,
+                    revenue: 0,
+                    transaction: 0
+                };
+
+                let tempDateChartDataM15_30 = {
+                    date: new Date(dateItem.getTime()),
+                    siteObjectId: "",
+                    temperatureMin: 0,
+                    temperatureMax: 0,
+                    weather: EWeather.none,
+                    ageRange: EAgeRange.none,
                     dwellTimeRange: EDwellTimeRange.m15_30,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
                     transaction: 0
                 };
-                let tempDateChartDataM31_40 = {
+
+                let tempDateChartDataM30_60 = {
                     date: new Date(dateItem.getTime()),
                     siteObjectId: "",
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
-                    ageRange: EAgeRange.m31_40,
+                    ageRange: EAgeRange.none,
                     dwellTimeRange: EDwellTimeRange.m30_60,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
                     transaction: 0
                 };
-                let tempDateChartDataM41_50 = {
+
+                let tempDateChartDataM60_120 = {
                     date: new Date(dateItem.getTime()),
                     siteObjectId: "",
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
-                    ageRange: EAgeRange.m41_50,
+                    ageRange: EAgeRange.none,
                     dwellTimeRange: EDwellTimeRange.m60_120,
                     maleCount: 0,
                     femaleCount: 0,
                     revenue: 0,
                     transaction: 0
                 };
-                let tempDateChartDataM51_60 = {
+
+                let tempDateChartDataUpper120 = {
                     date: new Date(dateItem.getTime()),
                     siteObjectId: "",
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
-                    ageRange: EAgeRange.m51_60,
-                    dwellTimeRange: EDwellTimeRange.m60_120,
-                    maleCount: 0,
-                    femaleCount: 0,
-                    revenue: 0,
-                    transaction: 0
-                };
-                let tempDateChartDataUpper61 = {
-                    date: new Date(dateItem.getTime()),
-                    siteObjectId: "",
-                    temperatureMin: 0,
-                    temperatureMax: 0,
-                    weather: EWeather.none,
-                    ageRange: EAgeRange.upper61,
+                    ageRange: EAgeRange.none,
                     dwellTimeRange: EDwellTimeRange.upper120,
                     maleCount: 0,
                     femaleCount: 0,
@@ -1610,92 +1859,323 @@ export default class ReportDwellTime extends Vue {
                 };
 
                 for (let siteId of this.filterData.siteIds) {
-                    let tempSiteChartDataLower20 = JSON.parse(
-                        JSON.stringify(tempDateChartDataLower20)
-                    );
-                    tempSiteChartDataLower20.date = new Date(
-                        tempSiteChartDataLower20.date
-                    );
-                    tempSiteChartDataLower20.siteObjectId = siteId;
-
-                    let tempSiteChartDataM21_30 = JSON.parse(
-                        JSON.stringify(tempDateChartDataM21_30)
-                    );
-                    tempSiteChartDataM21_30.date = new Date(
-                        tempSiteChartDataM21_30.date
-                    );
-                    tempSiteChartDataM21_30.siteObjectId = siteId;
-
-                    let tempSiteChartDataM31_40 = JSON.parse(
-                        JSON.stringify(tempDateChartDataM31_40)
-                    );
-                    tempSiteChartDataM31_40.date = new Date(
-                        tempSiteChartDataM31_40.date
-                    );
-                    tempSiteChartDataM31_40.siteObjectId = siteId;
-
-                    let tempSiteChartDataM41_50 = JSON.parse(
-                        JSON.stringify(tempDateChartDataM41_50)
-                    );
-                    tempSiteChartDataM41_50.date = new Date(
-                        tempSiteChartDataM41_50.date
-                    );
-                    tempSiteChartDataM41_50.siteObjectId = siteId;
-
-                    let tempSiteChartDataM51_60 = JSON.parse(
-                        JSON.stringify(tempDateChartDataM51_60)
-                    );
-                    tempSiteChartDataM51_60.date = new Date(
-                        tempSiteChartDataM51_60.date
-                    );
-                    tempSiteChartDataM51_60.siteObjectId = siteId;
-
-                    let tempSiteChartDataUpper61 = JSON.parse(
-                        JSON.stringify(tempDateChartDataUpper61)
-                    );
-                    tempSiteChartDataUpper61.date = new Date(
-                        tempSiteChartDataUpper61.date
-                    );
-                    tempSiteChartDataUpper61.siteObjectId = siteId;
-
-                    tempChartDatas.push(
-                        tempSiteChartDataLower20,
-                        tempSiteChartDataM21_30,
-                        tempSiteChartDataM31_40,
-                        tempSiteChartDataM41_50,
-                        tempSiteChartDataM51_60,
-                        tempSiteChartDataUpper61
-                    );
+                    for (let j = 0; j < 6; j++) {
+                        switch (j) {
+                            case 0:
+                                for (let k = 0; k < 6; k++) {
+                                    switch (k) {
+                                        case 0:
+                                            let tempLower20 = JSON.parse(JSON.stringify(tempDateChartDataLower5));
+                                            tempLower20.ageRange = EAgeRange.lower20;
+                                            tempLower20.date = new Date(tempLower20.date);
+                                            tempLower20.siteObjectId = siteId;
+                                            tempChartDatas.push(tempLower20);
+                                            break;
+                                        case 1:
+                                            let tempM21_30 = JSON.parse(JSON.stringify(tempDateChartDataLower5));
+                                            tempM21_30.ageRange = EAgeRange.m21_30;
+                                            tempM21_30.date = new Date(tempM21_30.date);
+                                            tempM21_30.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM21_30);
+                                            break;
+                                        case 2:
+                                            let tempM31_40 = JSON.parse(JSON.stringify(tempDateChartDataLower5));
+                                            tempM31_40.ageRange = EAgeRange.m31_40;
+                                            tempM31_40.date = new Date(tempM31_40.date);
+                                            tempM31_40.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM31_40);
+                                            break;
+                                        case 3:
+                                            let tempM41_50 = JSON.parse(JSON.stringify(tempDateChartDataLower5));
+                                            tempM41_50.ageRange = EAgeRange.m41_50;
+                                            tempM41_50.date = new Date(tempM41_50.date);
+                                            tempM41_50.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM41_50);
+                                            break;
+                                        case 4:
+                                            let tempM51_60 = JSON.parse(JSON.stringify(tempDateChartDataLower5));
+                                            tempM51_60.ageRange = EAgeRange.m51_60;
+                                            tempM51_60.date = new Date(tempM51_60.date);
+                                            tempM51_60.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM51_60);
+                                            break;
+                                        case 5:
+                                            let tempUpper61 = JSON.parse(JSON.stringify(tempDateChartDataLower5));
+                                            tempUpper61.ageRange = EAgeRange.upper61;
+                                            tempUpper61.date = new Date(tempUpper61.date);
+                                            tempUpper61.siteObjectId = siteId;
+                                            tempChartDatas.push(tempUpper61);
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 1:
+                                for (let k = 0; k < 6; k++) {
+                                    switch (k) {
+                                        case 0:
+                                            let tempLower20 = JSON.parse(JSON.stringify(tempDateChartDataM5_15));
+                                            tempLower20.ageRange = EAgeRange.lower20;
+                                            tempLower20.date = new Date(tempLower20.date);
+                                            tempLower20.siteObjectId = siteId;
+                                            tempChartDatas.push(tempLower20);
+                                            break;
+                                        case 1:
+                                            let tempM21_30 = JSON.parse(JSON.stringify(tempDateChartDataM5_15));
+                                            tempM21_30.ageRange = EAgeRange.m21_30;
+                                            tempM21_30.date = new Date(tempM21_30.date);
+                                            tempM21_30.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM21_30);
+                                            break;
+                                        case 2:
+                                            let tempM31_40 = JSON.parse(JSON.stringify(tempDateChartDataM5_15));
+                                            tempM31_40.ageRange = EAgeRange.m31_40;
+                                            tempM31_40.date = new Date(tempM31_40.date);
+                                            tempM31_40.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM31_40);
+                                            break;
+                                        case 3:
+                                            let tempM41_50 = JSON.parse(JSON.stringify(tempDateChartDataM5_15));
+                                            tempM41_50.ageRange = EAgeRange.m41_50;
+                                            tempM41_50.date = new Date(tempM41_50.date);
+                                            tempM41_50.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM41_50);
+                                            break;
+                                        case 4:
+                                            let tempM51_60 = JSON.parse(JSON.stringify(tempDateChartDataM5_15));
+                                            tempM51_60.ageRange = EAgeRange.m51_60;
+                                            tempM51_60.date = new Date(tempM51_60.date);
+                                            tempM51_60.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM51_60);
+                                            break;
+                                        case 5:
+                                            let tempUpper61 = JSON.parse(JSON.stringify(tempDateChartDataM5_15));
+                                            tempUpper61.ageRange = EAgeRange.upper61;
+                                            tempUpper61.date = new Date(tempUpper61.date);
+                                            tempUpper61.siteObjectId = siteId;
+                                            tempChartDatas.push(tempUpper61);
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 2:
+                                for (let k = 0; k < 6; k++) {
+                                    switch (k) {
+                                        case 0:
+                                            let tempLower20 = JSON.parse(JSON.stringify(tempDateChartDataM15_30));
+                                            tempLower20.ageRange = EAgeRange.lower20;
+                                            tempLower20.date = new Date(tempLower20.date);
+                                            tempLower20.siteObjectId = siteId;
+                                            tempChartDatas.push(tempLower20);
+                                            break;
+                                        case 1:
+                                            let tempM21_30 = JSON.parse(JSON.stringify(tempDateChartDataM15_30));
+                                            tempM21_30.ageRange = EAgeRange.m21_30;
+                                            tempM21_30.date = new Date(tempM21_30.date);
+                                            tempM21_30.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM21_30);
+                                            break;
+                                        case 2:
+                                            let tempM31_40 = JSON.parse(JSON.stringify(tempDateChartDataM15_30));
+                                            tempM31_40.ageRange = EAgeRange.m31_40;
+                                            tempM31_40.date = new Date(tempM31_40.date);
+                                            tempM31_40.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM31_40);
+                                            break;
+                                        case 3:
+                                            let tempM41_50 = JSON.parse(JSON.stringify(tempDateChartDataM15_30));
+                                            tempM41_50.ageRange = EAgeRange.m41_50;
+                                            tempM41_50.date = new Date(tempM41_50.date);
+                                            tempM41_50.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM41_50);
+                                            break;
+                                        case 4:
+                                            let tempM51_60 = JSON.parse(JSON.stringify(tempDateChartDataM15_30));
+                                            tempM51_60.ageRange = EAgeRange.m51_60;
+                                            tempM51_60.date = new Date(tempM51_60.date);
+                                            tempM51_60.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM51_60);
+                                            break;
+                                        case 5:
+                                            let tempUpper61 = JSON.parse(JSON.stringify(tempDateChartDataM15_30));
+                                            tempUpper61.ageRange = EAgeRange.upper61;
+                                            tempUpper61.date = new Date(tempUpper61.date);
+                                            tempUpper61.siteObjectId = siteId;
+                                            tempChartDatas.push(tempUpper61);
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 3:
+                                for (let k = 0; k < 6; k++) {
+                                    switch (k) {
+                                        case 0:
+                                            let tempLower20 = JSON.parse(JSON.stringify(tempDateChartDataM30_60));
+                                            tempLower20.ageRange = EAgeRange.lower20;
+                                            tempLower20.date = new Date(tempLower20.date);
+                                            tempLower20.siteObjectId = siteId;
+                                            tempChartDatas.push(tempLower20);
+                                            break;
+                                        case 1:
+                                            let tempM21_30 = JSON.parse(JSON.stringify(tempDateChartDataM30_60));
+                                            tempM21_30.ageRange = EAgeRange.m21_30;
+                                            tempM21_30.date = new Date(tempM21_30.date);
+                                            tempM21_30.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM21_30);
+                                            break;
+                                        case 2:
+                                            let tempM31_40 = JSON.parse(JSON.stringify(tempDateChartDataM30_60));
+                                            tempM31_40.ageRange = EAgeRange.m31_40;
+                                            tempM31_40.date = new Date(tempM31_40.date);
+                                            tempM31_40.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM31_40);
+                                            break;
+                                        case 3:
+                                            let tempM41_50 = JSON.parse(JSON.stringify(tempDateChartDataM30_60));
+                                            tempM41_50.ageRange = EAgeRange.m41_50;
+                                            tempM41_50.date = new Date(tempM41_50.date);
+                                            tempM41_50.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM41_50);
+                                            break;
+                                        case 4:
+                                            let tempM51_60 = JSON.parse(JSON.stringify(tempDateChartDataM30_60));
+                                            tempM51_60.ageRange = EAgeRange.m51_60;
+                                            tempM51_60.date = new Date(tempM51_60.date);
+                                            tempM51_60.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM51_60);
+                                            break;
+                                        case 5:
+                                            let tempUpper61 = JSON.parse(JSON.stringify(tempDateChartDataM30_60));
+                                            tempUpper61.ageRange = EAgeRange.upper61;
+                                            tempUpper61.date = new Date(tempUpper61.date);
+                                            tempUpper61.siteObjectId = siteId;
+                                            tempChartDatas.push(tempUpper61);
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 4:
+                                for (let k = 0; k < 6; k++) {
+                                    switch (k) {
+                                        case 0:
+                                            let tempLower20 = JSON.parse(JSON.stringify(tempDateChartDataM60_120));
+                                            tempLower20.ageRange = EAgeRange.lower20;
+                                            tempLower20.date = new Date(tempLower20.date);
+                                            tempLower20.siteObjectId = siteId;
+                                            tempChartDatas.push(tempLower20);
+                                            break;
+                                        case 1:
+                                            let tempM21_30 = JSON.parse(JSON.stringify(tempDateChartDataM60_120));
+                                            tempM21_30.ageRange = EAgeRange.m21_30;
+                                            tempM21_30.date = new Date(tempM21_30.date);
+                                            tempM21_30.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM21_30);
+                                            break;
+                                        case 2:
+                                            let tempM31_40 = JSON.parse(JSON.stringify(tempDateChartDataM60_120));
+                                            tempM31_40.ageRange = EAgeRange.m31_40;
+                                            tempM31_40.date = new Date(tempM31_40.date);
+                                            tempM31_40.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM31_40);
+                                            break;
+                                        case 3:
+                                            let tempM41_50 = JSON.parse(JSON.stringify(tempDateChartDataM60_120));
+                                            tempM41_50.ageRange = EAgeRange.m41_50;
+                                            tempM41_50.date = new Date(tempM41_50.date);
+                                            tempM41_50.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM41_50);
+                                            break;
+                                        case 4:
+                                            let tempM51_60 = JSON.parse(JSON.stringify(tempDateChartDataM60_120));
+                                            tempM51_60.ageRange = EAgeRange.m51_60;
+                                            tempM51_60.date = new Date(tempM51_60.date);
+                                            tempM51_60.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM51_60);
+                                            break;
+                                        case 5:
+                                            let tempUpper61 = JSON.parse(JSON.stringify(tempDateChartDataM60_120));
+                                            tempUpper61.ageRange = EAgeRange.upper61;
+                                            tempUpper61.date = new Date(tempUpper61.date);
+                                            tempUpper61.siteObjectId = siteId;
+                                            tempChartDatas.push(tempUpper61);
+                                            break;
+                                    }
+                                }
+                                break;
+                            case 5:
+                                for (let k = 0; k < 6; k++) {
+                                    switch (k) {
+                                        case 0:
+                                            let tempLower20 = JSON.parse(JSON.stringify(tempDateChartDataUpper120));
+                                            tempLower20.ageRange = EAgeRange.lower20;
+                                            tempLower20.date = new Date(tempLower20.date);
+                                            tempLower20.siteObjectId = siteId;
+                                            tempChartDatas.push(tempLower20);
+                                            break;
+                                        case 1:
+                                            let tempM21_30 = JSON.parse(JSON.stringify(tempDateChartDataUpper120));
+                                            tempM21_30.ageRange = EAgeRange.m21_30;
+                                            tempM21_30.date = new Date(tempM21_30.date);
+                                            tempM21_30.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM21_30);
+                                            break;
+                                        case 2:
+                                            let tempM31_40 = JSON.parse(JSON.stringify(tempDateChartDataUpper120));
+                                            tempM31_40.ageRange = EAgeRange.m31_40;
+                                            tempM31_40.date = new Date(tempM31_40.date);
+                                            tempM31_40.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM31_40);
+                                            break;
+                                        case 3:
+                                            let tempM41_50 = JSON.parse(JSON.stringify(tempDateChartDataUpper120));
+                                            tempM41_50.ageRange = EAgeRange.m41_50;
+                                            tempM41_50.date = new Date(tempM41_50.date);
+                                            tempM41_50.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM41_50);
+                                            break;
+                                        case 4:
+                                            let tempM51_60 = JSON.parse(JSON.stringify(tempDateChartDataUpper120));
+                                            tempM51_60.ageRange = EAgeRange.m51_60;
+                                            tempM51_60.date = new Date(tempM51_60.date);
+                                            tempM51_60.siteObjectId = siteId;
+                                            tempChartDatas.push(tempM51_60);
+                                            break;
+                                        case 5:
+                                            let tempUpper61 = JSON.parse(JSON.stringify(tempDateChartDataUpper120));
+                                            tempUpper61.ageRange = EAgeRange.upper61;
+                                            tempUpper61.date = new Date(tempUpper61.date);
+                                            tempUpper61.siteObjectId = siteId;
+                                            tempChartDatas.push(tempUpper61);
+                                            break;
+                                    }
+                                }
+                                break;
+                        }
+                    }
                 }
             }
         }
 
         for (let tempChartData of tempChartDatas) {
             let tempDateFormat = isOneDay
-                ? Datetime.DateTime2String(
-                      tempChartData.date,
-                      ReportService.datetimeFormat.hour
-                  )
-                : Datetime.DateTime2String(
-                      tempChartData.date,
-                      ReportService.datetimeFormat.date
-                  );
+                ? Datetime.DateTime2String(tempChartData.date, ReportService.datetimeFormat.hour)
+                : Datetime.DateTime2String(tempChartData.date, ReportService.datetimeFormat.date);
 
-            // 計算 maleCount、femaleCount、maleRanges、femaleRanges
+            // 計算 maleCount、femaleCount
             for (let summary of datas) {
                 let summaryDateFormat = isOneDay
                     ? Datetime.DateTime2String(
-                          new Date(summary.date),
-                          ReportService.datetimeFormat.hour
-                      )
+                        new Date(summary.date),
+                        ReportService.datetimeFormat.hour
+                    )
                     : Datetime.DateTime2String(
-                          new Date(summary.date),
-                          ReportService.datetimeFormat.date
-                      );
+                        new Date(summary.date),
+                        ReportService.datetimeFormat.date
+                    );
 
-
-
-
+                if (
+                    summaryDateFormat == tempDateFormat &&
+                    summary.site.objectId == tempChartData.siteObjectId
+                ) {
                     let ageRangeIndex = 0;
                     switch (tempChartData.ageRange) {
                         case EAgeRange.lower20:
@@ -1705,84 +2185,32 @@ export default class ReportDwellTime extends Vue {
                             ageRangeIndex = 1;
                             break;
                         case EAgeRange.m31_40:
-                            ageRangeIndex = 2;
+                            ageRangeIndex =2;
                             break;
                         case EAgeRange.m41_50:
                             ageRangeIndex = 3;
                             break;
                         case EAgeRange.m51_60:
-                            ageRangeIndex = 4;
+                            ageRangeIndex =4;
                             break;
                         case EAgeRange.upper61:
                             ageRangeIndex = 5;
                             break;
                     }
 
-                    summary.maleRanges[ageRangeIndex] =
-                        summary.maleRanges[ageRangeIndex] === null
-                            ? 0
-                            : summary.maleRanges[ageRangeIndex];
+                    summary.maleRanges[ageRangeIndex] = summary.maleRanges[ageRangeIndex] === null ? 0 : summary.maleRanges[ageRangeIndex];
+                    summary.femaleRanges[ageRangeIndex] = summary.femaleRanges[ageRangeIndex] === null ? 0 : summary.femaleRanges[ageRangeIndex];
+                    summary.maleEmployeeRanges[ageRangeIndex] = summary.maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.maleEmployeeRanges[ageRangeIndex];
+                    summary.femaleEmployeeRanges[ageRangeIndex] = summary.femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.femaleEmployeeRanges[ageRangeIndex];
 
-                    summary.femaleRanges[ageRangeIndex] =
-                        summary.femaleRanges[ageRangeIndex] === null
-                            ? 0
-                            : summary.femaleRanges[ageRangeIndex];
+                    tempChartData.maleCount += summary.maleRanges[ageRangeIndex];
+                    tempChartData.femaleCount += summary.femaleRanges[ageRangeIndex];
 
-                    summary.maleEmployeeRanges[ageRangeIndex] =
-                        summary.maleEmployeeRanges[ageRangeIndex] === null
-                            ? 0
-                            : summary.maleEmployeeRanges[ageRangeIndex];
-
-                    summary.femaleEmployeeRanges[ageRangeIndex] =
-                        summary.femaleEmployeeRanges[ageRangeIndex] === null
-                            ? 0
-                            : summary.femaleEmployeeRanges[ageRangeIndex];
-
-                    tempChartData.maleCount +=
-                        summary.maleRanges[ageRangeIndex];
-                    tempChartData.femaleCount +=
-                        summary.femaleRanges[ageRangeIndex];
-
-                    if (
-                        this.inputFormData.isIncludedEmployee ===
-                        EIncludedEmployee.no
-                    ) {
-                        tempChartData.maleCount -=
-                            summary.maleEmployeeRanges[ageRangeIndex];
-                        tempChartData.femaleCount -=
-                            summary.femaleEmployeeRanges[ageRangeIndex];
+                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                        tempChartData.maleCount -= summary.maleEmployeeRanges[ageRangeIndex];
+                        tempChartData.femaleCount -= summary.femaleEmployeeRanges[ageRangeIndex];
                     }
 
-            }
-
-            for (let saleRecord of this.responseData.salesRecords) {
-                let saleDateFormat = isOneDay
-                    ? Datetime.DateTime2String(
-                          new Date(saleRecord.date),
-                          `${Datetime.FormatCheckDate} HH`
-                      )
-                    : Datetime.DateTime2String(
-                          new Date(saleRecord.date),
-                          Datetime.FormatCheckDate
-                      );
-                for (let tempChartData of tempChartDatas) {
-                    let tempDateFormat = isOneDay
-                        ? Datetime.DateTime2String(
-                              tempChartData.date,
-                              `${Datetime.FormatCheckDate} HH`
-                          )
-                        : Datetime.DateTime2String(
-                              tempChartData.date,
-                              Datetime.FormatCheckDate
-                          );
-                    if (
-                        saleDateFormat == tempDateFormat &&
-                        saleRecord.site.objectId == tempChartData.siteObjectId
-                    ) {
-                        tempChartData.revenue += saleRecord.revenue;
-                        tempChartData.transaction += saleRecord.transaction;
-                        break;
-                    }
                 }
             }
 
@@ -1791,13 +2219,13 @@ export default class ReportDwellTime extends Vue {
                 let weather = this.responseData.weathers[i];
                 let weatherDateFormat = isOneDay
                     ? Datetime.DateTime2String(
-                          new Date(weather.date),
-                          ReportService.datetimeFormat.hour
-                      )
+                        new Date(weather.date),
+                        ReportService.datetimeFormat.hour
+                    )
                     : Datetime.DateTime2String(
-                          new Date(weather.date),
-                          ReportService.datetimeFormat.date
-                      );
+                        new Date(weather.date),
+                        ReportService.datetimeFormat.date
+                    );
 
                 if (
                     weatherDateFormat == tempDateFormat &&
@@ -1811,6 +2239,25 @@ export default class ReportDwellTime extends Vue {
                     break;
                 }
             }
+
+
+            // TODO: Dwell time
+            let tempRandomDwellTime = Math.floor(Math.random()*6);
+            if (tempRandomDwellTime == 0) {
+                tempChartData.dwellTimeRange = EDwellTimeRange.lower5;
+            } else if (tempRandomDwellTime == 1) {
+                tempChartData.dwellTimeRange = EDwellTimeRange.m5_15;
+            } else if (tempRandomDwellTime == 2) {
+                tempChartData.dwellTimeRange = EDwellTimeRange.m15_30;
+            } else if (tempRandomDwellTime == 3) {
+                tempChartData.dwellTimeRange = EDwellTimeRange.m30_60;
+            } else if (tempRandomDwellTime == 4) {
+                tempChartData.dwellTimeRange = EDwellTimeRange.m60_120;
+            } else {
+                tempChartData.dwellTimeRange = EDwellTimeRange.upper120;
+            }
+            // TODO: Dwell time
+
         }
 
         this.chartDatas = tempChartDatas;
@@ -1824,7 +2271,7 @@ export default class ReportDwellTime extends Vue {
 
         // 依照單一area篩選
         if (this.inputFormData.areaId && this.inputFormData.areaId !== "all") {
-            for (const singleData of this.responseData.summaryRangeDatas) {
+            for (const singleData of this.responseData.summaryDatas) {
                 for (const detailKey in singleData) {
                     const tempSingleData = singleData[detailKey];
                     if (detailKey === "area") {
@@ -1854,7 +2301,7 @@ export default class ReportDwellTime extends Vue {
             this.inputFormData.areaId &&
             this.inputFormData.areaId === "all"
         ) {
-            this.sortOutChartData(this.responseData.summaryRangeDatas);
+            this.sortOutChartData(this.responseData.summaryDatas);
             this.areaMode = EAreaMode.all;
 
             this.inputFormData.groupId = "";
@@ -1869,7 +2316,7 @@ export default class ReportDwellTime extends Vue {
 
             // 清除area篩選
         } else if (!this.inputFormData.areaId) {
-            this.sortOutChartData(this.responseData.summaryRangeDatas);
+            this.sortOutChartData(this.responseData.summaryDatas);
             this.areaMode = EAreaMode.all;
 
             this.inputFormData.areaId = "";
@@ -2112,7 +2559,7 @@ export default class ReportDwellTime extends Vue {
 
         // 單一site
         if (this.filterData.firstSiteId) {
-            this.sortOutChartData(this.responseData.summaryRangeDatas);
+            this.sortOutChartData(this.responseData.summaryDatas);
 
             this.inputFormData.areaId = "";
             this.inputFormData.groupId = "";
@@ -2133,7 +2580,7 @@ export default class ReportDwellTime extends Vue {
 
         // 單一site
         if (this.filterData.firstSiteId) {
-            this.sortOutChartData(this.responseData.summaryRangeDatas);
+            this.sortOutChartData(this.responseData.summaryDatas);
 
             this.inputFormData.areaId = "";
             this.inputFormData.groupId = "";

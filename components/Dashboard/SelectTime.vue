@@ -232,11 +232,11 @@ export class SelectTime extends Vue {
         switch (data) {
             case ETime.today:
                 submitParam.startDate = Datetime.DateStart(new Date());
-                submitParam.endDate = Datetime.DateStart(new Date());
+                submitParam.endDate = Datetime.DateEnd(new Date());
                 break;
             case ETime.yesterday:
                 submitParam.startDate = Datetime.DatePlus(new Date(), -1);
-                submitParam.endDate = Datetime.DatePlus(new Date(), -1);
+                submitParam.endDate = Datetime.DateStart(new Date());
                 break;
             case ETime.last7day:
                 submitParam.startDate = Datetime.DatePlus(new Date(), -6);

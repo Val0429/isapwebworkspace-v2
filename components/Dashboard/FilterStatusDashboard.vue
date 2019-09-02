@@ -621,17 +621,17 @@ export class FilterStatusDashboard extends Vue {
                 useHTML: true,
                 animation: true,
                 style: { color: "#fff" },
-                formatter: () => {
+                formatter: function() {
                     let result = "";
                     let self: any = this;
 
                     try {
                             // set value
-                            result += `${dayRange}<br>`;
-                            result += `${self._('w_Navigation_RuleAndActions_Traffic')}: ${ 101 }<br>`;
-                            result += `${self._('w_revenue')}: ${456123}<br>`;
-                            result += `${self._('w_transaction')}: ${50}<br>`;
-                            result += `${self._('w_conversion')}: ${10}%<br>`;
+                        result += `${dayRange}<br>`;
+                        result += `Traffic: ${ self.y }<br>`;
+                        result += `Revenue: ${456123}<br>`;
+                        result += `Transaction: ${50}<br>`;
+                        result += `Conversion: ${10}%<br>`;
 
                         } catch (e) {
                             console.log(e);
