@@ -97,7 +97,6 @@ export class NewPeakHour extends Vue {
     created() {}
 
     mounted() {
-        this.site = this.siteItems[0].value;
         this.initData();
     }
 
@@ -132,10 +131,10 @@ export class NewPeakHour extends Vue {
     }
 
     generateDay1Ste1() {
+        console.log("generateDay1Ste1", this.timeRangeData, this.siteItems);
         if (this.timeRangeData.length == 0) {
             return;
         }
-        console.log("generateDay1Ste1", this.timeRangeData, this.siteItems);
 
         let yList = [];
         let sTime = null;
@@ -243,10 +242,10 @@ export class NewPeakHour extends Vue {
     }
 
     generateDayXSte1() {
+        console.log("generateDayXSte1", this.timeRangeData, this.siteItems);
         if (this.timeRangeData.length == 0) {
             return;
         }
-        console.log("generateDayXSte1", this.timeRangeData, this.siteItems);
 
         for (let data of this.timeRangeData) {
             let sTime = null;
@@ -359,10 +358,15 @@ export class NewPeakHour extends Vue {
     }
 
     generateDay1SteX() {
+        console.log("generateDay1SteX", this.timeRangeData, this.siteItems);
+
         if (this.timeRangeData.length == 0) {
             return;
         }
-        console.log("generateDay1SteX", this.timeRangeData, this.siteItems);
+
+        if (this.site == "") {
+            this.site = this.siteItems[0].value;
+        }
 
         for (let data of this.timeRangeData) {
             let sTime = null;
@@ -474,10 +478,14 @@ export class NewPeakHour extends Vue {
     }
 
     generateDayXSteX() {
+        console.log("generateDayXSteX", this.timeRangeData, this.siteItems);
         if (this.timeRangeData.length == 0) {
             return;
         }
-        console.log("generateDayXSteX", this.timeRangeData, this.siteItems);
+
+        if (this.site == "") {
+            this.site = this.siteItems[0].value;
+        }
 
         for (let data of this.timeRangeData) {
             if (data.site != this.site) {

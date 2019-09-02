@@ -309,7 +309,7 @@ export class SiteDeviceGroupForm extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Site_GroupName")}
                  * @uiPlaceHolder - ${this._("w_Site_GroupName")}
-                 * @uiType - iv-form-string
+                 * @uiType - iv-form-label
                  */
                 name: string;
 
