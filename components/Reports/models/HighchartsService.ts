@@ -121,7 +121,7 @@ class HighchartsService {
         return `${showString} <span style='display:none;'>${JSON.stringify(value)}</span>`;
     }
 
-    formatFloat(num: number) {
+    formatFloat(num: number): number {
         var size = Math.pow(10, this.mathRoundLength);
         return Math.round(num * size) / size;
     }

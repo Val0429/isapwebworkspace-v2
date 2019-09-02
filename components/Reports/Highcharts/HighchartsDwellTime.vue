@@ -401,7 +401,6 @@ export class HighchartsDwellTime extends Vue {
         // set data
         for (let categorie of tempHourStrings) {
             let haveValue = false;
-
             for (let i in tempValues) {
                 let loopValue = tempValues[i];
                 let value: IChartDwellTimeData = this.anysislyChartValue(
@@ -426,6 +425,7 @@ export class HighchartsDwellTime extends Vue {
         for (let result of tempResult) {
             tempSeries[0].data.push(result.revenue);
             tempSeries[1].data.push(result.dwellTime);
+
             tempCategories.push(
                 HighchartsService.categorieStringWithJSON(
                     result.timeString,
@@ -482,10 +482,15 @@ export class HighchartsDwellTime extends Vue {
                                         endIndex + 1
                                     );
                                     let newValue: any = JSON.parse(valueJson);
-
+                                    
                                     // set value
                                     result += `${newValue.i18n.time}:${newValue.timeString}<br>`;
-                                    result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime}<br>`;
+                                    result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime.toFixed(2)}<br>`;
+                                    result += `${newValue.i18n.maleCountPercent}: ${newValue.maleCountPercent} %<br>`;
+                                    result += `${newValue.i18n.femaleCountPercent}: ${newValue.femaleCountPercent} %<br>`;
+                                    result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
+                                    result += `${newValue.i18n.transaction}: ${newValue.transaction}<br>`;
+                                    result += `${newValue.i18n.conversion}: ${newValue.conversion}<br>`;
                                 } catch (e) {
                                     console.log(e);
                                 }
@@ -552,7 +557,7 @@ export class HighchartsDwellTime extends Vue {
 
                                     // set value
                                     result += `${newValue.i18n.time}:${newValue.timeString}<br>`;
-                                    result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime}<br>`;
+                                    result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime.toFixed(2)}<br>`;
                                     result += `${newValue.i18n.maleCountPercent}: ${newValue.maleCountPercent} %<br>`;
                                     result += `${newValue.i18n.femaleCountPercent}: ${newValue.femaleCountPercent} %<br>`;
                                     result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
@@ -941,7 +946,7 @@ export class HighchartsDwellTime extends Vue {
                                 case ETimeMode.week:
                                     result += `${newValue.i18n.startDate}: ${newValue.dateStartString}<br>`;
                                     result += `${newValue.i18n.endDate}: ${newValue.dateEndString}<br>`;
-                                    result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime}<br>`;
+                                    result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime.toFixed(2)}<br>`;
                                     result += `${newValue.i18n.maleCountPercent}: ${newValue.maleCountPercent} %<br>`;
                                     result += `${newValue.i18n.femaleCountPercent}: ${newValue.femaleCountPercent} %<br>`;
                                     result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
@@ -955,10 +960,10 @@ export class HighchartsDwellTime extends Vue {
                                     result += `${newValue.dateString}<br>`;
                                     result += `${newValue.i18n.temperatureMin}: ${newValue.temperatureMin}°C<br>`;
                                     result += `${newValue.i18n.temperatureMax}: ${newValue.temperatureMax}°C<br>`;
-                                    result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime}<br>`;
+                                    result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime.toFixed(2)}<br>`;
                                     result += `${newValue.i18n.maleCountPercent}: ${newValue.maleCountPercent} %<br>`;
                                     result += `${newValue.i18n.femaleCountPercent}: ${newValue.femaleCountPercent} %<br>`;
-                                    result += `${newValue.i18n.dwellTimeAVG}: ${newValue.dwellTimeAVG}<br>`;
+                                    result += `${newValue.i18n.dwellTimeAVG}: ${newValue.dwellTimeAVG.toFixed(2)}<br>`;
                                     result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
                                     result += `${newValue.i18n.transaction}: ${newValue.transaction}<br>`;
                                     result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
@@ -1129,8 +1134,8 @@ export class HighchartsDwellTime extends Vue {
                             result += `${newValue.i18n.date}: ${newValue.dateString}<br>`;
                             result += `${newValue.i18n.temperatureMin}: ${newValue.temperatureMin}°C<br>`;
                             result += `${newValue.i18n.temperatureMax}: ${newValue.temperatureMax}°C<br>`;
-                            result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime}<br>`;
-                            result += `${newValue.i18n.dwellTimeAVG}: ${newValue.dwellTimeAVG}<br>`;
+                            result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime.toFixed(2)}<br>`;
+                            result += `${newValue.i18n.dwellTimeAVG}: ${newValue.dwellTimeAVG.toFixed(2)}<br>`;
                             result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
                             result += `${newValue.i18n.transaction}: ${newValue.transaction}<br>`;
                             result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
@@ -1457,6 +1462,8 @@ export class HighchartsDwellTime extends Vue {
                 );
             }
 
+
+
             switch (this.timeMode) {
                 case ETimeMode.year:
                 case ETimeMode.month:
@@ -1554,7 +1561,7 @@ export class HighchartsDwellTime extends Vue {
                                         result += `${site.siteName}<br>`;
                                         result += `${newValue.i18n.startDate}: ${site.dateStartString}<br>`;
                                         result += `${newValue.i18n.endDate}: ${site.dateEndString}<br>`;
-                                        result += `${newValue.i18n.dwellTime}: ${site.dwellTime}<br>`;
+                                        result += `${newValue.i18n.dwellTime}: ${site.dwellTime.toFixed(2)}<br>`;
                                         result += `${newValue.i18n.revenue}: ${site.revenue}<br>`;
                                         result += `${newValue.i18n.transaction}: ${site.transaction}<br>`;
                                         result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
@@ -1568,7 +1575,7 @@ export class HighchartsDwellTime extends Vue {
                                         result += `${newValue.i18n.temperatureMin}: ${site.temperatureMin}°C<br>`;
                                         result += `${newValue.i18n.temperatureMax}: ${site.temperatureMax}°C<br>`;
                                         result += `${newValue.i18n.weather}: ${site.weatherIcon}<br>`;
-                                        result += `${newValue.i18n.dwellTime}: ${site.dwellTime}<br>`;
+                                        result += `${newValue.i18n.dwellTime}: ${site.dwellTime.toFixed(2)}<br>`;
                                         result += `${newValue.i18n.revenue}: ${site.revenue}<br>`;
                                         result += `${newValue.i18n.transaction}: ${site.transaction}<br>`;
                                         result += `${newValue.i18n.conversion}: ${newValue.conversion}%<br>`;
@@ -1887,6 +1894,7 @@ export class HighchartsDwellTime extends Vue {
         value.weatherIcon = HighchartsService.weatherIcon(value.weather);
         value.weekNumber = Datetime.WeekNumber(value.date);
         value.quarterNumber = Datetime.QuarterNumber(value.date);
+
         switch (this.timeMode) {
             case ETimeMode.year:
                 value.dateStart = Datetime.YearStart(value.date);
