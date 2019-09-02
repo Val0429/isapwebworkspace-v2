@@ -31,7 +31,7 @@
             </thead>
             <tbody>
                 <template v-for="(items, key, index) in reportTableData._body">
-                    <tr>
+                    <tr v-if="reportTableTitle.title1">
                         <td
                             v-if="reportTableData._body && reportTableData._body[0] && reportTableData._body[0].site"
                             :rowspan="reportTableTitle.titleCount"
@@ -49,7 +49,6 @@
                         >{{items.group ? items.group.name : ""}}</td>
                         <td class="title"> {{reportTableTitle.title1}}</td>
                         <td v-for="(item1, key, index) in items.item1">
-
                             <a
                                 v-if="item1.link && item1.value != 0"
                                 href="#"
@@ -69,7 +68,7 @@
                             >{{ " (" + toPercent(items.item1Total.valueRatio,0) + ")" }}</span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr v-if="reportTableTitle.title2">
                         <td class="title"> {{reportTableTitle.title2}}</td>
                         <td v-for="(item2, key, index) in items.item2">
                             <a
@@ -138,7 +137,7 @@
                 </template>
             </tbody>
             <tfoot v-if="!reportTableData._noFoot && reportTableData._body && reportTableData._body.length > 0">
-                <tr>
+                <tr v-if="reportTableTitle.total1Title">
                     <td
                         v-if="reportTableData._body &&  reportTableData._body[0] && reportTableData._body[0].site"
                         :rowspan="reportTableTitle.titleCount"
@@ -164,7 +163,7 @@
                     </td>
 
                 </tr>
-                <tr>
+                <tr v-if="reportTableTitle.total2Title">
                     <td class="title"> {{reportTableTitle.total2Title}}</td>
                     <td v-for="(items, key, index) in reportTableData.foot">
                         <span>{{ items.item2Total.value }}</span>
