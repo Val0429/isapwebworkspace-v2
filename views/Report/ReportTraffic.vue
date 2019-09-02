@@ -478,7 +478,7 @@ export default class ReportTraffic extends Vue {
         let chartMode = EChartMode.site1Day1;
 
         this.sunRData.chartMode = chartMode;
-        this.sunRData.noFoot = true;
+        this.sunRData.noFoot = false;
         this.sunRData.thatDay = this.startDate; //單天記錄時間日期
         this.reportTableTitle.headTitle = this._(
             "w_ReportTraffic_TrafficByHours"
