@@ -207,16 +207,15 @@ export class AnalysisFilterHeatMap extends Vue {
                     false
                 )};
 
-
-                /**
-                 * @uiColumnGroup - analysis
-                 * @uiHidden - true
-                 */
-                submitButton?: any;
-
             }
         `;
     }
+
+    // /**
+    //  * @uiColumnGroup - analysis
+    //  * @uiHidden - true
+    //  */
+    // submitButton?: any;
 }
 
 export default AnalysisFilterHeatMap;

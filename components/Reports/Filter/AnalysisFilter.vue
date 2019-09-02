@@ -250,13 +250,6 @@ export class AnalysisFilter extends Vue {
 
 
                 /**
-                 * @uiColumnGroup - analysis
-                 * @uiHidden - true
-                 */
-                submitButton?: any;
-
-
-                /**
                  * @uiLabel - ${this._("w_countSelect")}
                  * @uiColumnGroup - row2
                  */
@@ -273,6 +266,14 @@ export class AnalysisFilter extends Vue {
             }
         `;
     }
+
+
+
+    // /**
+    //  * @uiColumnGroup - analysis
+    //  * @uiHidden - true
+    //  */
+    // submitButton?: any;
 }
 
 export default AnalysisFilter;

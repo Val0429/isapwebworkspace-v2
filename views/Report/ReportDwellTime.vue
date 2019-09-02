@@ -216,6 +216,7 @@ import excel2json from "@/services/Excel/excel2json";
 import ReportPDFService from "@/components/Reports/models/ReportPDFService";
 import { EFileType, IReportTableTitle } from "@/components/Reports";
 
+
 enum ETableStep {
     mainTable = "mainTable",
     sunTable = "sunTable",
@@ -336,7 +337,7 @@ export default class ReportDwellTime extends Vue {
     detailRData = [];
 
     created() {
-        this.initChartDeveloper();
+        // this.initChartDeveloper();
         this.initTemplate();
         this.initDatas();
     }
@@ -1319,6 +1320,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
+                    dwellTime: 0,
                     ageRange: EAgeRange.none,
                     dwellTimeRange: EDwellTimeRange.lower5,
                     maleCount: 0,
@@ -1333,6 +1335,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
+                    dwellTime: 0,
                     ageRange: EAgeRange.none,
                     dwellTimeRange: EDwellTimeRange.m5_15,
                     maleCount: 0,
@@ -1347,6 +1350,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
+                    dwellTime: 0,
                     ageRange: EAgeRange.none,
                     dwellTimeRange: EDwellTimeRange.m15_30,
                     maleCount: 0,
@@ -1361,6 +1365,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
+                    dwellTime: 0,
                     ageRange: EAgeRange.none,
                     dwellTimeRange: EDwellTimeRange.m30_60,
                     maleCount: 0,
@@ -1375,6 +1380,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
+                    dwellTime: 0,
                     ageRange: EAgeRange.none,
                     dwellTimeRange: EDwellTimeRange.m60_120,
                     maleCount: 0,
@@ -1389,6 +1395,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMin: 0,
                     temperatureMax: 0,
                     weather: EWeather.none,
+                    dwellTime: 0,
                     ageRange: EAgeRange.none,
                     dwellTimeRange: EDwellTimeRange.upper120,
                     maleCount: 0,
@@ -1959,6 +1966,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.none,
+                    dwellTime: 0,
                     dwellTimeRange: EDwellTimeRange.lower5,
                     maleCount: 0,
                     femaleCount: 0,
@@ -1973,6 +1981,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.none,
+                    dwellTime: 0,
                     dwellTimeRange: EDwellTimeRange.m5_15,
                     maleCount: 0,
                     femaleCount: 0,
@@ -1987,6 +1996,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.none,
+                    dwellTime: 0,
                     dwellTimeRange: EDwellTimeRange.m15_30,
                     maleCount: 0,
                     femaleCount: 0,
@@ -2001,6 +2011,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.none,
+                    dwellTime: 0,
                     dwellTimeRange: EDwellTimeRange.m30_60,
                     maleCount: 0,
                     femaleCount: 0,
@@ -2015,6 +2026,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.none,
+                    dwellTime: 0,
                     dwellTimeRange: EDwellTimeRange.m60_120,
                     maleCount: 0,
                     femaleCount: 0,
@@ -2029,6 +2041,7 @@ export default class ReportDwellTime extends Vue {
                     temperatureMax: 0,
                     weather: EWeather.none,
                     ageRange: EAgeRange.none,
+                    dwellTime: 0,
                     dwellTimeRange: EDwellTimeRange.upper120,
                     maleCount: 0,
                     femaleCount: 0,
@@ -2598,6 +2611,7 @@ export default class ReportDwellTime extends Vue {
 
             // 計算 maleCount、femaleCount
             for (let summary of datas) {
+
                 let summaryDateFormat = isOneDay
                     ? Datetime.DateTime2String(
                           new Date(summary.date),
@@ -2612,60 +2626,675 @@ export default class ReportDwellTime extends Vue {
                     summaryDateFormat == tempDateFormat &&
                     summary.site.objectId == tempChartData.siteObjectId
                 ) {
+
                     let ageRangeIndex = 0;
-                    switch (tempChartData.ageRange) {
-                        case EAgeRange.lower20:
-                            ageRangeIndex = 0;
+                    let dwellTimeRangeIndex = 0;
+
+                    switch (tempChartData.dwellTimeRange) {
+                        case EDwellTimeRange.lower5:
+                            dwellTimeRangeIndex = 0;
+                            switch (tempChartData.ageRange) {
+                                case EAgeRange.lower20:
+                                    ageRangeIndex = 0;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m21_30:
+                                    ageRangeIndex = 1;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m31_40:
+                                    ageRangeIndex = 2;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m41_50:
+                                    ageRangeIndex = 3;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m51_60:
+                                    ageRangeIndex = 4;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.upper61:
+                                    ageRangeIndex = 5;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                            }
                             break;
-                        case EAgeRange.m21_30:
-                            ageRangeIndex = 1;
+                        case EDwellTimeRange.m5_15:
+                            dwellTimeRangeIndex = 1;
+                            switch (tempChartData.ageRange) {
+                                case EAgeRange.lower20:
+                                    ageRangeIndex = 0;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m21_30:
+                                    ageRangeIndex = 1;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m31_40:
+                                    ageRangeIndex = 2;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m41_50:
+                                    ageRangeIndex = 3;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m51_60:
+                                    ageRangeIndex = 4;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.upper61:
+                                    ageRangeIndex = 5;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                            }
                             break;
-                        case EAgeRange.m31_40:
-                            ageRangeIndex = 2;
+                        case EDwellTimeRange.m15_30:
+                            dwellTimeRangeIndex = 2;
+                            switch (tempChartData.ageRange) {
+                                case EAgeRange.lower20:
+                                    ageRangeIndex = 0;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m21_30:
+                                    ageRangeIndex = 1;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m31_40:
+                                    ageRangeIndex = 2;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m41_50:
+                                    ageRangeIndex = 3;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m51_60:
+                                    ageRangeIndex = 4;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.upper61:
+                                    ageRangeIndex = 5;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                            }
                             break;
-                        case EAgeRange.m41_50:
-                            ageRangeIndex = 3;
+                        case EDwellTimeRange.m30_60:
+                            dwellTimeRangeIndex = 3;
+                            switch (tempChartData.ageRange) {
+                                case EAgeRange.lower20:
+                                    ageRangeIndex = 0;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m21_30:
+                                    ageRangeIndex = 1;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m31_40:
+                                    ageRangeIndex = 2;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m41_50:
+                                    ageRangeIndex = 3;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m51_60:
+                                    ageRangeIndex = 4;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.upper61:
+                                    ageRangeIndex = 5;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                            }
                             break;
-                        case EAgeRange.m51_60:
-                            ageRangeIndex = 4;
+                        case EDwellTimeRange.m60_120:
+                            dwellTimeRangeIndex = 4;
+                            switch (tempChartData.ageRange) {
+                                case EAgeRange.lower20:
+                                    ageRangeIndex = 0;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m21_30:
+                                    ageRangeIndex = 1;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m31_40:
+                                    ageRangeIndex = 2;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m41_50:
+                                    ageRangeIndex = 3;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m51_60:
+                                    ageRangeIndex = 4;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.upper61:
+                                    ageRangeIndex = 5;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                            }
                             break;
-                        case EAgeRange.upper61:
-                            ageRangeIndex = 5;
+                        case EDwellTimeRange.upper120:
+                            dwellTimeRangeIndex = 5;
+                            switch (tempChartData.ageRange) {
+                                case EAgeRange.lower20:
+                                    ageRangeIndex = 0;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m21_30:
+                                    ageRangeIndex = 1;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m31_40:
+                                    ageRangeIndex = 2;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m41_50:
+                                    ageRangeIndex = 3;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.m51_60:
+                                    ageRangeIndex = 4;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                                case EAgeRange.upper61:
+                                    ageRangeIndex = 5;
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                    summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+
+                                    tempChartData.maleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
+                                    tempChartData.femaleCount += summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
+                                    tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+
+                                    if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                        tempChartData.maleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                                        tempChartData.femaleCount -= summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                                    }
+                                    break;
+                            }
                             break;
                     }
 
-                    summary.maleRanges[ageRangeIndex] =
-                        summary.maleRanges[ageRangeIndex] === null
-                            ? 0
-                            : summary.maleRanges[ageRangeIndex];
-                    summary.femaleRanges[ageRangeIndex] =
-                        summary.femaleRanges[ageRangeIndex] === null
-                            ? 0
-                            : summary.femaleRanges[ageRangeIndex];
-                    summary.maleEmployeeRanges[ageRangeIndex] =
-                        summary.maleEmployeeRanges[ageRangeIndex] === null
-                            ? 0
-                            : summary.maleEmployeeRanges[ageRangeIndex];
-                    summary.femaleEmployeeRanges[ageRangeIndex] =
-                        summary.femaleEmployeeRanges[ageRangeIndex] === null
-                            ? 0
-                            : summary.femaleEmployeeRanges[ageRangeIndex];
+                    // summary.dwellTimeRanges[ageRangeIndex].maleRanges[ageRangeIndex] = summary.dwellTimeRanges[ageRangeIndex].maleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[ageRangeIndex].maleRanges[ageRangeIndex];
+                    // summary.dwellTimeRanges[ageRangeIndex].femaleRanges[ageRangeIndex] = summary.dwellTimeRanges[ageRangeIndex].femaleRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[ageRangeIndex].femaleRanges[ageRangeIndex];
+                    // summary.dwellTimeRanges[ageRangeIndex].maleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[ageRangeIndex].maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[ageRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                    // summary.dwellTimeRanges[ageRangeIndex].femaleEmployeeRanges[ageRangeIndex] = summary.dwellTimeRanges[ageRangeIndex].femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.dwellTimeRanges[ageRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                    //
+                    // tempChartData.maleCount += summary.dwellTimeRanges[ageRangeIndex].maleRanges[ageRangeIndex];
+                    // tempChartData.femaleCount += summary.dwellTimeRanges[ageRangeIndex].femaleRanges[ageRangeIndex];
+                    //
+                    // if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                    //     tempChartData.maleCount -= summary.dwellTimeRanges[ageRangeIndex].maleEmployeeRanges[ageRangeIndex];
+                    //     tempChartData.femaleCount -= summary.dwellTimeRanges[ageRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+                    // }
 
-                    tempChartData.maleCount +=
-                        summary.maleRanges[ageRangeIndex];
-                    tempChartData.femaleCount +=
-                        summary.femaleRanges[ageRangeIndex];
+                }
+            }
+
+            for (let saleRecord of this.responseData.salesRecords) {
+
+                let saleDateFormat = isOneDay
+                    ? Datetime.DateTime2String(
+                        new Date(saleRecord.date),
+                        `${Datetime.FormatCheckDate} HH`
+                    )
+                    : Datetime.DateTime2String(
+                        new Date(saleRecord.date),
+                        Datetime.FormatCheckDate
+                    );
+
+
+                let tempDateFormat = isOneDay
+                    ? Datetime.DateTime2String(
+                        tempChartData.date,
+                        `${Datetime.FormatCheckDate} HH`
+                    )
+                    : Datetime.DateTime2String(
+                        tempChartData.date,
+                        Datetime.FormatCheckDate
+                    );
+                if (
+                    saleDateFormat == tempDateFormat &&
+                    saleRecord.site.objectId == tempChartData.siteObjectId
+                ) {
+                    tempChartData.revenue += saleRecord.revenue;
+                    tempChartData.transaction += saleRecord.transaction;
+                    break;
+                }
 
                     if (
-                        this.inputFormData.isIncludedEmployee ===
-                        EIncludedEmployee.no
+                        saleDateFormat == tempDateFormat &&
+                        saleRecord.site.objectId == tempChartData.siteObjectId
                     ) {
-                        tempChartData.maleCount -=
-                            summary.maleEmployeeRanges[ageRangeIndex];
-                        tempChartData.femaleCount -=
-                            summary.femaleEmployeeRanges[ageRangeIndex];
+                        tempChartData.revenue += saleRecord.revenue;
+                        tempChartData.transaction += saleRecord.transaction;
+                        break;
                     }
-                }
+
             }
 
             // 取得天氣
@@ -2693,26 +3322,12 @@ export default class ReportDwellTime extends Vue {
                     break;
                 }
             }
-
-            // TODO: Dwell time
-            let tempRandomDwellTime = Math.floor(Math.random() * 6);
-            if (tempRandomDwellTime == 0) {
-                tempChartData.dwellTimeRange = EDwellTimeRange.lower5;
-            } else if (tempRandomDwellTime == 1) {
-                tempChartData.dwellTimeRange = EDwellTimeRange.m5_15;
-            } else if (tempRandomDwellTime == 2) {
-                tempChartData.dwellTimeRange = EDwellTimeRange.m15_30;
-            } else if (tempRandomDwellTime == 3) {
-                tempChartData.dwellTimeRange = EDwellTimeRange.m30_60;
-            } else if (tempRandomDwellTime == 4) {
-                tempChartData.dwellTimeRange = EDwellTimeRange.m60_120;
-            } else {
-                tempChartData.dwellTimeRange = EDwellTimeRange.upper120;
-            }
-            // TODO: Dwell time
         }
 
         this.chartDatas = tempChartDatas;
+
+        console.log('this.chartDatas ~ ', JSON.stringify(this.chartDatas))
+
     }
 
     async receiveAreaId(areaId) {
@@ -3226,7 +3841,8 @@ export default class ReportDwellTime extends Vue {
                     maleCount: Math.floor(Math.random() * 300),
                     femaleCount: Math.floor(Math.random() * 300),
                     revenue: Math.floor(Math.random() * 1000),
-                    transaction: Math.floor(Math.random() * 50)
+                    transaction: Math.floor(Math.random() * 50),
+                    dwellTime: Math.floor(Math.random() * 2)
                 };
 
                 if (!isNaN(tempChartData.date.getTime())) {

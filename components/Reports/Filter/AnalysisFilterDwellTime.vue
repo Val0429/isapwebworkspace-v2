@@ -290,13 +290,6 @@ export class AnalysisFilterDwellTime extends Vue {
 
 
                 /**
-                 * @uiColumnGroup - analysis
-                 * @uiHidden - true
-                 */
-                submitButton?: any;
-
-
-                /**
                  * @uiLabel - ${this._("w_countSelect")}
                  * @uiColumnGroup - row
                  */
@@ -320,6 +313,13 @@ export class AnalysisFilterDwellTime extends Vue {
             }
         `;
     }
+
+
+    // /**
+    //  * @uiColumnGroup - analysis
+    //  * @uiHidden - true
+    //  */
+    // submitButton?: any;
 }
 
 export default AnalysisFilterDwellTime;
