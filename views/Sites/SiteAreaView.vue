@@ -192,8 +192,8 @@ export class SiteAreaView extends Vue {
         let imageMapRef: any = this.$refs.imageMap;
 
         // imageMap mode
-        // this.imageMap.setupMode = ESetupMode.preview;
-        this.imageMap.setupMode = ESetupMode.setup;
+        this.imageMap.setupMode = ESetupMode.preview;
+        //this.imageMap.setupMode = ESetupMode.setup;
 
         // imageMap setting
         this.imageMap.draw.deviceGroupInTagLabel = true;
