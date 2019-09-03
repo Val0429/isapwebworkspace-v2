@@ -729,7 +729,6 @@ export default class ReportDwellTime extends Vue {
         let filterData = {
             startDate: tempSDate,
             endDate: tempEDate,
-            type: rowName == "item2" ? "medium" : "high",
             areaId: sunArea
         };
 
@@ -739,7 +738,7 @@ export default class ReportDwellTime extends Vue {
 
         // TODO: wait api
         await this.$server
-            .C("/report/human-detection/summary-threshold", filterData)
+                        .C("/report/dwell-time/summary-threshold", filterData)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     this.detailRData = response;
