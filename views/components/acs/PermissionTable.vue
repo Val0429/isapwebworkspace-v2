@@ -598,8 +598,8 @@ async doExport(){
                     //skip orphan elevator
                     if (!origin) continue;                    
                     deviceData.deviceName.text = origin.elevatorname;                    
-                    if(!origin.reader || !tempAccesslevels.floor || tempAccesslevels.floor.length<=0) break;                    
-                    let floor = origin.reader.find(x=>x.objectId == tempAccesslevels.floor[0].objectId);                    
+                    if(!origin.reader || !tempAccesslevels.floor) break;                    
+                    let floor = origin.reader.find(x=>x.objectId == tempAccesslevels.floor.objectId);                    
                     if(!floor)break;
                     deviceData.area.id = floor.floorname;
                     deviceData.area.text = floor.floorname;
