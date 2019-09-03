@@ -111,9 +111,10 @@ interface IChartDwellTimeData extends IChart, IChartWeather, ITimeMode, IAreaMod
 
 interface IChartDemographicData extends IChart, IChartWeather, ITimeMode, IAreaMode {
     ageRange: EAgeRange;
-    dwellTimeRange: EDwellTimeRange;
+    dwellTimeRange?: EDwellTimeRange;
     maleCount: number;
     femaleCount: number;
+    dwellTimeRanges: number[];
 
     maleCountPercent?: number;
     femaleCountPercent?: number;

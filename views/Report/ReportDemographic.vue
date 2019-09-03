@@ -196,7 +196,7 @@ enum ETableStep {
 	components: {}
 })
 export default class ReportDemographic extends Vue {
-        
+
     lastTableStep: ETableStep = ETableStep.none;
 	tableStep: ETableStep = ETableStep.none;
 	eTableStep = ETableStep;
@@ -302,6 +302,7 @@ export default class ReportDemographic extends Vue {
 		created() {
 			this.initDatas();
 			this.initTemplate();
+			// this.initChartDeveloper();
 		}
 
 		mounted() {
@@ -362,7 +363,7 @@ export default class ReportDemographic extends Vue {
             : all - employee;
     }
 
-        
+
 		reportTableBack() {
 			this.tableStep = this.lastTableStep;
 			this.lastTableStep = ETableStep.mainTable;
@@ -621,7 +622,7 @@ export default class ReportDemographic extends Vue {
 			//body
 			this.rData.body = [];
             let tempArray = [];
-            
+
 			//篩選出所有店
 			for (let summaryData of this.responseData.summaryDatas) {
 				if (
@@ -1022,7 +1023,7 @@ export default class ReportDemographic extends Vue {
 
 			if (!this.filterData.firstSiteId) {
 				return false;
-            } 
+            }
 
             await this.$server
 					.R("/location/area/all", readParam)
@@ -1040,7 +1041,7 @@ export default class ReportDemographic extends Vue {
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
 					});
-        
+
 		}
 
 		async initSelectItemDeviceGroup() {
@@ -1057,10 +1058,10 @@ export default class ReportDemographic extends Vue {
                 mode: this.deviceMode,
                 paging: { all: true }
             };
-            
+
 			if (!this.filterData.firstSiteId) {
 				return false;
-            } 
+            }
 
             if (this.inputFormData.areaId) {
                 readParam.areaId = this.inputFormData.areaId !== "all" ? this.inputFormData.areaId : "";
@@ -1101,7 +1102,7 @@ export default class ReportDemographic extends Vue {
                 mode: this.deviceMode,
                 paging: { all: true }
             };
-            
+
 			if (!this.filterData.firstSiteId) {
                 return false;
             }
@@ -1131,7 +1132,7 @@ export default class ReportDemographic extends Vue {
                                         returnValue.name;
                                     }
                                     this.deviceSelectItem = tempDeviceSelectItem;
-                                } 
+                                }
                             }
                         );
 					})
@@ -1204,7 +1205,6 @@ export default class ReportDemographic extends Vue {
 				.catch((e: any) => {
 					return ResponseFilter.catchError(this, e);
                 });
-
         }
 
         resolveSummary () {
@@ -1253,7 +1253,7 @@ export default class ReportDemographic extends Vue {
 					}
 				}
             }
-            
+
                //追加沒有的資料site傳入陣列 以便chart 單店多店判斷
         for (const filterSiteId of this.filterData.siteIds) {
             if (this.sites.some(x => x.objectId == filterSiteId)) {
@@ -1347,6 +1347,7 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.lower20,
 						maleCount: 0,
 						femaleCount: 0,
+						dwellTimeRanges: []
 					};
 					let tempDateChartDataM21_30 = {
 						date: tempDate,
@@ -1357,6 +1358,7 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.m21_30,
 						maleCount: 0,
 						femaleCount: 0,
+						dwellTimeRanges: []
 					};
 					let tempDateChartDataM31_40 = {
 						date: tempDate,
@@ -1367,6 +1369,7 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.m31_40,
 						maleCount: 0,
 						femaleCount: 0,
+						dwellTimeRanges: []
 					};
 					let tempDateChartDataM41_50 = {
 						date: tempDate,
@@ -1377,6 +1380,7 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.m41_50,
 						maleCount: 0,
 						femaleCount: 0,
+						dwellTimeRanges: []
 					};
 					let tempDateChartDataM51_60 = {
 						date: tempDate,
@@ -1387,6 +1391,7 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.m51_60,
 						maleCount: 0,
 						femaleCount: 0,
+						dwellTimeRanges: []
 					};
 					let tempDateChartDataUpper61 = {
 						date: tempDate,
@@ -1397,6 +1402,7 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.upper61,
 						maleCount: 0,
 						femaleCount: 0,
+						dwellTimeRanges: []
 					};
 
 					for (let siteId of this.filterData.siteIds) {
@@ -1454,6 +1460,7 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.lower20,
 						maleCount: 0,
 						femaleCount: 0,
+						dwellTimeRanges: []
 					};
 					let tempDateChartDataM21_30 = {
 						date: new Date(dateItem.getTime()),
@@ -1464,6 +1471,7 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.m21_30,
 						maleCount: 0,
 						femaleCount: 0,
+						dwellTimeRanges: []
 					};
 					let tempDateChartDataM31_40 = {
 						date: new Date(dateItem.getTime()),
@@ -1474,6 +1482,7 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.m31_40,
 						maleCount: 0,
 						femaleCount: 0,
+						dwellTimeRanges: []
 					};
 					let tempDateChartDataM41_50 = {
 						date: new Date(dateItem.getTime()),
@@ -1484,6 +1493,7 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.m41_50,
 						maleCount: 0,
 						femaleCount: 0,
+						dwellTimeRanges: []
 					};
 					let tempDateChartDataM51_60 = {
 						date: new Date(dateItem.getTime()),
@@ -1494,6 +1504,7 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.m51_60,
 						maleCount: 0,
 						femaleCount: 0,
+						dwellTimeRanges: []
 					};
 					let tempDateChartDataUpper61 = {
 						date: new Date(dateItem.getTime()),
@@ -1504,6 +1515,7 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.upper61,
 						maleCount: 0,
 						femaleCount: 0,
+						dwellTimeRanges: []
 					};
 
 					for (let siteId of this.filterData.siteIds) {
@@ -1551,6 +1563,7 @@ export default class ReportDemographic extends Vue {
 
                 // 計算 maleCount、femaleCount
                 for (let summary of datas) {
+
                     let summaryDateFormat = isOneDay
                         ? Datetime.DateTime2String(
                             new Date(summary.date),
@@ -1565,7 +1578,9 @@ export default class ReportDemographic extends Vue {
                             summaryDateFormat == tempDateFormat &&
                             summary.site.objectId == tempChartData.siteObjectId
                         ) {
-                            let ageRangeIndex = 0;
+
+	                        let ageRangeIndex = 0;
+
                             switch (tempChartData.ageRange) {
                                 case EAgeRange.lower20:
                                     ageRangeIndex = 0;
@@ -1587,17 +1602,17 @@ export default class ReportDemographic extends Vue {
                                     break;
                             }
 
-                            summary.maleRanges[ageRangeIndex] = summary.maleRanges[ageRangeIndex] === null ? 0 : summary.maleRanges[ageRangeIndex];
-                            summary.femaleRanges[ageRangeIndex] = summary.femaleRanges[ageRangeIndex] === null ? 0 : summary.femaleRanges[ageRangeIndex];
-                            summary.maleEmployeeRanges[ageRangeIndex] = summary.maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.maleEmployeeRanges[ageRangeIndex];
-                            summary.femaleEmployeeRanges[ageRangeIndex] = summary.femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.femaleEmployeeRanges[ageRangeIndex];
+                            summary.ageRanges[ageRangeIndex].male = summary.ageRanges[ageRangeIndex].male === null ? 0 : summary.ageRanges[ageRangeIndex].male;
+                            summary.ageRanges[ageRangeIndex].female = summary.ageRanges[ageRangeIndex].female === null ? 0 : summary.ageRanges[ageRangeIndex].female;
+                            summary.ageRanges[ageRangeIndex].maleEmployee = summary.ageRanges[ageRangeIndex].maleEmployee === null ? 0 : summary.ageRanges[ageRangeIndex].maleEmployee;
+                            summary.ageRanges[ageRangeIndex].femaleEmployee = summary.ageRanges[ageRangeIndex].femaleEmployee === null ? 0 : summary.ageRanges[ageRangeIndex].femaleEmployee;
 
-                            tempChartData.maleCount += summary.maleRanges[ageRangeIndex];
-                            tempChartData.femaleCount += summary.femaleRanges[ageRangeIndex];
+                            tempChartData.maleCount += summary.ageRanges[ageRangeIndex].male;
+                            tempChartData.femaleCount += summary.ageRanges[ageRangeIndex].female;
 
-                            if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
-                                tempChartData.maleCount -= summary.maleEmployeeRanges[ageRangeIndex];
-                                tempChartData.femaleCount -= summary.femaleEmployeeRanges[ageRangeIndex];
+	                        if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+                                tempChartData.maleCount -= summary.ageRanges[ageRangeIndex].maleEmployee;
+                                tempChartData.femaleCount -= summary.ageRanges[ageRangeIndex].femaleEmployee;
                             }
 
                         }
