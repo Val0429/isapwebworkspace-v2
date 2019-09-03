@@ -8,11 +8,12 @@
             @update:zoom="zoomUpdated"
             @update:center="centerUpdated"
             @mouseenter="frezze"
-            >
+        >
             <leaf-tile-layer :url="url" />
-            <leaf-marker 
+            <leaf-marker
                 :lat-lng="marker"
-                />
+                :icon="icon"
+            />
         </leaf-map>
     </div>
 </template>

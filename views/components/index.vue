@@ -130,7 +130,7 @@ export default class Components extends Vue {
     }
     private async mounted() {
         let sitesList = await this.$server.R("/continental/sites", {
-            pageSize: 10
+            paging: { pageSize: 10 }
         });
         this.sites_list_body = sitesList["results"];
     }

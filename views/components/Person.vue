@@ -78,7 +78,11 @@
                             :interface="IAllowIntoSite()"
                             :data="allowIntoSite"
                             :hidePaging="true"
-                        />
+                        >
+                            <template #status="{$attrs}">
+                                {{ $attrs.value == 1 ? '允許': '拒絕' }}
+                            </template>
+                        </iv-table>
                     </iv-card>
                     <iv-card :label="_('m_Persons_Person_Enter_Site_Record')">
                         <iv-table
@@ -320,15 +324,7 @@ export default class Components extends Vue {
     private readMore(value) {
         this.step = 2;
 
-        this.personBaseData = {
-            paging: {
-                page: 1,
-                pageSize: 10000,
-                total: 1,
-                totalPages: 10000
-            },
-            results: value
-        };
+        this.personBaseData = value;
 
         this.personLicensesData = {
             paging: {
@@ -352,9 +348,15 @@ export default class Components extends Vue {
 
         let newWorkStationRecord = value.user_sites;
         let siteareaname = value.work_areas;
-        for (let i in newWorkStationRecord) {
-            newWorkStationRecord[i]["work_areas"] = siteareaname;
+        let work_areas = [];
+        // newWorkStationRecord["work_areas"] = [];
+        for (let j in siteareaname) {
+            work_areas.push(siteareaname[j].siteareaname);
         }
+        for (let i in newWorkStationRecord) {
+            newWorkStationRecord[i]["work_areas"] = work_areas.join(", ");
+        }
+        console.log(newWorkStationRecord);
         this.allowIntoSite = {
             paging: {
                 page: 1,

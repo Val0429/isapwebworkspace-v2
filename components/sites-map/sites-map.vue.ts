@@ -1,4 +1,4 @@
-import { Vue, Component, Prop, Model, Watch } from "vue-property-decorator";
+import { Vue, Component, Prop, Model, Watch } from 'vue-property-decorator';
 import * as L from 'leaflet';
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
 
@@ -6,16 +6,19 @@ import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
     components: {
         'leaf-map': LMap,
         'leaf-tile-layer': LTileLayer,
-        'leaf-marker': LMarker
-    }
+        'leaf-marker': LMarker,
+    },
 })
 export class SitesMap extends Vue {
-
     url: string = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
     zoom: number = 14;
     marker: any = L.latLng(this._lat, this._lng);
+    icon: any = L.icon({
+        iconUrl: require('leaflet/dist/images/marker-icon.png'),
+        shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+    });
 
-    get center () {
+    get center() {
         let center = [this._lat, this._lng];
         return center;
     }
@@ -26,29 +29,28 @@ export class SitesMap extends Vue {
     @Prop({ type: Boolean })
     isClick: Boolean;
 
-    get _lat (): number {
+    get _lat(): number {
         let _lat = this.newLocalData.length > 0 ? this.newLocalData[0] : 23.973875;
         return _lat;
     }
-    
-    get _lng () {
+
+    get _lng() {
         let _lng = this.newLocalData.length > 0 ? this.newLocalData[1] : 120.982024;
         return _lng;
     }
 
-    frezze () {
+    frezze() {
         this.$emit('isMove', true);
     }
 
-    zoomUpdated (zoom) {
+    zoomUpdated(zoom) {
         this.zoom = zoom;
     }
 
-    centerUpdated (center) {
+    centerUpdated(center) {
         if (this.isClick) {
             this.marker = center;
         }
     }
-
 }
 export default SitesMap;
