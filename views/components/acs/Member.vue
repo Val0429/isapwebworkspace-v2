@@ -85,11 +85,11 @@
           @click="pageToEdit()"
         />
 
-        <!-- <iv-toolbox-delete
+        <iv-toolbox-delete
           v-show="canDelete"
           :disabled="isSelected.length === 0"
           @click="doDelete"
-        /> -->
+        />
         <iv-toolbox-divider />
         <iv-toolbox-add v-show="canAdd" @click="pageToAdd(ePageStep.add)" />
       </template>
@@ -107,7 +107,7 @@
           <iv-toolbox-more size="sm" :disabled="isSelected.length !== 1">
             <iv-toolbox-view @click="pageToView" />
             <iv-toolbox-edit v-show="canEdit" @click="pageToEdit()" />
-            <!-- <iv-toolbox-delete v-show="canDelete" @click="doDelete" /> -->
+            <iv-toolbox-delete v-show="canDelete" @click="doDelete" />
           </iv-toolbox-more>
         </template>
       </iv-table>
@@ -837,26 +837,22 @@ export default class Member extends Vue {
       return false; 
   }
   async doDelete() {
-    await Dialog.confirm(
+     if(this.selectedDetail.length==0) return;
+    await Dialog.confirm(     
       this._("w_Member_DeleteConfirm"),
       this._("w_DeleteConfirm"),
-      () => {
-        for (const param of this.selectedDetail) {
-          const deleteParam: {
-            objectId: string;
-          } = {
-            objectId: param.objectId
-          };
-
-          this.$server
-            .D("/acs/member", deleteParam)
+      async () => {
+          await this.$server
+            .D("/acs/member", {
+              objectId: this.selectedDetail[0].objectId
+            })
             .then((response: any) => {
               if (response) {
                 this.pageToList();
               }
             });
         }
-      }
+      
     );
   }
 
