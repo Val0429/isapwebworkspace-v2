@@ -49,10 +49,12 @@ import ReportRepeatVisitor from './Report/ReportRepeatVisitor.vue';
 import ReportVIPTracking from './Report/ReportVIPTracking.vue';
 import ReportCampaign from './Report/ReportCampaign.vue';
 
-// Report
+// Tools
 import ToolTraffic from './Tools/ToolTraffic.vue';
 import ToolRepeatVisitor from './Tools/ToolRepeatVisitor.vue';
 import ToolDemographic from './Tools/ToolDemographic.vue';
+import ToolOccupancy from './Tools/ToolOccupancy.vue';
+import ToolDwellTime from './Tools/ToolDwellTime.vue';
 
 // Users
 import User from './Users/User.vue';
@@ -162,6 +164,8 @@ $({ path: '/tools', name: "_('w_Navigation_Tools')", icon: 'fa-code', redirect: 
 $({ path: '/tools/tool_traffic', name: "_('w_Navigation_Tools_Traffic')", icon: 'fa-check' })(ToolTraffic);
 $({ path: '/tools/tool_demographic', name: "_('w_Navigation_Tools_Demographic')", icon: 'fa-check' })(ToolDemographic);
 $({ path: '/tools/tool_repeatVisitor', name: "_('w_Navigation_Tools_RepeatVisitor')", icon: 'fa-check' })(ToolRepeatVisitor);
+$({ path: '/tools/tool_occupancy', name: "_('w_Navigation_Tools_Occupancy')", icon: 'fa-code' })(ToolOccupancy);
+$({ path: '/tools/tool_dwellTime', name: "_('w_Navigation_Tools_DwellTime')", icon: 'fa-code' })(ToolDwellTime);
 
 // Users
 $({ path: '/users', name: "_('w_Navigation_Users')", redirect: '/users/user' })();

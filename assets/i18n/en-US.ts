@@ -334,6 +334,8 @@ export default class LangObject {
     w_Navigation_Tools_Traffic = 'Traffic';
     w_Navigation_Tools_RepeatVisitor = 'Repeat Visitor';
     w_Navigation_Tools_Demographic = 'Demographic';
+    w_Navigation_Tools_Occupancy = 'Occupancy';
+    w_Navigation_Tools_DwellTime = 'DwellTime';
     w_Navigation_Tools_TrafficIn = 'Traffic -IN';
     w_Navigation_Tools_TrafficOut = 'Traffic - Out';
 

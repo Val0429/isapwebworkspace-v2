@@ -200,6 +200,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/report/campaign/single-campaign-summary': [any, any, false];
         '/report/heatmap/summary': [any, any, false];
         '/report/dwell-time/summary': [any, any, false];
+        '/report/dwell-time/summary-threshold': [any, any, false];
 
         // FRS Manager
         '/partner/frs-manager': [any, any, false];
