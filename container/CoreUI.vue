@@ -285,6 +285,14 @@
                             :label="_('w_Navigation_Tools_RepeatVisitor')"
                             url="/tools/tool_repeatVisitor"
                         />
+                           <SidebarNavItem
+                            :label="_('w_Navigation_Tools_Occupancy')"
+                            url="/tools/tool_occupancy"
+                        />
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Tools_DwellTime')"
+                            url="/tools/tool_dwellTime"
+                        />
                     </SidebarNavItem>
 
                 </iv-permission>
