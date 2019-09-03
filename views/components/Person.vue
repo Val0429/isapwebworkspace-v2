@@ -64,6 +64,7 @@
                             :interface="IPersonLicensesData()"
                             :data="personLicensesData"
                             :hidePaging="true"
+                            :selectable="false"
                         />
                     </iv-card>
                     <iv-card :label="_('m_Persons_Person_Work_Station_Record')">
@@ -71,27 +72,59 @@
                             :interface="IWorkStationRecord()"
                             :data="workStationRecord"
                             :hidePaging="true"
-                        />
+                            :selectable="false"
+                        >
+                            <template #work_record="{$attrs}">
+                                <template v-if="workStationRecord.results[$attrs.index].score == 2">
+                                    {{ _('w_level_5') }}
+                                </template>
+                                <template v-else-if="workStationRecord.results[$attrs.index].score == 1">
+                                    {{ _('w_level_4') }}
+                                </template>
+                                <template v-else-if="workStationRecord.results[$attrs.index].score == 0">
+                                    {{ _('w_level_3') }}
+                                </template>
+                                <template v-else-if="workStationRecord.results[$attrs.index].score == -1">
+                                    {{ _('w_level_2') }}
+                                </template>
+                                <template v-else-if="workStationRecord.results[$attrs.index].score == -2">
+                                    {{ _('w_level_1') }}
+                                </template>
+                            </template>
+                            <template #is_black="{$attrs}">
+                                {{ workStationRecord.results[$attrs.index].score > -3 ? _('wb_No') : _('wb_Yes')}}
+                            </template>
+                        </iv-table>
                     </iv-card>
                     <iv-card :label="_('m_Persons_Person_Allow_Into_Site')">
                         <iv-table
                             :interface="IAllowIntoSite()"
                             :data="allowIntoSite"
                             :hidePaging="true"
+                            :selectable="false"
                         >
-                            <template #status="{$attrs}">
-                                {{ $attrs.value == 1 ? '允許': '拒絕' }}
+                            <template #flag="{$attrs}">
+                                {{ $attrs.value == 1 ? _('w_Status_On'): _('w_Status_Off') }}
                             </template>
                         </iv-table>
                     </iv-card>
                     <iv-card :label="_('m_Persons_Person_Enter_Site_Record')">
                         <iv-table
+                            :server="{ 'path': '/continental/attendance' }"
+                            :params="getEnterSiteRecord()"
                             :interface="IEnterSiteRecord()"
-                            :data="personLicensesData"
+                            :data="enterSiteRecord"
                             :hidePaging="true"
-                        />
+                            :selectable="false"
+                        >
+                            <template #enter_time="{$attrs}">
+                                {{ new Date($attrs.rows[$attrs.index]['Enter']['timestamp']).getHours() + ':' + new Date($attrs.rows[$attrs.index]['Enter']['timestamp']).getMinutes() + ':' + new Date($attrs.rows[$attrs.index]['Enter']['timestamp']).getMinutes() }}
+                            </template>
+                            <template #leave_time="{$attrs}">
+                                {{ new Date($attrs.rows[$attrs.index]['Leave']['timestamp']).getHours() + ':' + new Date($attrs.rows[$attrs.index]['Leave']['timestamp']).getMinutes() + ':' + new Date($attrs.rows[$attrs.index]['Leave']['timestamp']).getMinutes() }}
+                            </template>
+                        </iv-table>
                     </iv-card>
-
                     <template #footer>
                         <b-button
                             variant="secondary"
@@ -119,13 +152,13 @@ export default class Components extends Vue {
     private type: string = "iv-direction-slide";
     private personBaseData: any = {
         name: "",
-        idString: "",
+        pid: "",
         type: ""
     };
     private personLicensesData: any = {
-        licenses_name: "",
-        licenses_expiry: "",
-        licenses_get: ""
+        license_name: "",
+        due_date: "",
+        license_date: ""
     };
     private workStationRecord: any = {
         sitename: "",
@@ -140,7 +173,9 @@ export default class Components extends Vue {
         close_date: "",
         close_reason: ""
     };
+    private enterSiteRecord: any = {};
     private personFilter: any = {};
+    private getInfo: any = {};
     private personSearchForm() {
         return `
             interface {
@@ -224,11 +259,11 @@ export default class Components extends Vue {
             * @uiLabel - ${this._("w_Certificate") +
                 this._("w_Certificate_Expiry")}
             */
-          licenses_expiry: Date;
+          due_date: Date;
           /*
             * @uiLabel - ${this._("w_Get") + this._("w_Date")}
             */
-          licenses_get: Date;
+          license_date: Date;
       }
     `;
     }
@@ -278,17 +313,7 @@ export default class Components extends Vue {
           /*
             * @uiLabel - ${this._("w_Status")}
             */
-          status: string;
-
-          /*
-            * @uiLabel - ${this._("w_Status_Off") + this._("w_Date")}
-            */
-          close_date: Date;
-
-          /*
-            * @uiLabel - ${this._("w_Status_Off") + this._("w_Reason")}
-            */
-          close_reason: string;
+          flag: string;
       }
     `;
     }
@@ -298,23 +323,23 @@ export default class Components extends Vue {
           /*
             * @uiLabel - ${this._("w_Site") + this._("w_Title")}
             */
-          sitename: string;
+          siteid: string;
           /*
             * @uiLabel - ${this._("w_Date")}
             */
-          enter_date: Date;
+          date: Date;
           /*
             * @uiLabel - ${this._("w_Enter") + this._("w_Timestamp")}
             */
-          enter_time: string;
+          enter_time: Date;
           /*
             * @uiLabel - ${this._("w_Leave") + this._("w_Timestamp")}
             */
-          leave_time: string;
+          leave_time: Date;
           /*
             * @uiLabel - ${this._("w_Stay") + this._("w_Timestamp")}
             */
-          stay_time: string;
+          duration: string;
       }
     `;
     }
@@ -349,14 +374,12 @@ export default class Components extends Vue {
         let newWorkStationRecord = value.user_sites;
         let siteareaname = value.work_areas;
         let work_areas = [];
-        // newWorkStationRecord["work_areas"] = [];
         for (let j in siteareaname) {
             work_areas.push(siteareaname[j].siteareaname);
         }
         for (let i in newWorkStationRecord) {
             newWorkStationRecord[i]["work_areas"] = work_areas.join(", ");
         }
-        console.log(newWorkStationRecord);
         this.allowIntoSite = {
             paging: {
                 page: 1,
@@ -366,11 +389,13 @@ export default class Components extends Vue {
             },
             results: newWorkStationRecord
         };
-        console.log("!!!! value", value);
     }
 
     pageToList() {
         this.step = 1;
+    }
+    getEnterSiteRecord() {
+        return { "person_info.employeeno": this.personBaseData.pid };
     }
 }
 </script>

@@ -30,6 +30,7 @@ export default class LangObject {
 
     // Common
     w_User = '用戶';
+    w_Role = '角色';
     w_Group = '群組';
     w_Email = '電子信箱';
     w_Confirm_Password = '請確認密碼';
@@ -66,12 +67,19 @@ export default class LangObject {
     w_Is_Black = '是否為黑名單';
     w_Company = '所屬公司';
 
+    // Score
+    w_level_1 = '極差';
+    w_level_2 = '差';
+    w_level_3 = '一般';
+    w_level_4 = '佳';
+    w_level_5 = '優良';
+
     // Status
-    w_Status_On = '開啟';
-    w_Status_Off = '關閉';
+    w_Status_On = '啟用';
+    w_Status_Off = '停用';
 
     // Warn
-    m_Password = '密碼不一致';
+    m_Warn_Password = '密碼不一致';
 
     // Error
     w_Error_FailedToFetch = "We can't connect to server, please try again!"; // failed to fetch

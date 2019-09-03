@@ -30,6 +30,7 @@ export default class LangObject {
 
     // Common
     w_User = 'User';
+    w_Role = 'Role';
     w_Group = 'Group';
     w_Email = 'E-mail';
     w_Confirm_Password = 'Confirm Password';
@@ -66,12 +67,19 @@ export default class LangObject {
     w_Is_Black = 'Black List';
     w_Company = 'Company';
 
+    // Score
+    w_level_1 = 'E';
+    w_level_2 = 'D';
+    w_level_3 = 'C';
+    w_level_4 = 'B';
+    w_level_5 = 'A';
+
     // Status
     w_Status_On = 'On';
     w_Status_Off = 'Off';
 
     // Warn
-    m_Password = 'Confirm your password';
+    m_Warn_Password = 'Confirm your password';
 
     // Error
     w_Error_FailedToFetch = "We can't connect to server, please try again!"; // failed to fetch
