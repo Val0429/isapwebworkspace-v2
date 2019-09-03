@@ -747,14 +747,20 @@ export default class Member extends Vue {
         
     let tempCredentials:any[] = credential.CardNumber && credential.CardNumber.trim()!="" ? [credential] : [];
     
-
     let tempCustomFieldsList: any = [];
-    for(let field of CustomFields){             
-      if(field.date) {
+    for(let field of CustomFields){
+      if(field.name=="lastEditPerson"){
+          tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue: this.$user.user.username}); 
+      }
+      else if(field.name=="lastEditTime"){
+          tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue: moment(new Date()).format("YYYY-MM-DDTHH:mm:ss")}); 
+      }
+      else if(field.date) {
           tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue: this.testDate(inputFormData[field.name])});      
       }
       else tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue:inputFormData[field.name] || ""});      
     }
+
     let wg=this.workGroupSelectItems.find(x=>x.groupid==parseInt(inputFormData.personType || "1"));
     let member = {        
         // master
