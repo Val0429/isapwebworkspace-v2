@@ -394,7 +394,7 @@ export default class Member extends Vue {
   getMemberFields(){
     if(this.savedFieldOptions.length==0 && (this.$refs as any).listTable.result.results.length>0){
       for(let key of Object.keys((this.$refs as any).listTable.result.results[0])){
-        if(this.exceptionFields.find(x=>x==key))continue;
+        if(this.excludeFields.find(x=>x==key))continue;
         this.savedFieldOptions.push({value:key, text:this._(key as any)});
       }
       //to trigger option changed
@@ -591,7 +591,7 @@ export default class Member extends Vue {
   savedFieldOptions=[];
   fieldOptions=[];
   fieldSelected=[];
-  exceptionFields = ["objectId","cardAllNumber","pinDigit","profileName", "technologyCode", "pinMode"];
+  excludeFields = ["objectId","cardAllNumber","pinDigit","profileName", "technologyCode", "pinMode","primaryWorkgroupId"];
   selectedItem(data) {
     this.isSelected = data;
     this.selectedDetail = data;
