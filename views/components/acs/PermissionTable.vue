@@ -841,16 +841,16 @@ async doExport(){
                         accessParam.door = tempData.deviceName.id;
                         let door = this.selectItemOriginal.door.find(x=>x.objectId==accessParam.door);                            
                         if (!door)break;
-                        if(door.readerin) {
-                            for (let reader of door.readerin) {
-                                accessParam.reader.push(reader.objectId);
-                            }
-                        }
-                        if (door.readerout) {
-                            for (let reader of door.readerout) {                                
-                                accessParam.reader.push(reader.objectId);
-                            }
-                        }       
+                        // if(door.readerin) {
+                        //     for (let reader of door.readerin) {
+                        //         accessParam.reader.push(reader.objectId);
+                        //     }
+                        // }
+                        // if (door.readerout) {
+                        //     for (let reader of door.readerout) {                                
+                        //         accessParam.reader.push(reader.objectId);
+                        //     }
+                        // }       
                         
                         this.savedAccessLevels.push({timename: tempData.timeFormat.text, devicename: tempData.deviceName.text});
                         break;
@@ -859,23 +859,23 @@ async doExport(){
                         let doorGroup = this.selectItemOriginal.doorGroup.find(x=>x.objectId == accessParam.doorgroup);
                         if(!doorGroup || !doorGroup.doors)break;
                         for (let door of doorGroup.doors) {
-                            if (door.readerin) {
-                                for (let reader of door.readerin) {
-                                    accessParam.reader.push(reader.objectId);                                    
-                                }
-                            }
-                            if (door.readerout) {
-                                for (let reader of door.readerout) {                                    
-                                    accessParam.reader.push(reader.objectId);
-                                }
-                            }
+                            // if (door.readerin) {
+                            //     for (let reader of door.readerin) {
+                            //         accessParam.reader.push(reader.objectId);                                    
+                            //     }
+                            // }
+                            // if (door.readerout) {
+                            //     for (let reader of door.readerout) {                                    
+                            //         accessParam.reader.push(reader.objectId);
+                            //     }
+                            // }
                             this.savedAccessLevels.push({timename: tempData.timeFormat.text, devicename: door.doorname});
                         }
                         break;
 
                     case EDeviceType.elevator:
                         accessParam.elevator = tempData.deviceName.id;                        
-                        accessParam.floor=[tempData.area.id];                        
+                        accessParam.floor=tempData.area.id;                        
                         this.savedAccessLevels.push({timename: tempData.timeFormat.text, devicename: `${tempData.deviceName.text}-${tempData.area.text}`});
                         break;
 
@@ -883,10 +883,10 @@ async doExport(){
                         accessParam.elevator = tempData.deviceName.id;                        
                         accessParam.floorgroup=tempData.area.id;
                         let floorgroup = this.selectItemOriginal.floorGroup.find(x=>x.objectId ==accessParam.floorgroup);
-                        accessParam.floor=[];
+                        //accessParam.floor=[];
                         if(floorgroup && floorgroup.floors){
                             for(let floor of floorgroup.floors){
-                                accessParam.floor.push(floor.objectId);
+                                //accessParam.floor.push(floor.objectId);
                                 this.savedAccessLevels.push({timename: tempData.timeFormat.text, devicename: `${tempData.deviceName.text}-${tempData.area.text}`});
                             }                             
                         }
