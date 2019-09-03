@@ -482,15 +482,13 @@ export class HighchartsDwellTime extends Vue {
                                         endIndex + 1
                                     );
                                     let newValue: any = JSON.parse(valueJson);
-                                    
+
                                     // set value
                                     result += `${newValue.i18n.time}:${newValue.timeString}<br>`;
                                     result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime.toFixed(2)}<br>`;
                                     result += `${newValue.i18n.maleCountPercent}: ${newValue.maleCountPercent} %<br>`;
                                     result += `${newValue.i18n.femaleCountPercent}: ${newValue.femaleCountPercent} %<br>`;
-                                    result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
-                                    result += `${newValue.i18n.transaction}: ${newValue.transaction}<br>`;
-                                    result += `${newValue.i18n.conversion}: ${newValue.conversion}<br>`;
+
                                 } catch (e) {
                                     console.log(e);
                                 }
@@ -560,9 +558,7 @@ export class HighchartsDwellTime extends Vue {
                                     result += `${newValue.i18n.dwellTime}: ${newValue.dwellTime.toFixed(2)}<br>`;
                                     result += `${newValue.i18n.maleCountPercent}: ${newValue.maleCountPercent} %<br>`;
                                     result += `${newValue.i18n.femaleCountPercent}: ${newValue.femaleCountPercent} %<br>`;
-                                    result += `${newValue.i18n.revenue}: ${newValue.revenue}<br>`;
-                                    result += `${newValue.i18n.transaction}: ${newValue.transaction}<br>`;
-                                    result += `${newValue.i18n.conversion}: ${newValue.conversion}<br>`;
+
                                 } catch (e) {
                                     console.log(e);
                                 }
@@ -1872,8 +1868,8 @@ export class HighchartsDwellTime extends Vue {
         let value = JSON.parse(JSON.stringify(item));
         value.date = new Date(value.date);
 
-        value.maleCountPercent = 0;
-        value.femaleCountPercent = 0;
+        // value.maleCountPercent = 0;
+        // value.femaleCountPercent = 0;
         value.conversion = 0;
         value.asp = 0;
         value.dwellTimeAVG = 0;
