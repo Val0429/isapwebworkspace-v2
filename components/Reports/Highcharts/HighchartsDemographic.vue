@@ -266,7 +266,7 @@ export class HighchartsDemographic extends Vue {
             },
             {
                 value: EGender.female,
-                text: this._("w_Male")
+                text: this._("w_Female")
             }
         ];
         this.selectItem.ageRange = [

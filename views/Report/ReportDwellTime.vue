@@ -2800,12 +2800,11 @@ export default class ReportDwellTime extends Vue {
         tempChartData.maleCount += tempMaleRange;
         tempChartData.femaleCount += tempFemaleRange;
 
-        tempChartData.dwellTime = Number((summary.total / 60).toFixed(2));
+        tempChartData.dwellTime = HighchartsService.formatFloat(summary.total / 60);
 
         if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
             tempChartData.maleCount -= tempMaleEmployeeRange;
             tempChartData.femaleCount -= tempFemaleEmployeeRange;
-
         }
     }
 
@@ -2819,8 +2818,8 @@ export default class ReportDwellTime extends Vue {
         let maleAndFemaleNoEmployeeTotal = maleNoEmployeeTotal + femaleNoEmployeeTotal;
 
         if (maleAndFemaleTotal > 0 && maleTotal > 0 && femaleTotal > 0) {
-            tempChartData.maleCountPercent = parseInt(((femaleTotal / maleAndFemaleTotal) * 100).toFixed(2), 10);
-            tempChartData.femaleCountPercent = parseInt(((femaleTotal / maleAndFemaleTotal) * 100).toFixed(2), 10);
+	        tempChartData.maleCountPercent = HighchartsService.formatFloat((maleTotal / maleAndFemaleNoEmployeeTotal) * 100);
+	        tempChartData.femaleCountPercent = HighchartsService.formatFloat((femaleNoEmployeeTotal / maleAndFemaleNoEmployeeTotal) * 100);
         } else if (femaleTotal > 0 && femaleTotal === 0) {
             tempChartData.maleCountPercent = 100;
             tempChartData.femaleCountPercent = 0;
@@ -2829,11 +2828,10 @@ export default class ReportDwellTime extends Vue {
             tempChartData.femaleCountPercent = 100;
         }
 
-
         if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
             if (maleAndFemaleNoEmployeeTotal > 0 && maleNoEmployeeTotal > 0 && femaleNoEmployeeTotal > 0) {
-                tempChartData.maleCountPercent = parseInt(((maleNoEmployeeTotal / maleAndFemaleNoEmployeeTotal) * 100).toFixed(2), 10);
-                tempChartData.femaleCountPercent = parseInt(((femaleNoEmployeeTotal / maleAndFemaleNoEmployeeTotal) * 100).toFixed(2), 10);
+                tempChartData.maleCountPercent = HighchartsService.formatFloat((maleNoEmployeeTotal / maleAndFemaleNoEmployeeTotal) * 100);
+                tempChartData.femaleCountPercent = HighchartsService.formatFloat((femaleNoEmployeeTotal / maleAndFemaleNoEmployeeTotal) * 100);
             } else if (maleNoEmployeeTotal > 0 && femaleNoEmployeeTotal === 0) {
                 tempChartData.maleCountPercent = 100;
                 tempChartData.femaleCountPercent = 0;
