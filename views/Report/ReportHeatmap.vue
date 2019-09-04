@@ -752,10 +752,10 @@ export default class ReportHeatmap extends Vue {
             });
             heatmap = [].concat(...heatmaps);
         }
-        this.mapImage.src = datas[0];
+        // this.mapImage.src = datas[0];
 
         this.heatMapPosition = heatmap;
-        this.mapImage.src = ServerConfig.url + datas[0].imageSrc;
+        this.mapImage.src = datas[0] ? ServerConfig.url + datas[0].imageSrc : ImageBase64.pngEmpty;
     }
 
     sortOutChartDataOneDay(datas: any) {
