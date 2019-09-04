@@ -184,6 +184,8 @@ import toExcel from "@/services/Excel/json2excel";
 import excel2json from "@/services/Excel/excel2json";
 import ReportPDFService from "@/components/Reports/models/ReportPDFService";
 import { EFileType,IReportTableTitle } from "@/components/Reports";
+import {DomEvent} from "@/node_modules/@types/leaflet";
+import on = DomEvent.on;
 
 enum ETableStep {
 	mainTable = "mainTable",
@@ -1584,21 +1586,43 @@ export default class ReportDemographic extends Vue {
                             switch (tempChartData.ageRange) {
                                 case EAgeRange.lower20:
                                     ageRangeIndex = 0;
+	                                tempChartData.dwellTimeRanges = summary.ageRanges[ageRangeIndex].dwellTimeRanges;
+	                                if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+		                                tempChartData.dwellTimeRanges = this.sortNoEmployeeRanges(summary.ageRanges[ageRangeIndex].dwellTimeRanges, summary.ageRanges[ageRangeIndex].dwellTimeEmployeeRanges)
+	                                }
                                     break;
                                 case EAgeRange.m21_30:
                                     ageRangeIndex = 1;
+	                                tempChartData.dwellTimeRanges = summary.ageRanges[ageRangeIndex].dwellTimeRanges;
+	                                if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+		                                tempChartData.dwellTimeRanges = this.sortNoEmployeeRanges(summary.ageRanges[ageRangeIndex].dwellTimeRanges, summary.ageRanges[ageRangeIndex].dwellTimeEmployeeRanges)
+	                                }
                                     break;
                                 case EAgeRange.m31_40:
-                                    ageRangeIndex =2;
+                                    ageRangeIndex = 2;
+	                                tempChartData.dwellTimeRanges = summary.ageRanges[ageRangeIndex].dwellTimeRanges;
+	                                if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+		                                tempChartData.dwellTimeRanges = this.sortNoEmployeeRanges(summary.ageRanges[ageRangeIndex].dwellTimeRanges, summary.ageRanges[ageRangeIndex].dwellTimeEmployeeRanges)
+	                                }
                                     break;
                                 case EAgeRange.m41_50:
                                     ageRangeIndex = 3;
+	                                tempChartData.dwellTimeRanges = summary.ageRanges[ageRangeIndex].dwellTimeRanges;
+	                                if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+		                                tempChartData.dwellTimeRanges = this.sortNoEmployeeRanges(summary.ageRanges[ageRangeIndex].dwellTimeRanges, summary.ageRanges[ageRangeIndex].dwellTimeEmployeeRanges)
+	                                }
                                     break;
                                 case EAgeRange.m51_60:
-                                    ageRangeIndex =4;
+	                                tempChartData.dwellTimeRanges = summary.ageRanges[ageRangeIndex].dwellTimeRanges;
+	                                if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+		                                tempChartData.dwellTimeRanges = this.sortNoEmployeeRanges(summary.ageRanges[ageRangeIndex].dwellTimeRanges, summary.ageRanges[ageRangeIndex].dwellTimeEmployeeRanges)
+	                                }
                                     break;
                                 case EAgeRange.upper61:
-                                    ageRangeIndex = 5;
+	                                tempChartData.dwellTimeRanges = summary.ageRanges[ageRangeIndex].dwellTimeRanges;
+	                                if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+		                                tempChartData.dwellTimeRanges = this.sortNoEmployeeRanges(summary.ageRanges[ageRangeIndex].dwellTimeRanges, summary.ageRanges[ageRangeIndex].dwellTimeEmployeeRanges)
+	                                }
                                     break;
                             }
 
@@ -1645,26 +1669,34 @@ export default class ReportDemographic extends Vue {
 				}
 
 
-                // TODO: Dwell time
-                let tempRandomDwellTime = Math.floor(Math.random()*6);
-                if (tempRandomDwellTime == 0) {
-                    tempChartData.dwellTimeRange = EDwellTimeRange.lower5;
-                } else if (tempRandomDwellTime == 1) {
-                    tempChartData.dwellTimeRange = EDwellTimeRange.m5_15;
-                } else if (tempRandomDwellTime == 2) {
-                    tempChartData.dwellTimeRange = EDwellTimeRange.m15_30;
-                } else if (tempRandomDwellTime == 3) {
-                    tempChartData.dwellTimeRange = EDwellTimeRange.m30_60;
-                } else if (tempRandomDwellTime == 4) {
-                    tempChartData.dwellTimeRange = EDwellTimeRange.m60_120;
-                } else {
-                    tempChartData.dwellTimeRange = EDwellTimeRange.upper120;
-                }
-                // TODO: Dwell time
+                // // TODO: Dwell time
+                // let tempRandomDwellTime = Math.floor(Math.random()*6);
+                // if (tempRandomDwellTime == 0) {
+                //     tempChartData.dwellTimeRange = EDwellTimeRange.lower5;
+                // } else if (tempRandomDwellTime == 1) {
+                //     tempChartData.dwellTimeRange = EDwellTimeRange.m5_15;
+                // } else if (tempRandomDwellTime == 2) {
+                //     tempChartData.dwellTimeRange = EDwellTimeRange.m15_30;
+                // } else if (tempRandomDwellTime == 3) {
+                //     tempChartData.dwellTimeRange = EDwellTimeRange.m30_60;
+                // } else if (tempRandomDwellTime == 4) {
+                //     tempChartData.dwellTimeRange = EDwellTimeRange.m60_120;
+                // } else {
+                //     tempChartData.dwellTimeRange = EDwellTimeRange.upper120;
+                // }
+                // // TODO: Dwell time
 
             }
 
 			this.chartDatas = tempChartDatas;
+		}
+
+		sortNoEmployeeRanges(allPeople: number[], onlyEmployee: number[]): number[] {
+			let result = [];
+			for (let i = 0; i < 6; i++) {
+				result.push(allPeople[i] - onlyEmployee[i])
+			}
+			return result;
 		}
 
 		async receiveAreaId(areaId) {

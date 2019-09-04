@@ -166,7 +166,7 @@ import {EMode} from "@/components/Dashboard/models/EDashboard";
                         name: tempName,
                         // TODO : wait api
                         // data: tempData
-                        data: [107, 31, 635, 203, 2]
+                        data: [99, 299, 499, 699, 899]
                     }
                 ],
                 tooltip: {

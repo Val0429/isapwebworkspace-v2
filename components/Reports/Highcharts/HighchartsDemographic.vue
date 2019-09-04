@@ -1,3 +1,4 @@
+import {EAgeRange} from "@/components/Reports";
 <template>
     <div class="chart">
         <h2 v-if="mountAnyChart()">{{ _('w_ReportDemographic_DemographicChart') }}</h2>
@@ -104,43 +105,33 @@
 
 
 <script lang="ts">
-import {
-    Vue,
-    Component,
-    Prop,
-    Emit,
-    Model,
-    Watch
-} from "vue-property-decorator";
+    import {Component, Prop, Vue, Watch} from "vue-property-decorator";
+    /// install Highcharts
+    import Highcharts from "highcharts";
+    import HighchartsVue from "highcharts-vue";
+    import exportingInit from "highcharts/modules/exporting";
+    // custom import
+    import {
+        EAgeRange,
+        EAreaMode,
+        EChartMode,
+        EDwellTimeRange,
+        EGender,
+        ETimeMode,
+        EWeather,
+        IBootstrapSelectItem,
+        IChartDemographicData,
+        ISite,
+        ISiteOfficeHourItem,
+        IValSelectItem
+    } from "../";
+    import Datetime from "@/services/Datetime";
+    import HighchartsService from "../models/HighchartsService";
 
-/// install Highcharts
-import Highcharts from "highcharts";
-import HighchartsVue from "highcharts-vue";
-import exportingInit from "highcharts/modules/exporting";
-exportingInit(Highcharts);
+    exportingInit(Highcharts);
 Vue.use(HighchartsVue);
 
-// custom import
-import {
-    ETimeMode,
-    EAreaMode,
-    EChartMode,
-    EWeather,
-    EAgeRange,
-    EGender,
-    EDwellTimeRange
-} from "../";
-import {
-    IValSelectItem,
-    IBootstrapSelectItem,
-    ISite,
-    ISiteOfficeHourItem,
-    IChartDemographicData
-} from "../";
-import Datetime from "@/services/Datetime";
-import HighchartsService from "../models/HighchartsService";
-
-@Component({
+    @Component({
     components: {}
 })
 export class HighchartsDemographic extends Vue {
@@ -1647,13 +1638,10 @@ export class HighchartsDemographic extends Vue {
 
         let barSeries = [
             {
-                name: this._("w_Male"),
+                name: this._("w_DwellTime"),
                 data: [0, 0, 0, 0, 0, 0]
             },
-            {
-                name: this._("w_Female"),
-                data: [0, 0, 0, 0, 0, 0]
-            }
+
         ];
         let pieSeriesData: any = [
             [this._("w_Male"), 0],
@@ -1670,32 +1658,47 @@ export class HighchartsDemographic extends Vue {
 
             if (addValue) {
                 let barSeriesDataIndex: number = 0;
-                switch (val.dwellTimeRange) {
-                    case EDwellTimeRange.upper120:
-                        barSeriesDataIndex = 0;
-                        break;
-                    case EDwellTimeRange.m60_120:
-                        barSeriesDataIndex = 1;
-                        break;
-                    case EDwellTimeRange.m30_60:
-                        barSeriesDataIndex = 2;
-                        break;
-                    case EDwellTimeRange.m15_30:
-                        barSeriesDataIndex = 3;
-                        break;
-                    case EDwellTimeRange.m5_15:
-                        barSeriesDataIndex = 4;
-                        break;
-                    case EDwellTimeRange.lower5:
-                        barSeriesDataIndex = 5;
-                        break;
+
+                for (let i = 0; i < 6; i++) {
+                    switch (i) {
+                        case 0:
+                            barSeriesDataIndex = 0;
+                            let lower5: number = val.dwellTimeRanges[barSeriesDataIndex] ? val.dwellTimeRanges[barSeriesDataIndex] : 0;
+                            barSeries[0].data[barSeriesDataIndex] += lower5;
+                            break;
+                        case 1:
+                            barSeriesDataIndex = 1;
+                            let m5_15: number = val.dwellTimeRanges[barSeriesDataIndex] ? val.dwellTimeRanges[barSeriesDataIndex] : 0;
+                            barSeries[0].data[barSeriesDataIndex] += m5_15;
+                            break;
+                        case 2:
+                            barSeriesDataIndex = 2;
+                            let m15_30: number = val.dwellTimeRanges[barSeriesDataIndex] ? val.dwellTimeRanges[barSeriesDataIndex] : 0;
+                            barSeries[0].data[barSeriesDataIndex] += m15_30;
+                            break;
+                        case 3:
+                            barSeriesDataIndex = 3;
+                            let m30_60: number = val.dwellTimeRanges[barSeriesDataIndex] ? val.dwellTimeRanges[barSeriesDataIndex] : 0;
+                            barSeries[0].data[barSeriesDataIndex] += m30_60;
+                            break;
+                        case 4:
+                            barSeriesDataIndex = 4;
+                            let m60_120: number = val.dwellTimeRanges[barSeriesDataIndex] ? val.dwellTimeRanges[barSeriesDataIndex] : 0;
+                            barSeries[0].data[barSeriesDataIndex] += m60_120;
+                            break;
+                        case 5:
+                            barSeriesDataIndex = 5;
+                            let upper120: number = val.dwellTimeRanges[barSeriesDataIndex] ? val.dwellTimeRanges[barSeriesDataIndex] : 0;
+                            barSeries[0].data[barSeriesDataIndex] += upper120;
+                            break;
+                    }
+
+                    totalCount = barSeries[0].data.reduce((accumulator, currentValue) => accumulator + currentValue);
+
+                    pieSeriesData[0][1] += val.maleCount;
+                    pieSeriesData[1][1] += val.femaleCount;
                 }
-                totalCount += val.maleCount;
-                totalCount += val.femaleCount;
-                barSeries[0].data[barSeriesDataIndex] += val.maleCount;
-                barSeries[1].data[barSeriesDataIndex] += val.femaleCount;
-                pieSeriesData[0][1] += val.maleCount;
-                pieSeriesData[1][1] += val.femaleCount;
+
             }
         }
 
@@ -1704,11 +1707,10 @@ export class HighchartsDemographic extends Vue {
                 barSeries[0].data[i] = HighchartsService.formatFloat(
                     (barSeries[0].data[i] / totalCount) * 100
                 );
-                barSeries[1].data[i] = HighchartsService.formatFloat(
-                    (barSeries[1].data[i] / totalCount) * 100
-                );
             }
         }
+
+        barSeries[0].data = barSeries[0].data.reverse();
 
         this.chartOptions.dwellTimeBar = {
             chart: {
@@ -1771,6 +1773,7 @@ export class HighchartsDemographic extends Vue {
             dwellTimeRange: EDwellTimeRange.none,
             maleCount: 0,
             femaleCount: 0,
+            dwellTimeRanges: [],
 
             maleCountPercent: 0,
             femaleCountPercent: 0,

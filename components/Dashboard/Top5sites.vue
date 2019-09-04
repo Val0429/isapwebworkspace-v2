@@ -167,7 +167,7 @@ export class Top5sites extends Vue {
                     name: tempName,
                     // TODO : wait api
                     // data: tempData
-                    data: [107, 31, 635, 203, 2]
+                    data: [999, 799, 599, 399, 199]
                 }
             ],
             tooltip: {
