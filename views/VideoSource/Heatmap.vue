@@ -1237,7 +1237,9 @@ export default class HumanDetection extends Vue {
                         channelId: data[1].channelId
                     },
                     hdServerId: data[1].hdServerId,
-                    rois: this.canvasDetail
+                    rois: this.canvasDetail,
+                    brand: data[1].brand,
+                    model: "cms" //TODO 目前只能帶cms
                 }
             ];
 
@@ -1278,7 +1280,9 @@ export default class HumanDetection extends Vue {
                             ? data[1].channelId
                             : this.inputFormData.channelId
                     },
-                    rois: this.canvasDetail
+                    rois: this.canvasDetail,
+                    brand: data[1].brand,
+                    model: "cms" //TODO 目前只能帶cms
                 }
             ];
 
