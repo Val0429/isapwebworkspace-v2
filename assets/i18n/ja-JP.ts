@@ -674,4 +674,6 @@ export default class LangObject implements ILang {
     w_Download = "Download";
     w_Member_ExportResult = "Export Result";
     w_Download_Notify = "Download link will appear soon after the file is ready";
+    allCardNumber="All Card Number";
+    void="void";
 }

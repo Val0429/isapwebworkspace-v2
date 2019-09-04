@@ -1,4 +1,5 @@
-export const CustomFields = [
+export const CustomFields = [    
+    { fieldName:"CustomTextBoxControl1__CF", name:"allCardNumber", date:false},
     { fieldName:"CustomTextBoxControl6__CF", name:"companyName", date:false},
     { fieldName:"CustomTextBoxControl2__CF",name:"cardCustodian", date:false},
     { fieldName:"CustomTextBoxControl3__CF", name:"lastEditPerson", date:false},

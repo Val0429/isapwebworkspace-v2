@@ -778,10 +778,10 @@ export default class Member extends Vue {
         Status:1,
         //new addition
         GeneralInformation:"",
-        Attributes:{},
+        Attributes:{Void:inputFormData.void || false},
         NonPartitionWorkGroups:[],
         NonPartitionWorkgroupAccessRules:[],
-        PrimaryWorkGroupAccessRule:[],       
+        PrimaryWorkGroupAccessRule:[],
         Token: "-1",
         Vehicle1: {},
         Vehicle2: {},
@@ -1027,15 +1027,11 @@ export default class Member extends Vue {
                  }
                  */
                 cardCustodian?: string;
-
-
-
                 /**
+                 * @uiLabel - ${this._("void")}
                  * @uiColumnGroup - row3
-                 * @uiHidden - true
                  */
-                row3?: string;
-
+                void?: boolean;
 
                /**
                 * @uiColumnGroup - row13
@@ -1081,23 +1077,8 @@ export default class Member extends Vue {
 
 
                 /**
-                 * @uiHidden - true
-                 * @uiLabel - ${this._("deviceNumber")}
-                 * @uiColumnGroup - row33
-                 * @uiType - ${
-                   this.pageStep === EPageStep.add ||
-                   this.pageStep === EPageStep.edit
-                     ? "iv-form-string"
-                     : "iv-form-label"
-                 }
-                 */
-                deviceNumber?: string;
-
-
-
-                /**
                  * @uiLabel - ${this._("pin")}
-                 * @uiColumnGroup - row173
+                 * @uiColumnGroup - row33
                  * @uiDisabled - ${!this.inputFormData.cardNumber || this.inputFormData.cardNumber=="" ? "true":"false"}
                  * @uiType - ${
                    this.pageStep === EPageStep.add ||
@@ -1107,6 +1088,20 @@ export default class Member extends Vue {
                  }
                  */
                 pin?: string;
+
+                /**
+                 * @uiLabel - ${this._("allCardNumber")}
+                 * @uiColumnGroup - row173
+                 * @uiType - ${
+                   this.pageStep === EPageStep.add ||
+                   this.pageStep === EPageStep.edit
+                     ? "iv-form-string"
+                     : "iv-form-label"
+                 }
+                 */
+                allCardNumber?: string;
+
+                
 
 
 
