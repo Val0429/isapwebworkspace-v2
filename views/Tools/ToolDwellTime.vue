@@ -11,7 +11,7 @@
             <iv-table
                 ref="listTable"
                 :interface="ITableList()"
-                :server="{ path: '/report/people-counting' }"
+                :server="{ path: '/report/dwell-time' }"
                 :params="tabelParam"
             >
 

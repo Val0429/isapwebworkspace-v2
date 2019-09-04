@@ -837,6 +837,7 @@ export class HighchartsDwellTime extends Vue {
             for (let i in tempValues) {
                 let val = tempValues[i];
                 let value: IChartDwellTimeData = this.anysislyChartValue(val);
+
                 let valTimestamp = value.date.getTime();
 
                 if (
@@ -850,6 +851,8 @@ export class HighchartsDwellTime extends Vue {
                     tempChartData.temperature = value.temperature;
                     tempChartData.temperatureMin = value.temperatureMin;
                     tempChartData.temperatureMax = value.temperatureMax;
+                    tempChartData.maleCountPercent = value.maleCountPercent;
+                    tempChartData.femaleCountPercent = value.femaleCountPercent;
                     tempChartData.weather = value.weather;
                     tempChartData.weatherIcon = HighchartsService.weatherIcon(
                         value.weather
@@ -894,7 +897,6 @@ export class HighchartsDwellTime extends Vue {
                 dwellTimeTotal / dateGap
             );
         }
-
         // set result
         for (let result of tempResult) {
             result.dwellTimeAVG = dwellTimeAVG;
@@ -1113,6 +1115,9 @@ export class HighchartsDwellTime extends Vue {
                             haveResult = true;
                             result.dwellTime += value.dwellTime;
                             result.revenue += value.revenue;
+                            result.maleCountPercent = value.maleCountPercent;
+                            result.femaleCountPercent =
+                                value.femaleCountPercent;
                             break;
                         }
                     }
@@ -1212,6 +1217,8 @@ export class HighchartsDwellTime extends Vue {
                             result += `${newValue.i18n.date}: ${newValue.dateString}<br>`;
                             result += `${newValue.i18n.temperatureMin}: ${newValue.temperatureMin}°C<br>`;
                             result += `${newValue.i18n.temperatureMax}: ${newValue.temperatureMax}°C<br>`;
+                            // result += `${newValue.i18n.maleCountPercent}: ${newValue.maleCountPercent} %<br>`;
+                            // result += `${newValue.i18n.femaleCountPercent}: ${newValue.femaleCountPercent} %<br>`
                             result += `${
                                 newValue.i18n.dwellTime
                             }: ${newValue.dwellTime.toFixed(2)}<br>`;

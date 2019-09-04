@@ -19,8 +19,6 @@
                     </iv-form-selection>
                 </template>
 
-
-
                 <template #campaignIds="{ $attrs, $listeners }">
                     <iv-form-selection
                         v-if="inputFormData.year && checkObjectLength(campaignSelectItem) > 1"
@@ -158,7 +156,7 @@ export class FilterConditionCampaign extends Vue {
                 if (this.inputFormData.year) {
                     let tempCampaignSelectItem = { all: this._('w_AllCampaign')};
                     for (const year in this.campaignAllData) {
-                        if (this.inputFormData.year === parseInt(year)) {
+                        if (this.inputFormData.year === year) {
                             const tempYearCampaign = this.campaignAllData[year];
                             for (const campaignKey of tempYearCampaign) {
                                 tempCampaignSelectItem[campaignKey.objectId] = campaignKey.name;
@@ -278,10 +276,9 @@ export class FilterConditionCampaign extends Vue {
             siteIds: [],
         };
 
-
         if (this.inputFormData.year) {
             for (const year in this.campaignAllData) {
-                if (this.inputFormData.year === parseInt(year)) {
+                if (this.inputFormData.year === year) {
                     const tempYearCampaign = this.campaignAllData[year];
 
                     // all campaigns
@@ -315,7 +312,7 @@ export class FilterConditionCampaign extends Vue {
                 }
             }
         }
-        
+
         this.visible = false;
         this.$emit("submit-data", doSubmitParam);
     }
