@@ -101,17 +101,9 @@ export class ToolRepeatVisitorFilter extends Vue {
                 this.inputFormData.siteIds = data.value;
                 break;
             case 'startDate':
-                if (!Datetime.CheckDate(Datetime.DateStart(data.value), Datetime.DateStart(new Date(this.inputFormData.endDate)))) {
-                    Dialog.error(this._("w_ReportDateError"));
-                    return false;
-                }
                 this.inputFormData.startDate = data.value;
                 break;
             case 'endDate':
-                if (!Datetime.CheckDate(Datetime.DateStart(new Date(this.inputFormData.startDate)), Datetime.DateStart(data.value))) {
-                    Dialog.error(this._("w_ReportDateError"));
-                    return false;
-                }
                 this.inputFormData.endDate = data.value;
                 break;
         }
@@ -135,9 +127,9 @@ export class ToolRepeatVisitorFilter extends Vue {
             submitParam.endDate = Datetime.DateEnd(data.endDate).toISOString();
         } else {
             submitParam.startDate = Datetime.DateStart(data.startDate).toISOString();
-            submitParam.endDate = Datetime.DateStart(data.endDate).toISOString();
+            submitParam.endDate = Datetime.DateEnd(data.endDate).toISOString();
         }
-        
+
         this.visible = false;
         this.$emit('filter', submitParam)
     }
