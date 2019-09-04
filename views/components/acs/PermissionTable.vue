@@ -157,16 +157,24 @@
                         >{{ _('w_Add') }}
                         </b-button>
                     </template>
-
                     <!-- elevator -->
-
                     <template #elevatorName="{ $attrs, $listeners }">
                         <iv-form-selection
-                            v-if="deviceType === eDeviceType.elevator"
+                            v-show="deviceType == eDeviceType.elevator"
                             v-bind="$attrs"
                             v-on="$listeners"
                             v-model="inputFormData.elevatorNameOption"
                         ></iv-form-selection>
+                    </template>
+
+                    <template #elevatorArea="{ $attrs, $listeners }">
+                        <iv-form-string
+                            v-show="deviceType == eDeviceType.elevator"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.elevatorAreaOption"
+                            :disabled="true"
+                        ></iv-form-string>
                     </template>
 
                     <template #elevatorTimeFormat="{ $attrs, $listeners }">
@@ -177,18 +185,89 @@
                             v-model="inputFormData.deviceTimeFormatOption"
                         ></iv-form-selection>
                     </template>
-                    <template #elevatorArea="{ $attrs, $listeners }">
-                        <iv-form-selection
-                            v-if="deviceType === eDeviceType.elevator"
-                            v-bind="$attrs"
-                            v-on="$listeners"
-                            v-model="inputFormData.elevatorAreaOption"
-                        ></iv-form-selection>
-                    </template>
 
                     <template #elevatorAdd="{ $attrs }">
                         <b-button
-                            v-if="deviceType === eDeviceType.elevator"
+                            v-show="deviceType == eDeviceType.elevator"
+                            class="h-25 addButton"
+                            variant="primary"
+                            size="md"
+                            @click="clickAddDeviceInTable()"
+                        >{{ _('w_Add') }}
+                        </b-button>
+                    </template>
+
+                     <!-- elevator Group -->
+                    <template #elevatorGroupName="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-show="deviceType === eDeviceType.elevatorGroup"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.elevatorGroupNameOption"
+                        ></iv-form-selection>
+                    </template>
+
+                    <template #elevatorGroupArea="{ $attrs, $listeners }">
+                        <iv-form-string
+                            v-show="deviceType === eDeviceType.elevatorGroup"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.elevatorGroupAreaOption"
+                            :disabled="true"
+                        ></iv-form-string>
+                    </template>
+
+                    <template #elevatorGroupTimeFormat="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-show="deviceType == eDeviceType.elevatorGroup"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.deviceTimeFormatOption"
+                        ></iv-form-selection>
+                    </template>
+
+                    <template #elevatorGroupAdd="{ $attrs }">
+                        <b-button
+                            v-show="deviceType === eDeviceType.elevatorGroup"
+                            class="h-25 addButton"
+                            variant="primary"
+                            size="md"
+                            @click="clickAddDeviceInTable()"
+                        >{{ _('w_Add') }}
+                        </b-button>
+                    </template>
+
+                    <!-- floor -->
+
+                    <template #floorName="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-if="deviceType === eDeviceType.floor"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.floorNameOption"
+                        ></iv-form-selection>
+                    </template>
+
+                    <template #floorTimeFormat="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-show="deviceType == eDeviceType.floor"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.deviceTimeFormatOption"
+                        ></iv-form-selection>
+                    </template>
+                    <template #floorArea="{ $attrs, $listeners }">
+                        <iv-form-selection
+                            v-if="deviceType === eDeviceType.floor"
+                            v-bind="$attrs"
+                            v-on="$listeners"
+                            v-model="inputFormData.floorAreaOption"
+                        ></iv-form-selection>
+                    </template>
+
+                    <template #floorAdd="{ $attrs }">
+                        <b-button
+                            v-if="deviceType === eDeviceType.floor"
                             class="h-25 addButton"
                             variant="primary"
                             size="md"
@@ -309,6 +388,8 @@ enum EDeviceType {
     door = "door",
     doorGroup = "doorGroup",
     elevator = "elevator",
+    elevatorGroup = "elevatorGroup",
+    floor="floor",    
     floorGroup = "floorGroup"
 }
 
@@ -322,7 +403,9 @@ interface ISelectItem {
     doorDevice: any;
     doorGroupDevice: any;
     elevatorDevice: any;
+    elevatorGroupDevice: any;
     floorGroupDevice: any;
+    floorDevice: any;
 }
 
 @Component({
@@ -379,16 +462,21 @@ export default class PermissionTable extends Vue {
         door: [],
         doorGroup: [],
         elevator: [],
-        floorGroup: []
+        elevatorGroup:[],
+        floorGroup: [],
+        floor:[]
     };
     selectItem: ISelectItem = {
         timeSchedule: [],
         doorDevice: [],
         doorGroupDevice: [],
+        elevatorGroupDevice:[],
         elevatorDevice: [],
-        floorGroupDevice: []
+        floorGroupDevice: [],
+        floorDevice:[]
     };
-
+    
+    
     created() {}
 
     mounted() {
@@ -396,6 +484,8 @@ export default class PermissionTable extends Vue {
         this.deviceTypeItem.door = this._("door");
         this.deviceTypeItem.doorGroup = this._("w_DoorGroup");
         this.deviceTypeItem.elevator = this._("w_Elevator");
+        this.deviceTypeItem.elevatorGroup = this._("w_ElevatorGroup");
+        this.deviceTypeItem.floor = this._("w_Floor");
         this.deviceTypeItem.floorGroup = this._("w_FloorGroup");
     }
 
@@ -461,6 +551,8 @@ export default class PermissionTable extends Vue {
         this.selectItem.doorDevice = { "": this._("w_Select") };
         this.selectItem.doorGroupDevice = { "": this._("w_Select") };
         this.selectItem.elevatorDevice = { "": this._("w_Select") };
+        this.selectItem.elevatorGroupDevice = { "": this._("w_Select") };
+        this.selectItem.floorDevice = { "": this._("w_Select") };
         this.selectItem.floorGroupDevice = { "": this._("w_Select") };
 
         await Promise.all([
@@ -468,14 +560,36 @@ export default class PermissionTable extends Vue {
             this.getDoor(),
             this.getDoorGroup(),
             this.getElevator(),
+            this.getElevatorGroup(),
+            this.getFloor(),
             this.getFloorGroup()
         ]);
     }
+    private async getFloor() {
+    await this.$server
+      .R("/acs/floor" as any,{ "paging.all": "true" })
+      .then((response: any) => {
+        for(let tempItem of response.results) {
+          this.selectItem.floorDevice[tempItem.objectId]=tempItem.floorname;
+          this.selectItemOriginal.floor.push(tempItem);
+        }
+      });
+  }
+  private async getElevatorGroup() {
+    await this.$server
+      .R("/acs/elevatorgroup" as any,{ "paging.all": "true" })
+      .then((response: any) => {
+        for(let tempItem of response.results.filter(x=>x.elevators && x.elevators.length>0)) {
+          this.selectItem.elevatorGroupDevice[tempItem.objectId]=tempItem.groupname;
+          this.selectItemOriginal.elevatorGroup.push(tempItem);
+        }
+      });
+  }
 private async getFloorGroup() {
     await this.$server
       .R("/acs/floorgroup" as any,{ "paging.all": "true" })
       .then((response: any) => {
-        for(let tempItem of response.results) {
+        for(let tempItem of response.results.filter(x=>x.floors && x.floors.length>0)) {
           this.selectItem.floorGroupDevice[tempItem.objectId]=tempItem.groupname;
           this.selectItemOriginal.floorGroup.push(tempItem);
         }
@@ -485,7 +599,7 @@ private async getFloorGroup() {
     await this.$server
       .R("/acs/elevator",{ "paging.all": "true" })
       .then((response: any) => {
-        for(let tempItem of response.results) {
+        for(let tempItem of response.results.filter(x=>x.reader && x.reader.length>0)) {
           this.selectItem.elevatorDevice[tempItem.objectId]=tempItem.elevatorname;
           this.selectItemOriginal.elevator.push(tempItem);
         }
@@ -496,7 +610,7 @@ private async getFloorGroup() {
     await this.$server
       .R("/acs/doorgroup",{ "paging.all": "true" })
       .then((response: any) => {
-        for(let tempItem of response.results) {
+        for(let tempItem of response.results.filter(x=>x.doors && x.doors.length>0)) {
           this.selectItem.doorGroupDevice[tempItem.objectId]=tempItem.groupname;
           this.selectItemOriginal.doorGroup.push(tempItem);
         }
@@ -514,7 +628,17 @@ private async getFloorGroup() {
       });
   }
 async doExport(){
-        let headers= [this._("w_PermissionTable"),this._("w_AccessLevel"),this._("timename"),this._("w_Door"),this._("w_DoorGroup"),this._("w_Elevator"),this._("w_Floor"),this._("w_FloorGroup")];
+        let headers= [
+                        this._("w_PermissionTable"),
+                        this._("w_AccessLevel"),
+                        this._("timename"),
+                        this._("w_Door"),
+                        this._("w_DoorGroup"),
+                        this._("w_Elevator"),
+                        this._("w_ElevatorGroup"),
+                        this._("w_Floor"),
+                        this._("w_FloorGroup")
+                    ];
         let exportList =[];
         console.log("headers", headers);
         let resp:any = await this.$server.R("/acs/permissiontable" as any, Object.assign({"paging.all":"true"}, this.searchParams));
@@ -524,11 +648,12 @@ async doExport(){
                 let timename = al.timeschedule.timename;
                 let levelname = al.levelname;
                 let elevatorname = al.elevator ? al.elevator.elevatorname:"";
+                let elevatorgroupname = al.elevatorgroup ? al.elevatorgroup.groupname:"";
                 let doorname=al.door? al.door.doorname:"";
                 let doorgroupname=al.doorgroup ? al.doorgroup.groupname:"";
-                let floorname=al.floor&&al.floor.length>0?al.floor[0].floorname:"";
+                let floorname=al.floor?al.floor.floorname:"";
                 let floorgroupname=al.floorgroup?al.floorgroup.groupname:"";
-                exportList.push({tablename,levelname,timename,doorname,doorgroupname,elevatorname,floorname,floorgroupname})
+                exportList.push({tablename,levelname,timename,doorname,doorgroupname,elevatorname,elevatorgroupname,floorname,floorgroupname})
             }
             
         }
@@ -569,51 +694,42 @@ async doExport(){
                 deviceData.timeFormat.id = tempAccesslevels.timeschedule.objectId;
                 deviceData.timeFormat.text = tempAccesslevels.timeschedule.timename;
             }
-            let origin:any;
             switch (tempAccesslevels.type) {
                 case EDeviceType.door:
-                    if (!tempAccesslevels.door) break;
+                    if (!tempAccesslevels.door) continue;
                     deviceData.deviceName.id = tempAccesslevels.door.objectId;
-                    origin = this.selectItemOriginal.door.find(x=>x.objectId == deviceData.deviceName.id);    
-                    //skip orphan door
-                    if(!origin)continue;
-                    deviceData.deviceName.text = origin.doorname;
+                    deviceData.deviceName.text = tempAccesslevels.door.doorname;
                     break;
                 case EDeviceType.doorGroup:
-                    if (!tempAccesslevels.doorgroup) break;
+                    if (!tempAccesslevels.doorgroup) continue;
                     deviceData.deviceName.id = tempAccesslevels.doorgroup.objectId;
-                    origin = this.selectItemOriginal.doorGroup.find(x=>x.objectId == deviceData.deviceName.id);                        
-                    //skip orphan door group
-                    if (!origin) continue;
-                    deviceData.deviceName.text = origin.groupname;                                
-                    if(!origin.area )break
-                    //deviceData.area.id = origin.area.name;
-                    //deviceData.area.text = origin.area.name;
+                    deviceData.deviceName.text =  tempAccesslevels.doorgroup.groupname;
                     break;
-                case EDeviceType.elevator:
-                    
-                    if (!tempAccesslevels.elevator) break;
-                    deviceData.deviceName.id = tempAccesslevels.elevator.objectId;
-                    origin = this.selectItemOriginal.elevator.find(x=>x.objectId == deviceData.deviceName.id);                        
-                    //skip orphan elevator
-                    if (!origin) continue;                    
-                    deviceData.deviceName.text = origin.elevatorname;                    
-                    if(!origin.reader || !tempAccesslevels.floor) break;                    
-                    let floor = origin.reader.find(x=>x.objectId == tempAccesslevels.floor.objectId);                    
-                    if(!floor)break;
+                case EDeviceType.elevator:                    
+                    if (!tempAccesslevels.elevator) continue;
+                    deviceData.deviceName.id = tempAccesslevels.elevator.objectId;                 
+                    deviceData.deviceName.text = tempAccesslevels.elevator.elevatorname;
+                    break;
+                case EDeviceType.elevatorGroup:                    
+                    if (!tempAccesslevels.elevatorgroup) continue;
+                    deviceData.deviceName.id = tempAccesslevels.elevatorgroup.objectId;                   
+                    deviceData.deviceName.text = tempAccesslevels.elevatorgroup.groupname;
+                    break;
+                case EDeviceType.floor:                    
+                    if (!tempAccesslevels.floor || !tempAccesslevels.elevator) continue;
+                    deviceData.deviceName.id = tempAccesslevels.elevator.objectId;                   
+                    deviceData.deviceName.text = tempAccesslevels.elevator.elevatorname;  
+                    let floor = tempAccesslevels.elevator.reader.find(x=>x.objectId == tempAccesslevels.floor.objectId);                    
+                    if(!floor)continue;
                     deviceData.area.id = floor.floorname;
                     deviceData.area.text = floor.floorname;
                     break;
                 case EDeviceType.floorGroup:
-                    if (!tempAccesslevels.elevatorgroup) break;
-                    deviceData.deviceName.id = tempAccesslevels.elevatorgroup.objectId;
-                    origin = this.selectItemOriginal.floorGroup.find(x=>x.objectId == deviceData.deviceName.id);                        
-                    //skip orphan door group
-                    if (!origin) continue;
-                    deviceData.deviceName.text = origin.groupname;                                
-                    if(!origin.area )break
-                    //deviceData.area.id = origin.area.name;
-                    //deviceData.area.text = origin.area.name;
+                    if (!tempAccesslevels.floorgroup || !tempAccesslevels.elevator) continue;
+                    deviceData.deviceName.id = tempAccesslevels.elevator.objectId;
+                    deviceData.deviceName.text =  tempAccesslevels.elevator.elevatorname;  
+                    deviceData.area.id = tempAccesslevels.floorgroup.groupname;
+                    deviceData.area.text = tempAccesslevels.floorgroup.groupname;
                     break;
                 case EDeviceType.none:
                 default:
@@ -626,9 +742,10 @@ async doExport(){
     selectedItem(data) {
         this.isSelected = data;
     }
-    floorGroupOptions:any={};
-    floorOptions:any={};
+    
     updateInputData(data) {
+        console.log("updateInputData", data);
+        let elevator:any;
         switch (data.key) {
             case "permissionName":
                 this.inputFormData.permissionName = data.value;
@@ -643,42 +760,48 @@ async doExport(){
                 break;
             // doorGroup
             case "doorGroupName": this.inputFormData.doorGroupNameOption = data.value;
-                let dg = this.selectItemOriginal.doorGroup.find(x=>x.objectId == data.value);
-                if (dg && dg.area) {
-                    this.inputFormData.doorGroupAreaOption = dg.area.name;
-                }
                 break;
-            case "floorGroupName": 
-                console.log("floorGroupName changed",data);
-                this.inputFormData.floorGroupNameOption = data.value;                
+            case "elevatorName": 
+                this.inputFormData.elevatorNameOption = data.value;                
+                break;
+            case "elevatorGroupName": 
+                this.inputFormData.elevatorGroupNameOption = data.value;                
                 break;
             
-            // elevator
-            case "elevatorName":
-                console.log("elevatorName changed",data);
-                this.floorOptions={};
-                let elevator = this.selectItemOriginal.elevator.find(x=>x.objectId == data.value);                
+            // floor - elevator option
+            case "floorName":
+                console.log("floor elevator changed", data);
+                this.selectItem.floorDevice={ "": this._("w_Select") };
+                elevator = this.selectItemOriginal.elevator.find(x=>x.objectId == data.value);                
                 if(elevator&&elevator.reader){
                     for(let floor of elevator.reader){
-                        this.floorOptions[floor.objectId]=floor.floorname;
+                        this.selectItem.floorDevice[floor.objectId]=floor.floorname;
                     }
-                }else{
-                    this.inputFormData.elevatorAreaOption="";
+                }
+                else{
+                    this.inputFormData.floorAreaOption="";
                 }                
-                this.inputFormData.elevatorNameOption = data.value;                        
+                this.inputFormData.floorNameOption = data.value;                        
                 break;            
-            case "elevatorArea":
-                console.log("elevatorArea changed",data);
-                this.inputFormData.elevatorAreaOption = data.value;                
+            case "floorArea":
+                console.log("floorArea changed", data);
+                this.inputFormData.floorAreaOption = data.value;                
+                break;
+            case "floorGroupName":
+                console.log("floorGroup elevator changed", data);                          
+                this.inputFormData.floorGroupNameOption = data.value;                        
                 break;
             case "floorGroupArea":
                 console.log("floorGroupArea changed",data);
                 this.inputFormData.floorGroupAreaOption = data.value;                
                 break;
             case "doorTimeFormat": 
+            case "doorGroupTimeFormat":
             case "elevatorTimeFormat":
+            case "elevatorGroupTimeFormat":
+            case "floorTimeFormat":
             case "floorGroupTimeFormat":                    
-            case "doorGroupTimeFormat":   
+               
                 this.inputFormData.deviceTimeFormatOption = data.value;
                 break;
 
@@ -695,7 +818,7 @@ async doExport(){
         
 
         if(!this.inputFormData.deviceTimeFormatOption||
-            (!this.inputFormData.elevatorAreaOption && this.inputFormData.deviceType=="elevator" )|| 
+            (!this.inputFormData.floorAreaOption && this.inputFormData.deviceType=="floor" )|| 
             (!this.inputFormData.floorGroupAreaOption && this.inputFormData.deviceType=="floorGroup")){            
             return;
         }   
@@ -719,35 +842,35 @@ async doExport(){
             case EDeviceType.doorGroup:
                 if (!this.inputFormData.doorGroupNameOption) return;
                 deviceData.deviceName.id = this.inputFormData.doorGroupNameOption;
-                let doorgroup = this.selectItemOriginal.doorGroup.find(x=>x.objectId == deviceData.deviceName.id );                
-                if (doorgroup && doorgroup.area) {
-                    // deviceData.area.id = doorgroup.area.name;
-                    // deviceData.area.text = doorgroup.area.name;
-                }                      
                 deviceData.deviceName.text = this.selectItem.doorGroupDevice[deviceData.deviceName.id];
                 break;
             case EDeviceType.elevator:
                 if (!this.inputFormData.elevatorNameOption) return;
                 deviceData.deviceName.id = this.inputFormData.elevatorNameOption;
-                if(!this.inputFormData.elevatorAreaOption) return;
-                let elevator = this.selectItemOriginal.elevator.find(x=>x.objectId == deviceData.deviceName.id );    
-                console.log("elevator", elevator);
+                deviceData.deviceName.text = this.selectItem.elevatorDevice[deviceData.deviceName.id];
+                break;
+            case EDeviceType.elevatorGroup:
+                if (!this.inputFormData.elevatorGroupNameOption) return;
+                deviceData.deviceName.id = this.inputFormData.elevatorGroupNameOption;
+                deviceData.deviceName.text = this.selectItem.elevatorGroupDevice[deviceData.deviceName.id];
+                break;
+            case EDeviceType.floor:
+                if (!this.inputFormData.floorNameOption) return;
+                deviceData.deviceName.id = this.inputFormData.floorNameOption;
+                let elevator = this.selectItemOriginal.elevator.find(x=>x.objectId == deviceData.deviceName.id ); 
                 if(elevator&&elevator.reader){
-                    deviceData.area.id = this.inputFormData.elevatorAreaOption;
+                    deviceData.area.id = this.inputFormData.floorAreaOption;
                     let floor = elevator.reader.find(x=>x.objectId == deviceData.area.id);
                     if(floor)deviceData.area.text=floor.floorname;
-                }                    
-                       
+                }
                 deviceData.deviceName.text = this.selectItem.elevatorDevice[deviceData.deviceName.id];
                 break;
             case EDeviceType.floorGroup:
                 if (!this.inputFormData.floorGroupNameOption) return;
                 deviceData.deviceName.id = this.inputFormData.floorGroupNameOption; 
-                deviceData.deviceName.text = this.selectItem.elevatorDevice[deviceData.deviceName.id];
-                if (!this.inputFormData.floorGroupAreaOption) return;
+                deviceData.deviceName.text = this.selectItem.elevatorDevice[deviceData.deviceName.id];                
                 deviceData.area.id = this.inputFormData.floorGroupAreaOption;
-                deviceData.area.text = this.selectItem.floorGroupDevice[deviceData.area.id];
-                
+                deviceData.area.text = this.selectItem.floorGroupDevice[deviceData.area.id];                
                 break;
             }
         console.log("push device data", deviceData);
@@ -758,11 +881,13 @@ async doExport(){
     clearDeviceSelection() {
         this.inputFormData.deviceTimeFormatOption = "";
         this.inputFormData.doorNameOption = "";
-        this.inputFormData.doorAreaOption = "";
+        //this.inputFormData.doorAreaOption = "";
         this.inputFormData.doorGroupNameOption = "";
-        this.inputFormData.doorGroupAreaOption = "";
+        // this.inputFormData.doorGroupAreaOption = "";
         this.inputFormData.elevatorNameOption = "";
-        this.inputFormData.elevatorAreaOption = "";
+        this.inputFormData.elevatorGroupNameOption = "";
+        this.inputFormData.floorNameOption = "";
+        this.inputFormData.floorAreaOption = "";
         this.inputFormData.floorGroupAreaOption = "";
         this.inputFormData.floorGroupNameOption = "";
     }
@@ -839,55 +964,41 @@ async doExport(){
                 switch (tempData.deviceType) {
                     case EDeviceType.door:
                         accessParam.door = tempData.deviceName.id;
-                        let door = this.selectItemOriginal.door.find(x=>x.objectId==accessParam.door);                            
-                        if (!door)break;
-                        // if(door.readerin) {
-                        //     for (let reader of door.readerin) {
-                        //         accessParam.reader.push(reader.objectId);
-                        //     }
-                        // }
-                        // if (door.readerout) {
-                        //     for (let reader of door.readerout) {                                
-                        //         accessParam.reader.push(reader.objectId);
-                        //     }
-                        // }       
-                        
                         this.savedAccessLevels.push({timename: tempData.timeFormat.text, devicename: tempData.deviceName.text});
                         break;
                     case EDeviceType.doorGroup:
                         accessParam.doorgroup = tempData.deviceName.id;
                         let doorGroup = this.selectItemOriginal.doorGroup.find(x=>x.objectId == accessParam.doorgroup);
-                        if(!doorGroup || !doorGroup.doors)break;
+                        if(!doorGroup || !doorGroup.doors)continue;
                         for (let door of doorGroup.doors) {
-                            // if (door.readerin) {
-                            //     for (let reader of door.readerin) {
-                            //         accessParam.reader.push(reader.objectId);                                    
-                            //     }
-                            // }
-                            // if (door.readerout) {
-                            //     for (let reader of door.readerout) {                                    
-                            //         accessParam.reader.push(reader.objectId);
-                            //     }
-                            // }
                             this.savedAccessLevels.push({timename: tempData.timeFormat.text, devicename: door.doorname});
                         }
                         break;
 
                     case EDeviceType.elevator:
+                        accessParam.elevator = tempData.deviceName.id;
+                        this.savedAccessLevels.push({timename: tempData.timeFormat.text, devicename: `${tempData.deviceName.text}`});
+                        break;
+                    case EDeviceType.elevatorGroup:
+                        accessParam.elevatorgroup = tempData.deviceName.id;                        
+                        let elevatorGroup = this.selectItemOriginal.elevatorGroup.find(x=>x.objectId == accessParam.elevatorgroup);
+                        if(!elevatorGroup || !elevatorGroup.elevators)continue;
+                        for (let eg of elevatorGroup.elevators) {                            
+                            this.savedAccessLevels.push({timename: tempData.timeFormat.text, devicename: eg.elevatorname});
+                        }
+                        break;
+                    case EDeviceType.floor:
                         accessParam.elevator = tempData.deviceName.id;                        
                         accessParam.floor=tempData.area.id;                        
                         this.savedAccessLevels.push({timename: tempData.timeFormat.text, devicename: `${tempData.deviceName.text}-${tempData.area.text}`});
                         break;
-
                     case EDeviceType.floorGroup:
                         accessParam.elevator = tempData.deviceName.id;                        
                         accessParam.floorgroup=tempData.area.id;
                         let floorgroup = this.selectItemOriginal.floorGroup.find(x=>x.objectId ==accessParam.floorgroup);
-                        //accessParam.floor=[];
                         if(floorgroup && floorgroup.floors){
                             for(let floor of floorgroup.floors){
-                                //accessParam.floor.push(floor.objectId);
-                                this.savedAccessLevels.push({timename: tempData.timeFormat.text, devicename: `${tempData.deviceName.text}-${tempData.area.text}`});
+                                this.savedAccessLevels.push({timename: tempData.timeFormat.text, devicename: `${tempData.deviceName.text}-${floor.floorname}`});
                             }                             
                         }
                         break;
@@ -1167,17 +1278,17 @@ private async checkDuplication(permtable:any):Promise<boolean>{
                 ///////////////////////////////////////////////////////
 
 
-                /**
-                 * @uiLabel - ${this._("w_Elevator")}
-                 * @uiPlaceHolder - ${this._("w_Elevator")}
-                 * @uiColumnGroup - row112
+                 /**
+                 * @uiLabel - ${this._("w_Permission_DeviceName")}
+                 * @uiPlaceHolder - ${this._("w_Permission_DeviceName")}
+                 * @uiColumnGroup - row11e
                  * @uiDisabled - ${
                      this.pageStep === EPageStep.add ||
                      this.pageStep === EPageStep.edit
                          ? "false"
                          : "true"
                  }
-                 * @uiHidden - ${this.pageStep === EPageStep.view? "true" : "false"}
+                * @uiHidden - ${this.pageStep === EPageStep.view? "true" : "false"}
                 */
                  elevatorName?: ${toEnumInterface(
                      this.selectItem.elevatorDevice as any,
@@ -1186,17 +1297,22 @@ private async checkDuplication(permtable:any):Promise<boolean>{
 
 
                 /**
-                 * @uiLabel - ${this._("w_Floor")}
-                 * @uiColumnGroup - row112
-                * @uiHidden - ${this.pageStep === EPageStep.view ? "true" : "false"}
+                 * @uiLabel - ${this._("w_Permission_DeviceArea")}
+                 * @uiColumnGroup - row11e
+                 * @uiType - ${
+                     this.deviceType === "elevator"
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
+                 * @uiHidden - true
                 */
-                 elevatorArea?:  ${toEnumInterface(this.floorOptions, false)};
+                 elevatorArea?: string;
 
 
-                 /**
+                /**
                  * @uiLabel - ${this._("w_Permission_DeviceTimeFormat")}
                  * @uiPlaceHolder - ${this._("w_Permission_DeviceTimeFormat")}
-                 * @uiColumnGroup - row112
+                 * @uiColumnGroup - row11e
                  * @uiDisabled - ${
                      this.pageStep === EPageStep.add ||
                      this.pageStep === EPageStep.edit
@@ -1212,10 +1328,122 @@ private async checkDuplication(permtable:any):Promise<boolean>{
 
 
                 /*
-                 * @uiColumnGroup - row112
+                 * @uiColumnGroup - row11e
                  * @uiHidden - ${this.pageStep === EPageStep.view? "true" : "false"}
                 */
                  elevatorAdd?: any;
+
+
+                ///////////////////////////////////////////////////////
+
+
+                 /**
+                 * @uiLabel - ${this._("w_Permission_DeviceName")}
+                 * @uiPlaceHolder - ${this._("w_Permission_DeviceName")}
+                 * @uiColumnGroup - row111eg
+                 * @uiDisabled - ${
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
+                 * @uiHidden - ${this.pageStep === EPageStep.view? "true" : "false"}
+                */
+                 elevatorGroupName?: ${toEnumInterface(
+                     this.selectItem.elevatorGroupDevice as any,
+                     false
+                 )};
+
+                /**
+                 * @uiLabel - ${this._("w_Permission_DeviceArea")}
+                 * @uiColumnGroup - row111eg
+                * @uiType - ${
+                    this.deviceType === EDeviceType.elevatorGroup
+                        ? "iv-form-string"
+                        : "iv-form-label"
+                }
+               * @uiHidden - true
+                */
+                 elevatorGroupArea?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Permission_DeviceTimeFormat")}
+                 * @uiPlaceHolder - ${this._("w_Permission_DeviceTimeFormat")}
+                 * @uiColumnGroup - row111eg
+                 * @uiDisabled - ${
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
+                 * @uiHidden - ${this.pageStep === EPageStep.view? "true" : "false"}
+                */
+                elevatorGroupTimeFormat?: ${toEnumInterface(
+                    this.selectItem.timeSchedule as any,
+                    false
+                )};
+
+
+                /*
+                 * @uiColumnGroup - row111eg
+                 * @uiHidden - ${this.pageStep === EPageStep.view? "true" : "false"}
+                */
+                 elevatorGroupAdd?: any;
+
+                ///////////////////////////////////////////////////////
+                
+
+
+                /**
+                 * @uiLabel - ${this._("w_Elevator")}
+                 * @uiPlaceHolder - ${this._("w_Elevator")}
+                 * @uiColumnGroup - row112
+                 * @uiDisabled - ${
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
+                 * @uiHidden - ${this.pageStep === EPageStep.view? "true" : "false"}
+                */
+                 floorName?: ${toEnumInterface(
+                     this.selectItem.elevatorDevice as any,
+                     false
+                 )};
+
+
+                /**
+                 * @uiLabel - ${this._("w_Floor")}
+                 * @uiColumnGroup - row112
+                * @uiHidden - ${this.pageStep === EPageStep.view ? "true" : "false"}
+                */
+                 floorArea?:  ${toEnumInterface(this.selectItem.floorDevice, false)};
+
+
+                 /**
+                 * @uiLabel - ${this._("w_Permission_DeviceTimeFormat")}
+                 * @uiPlaceHolder - ${this._("w_Permission_DeviceTimeFormat")}
+                 * @uiColumnGroup - row112
+                 * @uiDisabled - ${
+                     this.pageStep === EPageStep.add ||
+                     this.pageStep === EPageStep.edit
+                         ? "false"
+                         : "true"
+                 }
+                 * @uiHidden - ${this.pageStep === EPageStep.view? "true" : "false"}
+                */
+                floorTimeFormat?: ${toEnumInterface(
+                    this.selectItem.timeSchedule as any,
+                    false
+                )};
+
+
+                /*
+                 * @uiColumnGroup - row112
+                 * @uiHidden - ${this.pageStep === EPageStep.view? "true" : "false"}
+                */
+                 floorAdd?: any;
                  ///////////////////////
 
                  /**
