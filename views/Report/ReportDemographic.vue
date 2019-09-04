@@ -1668,24 +1668,6 @@ export default class ReportDemographic extends Vue {
 					}
 				}
 
-
-                // // TODO: Dwell time
-                // let tempRandomDwellTime = Math.floor(Math.random()*6);
-                // if (tempRandomDwellTime == 0) {
-                //     tempChartData.dwellTimeRange = EDwellTimeRange.lower5;
-                // } else if (tempRandomDwellTime == 1) {
-                //     tempChartData.dwellTimeRange = EDwellTimeRange.m5_15;
-                // } else if (tempRandomDwellTime == 2) {
-                //     tempChartData.dwellTimeRange = EDwellTimeRange.m15_30;
-                // } else if (tempRandomDwellTime == 3) {
-                //     tempChartData.dwellTimeRange = EDwellTimeRange.m30_60;
-                // } else if (tempRandomDwellTime == 4) {
-                //     tempChartData.dwellTimeRange = EDwellTimeRange.m60_120;
-                // } else {
-                //     tempChartData.dwellTimeRange = EDwellTimeRange.upper120;
-                // }
-                // // TODO: Dwell time
-
             }
 
 			this.chartDatas = tempChartDatas;
@@ -2189,7 +2171,8 @@ export default class ReportDemographic extends Vue {
                         ageRange: ageRange,
                         dwellTimeRange: dwellTimeRange,
 						maleCount: Math.floor(Math.random() * 300),
-						femaleCount: Math.floor(Math.random() * 300)
+						femaleCount: Math.floor(Math.random() * 300),
+						dwellTimeRanges: []
 					};
 
 					if (!isNaN(tempChartData.date.getTime())) {

@@ -105,33 +105,33 @@ import {EAgeRange} from "@/components/Reports";
 
 
 <script lang="ts">
-    import {Component, Prop, Vue, Watch} from "vue-property-decorator";
-    /// install Highcharts
-    import Highcharts from "highcharts";
-    import HighchartsVue from "highcharts-vue";
-    import exportingInit from "highcharts/modules/exporting";
-    // custom import
-    import {
-        EAgeRange,
-        EAreaMode,
-        EChartMode,
-        EDwellTimeRange,
-        EGender,
-        ETimeMode,
-        EWeather,
-        IBootstrapSelectItem,
-        IChartDemographicData,
-        ISite,
-        ISiteOfficeHourItem,
-        IValSelectItem
-    } from "../";
-    import Datetime from "@/services/Datetime";
-    import HighchartsService from "../models/HighchartsService";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+/// install Highcharts
+import Highcharts from "highcharts";
+import HighchartsVue from "highcharts-vue";
+import exportingInit from "highcharts/modules/exporting";
+// custom import
+import {
+    EAgeRange,
+    EAreaMode,
+    EChartMode,
+    EDwellTimeRange,
+    EGender,
+    ETimeMode,
+    EWeather,
+    IBootstrapSelectItem,
+    IChartDemographicData,
+    ISite,
+    ISiteOfficeHourItem,
+    IValSelectItem
+} from "../";
+import Datetime from "@/services/Datetime";
+import HighchartsService from "../models/HighchartsService";
 
-    exportingInit(Highcharts);
+exportingInit(Highcharts);
 Vue.use(HighchartsVue);
 
-    @Component({
+@Component({
     components: {}
 })
 export class HighchartsDemographic extends Vue {
@@ -379,7 +379,7 @@ export class HighchartsDemographic extends Vue {
                 data: []
             },
             {
-                name: this._("w_Male"),
+                name: this._("w_Female"),
                 data: []
             }
         ];
@@ -1626,7 +1626,6 @@ export class HighchartsDemographic extends Vue {
         }
     }
 
-    // TODO: No dwelltime API
     drawChartDwellTime() {
         let tempValues: IChartDemographicData[] = JSON.parse(
             JSON.stringify(this.value)
@@ -1640,8 +1639,7 @@ export class HighchartsDemographic extends Vue {
             {
                 name: this._("w_DwellTime"),
                 data: [0, 0, 0, 0, 0, 0]
-            },
-
+            }
         ];
         let pieSeriesData: any = [
             [this._("w_Male"), 0],
@@ -1650,55 +1648,36 @@ export class HighchartsDemographic extends Vue {
 
         for (let val of tempValues) {
             let addValue = false;
-            if (this.selection.ageRange == EAgeRange.all) {
+            let barSeriesDataIndex: number = 0;
+
+            if (
+                this.selection.ageRange === EAgeRange.all ||
+                this.selection.ageRange === val.ageRange
+            ) {
                 addValue = true;
-            } else if (val.ageRange == this.selection.ageRange) {
-                addValue = true;
-            }
-
-            if (addValue) {
-                let barSeriesDataIndex: number = 0;
-
-                for (let i = 0; i < 6; i++) {
-                    switch (i) {
-                        case 0:
-                            barSeriesDataIndex = 0;
-                            let lower5: number = val.dwellTimeRanges[barSeriesDataIndex] ? val.dwellTimeRanges[barSeriesDataIndex] : 0;
-                            barSeries[0].data[barSeriesDataIndex] += lower5;
-                            break;
-                        case 1:
-                            barSeriesDataIndex = 1;
-                            let m5_15: number = val.dwellTimeRanges[barSeriesDataIndex] ? val.dwellTimeRanges[barSeriesDataIndex] : 0;
-                            barSeries[0].data[barSeriesDataIndex] += m5_15;
-                            break;
-                        case 2:
-                            barSeriesDataIndex = 2;
-                            let m15_30: number = val.dwellTimeRanges[barSeriesDataIndex] ? val.dwellTimeRanges[barSeriesDataIndex] : 0;
-                            barSeries[0].data[barSeriesDataIndex] += m15_30;
-                            break;
-                        case 3:
-                            barSeriesDataIndex = 3;
-                            let m30_60: number = val.dwellTimeRanges[barSeriesDataIndex] ? val.dwellTimeRanges[barSeriesDataIndex] : 0;
-                            barSeries[0].data[barSeriesDataIndex] += m30_60;
-                            break;
-                        case 4:
-                            barSeriesDataIndex = 4;
-                            let m60_120: number = val.dwellTimeRanges[barSeriesDataIndex] ? val.dwellTimeRanges[barSeriesDataIndex] : 0;
-                            barSeries[0].data[barSeriesDataIndex] += m60_120;
-                            break;
-                        case 5:
-                            barSeriesDataIndex = 5;
-                            let upper120: number = val.dwellTimeRanges[barSeriesDataIndex] ? val.dwellTimeRanges[barSeriesDataIndex] : 0;
-                            barSeries[0].data[barSeriesDataIndex] += upper120;
-                            break;
-                    }
-
-                    totalCount = barSeries[0].data.reduce((accumulator, currentValue) => accumulator + currentValue);
-
-                    pieSeriesData[0][1] += val.maleCount;
-                    pieSeriesData[1][1] += val.femaleCount;
-                }
-
+                barSeries[0].data[0] += val.dwellTimeRanges[0]
+                    ? val.dwellTimeRanges[0]
+                    : 0;
+                barSeries[0].data[1] += val.dwellTimeRanges[1]
+                    ? val.dwellTimeRanges[1]
+                    : 0;
+                barSeries[0].data[2] += val.dwellTimeRanges[2]
+                    ? val.dwellTimeRanges[2]
+                    : 0;
+                barSeries[0].data[3] += val.dwellTimeRanges[3]
+                    ? val.dwellTimeRanges[3]
+                    : 0;
+                barSeries[0].data[4] += val.dwellTimeRanges[4]
+                    ? val.dwellTimeRanges[4]
+                    : 0;
+                barSeries[0].data[5] += val.dwellTimeRanges[5]
+                    ? val.dwellTimeRanges[5]
+                    : 0;
+                totalCount = barSeries[0].data.reduce(
+                    (accumulator, currentValue) => accumulator + currentValue
+                );
+                pieSeriesData[0][1] += val.maleCount;
+                pieSeriesData[1][1] += val.femaleCount;
             }
         }
 
