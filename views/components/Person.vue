@@ -117,9 +117,9 @@
                             :hidePaging="true"
                             :selectable="false"
                         >
-                            <template #enter_time="{$attrs}">
+                            <!-- <template #enter_time="{$attrs}">
                                 {{ new Date($attrs.rows[$attrs.index]['Enter']['timestamp']).getHours() + ':' + new Date($attrs.rows[$attrs.index]['Enter']['timestamp']).getMinutes() + ':' + new Date($attrs.rows[$attrs.index]['Enter']['timestamp']).getMinutes() }}
-                            </template>
+                            </template> -->
                             <template #leave_time="{$attrs}">
                                 {{ new Date($attrs.rows[$attrs.index]['Leave']['timestamp']).getHours() + ':' + new Date($attrs.rows[$attrs.index]['Leave']['timestamp']).getMinutes() + ':' + new Date($attrs.rows[$attrs.index]['Leave']['timestamp']).getMinutes() }}
                             </template>
@@ -331,11 +331,20 @@ export default class Components extends Vue {
           /*
             * @uiLabel - ${this._("w_Enter") + this._("w_Timestamp")}
             */
-          enter_time: Date;
+          Enter: interface {
+              /**
+               * @uiLabel - ${this._("w_Enter") + this._("w_Timestamp")}
+               * @uiAttrs - { format: "HH:mm:ss" }
+               */
+              timestamp: Date;
+          };
+        Leave: interface {
           /*
             * @uiLabel - ${this._("w_Leave") + this._("w_Timestamp")}
+               * @uiAttrs - { format: "HH:mm:ss" }
             */
-          leave_time: Date;
+          timestamp: Date;
+        };
           /*
             * @uiLabel - ${this._("w_Stay") + this._("w_Timestamp")}
             */
