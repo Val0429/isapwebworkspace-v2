@@ -1260,6 +1260,27 @@ export class HighchartsDwellTime extends Vue {
             data: number[];
         }[] = [];
 
+        // set business mode title
+        let tempBusinessTitle = this._("w_ReportTraffic_TrafficRevenue");
+        switch (this.businessMode) {
+            case EBusinessChart.transaction:
+                tempBusinessTitle = this._(
+                    "w_ReportTraffic_TrafficTransaction"
+                );
+                break;
+            case EBusinessChart.conversion:
+                tempBusinessTitle = this._("w_ReportTraffic_TrafficConversion");
+                break;
+            case EBusinessChart.asp:
+                tempBusinessTitle = this._("w_ReportTraffic_TrafficASP");
+                break;
+
+            case EBusinessChart.revenue:
+            default:
+                tempBusinessTitle = this._("w_ReportTraffic_TrafficRevenue");
+                break;
+        }
+
         // 避免時間相反造成無窮迴圈
         let sortDate = Datetime.SortDateGap(this.startDate, this.endDate);
 
@@ -1600,13 +1621,23 @@ export class HighchartsDwellTime extends Vue {
                 categories: tempCategories,
                 labels: { useHTML: true }
             },
-            yAxis: {
-                labels: { style: { color: "#000" } },
-                title: {
-                    text: this._("w_ReportDwellTime_DwellTimeDwellTime"),
-                    style: { color: "#000" }
+            yAxis: [
+                {
+                    labels: { style: { color: "#000" } },
+                    title: {
+                        text: this._("w_ReportTraffic_TrafficTraffic"),
+                        style: { color: "#000" }
+                    }
+                },
+                {
+                    labels: { style: { color: "#000" } },
+                    title: {
+                        text: tempBusinessTitle,
+                        style: { color: "#000" }
+                    },
+                    opposite: true
                 }
-            },
+            ],
 
             tooltip: {
                 enabled: true,
