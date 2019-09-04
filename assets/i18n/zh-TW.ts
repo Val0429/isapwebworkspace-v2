@@ -80,6 +80,7 @@ export default class LangObject {
 
     // Warn
     m_Warn_Password = '密碼不一致';
+    m_Warn_Email = '格式錯誤';
 
     // Error
     w_Error_FailedToFetch = "We can't connect to server, please try again!"; // failed to fetch

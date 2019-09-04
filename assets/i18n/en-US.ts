@@ -80,6 +80,7 @@ export default class LangObject {
 
     // Warn
     m_Warn_Password = 'Confirm your password';
+    m_Warn_Email = 'Confirm your Email';
 
     // Error
     w_Error_FailedToFetch = "We can't connect to server, please try again!"; // failed to fetch

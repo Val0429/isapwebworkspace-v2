@@ -60,6 +60,8 @@ export class UsersListForm extends Vue implements IFormQuick {
                     comfirmPassword: string;
                     /*
                      * @uiLabel - ${this._('w_Email')}
+                     * @uiValidation - (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+                     * @uiInvalidMessage - ${this._('m_Warn_Email')}
                      */
                     publicEmailAddress?: string;
                         /*
