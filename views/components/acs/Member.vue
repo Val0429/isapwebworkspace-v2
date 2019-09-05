@@ -308,6 +308,7 @@ enum ITemplateCard {
 })
 export default class Member extends Vue {
   serverUrl = ServerConfig.url;
+  isImageChanged: boolean;
   
   beforeMount() {
     if (!this.$user || !this.$user.permissions) return;
@@ -368,6 +369,8 @@ export default class Member extends Vue {
 
   clearInputData() {    
     this.permissionSelected=[];
+    this.isImageChanged=false;
+    this.newImgSrc="";
     this.inputFormData = Object.assign({}, this.defaultFormData);
     let defaultWg=this.workGroupSelectItems.find(x=>x.groupname=="正職");
     this.inputFormData.personType = defaultWg ? defaultWg.groupid.toString() : 1;
@@ -597,12 +600,13 @@ export default class Member extends Vue {
     this.selectedDetail = data;
   }
   
-  getInputData() {
+  async getInputData() {
     this.clearInputData();
 
     if (!this.selectedDetail[0]) return;
-      let detailData = this.selectedDetail[0];
-
+      let resp:any = await this.$server.R("/acs/member", {objectId:this.selectedDetail[0].objectId, showImage:"true"}) ;
+      let detailData = resp.results[0];
+      this.newImgSrc = detailData.cardholderPortrait;
       // Master form      
       this.inputFormData = Object.assign({}, detailData);      
 
@@ -662,13 +666,13 @@ export default class Member extends Vue {
   }
 
   async pageToEdit() {
-    this.getInputData();
+    await this.getInputData();
     await this.initPremission();
     this.pageStep = EPageStep.edit;
   }
 
   async pageToView() {
-    this.getInputData();
+    await this.getInputData();
     await this.initPremission();
     this.pageStep = EPageStep.view;
   }
@@ -683,14 +687,16 @@ export default class Member extends Vue {
   }
 
   async uploadFile(file) {
+    let parent=this;
     if (file) {
       ImageBase64.fileToBase64(file, (base64 = "") => {
         if (base64 != "") {
           this.newImg = new Image();
           this.newImg.src = base64;
           this.newImg.onload = () => {
-            this.newImgSrc = base64;
-            return;
+            parent.newImgSrc = base64;
+            parent.isImageChanged=true;
+            
           };
         } else {
           Dialog.error(this._("w_Member_ErrorUploadFile"));
@@ -707,6 +713,8 @@ export default class Member extends Vue {
     }
   }
   async doSave($event){
+    this.inputFormData.newImgSrc=this.newImgSrc;
+    this.inputFormData.isImageChanged = this.isImageChanged;
     await this.saveAddOrEdit(this.inputFormData, this.permissionSelected);
   }
   async saveAddOrEdit(inputFormData:any, accessRules:string[], checkDuplication:boolean=true,refreshAfterwards:boolean=true) {
@@ -793,7 +801,9 @@ export default class Member extends Vue {
         // special
         Credentials: tempCredentials,
         PersonalDetails: tempPersonalDetails,
-        CustomFields: tempCustomFieldsList
+        CustomFields: tempCustomFieldsList,
+        CardholderPortrait:inputFormData.isImageChanged?inputFormData.newImgSrc.substr(inputFormData.newImgSrc.indexOf(",")+1, inputFormData.newImgSrc.length):"",
+        IsImageChanged: inputFormData.isImageChanged
       };
       // if(inputFormData["registrationDate"]){
       //    member.StartDate = moment(inputFormData["registrationDate"]).toDate();
