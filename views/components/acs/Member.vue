@@ -600,13 +600,17 @@ export default class Member extends Vue {
     this.selectedDetail = data;
   }
   
-  async getInputData() {
+  getInputData() {
     this.clearInputData();
 
     if (!this.selectedDetail[0]) return;
-      let resp:any = await this.$server.R("/acs/member", {objectId:this.selectedDetail[0].objectId, showImage:"true"}) ;
-      let detailData = resp.results[0];
-      this.newImgSrc = detailData.cardholderPortrait;
+      this.$server.R("/acs/member", {objectId:this.selectedDetail[0].objectId, showImage:"true"})
+        .then((resp:any) => {
+          if(resp && Array.isArray(resp.results) && resp.results.length>0)
+            this.newImgSrc =  resp.results[0].cardholderPortrait
+        });
+      let detailData = this.selectedDetail[0];
+      
       // Master form      
       this.inputFormData = Object.assign({}, detailData);      
 
@@ -666,13 +670,13 @@ export default class Member extends Vue {
   }
 
   async pageToEdit() {
-    await this.getInputData();
+    this.getInputData();
     await this.initPremission();
     this.pageStep = EPageStep.edit;
   }
 
   async pageToView() {
-    await this.getInputData();
+    this.getInputData();
     await this.initPremission();
     this.pageStep = EPageStep.view;
   }
