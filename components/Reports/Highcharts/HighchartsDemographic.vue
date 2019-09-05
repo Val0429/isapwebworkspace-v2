@@ -481,7 +481,7 @@ export class HighchartsDemographic extends Vue {
                 formatter: function(tooltip: any) {
                     let self: any = this;
                     let result = "";
-                    if (self.x != undefined) {
+                    if (self.x != undefined && typeof self.x == "string") {
                         try {
                             // anysisly JSON
                             let startIndex = self.x.indexOf(">{");
@@ -829,7 +829,7 @@ export class HighchartsDemographic extends Vue {
                 formatter: function(tooltip: any) {
                     let self: any = this;
                     let result = "";
-                    if (self.x != undefined) {
+                    if (self.x != undefined && typeof self.x == "string") {
                         try {
                             // anysisly JSON
                             let startIndex = self.x.indexOf(">{");
@@ -972,7 +972,7 @@ export class HighchartsDemographic extends Vue {
                 formatter: function(tooltip: any) {
                     let self: any = this;
                     let result = "";
-                    if (self.x != undefined) {
+                    if (self.x != undefined && typeof self.x == "string") {
                         try {
                             // anysisly JSON
                             let startIndex = self.x.indexOf(">{");

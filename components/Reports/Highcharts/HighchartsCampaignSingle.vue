@@ -195,7 +195,7 @@ export class HighchartsCampaignSingle extends Vue {
                 formatter: function() {
                     let self: any = this;
                     let result = "";
-                    if (self.x != undefined) {
+                    if (self.x != undefined && typeof self.x == "string") {
                         try {
                             // anysisly JSON
                             let startIndex = self.x.indexOf(">{");
