@@ -1,7 +1,7 @@
 <template>
     <div class="animated fadeIn">
 
-        <tool-traffic-filter @filter="receiveFilterData"></tool-traffic-filter>
+        <tool-dwell-time-filter @filter="receiveFilterData"></tool-dwell-time-filter>
 
         <iv-card
             :visible="visible"
