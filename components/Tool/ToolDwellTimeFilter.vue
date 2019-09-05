@@ -313,7 +313,7 @@ export class ToolDwellTimeFilter extends Vue {
     }
 
     async doSubmit(data) {
-        const submitParam: ITrafficFilter = {
+        const submitParam: IFilter = {
             siteId: data.siteId,
             areaId: data.areaId,
             deviceGroupId: data.deviceGroupId ? data.deviceGroupId : undefined,
