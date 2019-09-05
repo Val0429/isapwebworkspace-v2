@@ -342,7 +342,7 @@ export default class HumanDetectionServer extends Vue {
     }
 
     pageToHumanServerTest() {
-        this.clearInputData();
+        // this.clearInputData();
         this.modalShow = !this.modalShow;
     }
 

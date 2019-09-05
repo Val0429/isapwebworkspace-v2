@@ -682,6 +682,7 @@ export default class LangObject {
     w_ServerHD_DeviceName = 'Device Name';
     w_ServerHD_IP = 'IP';
     w_ServerHD_Port = 'Port';
+    w_ServerHD_Margin = 'Margin';
     w_ServerHD_Scale = 'Scale';
     w_ServerHD_Test = 'Test Human Detection Server';
     w_ServerHD_AddSuccess = 'Human Detection Server Add Success';

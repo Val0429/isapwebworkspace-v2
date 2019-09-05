@@ -337,7 +337,7 @@ export default class DemographicServer extends Vue {
             protocol: "http",
             ip: "",
             port: "",
-            margin: "0.5",
+            margin: "0",
             imageBase64: ""
         };
     }
@@ -391,7 +391,7 @@ export default class DemographicServer extends Vue {
     }
 
     pageToHumanServerTest() {
-        this.clearInputData();
+        // this.clearInputData();
         this.testDetailTable.tableDataFromApi = [];
         this.modalShow = !this.modalShow;
     }
@@ -638,7 +638,7 @@ export default class DemographicServer extends Vue {
                 name: string;
 
                 /**
-                * @uiLabel - ${this._("w_ServerHD_Scale")}
+                * @uiLabel - ${this._("w_ServerHD_Margin")}
                 */
                 margin: number;
 
@@ -683,7 +683,7 @@ export default class DemographicServer extends Vue {
 
 
                 /**
-                * @uiLabel - ${this._("w_ServerHD_Scale")}
+                * @uiLabel - ${this._("w_ServerHD_Margin")}
                 */
                 margin?: any;
 
@@ -734,8 +734,8 @@ export default class DemographicServer extends Vue {
 
 
                 /**
-                * @uiLabel - ${this._("w_ServerHD_Scale")}
-                * @uiPlaceHolder - ${this._("w_ServerHD_Scale")}
+                * @uiLabel - ${this._("w_ServerHD_Margin")}
+                * @uiPlaceHolder - ${this._("w_ServerHD_Margin")}
                 */
                 margin?: ${toEnumInterface(this.targetScoreItem as any, false)};
 
@@ -772,8 +772,8 @@ export default class DemographicServer extends Vue {
 
 
                 /**
-                * @uiLabel - ${this._("w_ServerHD_Scale")}
-                * @uiPlaceHolder - ${this._("w_ServerHD_Scale")}
+                * @uiLabel - ${this._("w_ServerHD_Margin")}
+                * @uiPlaceHolder - ${this._("w_ServerHD_Margin")}
                 */
                 margin?: ${toEnumInterface(this.targetScoreItem as any, false)};
 
