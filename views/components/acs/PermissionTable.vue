@@ -1227,8 +1227,8 @@ private async checkDuplication(permtable:any):Promise<boolean>{
 
 
                  /**
-                 * @uiLabel - ${this._("w_Permission_DeviceName")}
-                 * @uiPlaceHolder - ${this._("w_Permission_DeviceName")}
+                 * @uiLabel - ${this._("w_ElevatorGroup")}
+                 * @uiPlaceHolder - ${this._("w_ElevatorGroup")}
                  * @uiColumnGroup - row111eg
                  * @uiDisabled - ${
                      this.pageStep === EPageStep.add ||
