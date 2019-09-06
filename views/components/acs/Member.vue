@@ -139,9 +139,9 @@
           <h4 class="ml-3 mt-4 font-weight-bold">{{ _('w_Member_Info') }}</h4>
         </template>
 
-        <template #imageSrc="{ $attrs, $listeners}" v-if="newImgSrc">
+        <template #imageSrc="{ $attrs, $listeners}" v-if="inputFormData.cardholderPortrait">
           <label class="col-md-12">{{_("w_Member_PersonPic")}}</label>
-          <img class="imgSide" v-bind="$attrs" v-on="$listeners" :src="newImgSrc" />
+          <img class="imgSide" v-bind="$attrs" v-on="$listeners" :src="inputFormData.cardholderPortrait" />
         </template>
 
         <template #permissionTable="{ $attr }">
@@ -281,7 +281,6 @@ import ImageBase64 from "@/services/ImageBase64";
 import CardTemplateBase64 from "@/components/FET_Card/models/cardTemplateBase64";
 import { PermissionName } from "@/../src/constants/permissions";
 import moment from 'moment';
-import { CustomFields } from "@/../src/constants/customfields";
 import * as XLSX from 'xlsx';
 // Sort Select
 import { ISortSelectOption } from "@/components/SortSelect";
@@ -308,7 +307,7 @@ enum ITemplateCard {
 })
 export default class Member extends Vue {
   serverUrl = ServerConfig.url;
-  isImageChanged: boolean;
+  
   
   beforeMount() {
     if (!this.$user || !this.$user.permissions) return;
@@ -350,8 +349,7 @@ export default class Member extends Vue {
   applyReason3Options: any = {};
   exportVisible:boolean=false;
   inputTestEmail: string = "";
-  newImg = new Image();
-  newImgSrc = "";
+  newImg = new Image();  
   imageSrcCard = "";
   permissionOptions: ISortSelectOption[] = [];
   tabMounted: boolean = false;
@@ -368,9 +366,7 @@ export default class Member extends Vue {
   };
 
   clearInputData() {    
-    this.permissionSelected=[];
-    this.isImageChanged=false;
-    this.newImgSrc="";
+    this.permissionSelected=[];    
     this.inputFormData = Object.assign({}, this.defaultFormData);
     let defaultWg=this.workGroupSelectItems.find(x=>x.groupname=="正職");
     this.inputFormData.personType = defaultWg ? defaultWg.groupid.toString() : 1;
@@ -600,28 +596,24 @@ export default class Member extends Vue {
     this.selectedDetail = data;
   }
   
-  getInputData() {
+  async getInputData() {
     this.clearInputData();
 
     if (!this.selectedDetail[0]) return;
-      this.$server.R("/acs/member", {objectId:this.selectedDetail[0].objectId, showImage:"true"})
-        .then((resp:any) => {
-          if(resp && Array.isArray(resp.results) && resp.results.length>0)
-            this.newImgSrc =  resp.results[0].cardholderPortrait
-        });
-      let detailData = this.selectedDetail[0];
-      
-      // Master form      
-      this.inputFormData = Object.assign({}, detailData);      
+      let resp:any = await this.$server.R("/acs/member", {objectId:this.selectedDetail[0].objectId, showImage:"true"}) ;
+       // Master form      
+      this.inputFormData = resp.results[0];
+      console.log("image", this.inputFormData.cardholderPortrait.substr(0,100))
+     
 
-      if (detailData.permissionTable) {
+      if (this.inputFormData.permissionTable) {
         console.log("pushing from access rules")
-        for (let rule of detailData.permissionTable) {
+        for (let rule of this.inputFormData.permissionTable) {
               this.permissionSelected.push(rule.toString());            
         }
       }
       let defaultWg=this.workGroupSelectItems.find(x=>x.groupname=="正職");
-      this.inputFormData.personType = (detailData.primaryWorkgroupId || (defaultWg ? defaultWg.groupid : 1)).toString();
+      this.inputFormData.personType = (this.inputFormData.primaryWorkgroupId || (defaultWg ? defaultWg.groupid : 1)).toString();
               
   }
 
@@ -670,13 +662,13 @@ export default class Member extends Vue {
   }
 
   async pageToEdit() {
-    this.getInputData();
+    await this.getInputData();
     await this.initPremission();
     this.pageStep = EPageStep.edit;
   }
 
   async pageToView() {
-    this.getInputData();
+    await this.getInputData();
     await this.initPremission();
     this.pageStep = EPageStep.view;
   }
@@ -698,8 +690,8 @@ export default class Member extends Vue {
           this.newImg = new Image();
           this.newImg.src = base64;
           this.newImg.onload = () => {
-            parent.newImgSrc = base64;
-            parent.isImageChanged=true;
+            parent.inputFormData.cardholderPortrait = base64;
+            parent.inputFormData.isImageChanged=true;
             
           };
         } else {
@@ -717,143 +709,49 @@ export default class Member extends Vue {
     }
   }
   async doSave($event){
-    this.inputFormData.newImgSrc=this.newImgSrc;
-    this.inputFormData.isImageChanged = this.isImageChanged;
     await this.saveAddOrEdit(this.inputFormData, this.permissionSelected);
   }
   async saveAddOrEdit(inputFormData:any, accessRules:string[], checkDuplication:boolean=true,refreshAfterwards:boolean=true) {
-    let dob= this.testDate(inputFormData.birthday, "T");
-    
-    console.log("dob", dob);
-    let tempPersonalDetails: any = {
-          Address: "",
-          ContactDetails: {
-              Email: inputFormData.email || "",
-              MobileNumber: inputFormData.extensionNumber || "",
-              MobileServiceProviderId: "0",
-              PagerNumber: "",
-              PagerServiceProviderId: "0",
-              PhoneNumber: inputFormData.phone || "",
-              },
-              DateOfBirth: dob || "",
-              PayrollNumber: "",
-              Title: "",
-              UserDetails: {
-                  Password: inputFormData.password || "",
-                  UserName: inputFormData.account || ""
-              }
-    };
-    
-    let credential = {
-          CardNumber: (inputFormData.cardNumber || "").toString(),
-          Pin: inputFormData.pin || "0",
-          FacilityCode: parseInt(inputFormData.deviceNumber||"469"),
-          ProfileId: !isNaN(parseInt(inputFormData.cardCertificate)) ? parseInt(inputFormData.cardCertificate) : 0,
-          ProfileName : inputFormData.profileName || "基礎",
-          CardTechnologyCode : inputFormData.technologyCode || 10,
-          PinMode: inputFormData.pinMode || 1,          
-          PinDigit:inputFormData.pinDigit || 0,
-          EndDate:inputFormData.endDate || moment("2100-12-31 23:59:59", 'YYYY-MM-DD HH:mm:ss').toDate(),
-          StartDate:inputFormData.startDate || new Date()
-        };
-        
-    let tempCredentials:any[] = credential.CardNumber && credential.CardNumber.trim()!="" ? [credential] : [];
-    
-    let tempCustomFieldsList: any = [];
-    for(let field of CustomFields){
-      if(field.name=="lastEditPerson"){
-          tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue: this.$user.user.username}); 
-      }
-      else if(field.name=="lastEditTime"){
-          tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue: moment(new Date()).format("YYYY-MM-DDTHH:mm:ss")}); 
-      }
-      else if(field.date) {
-          tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue: this.testDate(inputFormData[field.name])});      
-      }
-      else tempCustomFieldsList.push({FiledName:field.fieldName, FieldValue:inputFormData[field.name] || ""});      
-    }
-
-    let wg=this.workGroupSelectItems.find(x=>x.groupid==parseInt(inputFormData.personType || "1"));
-    let member = {        
-        // master
-        objectId: inputFormData.objectId,
-        AccessRules: accessRules,
-        PrimaryWorkgroupId: wg ? wg.groupid : 1,
-        ApbWorkgroupId: wg ? wg.groupid : 1,
-        PrimaryWorkgroupName: wg? wg.groupname:"正職",
-        EmployeeNumber: inputFormData.employeeNumber.toString(),
-        LastName: inputFormData.chineseName,
-        FirstName: inputFormData.englishName || "-",
-        StartDate: inputFormData.startDate || credential.StartDate,
-        EndDate: inputFormData.endDate || credential.EndDate,
-        SmartCardProfileId:"0",
-        Status:1,
-        //new addition
-        GeneralInformation:"",
-        Attributes:{Void:inputFormData.void || false},
-        NonPartitionWorkGroups:[],
-        NonPartitionWorkgroupAccessRules:[],
-        PrimaryWorkGroupAccessRule:[],
-        Token: "-1",
-        Vehicle1: {},
-        Vehicle2: {},
-        VisitorDetails: {
-            VisitorCardStatus: 0,
-            VisitorCustomValues: {}
-        },
-        TraceDetails: {},
-        // special
-        Credentials: tempCredentials,
-        PersonalDetails: tempPersonalDetails,
-        CustomFields: tempCustomFieldsList,
-        CardholderPortrait:inputFormData.isImageChanged?inputFormData.newImgSrc.substr(inputFormData.newImgSrc.indexOf(",")+1, inputFormData.newImgSrc.length):"",
-        IsImageChanged: inputFormData.isImageChanged
-      };
-      // if(inputFormData["registrationDate"]){
-      //    member.StartDate = moment(inputFormData["registrationDate"]).toDate();
-      // }
-      // if(inputFormData["resignationDate"]){
-      //    member.EndDate = moment(inputFormData["resignationDate"]).toDate();
-      // }
-    if (member.objectId) {
+    inputFormData.permissionTable = accessRules;
+    if (inputFormData.objectId) {
       if(checkDuplication){
-        let isDuplicateFound = await this.checkDuplication(member);
+        let isDuplicateFound = await this.checkDuplication(inputFormData);
         if(isDuplicateFound)return;
       }
       await this.$server
-        .U("/acs/member", member)
+        .U("/acs/member", inputFormData)
         .then((response: any) => {
           if(refreshAfterwards)this.pageToList();
         });
     } 
     else {
       if(checkDuplication){
-        let isDuplicateFound = await this.checkDuplication(member);
+        let isDuplicateFound = await this.checkDuplication(inputFormData);
         if(isDuplicateFound)return;
       }
       
       await this.$server
-        .C("/acs/member", member)
+        .C("/acs/member", inputFormData)
         .then((response: any) => {
           if(refreshAfterwards)this.pageToList();
         });
     }
   }
   async checkDuplication(member:any):Promise<boolean>{
-    let empNoDuplication:any = await this.$server.R("/acs/member",{eEmployeeNumber:member.EmployeeNumber});
+    let empNoDuplication:any = await this.$server.R("/acs/member",{eEmployeeNumber:member.employeeNumber});
       if(empNoDuplication.results.length>0){        
         let isDuplicate = member.objectId ? empNoDuplication.results[0].objectId!=member.objectId : true;
         if(isDuplicate)alert(this._("w_Error_DuplicateEmployeeNumber"));
         return isDuplicate;
       }
-      if(member.Credentials && member.Credentials.length>0){
-        let cardDuplication:any = await this.$server.R("/acs/member",{eCardNumber:member.Credentials[0].CardNumber});
-        if(cardDuplication.results.length>0){          
-          let isDuplicate = member.objectId ? cardDuplication.results[0].objectId!=member.objectId : true;          
-          if(isDuplicate)alert(this._("w_Error_DuplicateCardNumber"));
-          return isDuplicate;
-        }
+      if(!member.cardNumber)return false;
+      let cardDuplication:any = await this.$server.R("/acs/member",{eCardNumber:member.cardNumber});
+      if(cardDuplication.results.length>0){          
+        let isDuplicate = member.objectId ? cardDuplication.results[0].objectId!=member.objectId : true;          
+        if(isDuplicate)alert(this._("w_Error_DuplicateCardNumber"));
+        return isDuplicate;
       }
+      
       return false; 
   }
   async doDelete() {
