@@ -760,15 +760,15 @@ export default class Member extends Vue {
       this._("w_Member_DeleteConfirm"),
       this._("w_DeleteConfirm"),
       async () => {
-          await this.$server
+        let promises = [];
+        for(let member of this.selectedDetail){
+          promises.push(this.$server
             .D("/acs/member", {
-              objectId: this.selectedDetail[0].objectId
-            })
-            .then((response: any) => {
-              if (response) {
-                this.pageToList();
-              }
-            });
+              objectId: member.objectId
+            }))
+        }
+          await Promise.all(promises);
+           this.pageToList(); 
         }
       
     );
