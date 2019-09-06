@@ -590,7 +590,7 @@ export default class Member extends Vue {
   savedFieldOptions=[];
   fieldOptions=[];
   fieldSelected=[];
-  excludeFields = ["objectId","cardAllNumber","pinDigit","profileName", "technologyCode", "pinMode","primaryWorkgroupId"];
+  excludeFields = ["objectId","cardAllNumber","pinDigit","profileName", "technologyCode", "pinMode","primaryWorkgroupId","void", "cardholderPortrait"];
   selectedItem(data) {
     this.isSelected = data;
     this.selectedDetail = data;
