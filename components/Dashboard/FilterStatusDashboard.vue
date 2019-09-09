@@ -497,8 +497,6 @@ export class FilterStatusDashboard extends Vue {
         //         return ResponseFilter.catchError(this, e);
         //     });
 
-
-
         let dayRange: string = '';
         if (Datetime.DateStart(this.timeParam.startDate).getTime() === Datetime.DateStart(this.timeParam.endDate).getTime()) {
             dayRange = Datetime.DateTime2String(this.timeParam.startDate, 'YYYY/MM/DD');
@@ -506,6 +504,19 @@ export class FilterStatusDashboard extends Vue {
             dayRange = `${Datetime.DateTime2String(this.timeParam.startDate, 'YYYY/MM/DD')} ~ ${Datetime.DateTime2String(this.timeParam.endDate, 'YYYY/MM/DD')}`
         }
 
+        let toolTipTitle = {
+            traffic: this._('w_ReportTraffic_TrafficTraffic'),
+            revenue: this._('w_ReportTraffic_TrafficRevenue'),
+            transaction: this._('w_ReportTraffic_TrafficTransaction'),
+            conversion: this._('w_ReportTraffic_TrafficTransaction'),
+        };
+
+        // TODO: calculate conversion
+        // if (????.traffic != 0) {
+        //         ????.conversion = HighchartsService.formatFloat(
+        //         (????.transaction / ????.traffic) * 100
+        //     );
+        // }
 
         let demographicData = [
             {
@@ -627,11 +638,11 @@ export class FilterStatusDashboard extends Vue {
 
                     try {
                             // set value
-                        result += `${dayRange}<br>`;
-                        result += `Traffic: ${ self.y }<br>`;
-                        result += `Revenue: ${456123}<br>`;
-                        result += `Transaction: ${50}<br>`;
-                        result += `Conversion: ${10}%<br>`;
+                        result += `${ dayRange }<br>`;
+                        result += `${ toolTipTitle.traffic }: ${ self.y }<br>`;
+                        result += `${ toolTipTitle.revenue }: ${456123}<br>`;
+                        result += `${ toolTipTitle.transaction }: ${50}<br>`;
+                        result += `${ toolTipTitle.conversion }: ${10}%<br>`;
 
                         } catch (e) {
                             console.log(e);

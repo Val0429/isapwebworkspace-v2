@@ -438,6 +438,10 @@ export class HighchartsVipTracking extends Vue {
         }
 
         for (let ret of tempResult) {
+
+            // TODO: append some value for new API
+            console.log("!!! ret", ret);
+
             tempCategories.push(
                 HighchartsService.categorieStringWithJSON(
                     Datetime.DateTime2String(
@@ -478,7 +482,10 @@ export class HighchartsVipTracking extends Vue {
                     cursor: "pointer",
                     point: {
                         events: {
-                            click: this.clickChartPoint
+                            // click: function(){
+                            //
+                            // }
+                            click : this.clickChartPoint
                         }
                     }
                 }
@@ -491,6 +498,7 @@ export class HighchartsVipTracking extends Vue {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     clickChartPoint(value: any) {
+
         if (value == undefined) {
             return false;
         }
@@ -522,6 +530,9 @@ export class HighchartsVipTracking extends Vue {
                 valueEndIndex + 1
             );
             let newValue: any = JSON.parse(valueJson);
+
+            // TODO: use VIP type and newValue to request new API
+            console.log(vipType, newValue);
 
             this.vipTrackingDetail.titleList = [];
             this.vipTrackingDetail.data = [];
