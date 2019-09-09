@@ -37,7 +37,6 @@
                         :options="areaNameItem"
                     >
                     </iv-form-selection>
-
                     <iv-form-label
                         v-if="transition.step === 11 && !isEmptyObject(area.objectId)"
                         v-bind="$attrs"
@@ -309,7 +308,11 @@ export class SiteDeviceGroupForm extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Site_GroupName")}
                  * @uiPlaceHolder - ${this._("w_Site_GroupName")}
-                 * @uiType - iv-form-label
+                  * @uiType - ${
+                      this.deviceGroup.objectId == undefined
+                          ? "iv-form-string"
+                          : "iv-form-label"
+                  }
                  */
                 name: string;
 
