@@ -62,7 +62,7 @@ export class BasicReport extends Vue{
     //     this.reprocessRecords();
     // }
     private reprocessRecords() {
-        console.log("record updated");
+        console.log("record updated",this.sortedFields.length, this.fields.length);
         let processedRecords = [];
         let stringProcessedRecords = [];
         for (let record of this.records) {
@@ -70,16 +70,27 @@ export class BasicReport extends Vue{
             for (let field of this.sortedFields) {
                 newItem[field.key] = record[field.key];
             }
-            let exists = stringProcessedRecords.find(x=> x == JSON.stringify(newItem));
-            if(!exists){
-                console.log("new Item",JSON.stringify(newItem) , processedRecords.length);
-                stringProcessedRecords.push(JSON.stringify(newItem));
+            if(this.sortedFields.length < (this.fields.length/2)){
+                let exists = stringProcessedRecords.find(x=> x == this.getJsonValue(newItem));
+                if(!exists){
+                    //console.log("new Item", JSON.stringify(newItem).substr(0,20), processedRecords.length);
+                    stringProcessedRecords.push(this.getJsonValue(newItem));
+                    processedRecords.push(newItem);
+                }
+            }else{
                 processedRecords.push(newItem);
             }
+            
         }
         this.processedRecords = processedRecords;//.filter((value, index, self) => self.indexOf(value) === index);
     }
-
+    private getJsonValue(obj:any){
+        let result="";
+        for(let key in obj){
+            result+=obj[key]+"";
+        }
+        return result;
+    }
     onUpdate(value: any) {
         if (value) {            
             this.$emit("update", value);
@@ -112,7 +123,7 @@ export class BasicReport extends Vue{
         for(let key of $event){
             this.sortedFields.push(this.fields.find(x=>x.key==key));
         }    
-        this.reprocessRecords();
+        //this.reprocessRecords();
     }
     onSubmit($event:any){        
         this.showTable = true;
