@@ -59,7 +59,7 @@ export class ToolRepeatVisitorFilter extends Vue {
         siteIds: [],
         startDate: new Date(),
         endDate: new Date(),
-        numberOfVisitor: undefined
+        count: undefined
     };
 
     created() {
@@ -121,7 +121,7 @@ export class ToolRepeatVisitorFilter extends Vue {
                 this.inputFormData.endDate = data.value;
                 break;
                 case 'numberOfVisitor':
-                this.inputFormData.numberOfVisitor = data.value;
+                this.inputFormData.count = data.value;
                 break;
         }
     }
@@ -132,7 +132,7 @@ export class ToolRepeatVisitorFilter extends Vue {
             siteIds: data.siteIds,
             startDate: data.startDate,
             endDate: data.endDate,
-            numberOfVisitor: data.numberOfVisitor
+            count: data.count ? data.count : 1
         };
 
         if (!Datetime.CheckDate(data.startDate, data.endDate)) {
@@ -147,8 +147,6 @@ export class ToolRepeatVisitorFilter extends Vue {
             submitParam.startDate = Datetime.DateStart(data.startDate).toISOString();
             submitParam.endDate = Datetime.DateEnd(data.endDate).toISOString();
         }
-
-        console.log('submitParam ~ ', submitParam)
 
         this.visible = false;
         this.$emit('filter', submitParam)
@@ -189,7 +187,7 @@ export class ToolRepeatVisitorFilter extends Vue {
                  * @uiLabel - ${this._("w_ReportVisitor_numberOfVisitor")}
                  * @uiColumnGroup - row1
                  */
-                numberOfVisitor?: ${toEnumInterface(this.numberOfVisitorSelectItem as any, false)};
+                count?: ${toEnumInterface(this.numberOfVisitorSelectItem as any, false)};
             }
         `;
     }

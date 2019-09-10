@@ -15,7 +15,7 @@ interface IFilter extends IDate {
 
 interface IRepeatVisitorFilter extends IDate {
 	siteIds: string[];
-	numberOfVisitor: number
+	count: number
 }
 
 interface ITrafficFilter extends IFilter {
