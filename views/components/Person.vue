@@ -117,12 +117,6 @@
                             :hidePaging="true"
                             :selectable="false"
                         >
-                            <!-- <template #enter_time="{$attrs}">
-                                {{ new Date($attrs.rows[$attrs.index]['Enter']['timestamp']).getHours() + ':' + new Date($attrs.rows[$attrs.index]['Enter']['timestamp']).getMinutes() + ':' + new Date($attrs.rows[$attrs.index]['Enter']['timestamp']).getMinutes() }}
-                            </template> -->
-                            <template #leave_time="{$attrs}">
-                                {{ new Date($attrs.rows[$attrs.index]['Leave']['timestamp']).getHours() + ':' + new Date($attrs.rows[$attrs.index]['Leave']['timestamp']).getMinutes() + ':' + new Date($attrs.rows[$attrs.index]['Leave']['timestamp']).getMinutes() }}
-                            </template>
                         </iv-table>
                     </iv-card>
                     <template #footer>
@@ -189,6 +183,13 @@ export default class Components extends Vue {
                  * @uiType - iv-form-string
                  */
                 name_zh?: string;
+                /*
+                 * @uiLabel - ${this._("w_Sorting_By_Name")}
+                 */
+                sorting?: ${toEnumInterface({
+                    asc: `${this._("w_Sorting_Asc")}`,
+                    desc: `${this._("w_Sorting_Desc")}`
+                })};
             }
         `;
     }
@@ -353,7 +354,14 @@ export default class Components extends Vue {
     `;
     }
     private async doSearch(val) {
-        this.personFilter = val;
+        console.log(val);
+        if (val.sorting) {
+            return (this.personFilter = {
+                sorting: `name_zh,${val.sorting}`
+            });
+        } else {
+            return (this.personFilter = val);
+        }
     }
     private readMore(value) {
         this.step = 2;

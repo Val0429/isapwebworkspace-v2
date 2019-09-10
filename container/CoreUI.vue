@@ -17,7 +17,7 @@
 
         <template #nav>
             <SidebarNav>
-                <SidebarNavItem url="/dashboard" />
+                <SidebarNavItem url="/dashboard/dashboard" />
 
                 <SidebarNavTitle :label="_('m_Navagation_Persons')" />
                 <SidebarNavItem url="/persons/person" />

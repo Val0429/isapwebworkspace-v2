@@ -1,7 +1,7 @@
 import { RegisterRouter as $ } from '@/../core';
 
 // Home
-$({ path: '/', name: 'Home', redirect: '/dashboard' })();
+$({ path: '/', name: 'Home', redirect: '/dashboard/dashboard' })();
 
 // components
 import Components from './components/index.vue';
@@ -12,7 +12,7 @@ import Stranger from './components/Stranger.vue';
 import Site from './components/Site.vue';
 
 // components
-$({ path: '/dashboard', name: "_('m_Dashboard')", icon: 'fa-sitemap' })(Components);
+$({ path: '/dashboard/dashboard', name: "_('m_Dashboard')", icon: 'fa-sitemap' })(Components);
 
 $({ path: '/persons', name: "_('m_Navagation_Persons')" })();
 $({ path: '/persons/person', name: "_('m_Navagation_Persons_Person')", icon: 'fa-user', permission: true })(Person);

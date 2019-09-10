@@ -13,6 +13,14 @@
             </div>
         </template>
         <!-- 51) custom edit / add template with <template #add.* /> -->
+        <!-- <template #add.data="{$attrs, $listeners}">
+            <div
+                v-for="g in $attrs.value.groups"
+                :key="g.objectId"
+            >
+                {{ g.name }}
+            </div>
+        </template> -->
     </iv-form-quick>
 </template>
 

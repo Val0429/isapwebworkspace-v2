@@ -9,7 +9,7 @@ export default class LangObject {
     m_Navagation_Persons_Stranger = 'Stranger';
     m_Navagation_Users = 'Users Management';
     m_Navagation_Users_Users = 'Users';
-    m_Navagation_Users_Groups = 'User Grpous';
+    m_Navagation_Users_Groups = 'User Groups';
     m_Navagation_Region = 'Region';
     m_Navagation_Region_Site = 'Site';
 
@@ -66,6 +66,10 @@ export default class LangObject {
     w_Work_Record = 'Work Record';
     w_Is_Black = 'Black List';
     w_Company = 'Company';
+    w_Sorting_By_CreatedAt = 'Sorting by CreatedAt';
+    w_Sorting_By_Name = 'Sorting by Name';
+    w_Sorting_Asc = 'Asc';
+    w_Sorting_Desc = 'Desc';
 
     // Score
     w_level_1 = 'E';

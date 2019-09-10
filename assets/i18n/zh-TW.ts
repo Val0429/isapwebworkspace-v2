@@ -66,6 +66,10 @@ export default class LangObject {
     w_Work_Record = '工作紀錄';
     w_Is_Black = '是否為黑名單';
     w_Company = '所屬公司';
+    w_Sorting_By_CreatedAt = '依建立時間排序';
+    w_Sorting_By_Name = '依姓名排序';
+    w_Sorting_Asc = '升冪';
+    w_Sorting_Desc = '降冪';
 
     // Score
     w_level_1 = '極差';
