@@ -42,6 +42,7 @@ export default class LangObject {
     w_Region = 'Region';
     w_Site = 'Site';
     w_Work_Area = 'Work Area';
+    w_Camera_Position = 'Camera';
     w_Inquire = 'Inquire';
     w_Detail = 'Detail';
     w_Status = 'Status';
@@ -66,8 +67,7 @@ export default class LangObject {
     w_Work_Record = 'Work Record';
     w_Is_Black = 'Black List';
     w_Company = 'Company';
-    w_Sorting_By_CreatedAt = 'Sorting by CreatedAt';
-    w_Sorting_By_Name = 'Sorting by Name';
+    w_Sorting = 'Sorting';
     w_Sorting_Asc = 'Asc';
     w_Sorting_Desc = 'Desc';
 

@@ -142,8 +142,6 @@ export default class Components extends Vue {
         pid: "",
         name_zh: ""
     };
-    private step: number = 1;
-    private type: string = "iv-direction-slide";
     private personBaseData: any = {
         name: "",
         pid: "",
@@ -167,6 +165,8 @@ export default class Components extends Vue {
         close_date: "",
         close_reason: ""
     };
+    private step: number = 1;
+    private type: string = "iv-direction-slide";
     private enterSiteRecord: any = {};
     private personFilter: any = {};
     private getInfo: any = {};
@@ -183,13 +183,17 @@ export default class Components extends Vue {
                  * @uiType - iv-form-string
                  */
                 name_zh?: string;
-                /*
-                 * @uiLabel - ${this._("w_Sorting_By_Name")}
-                 */
-                sorting?: ${toEnumInterface({
-                    asc: `${this._("w_Sorting_Asc")}`,
-                    desc: `${this._("w_Sorting_Desc")}`
-                })};
+                
+                sorting?: interface {
+                    /*
+                    * @uiLabel - ${this._("w_Sorting") + this._("w_Name")}
+                    * @uiColumnGroup - sorting-group
+                    */
+                    name_zh?: ${toEnumInterface({
+                        asc: `${this._("w_Sorting_Asc")}`,
+                        desc: `${this._("w_Sorting_Desc")}`
+                    })}
+                };
             }
         `;
     }
@@ -354,10 +358,11 @@ export default class Components extends Vue {
     `;
     }
     private async doSearch(val) {
-        console.log(val);
         if (val.sorting) {
             return (this.personFilter = {
-                sorting: `name_zh,${val.sorting}`
+                sorting: `${Object.keys(val.sorting)},${Object.values(
+                    val.sorting
+                )}`
             });
         } else {
             return (this.personFilter = val);

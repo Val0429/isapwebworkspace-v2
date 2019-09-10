@@ -35,7 +35,7 @@ export default class Components extends Vue {
     private type: string = "iv-direction-slide";
     private defaultValue = {
         username: "",
-        sorting: ""
+        sorting: {}
     };
     private personFilter: any = {};
     private personSearchForm() {
@@ -46,20 +46,39 @@ export default class Components extends Vue {
                  * @uiType - iv-form-string
                  */
                 username?: string;
-                /*
-                 * @uiLabel - ${this._("w_Sorting_By_CreatedAt")}
-                 */
-                sorting?: ${toEnumInterface({
-                    asc: `${this._("w_Sorting_Asc")}`,
-                    desc: `${this._("w_Sorting_Desc")}`
-                })};
+                
+                sorting?: interface {
+                    /*
+                    * @uiLabel - ${this._("w_Sorting") +
+                        this._("w_User") +
+                        this._("w_Title")}
+                    * @uiColumnGroup - sorting-group
+                    */
+                    username?: ${toEnumInterface({
+                        asc: `${this._("w_Sorting_Asc")}`,
+                        desc: `${this._("w_Sorting_Desc")}`
+                    })}
+
+                    /*
+                    * @uiLabel - ${this._("w_Sorting") +
+                        this._("w_User") +
+                        this._("w_Group")}
+                    * @uiColumnGroup - sorting-group
+                    */
+                    groups?: ${toEnumInterface({
+                        asc: `${this._("w_Sorting_Asc")}`,
+                        desc: `${this._("w_Sorting_Desc")}`
+                    })}
+                };
             }
         `;
     }
     private async doSearch(val) {
         if (val.sorting) {
             return (this.personFilter = {
-                sorting: [`username,${val.sorting}`, "createdAt,asc"]
+                sorting: [
+                    `${Object.keys(val.sorting)},${Object.values(val.sorting)}`
+                ]
             });
         } else {
             return (this.personFilter = val);

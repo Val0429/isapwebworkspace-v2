@@ -28,6 +28,13 @@ export class UsersListForm extends Vue implements IFormQuick {
                         */
                         firstname: string;
                     };
+
+                    /*
+                    * @uiLabel - ${this._('w_User') + this._('w_Title')}
+                    * @uiDisabled - true
+                    */
+                    username: string;
+
                     /*
                      * @uiLabel - ${this._('w_User') + this._('w_Group')}
                      */

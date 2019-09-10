@@ -42,7 +42,9 @@ export default class Components extends Vue {
         siteid: "",
         workarea: ""
     };
-    private strangerFilter: any = {};
+    private strangerFilter: any = {
+        sorting: "updatedAt,desc"
+    };
     private strangerSearchForm() {
         return `
             interface {
@@ -78,11 +80,18 @@ export default class Components extends Vue {
                  * @uiLabel - ${this._("w_Work_Area")}
                  */
                 workarea: string;
+                /**
+                 * @uiLabel - ${this._("w_Camera_Position")}
+                 */
+                channel: string;
             }
         `;
     }
     private async doSearch(val) {
-        this.strangerFilter = val;
+        this.strangerFilter = {
+            ...this.strangerFilter,
+            ...val
+        };
     }
     private getSnapshotUrl(snapshot: string) {
         let ref = this.$server
