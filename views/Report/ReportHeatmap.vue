@@ -247,7 +247,7 @@ export default class ReportHeatmap extends Vue {
 
     mapImage: IMapImage = {
         name: "HeatMap",
-        src: ImageBase64.pngEmpty,
+        src:    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
         width: 600,
         height: 400
     };
@@ -574,6 +574,7 @@ export default class ReportHeatmap extends Vue {
             data: tempDataArray,
             range: tempRangeArray
         };
+
     }
 
     initDayArray() {
@@ -700,22 +701,23 @@ export default class ReportHeatmap extends Vue {
     checkDateTheSameHour(selectDate: string, apiDate: string) {
         const selectedDate = Datetime.DateTime2String(
             new Date(selectDate),
-            "HH"
+            "H"
         );
-        const fromApiDate = Datetime.DateTime2String(new Date(apiDate), "HH");
+        const fromApiDate = Datetime.DateTime2String(new Date(apiDate), "H");
 
-        return (
-            Datetime.DateStart(new Date(selectedDate)).getTime() ===
-            Datetime.DateStart(new Date(fromApiDate)).getTime()
-        );
+
+        return selectedDate === fromApiDate
+
     }
 
     async firstSortOutChartData(datas: any) {
+
         if (datas[0] !== undefined) {
             this.inputFormData.areaId = datas[0].area.objectId;
             this.inputFormData.deviceId = datas[0].device.objectId;
             if (datas[0].deviceGroups.length > 0) {
                 this.inputFormData.groupId = datas[0].deviceGroups[0].objectId;
+                this.slider.value = parseInt(Datetime.DateTime2String(new Date(datas[0].date), "H"), 10)
             } else {
                 this.inputFormData.groupId = "all";
             }
@@ -752,13 +754,15 @@ export default class ReportHeatmap extends Vue {
             });
             heatmap = [].concat(...heatmaps);
         }
-        // this.mapImage.src = datas[0];
+        this.mapImage.src = datas[0];
 
-        this.heatMapPosition = heatmap;
+
         this.mapImage.src = datas[0] ? ServerConfig.url + datas[0].imageSrc : ImageBase64.pngEmpty;
+        this.heatMapPosition = heatmap;
     }
 
     sortOutChartDataOneDay(datas: any) {
+
         let heatmap: IHeatMapPosition[] = [];
         this.heatMapPosition = [];
         this.mapImage.src = "";
@@ -778,6 +782,7 @@ export default class ReportHeatmap extends Vue {
                             };
                         });
                     });
+
                     heatmap = [].concat(...heatmaps);
                 }
                 this.mapImage.src = ServerConfig.url + summary.imageSrc;

@@ -35,7 +35,7 @@ export class HeatMapOneDayVueSlideBar extends Vue {
     })
     slider: object;
 
-    rangeValue:any = '';
+    rangeValue:string = '';
 
     created() {
     }

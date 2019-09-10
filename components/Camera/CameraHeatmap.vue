@@ -2,7 +2,7 @@
     <div class="animated fadeIn center">
         <div
             class="card-content"
-            v-show="this.heatMapPosition.length > 0"
+            v-show="heatMapPosition.length > 0"
         >
             <div class="form-group col-md-12 center">
                 <div
@@ -45,7 +45,7 @@
             </div>
         </div>
         <div
-            v-show="this.heatMapPosition.length === 0"
+            v-show="heatMapPosition.length === 0"
             class="center canvas-div border border-dark fa-2x"
         >
             N/A
@@ -100,6 +100,11 @@ export class CameraHeatmap extends Vue {
         this.initMap();
     }
 
+    @Watch("mapImage", { deep: true })
+    private watchMapImage(newVal, oldVal) {
+        this.initMap();
+    }
+
     created() {
         this.legendTitle = this._("w_Navigation_Report_HeatmapLegend");
     }
@@ -149,6 +154,7 @@ export class CameraHeatmap extends Vue {
     }
 
     initMap() {
+
         let me = this;
         me.canvasEl = me.$refs.snapshot as any;
         me.cx = me.canvasEl.getContext("2d");
