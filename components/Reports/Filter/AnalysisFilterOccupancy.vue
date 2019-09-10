@@ -239,12 +239,6 @@ export class AnalysisFilterOccupancy extends Vue {
                 )};
 
 
-                /**
-                 * @uiColumnGroup - analysis
-                 * @uiHidden - true
-                 */
-                submitButton?: any;
-
 
                 /**
                  * @uiLabel - ${this._("w_countSelect")}
@@ -263,6 +257,13 @@ export class AnalysisFilterOccupancy extends Vue {
             }
         `;
     }
+
+
+    // /**
+    //  * @uiColumnGroup - analysis
+    //  * @uiHidden - true
+    //  */
+    // submitButton?: any;
 }
 
 export default AnalysisFilterOccupancy;
