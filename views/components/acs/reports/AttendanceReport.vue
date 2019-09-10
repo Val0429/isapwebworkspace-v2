@@ -3,9 +3,11 @@
      <ivc-basic-report    
         :inf="inf()"
         :title="_('w_AttendanceReport')"
+        :total="total"
         :records="records"
         :isBusy="isBusy"
         :fields="fields"
+        :itemsProvider="itemsProvider"
         v-model="filter"
         v-on:input="onSubmit()"
      />
@@ -24,7 +26,7 @@ export default class EmployeeReport extends Vue  {
     fields:any[] =[];
     isBusy:boolean=false;
     filter:any={};
-    
+    total:number=0;
     created(){        
         this.fields = 
         [     
@@ -98,16 +100,40 @@ export default class EmployeeReport extends Vue  {
         this.isBusy=false;
       }
   }
-    
+    itemsProvider (ctx) {
+        // Here we don't set isBusy prop, so busy state will be
+        // handled by table itself
+        // this.isBusy = true
 
-    async getAttendanceRecord(){  
+        console.log("filter", this.filter);
+
+        let promise = this.$server.C('/report/attendance'as any, Object.assign({paging:{page:ctx.currentPage, pageSize:ctx.perPage}}, this.filter));
+
+        return promise.then(async (data:any) => {
+          this.total = data.paging.total;          
+          // Here we could override the busy state, setting isBusy to false
+          // this.isBusy = false
+          return(data.results);
+        }).catch(error => {
+          // Here we could override the busy state, setting isBusy to false
+          // this.isBusy = false
+          // Returning an empty array, allows table to correctly handle
+          // internal busy state in case of error
+          return []
+        })
+      }
+
+    async getAttendanceRecord(){ 
+        this.total=0; 
         this.filter.DateStart.setHours(0,0,0,0);        
         this.filter.DateEnd.setHours(23,59,59,999);
         // let card_no = this.filter.CardNumber;
         let start = this.filter.DateStart.toISOString();
         let end = this.filter.DateEnd.toISOString();
-        let resp: any=await this.$server.R("/report/attendance" as any, Object.assign(this.filter, {start, end}));
+        let resp: any=await this.$server.C("/report/attendance" as any, Object.assign(this.filter, {start, end}));
         this.records=resp.results;
+        this.total = resp.paging.total;
+        
         console.log("this.records", this.records);
     }
 
@@ -162,7 +188,8 @@ export default class EmployeeReport extends Vue  {
     
     async onSubmit(){      
         console.log("filter", this.filter) ;
-        await this.getData();
+        //await this.getData();
+        (this.$refs.reportTable as any).refresh();
     }
 }
 </script>
