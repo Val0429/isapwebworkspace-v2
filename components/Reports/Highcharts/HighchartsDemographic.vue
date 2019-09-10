@@ -82,14 +82,7 @@ import {EAgeRange} from "@/components/Reports";
                         </b-col>
                     </b-row>
                     <b-row>
-                        <b-col cols="6">
-                            <highcharts
-                                ref="chartDwellTime"
-                                v-if="mountChart.dwellTime"
-                                :options="chartOptions.dwellTimeBar"
-                            ></highcharts>
-                        </b-col>
-                        <b-col cols="6">
+                        <b-col cols="12">
                             <highcharts
                                 ref="chartGender"
                                 v-if="mountChart.dwellTime"
@@ -1633,92 +1626,30 @@ export class HighchartsDemographic extends Vue {
         let categories: string[] = HighchartsService.personCountRangeListDesc(
             this
         );
-        let totalCount: number = 0;
+        let tempTotalCount: number = 0;
+        let tempMaleTotalCount: number = 0;
+        let tempFemaleTotalCount: number = 0;
 
-        let barSeries = [
-            {
-                name: this._("w_DwellTime"),
-                data: [0, 0, 0, 0, 0, 0]
-            }
-        ];
+
         let pieSeriesData: any = [
             [this._("w_Male"), 0],
             [this._("w_Female"), 0]
         ];
 
         for (let val of tempValues) {
-            let addValue = false;
-            let barSeriesDataIndex: number = 0;
 
-            if (
-                this.selection.ageRange === EAgeRange.all ||
-                this.selection.ageRange === val.ageRange
-            ) {
-                addValue = true;
-                barSeries[0].data[0] += val.dwellTimeRanges[0]
-                    ? val.dwellTimeRanges[0]
-                    : 0;
-                barSeries[0].data[1] += val.dwellTimeRanges[1]
-                    ? val.dwellTimeRanges[1]
-                    : 0;
-                barSeries[0].data[2] += val.dwellTimeRanges[2]
-                    ? val.dwellTimeRanges[2]
-                    : 0;
-                barSeries[0].data[3] += val.dwellTimeRanges[3]
-                    ? val.dwellTimeRanges[3]
-                    : 0;
-                barSeries[0].data[4] += val.dwellTimeRanges[4]
-                    ? val.dwellTimeRanges[4]
-                    : 0;
-                barSeries[0].data[5] += val.dwellTimeRanges[5]
-                    ? val.dwellTimeRanges[5]
-                    : 0;
-                totalCount = barSeries[0].data.reduce(
-                    (accumulator, currentValue) => accumulator + currentValue
-                );
-                pieSeriesData[0][1] += val.maleCount;
-                pieSeriesData[1][1] += val.femaleCount;
+            if (this.selection.ageRange === EAgeRange.all) {
+                tempMaleTotalCount += val.maleCount;
+                tempFemaleTotalCount += val.femaleCount;
+            } else if(this.selection.ageRange === val.ageRange) {
+                tempMaleTotalCount += val.maleCount;
+                tempFemaleTotalCount += val.femaleCount;
             }
+
+            tempTotalCount = tempMaleTotalCount + tempFemaleTotalCount;
+            pieSeriesData[0][1] = HighchartsService.formatFloat((tempMaleTotalCount / tempTotalCount) * 100);
+            pieSeriesData[1][1] = HighchartsService.formatFloat((tempFemaleTotalCount / tempTotalCount) * 100);
         }
-
-        if (totalCount > 0) {
-            for (let i = 0; i < 6; i++) {
-                barSeries[0].data[i] = HighchartsService.formatFloat(
-                    (barSeries[0].data[i] / totalCount) * 100
-                );
-            }
-        }
-
-        barSeries[0].data = barSeries[0].data.reverse();
-
-        this.chartOptions.dwellTimeBar = {
-            chart: {
-                type: "bar",
-                zoomType: "x"
-            },
-            exporting: { enabled: false },
-            title: { text: null },
-            subtitle: { text: null },
-            xAxis: {
-                categories: categories
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: null,
-                    align: "high"
-                },
-                labels: {
-                    formatter: function() {
-                        let self: any = this;
-                        return self.value + "%";
-                    }
-                }
-            },
-            tooltip: { enabled: false },
-            credits: { enabled: false },
-            series: barSeries
-        };
 
         this.chartOptions.dwellTimePie = {
             chart: { zoomType: "x" },
@@ -1726,6 +1657,22 @@ export class HighchartsDemographic extends Vue {
             title: { text: null },
             subtitle: { text: null },
             tooltip: { enabled: false },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: "pointer",
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function() {
+                            let self: any = this;
+                            return `${self.y}%`;
+                        }
+                    },
+                    showInLegend: true,
+                    center: ["50%", "50%"],
+                    size: "100%"
+                }
+            },
             series: [
                 {
                     type: "pie",

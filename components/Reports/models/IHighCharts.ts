@@ -114,7 +114,7 @@ interface IChartDemographicData extends IChart, IChartWeather, ITimeMode, IAreaM
     dwellTimeRange?: EDwellTimeRange;
     maleCount: number;
     femaleCount: number;
-    dwellTimeRanges: number[];
+    dwellTimeRanges?: number[];
 
     maleCountPercent?: number;
     femaleCountPercent?: number;

@@ -18,48 +18,36 @@
 			:label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
 			:visible="visible"
 		>
-				<template #toolbox>
-					<!-- Ben -->
-					<iv-toolbox-export-excel
-						size="lg"
-						@click="exportExcel(eFileType.xlsx)"
-					/>
-					<iv-toolbox-export-csv
-						size="lg"
-						@click="exportExcel(eFileType.csv)"
-					/>
-
-					<iv-toolbox-export-pdf
-						size="lg"
-						@click="exportPDF"
-					/>
-
-					<!-- Tina -->
-					<iv-toolbox-send-mail
-						size="lg"
-						@click="modalShow = !modalShow"
-					/>
-					<iv-toolbox-copy-to-template
-						size="lg"
-						@click="pageToReportTemplate()"
-					/>
-				</template>
-
+			<template #toolbox>
 				<!-- Ben -->
-				<anlysis-dashboard
-					ref="analysisDashboard"
-					:startDate="startDate"
-					:endDate="endDate"
-					:type="dTimeMode"
-					:siteIds="pSiteIds"
-					:tagIds="tags"
-					:pageType="dPageType"
-				>
-				</anlysis-dashboard>
+				<iv-toolbox-export-excel
+					size="lg"
+					@click="exportExcel(eFileType.xlsx)"
+				/>
+				<iv-toolbox-export-csv
+					size="lg"
+					@click="exportExcel(eFileType.csv)"
+				/>
+
+				<iv-toolbox-export-pdf
+					size="lg"
+					@click="exportPDF"
+				/>
+
+				<!-- Tina -->
+				<iv-toolbox-send-mail
+					size="lg"
+					@click="modalShow = !modalShow"
+				/>
+				<iv-toolbox-copy-to-template
+					size="lg"
+					@click="pageToReportTemplate()"
+				/>
+			</template>
 
 			<!-- Tina -->
 			<analysis-filter
-				class="mb-4 mt-3"
+				class="mb-4"
 				:areaSelectItem="areaSelectItem"
 				:deviceGroupSelectItem="deviceGroupSelectItem"
 				:deviceSelectItem="deviceSelectItem"
@@ -80,47 +68,59 @@
 
 			</analysis-filter>
 
+			<!-- Ben -->
+			<anlysis-dashboard
+				ref="analysisDashboard"
+				:startDate="startDate"
+				:endDate="endDate"
+				:type="dTimeMode"
+				:siteIds="pSiteIds"
+				:tagIds="tags"
+				:pageType="dPageType"
+			>
+			</anlysis-dashboard>
+
 			<!-- Morris -->
-				<highcharts-demographic
-					ref="test"
-					:startDate="startDate"
-					:endDate="endDate"
-					:sites="sites"
-					:timeMode="timeMode"
-					:areaMode="areaMode"
-					:value="chartDatas"
-				>
-				</highcharts-demographic>
+			<highcharts-demographic
+				ref="test"
+				:startDate="startDate"
+				:endDate="endDate"
+				:sites="sites"
+				:timeMode="timeMode"
+				:areaMode="areaMode"
+				:value="chartDatas"
+			>
+			</highcharts-demographic>
 
-				<!-- Ben -->
-				<report-table
-					v-show="tableStep === eTableStep.mainTable"
-					ref="reportTable"
-					:reportTableData="rData"
-					:reportTableTitle="reportTableTitle"
-					@clickItem="toSunReportTable"
-				>
-				</report-table>
+			<!-- Ben -->
+			<report-table
+				v-show="tableStep === eTableStep.mainTable"
+				ref="reportTable"
+				:reportTableData="rData"
+				:reportTableTitle="reportTableTitle"
+				@clickItem="toSunReportTable"
+			>
+			</report-table>
 
-				<report-table
-					v-show="tableStep === eTableStep.sunTable"
-					ref="sunReportTable"
-					:reportTableData="sunRData"
-					:reportTableTitle="reportTableTitle"
-				>
-				</report-table>
+			<report-table
+				v-show="tableStep === eTableStep.sunTable"
+				ref="sunReportTable"
+				:reportTableData="sunRData"
+				:reportTableTitle="reportTableTitle"
+			>
+			</report-table>
 
-				<div>
-					<b-button
-						v-show="tableStep === eTableStep.sunTable || tableStep === eTableStep.detailTable "
-						variant="secondary"
-						size="lg"
-						@click="reportTableBack"
-					>{{ _('w_Back') }}
-					</b-button>
-				</div>
+			<div>
+				<b-button
+					v-show="tableStep === eTableStep.sunTable || tableStep === eTableStep.detailTable "
+					variant="secondary"
+					size="lg"
+					@click="reportTableBack"
+				>{{ _('w_Back') }}
+				</b-button>
+			</div>
 
-			</iv-card>
+		</iv-card>
 
 		<!-- Tina -->
 		<recipient
@@ -134,177 +134,173 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component} from "vue-property-decorator";
+	import {Vue, Component} from "vue-property-decorator";
 
-// Vue
-import HighchartsDemographic from "@/components/Reports/Highcharts/HighchartsDemographic.vue";
+	// Vue
+	import HighchartsDemographic from "@/components/Reports/Highcharts/HighchartsDemographic.vue";
 
-// Region Tree
-import {
-	ERegionType,
-	IRegionTreeSelected,
-	RegionTreeItem
-} from "@/components/RegionTree";
+	// Region Tree
+	import {
+		ERegionType,
+		IRegionTreeSelected,
+		RegionTreeItem
+	} from "@/components/RegionTree";
 
-// Report
-import {
-	ETimeMode,
-    EWeather,
-    EAgeRange,
-    EAreaMode,
-    EDwellTimeRange,
-	EChartMode,
-	EPageType,
-    ESign,
-    EDeviceMode,
-    EAddPeriodSelect,
-    EDesignationPeriod,
-    EIfAllSelected,
-    EIncludedEmployee,
-	IChartDemographicData,
-	ISite,
-    ITemplateItem,
-    IFilterCondition,
-    IReportToTemplateItem,
-	ReportTableData
-} from "@/components/Reports";
+	// Report
+	import {
+		ETimeMode,
+		EWeather,
+		EAgeRange,
+		EAreaMode,
+		EDwellTimeRange,
+		EChartMode,
+		EPageType,
+		ESign,
+		EDeviceMode,
+		EAddPeriodSelect,
+		EDesignationPeriod,
+		EIfAllSelected,
+		EIncludedEmployee,
+		IChartDemographicData,
+		ISite,
+		ITemplateItem,
+		IFilterCondition,
+		IReportToTemplateItem,
+		ReportTableData
+	} from "@/components/Reports";
 
-// Service
-import Dialog from "@/services/Dialog";
-import RegionAPI from "@/components/RegionTree/models/RegionAPI";
-import ResponseFilter from "@/services/ResponseFilter";
-import Datetime from "@/services/Datetime";
-import ReportService from "@/components/Reports/models/ReportService";
-import WeatherService from "@/components/Reports/models/WeatherService";
-import HighchartsService from "@/components/Reports/models/HighchartsService";
-import Loading from "@/services/Loading";
+	// Service
+	import Dialog from "@/services/Dialog";
+    import RegionAPI from "@/components/RegionTree/models/RegionAPI";
+	import ResponseFilter from "@/services/ResponseFilter";
+	import Datetime from "@/services/Datetime";
+	import ReportService from "@/components/Reports/models/ReportService";
+	import WeatherService from "@/components/Reports/models/WeatherService";
+	import HighchartsService from "@/components/Reports/models/HighchartsService";
+	import Loading from "@/services/Loading";
 
-// Export
-import toExcel from "@/services/Excel/json2excel";
-import excel2json from "@/services/Excel/excel2json";
-import ReportPDFService from "@/components/Reports/models/ReportPDFService";
-import { EFileType,IReportTableTitle } from "@/components/Reports";
-import {DomEvent} from "@/node_modules/@types/leaflet";
-import on = DomEvent.on;
+	// Export
+	import toExcel from "@/services/Excel/json2excel";
+	import excel2json from "@/services/Excel/excel2json";
+	import ReportPDFService from "@/components/Reports/models/ReportPDFService";
+	import { EFileType,IReportTableTitle } from "@/components/Reports";
 
-enum ETableStep {
-	mainTable = "mainTable",
-	sunTable = "sunTable",
-	detailTable = "detailTable",
-	none = "none"
-}
+	enum ETableStep {
+		mainTable = "mainTable",
+		sunTable = "sunTable",
+		detailTable = "detailTable",
+		none = "none"
+	}
 
-@Component({
-	components: {}
-})
-export default class ReportDemographic extends Vue {
+	@Component({
+		components: {}
+	})
+	export default class ReportDemographic extends Vue {
+		lastTableStep: ETableStep = ETableStep.none;
+		tableStep: ETableStep = ETableStep.none;
+		eTableStep = ETableStep;
+		ePageType = EPageType;
+		eWeather = EWeather;
+		eFileType = EFileType;
 
-    lastTableStep: ETableStep = ETableStep.none;
-	tableStep: ETableStep = ETableStep.none;
-	eTableStep = ETableStep;
-	ePageType = EPageType;
-	eWeather = EWeather;
-	eFileType = EFileType;
+		templateItem: ITemplateItem | null = null;
 
-	templateItem: ITemplateItem | null = null;
+		startDate: Date = new Date("2019-01-01T00:00:00.000Z");
+		endDate: Date = new Date("2019-01-01T01:00:00.000Z");
+		timeMode: ETimeMode = ETimeMode.none;
+		areaMode: EAreaMode = EAreaMode.none;
+		sites: ISite[] = [];
+		chartDatas: IChartDemographicData[] = [];
 
-	startDate: Date = new Date("2019-01-01T00:00:00.000Z");
-	endDate: Date = new Date("2019-01-01T01:00:00.000Z");
-	timeMode: ETimeMode = ETimeMode.none;
-	areaMode: EAreaMode = EAreaMode.none;
-	sites: ISite[] = [];
-	chartDatas: IChartDemographicData[] = [];
+		////////////////////////////////////// Tina Start //////////////////////////////////////
 
-	////////////////////////////////////// Tina Start //////////////////////////////////////
+		//// Filter Condition Start ////
 
-	//// Filter Condition Start ////
+		// select 相關
+		sitesSelectItem: any = [];
+		ifAllSitesSelectItem: any = [];
+		addPeriodSelectItem: any = [];
+		tagSelectItem: any = {};
+		tags = [];
 
-	// select 相關
-	sitesSelectItem: any = [];
-	ifAllSitesSelectItem: any = [];
-	addPeriodSelectItem: any = [];
-	tagSelectItem: any = {};
-	tags = [];
+		// tree
+		selectType = ERegionType.site;
+		regionTreeItem = new RegionTreeItem();
+		selecteds: IRegionTreeSelected[] = [];
 
-	// tree
-	selectType = ERegionType.site;
-	regionTreeItem = new RegionTreeItem();
-	selecteds: IRegionTreeSelected[] = [];
+		// OfficeHour 相關
+		officeHourItemDetail: any = [];
 
-	// OfficeHour 相關
-    officeHourItemDetail: any = [];
+		// recipient 相關
+		modalShow: boolean = false;
 
-	// recipient 相關
-	modalShow: boolean = false;
+		// 收合card控制
+		visible: boolean = false;
 
-	// 收合card控制
-	visible: boolean = false;
+		// 接收 Filter Condition 資料 相關
+		filterData: IFilterCondition = {
+			startDate: new Date(),
+			endDate: new Date(),
+			firstSiteId: "",
+			siteIds: [],
+			tagIds: [],
+			type: ETimeMode.none
+		};
+		responseData: any = {};
+		userData: any = [];
+		//// Filter Condition End ////
 
-	// 接收 Filter Condition 資料 相關
-	filterData: IFilterCondition = {
-		startDate: new Date(),
-		endDate: new Date(),
-		firstSiteId: "",
-		siteIds: [],
-		tagIds: [],
-		type: ETimeMode.none
-	};
-	responseData: any = {};
-	userData: any = [];
-	//// Filter Condition End ////
+		//// Analysis Filter Start ////
+		deviceMode: string = EDeviceMode.demographic;
 
-	//// Analysis Filter Start ////
-	deviceMode: string = EDeviceMode.demographic;
+		// select 相關
+		areaSelectItem: any = {};
+		deviceGroupSelectItem: any = {};
+		deviceSelectItem: any = {};
+		timeModeSelectItem: any = {};
+		isIncludedEmployeeSelectItem: any = {};
 
-	// select 相關
-	areaSelectItem: any = {};
-	deviceGroupSelectItem: any = {};
-	deviceSelectItem: any = {};
-	timeModeSelectItem: any = {};
-	isIncludedEmployeeSelectItem: any = {};
+		inputFormData: any = {
+			areaId: "",
+			groupId: "",
+			deviceId: "",
+			type: "",
+			isIncludedEmployee: "no"
+		};
 
-	inputFormData: any = {
-		areaId: "",
-		groupId: "",
-		deviceId: "",
-		type: "",
-		isIncludedEmployee: "no"
-	};
+		// 整理 showReportData 相關
+		areaSummaryFilter: any = [];
+		deviceGroupSummaryFilter: any = [];
+		deviceSummaryFilter: any = [];
 
-	// 整理 showReportData 相關
-	areaSummaryFilter: any = [];
-	deviceGroupSummaryFilter: any = [];
-	deviceSummaryFilter: any = [];
+		//// Analysis Filter End ////
 
-	//// Analysis Filter End ////
+		// send user 相關
+		userSelectItem: any = {};
 
-	// send user 相關
-	userSelectItem: any = {};
+		// Report To Template相關
+		ReportToTemplateData: IReportToTemplateItem | null =  null;
+		designationPeriod: EDesignationPeriod = EDesignationPeriod.none;
 
-	// Report To Template相關
-	ReportToTemplateData: IReportToTemplateItem | null =  null;
-	designationPeriod: EDesignationPeriod = EDesignationPeriod.none;
+		//ReportDashboard 相關
+		dPageType: EPageType = EPageType.none;
+		dTimeMode: ETimeMode = ETimeMode.none;
+		pSiteIds = [];
 
-	//ReportDashboard 相關
-	dPageType: EPageType = EPageType.none;
-	dTimeMode: ETimeMode = ETimeMode.none;
-	pSiteIds = [];
+		//ReportTable 相關
+		rData = new ReportTableData();
 
-	//ReportTable 相關
-	rData = new ReportTableData();
+		reportTableTitle: IReportTableTitle = {
+			titleCount:0
+		};
+		//Sun ReportTable 相關
+		sunRData = new ReportTableData();
 
-	reportTableTitle: IReportTableTitle = {
-        titleCount:0
-    };
-	//Sun ReportTable 相關
-	sunRData = new ReportTableData();
-
-	////////////////////////////////////// Tina End //////////////////////////////////////
+		////////////////////////////////////// Tina End //////////////////////////////////////
 
 		created() {
 			this.initDatas();
 			this.initTemplate();
-			// this.initChartDeveloper();
 		}
 
 		mounted() {
@@ -358,14 +354,7 @@ export default class ReportDemographic extends Vue {
 		}
 
 
-        // Ben //
-                checkedEmployee(all, employee) {
-        return this.inputFormData.isIncludedEmployee == EIncludedEmployee.yes
-            ? all
-            : all - employee;
-    }
-
-
+		// Ben //
 		reportTableBack() {
 			this.tableStep = this.lastTableStep;
 			this.lastTableStep = ETableStep.mainTable;
@@ -386,8 +375,8 @@ export default class ReportDemographic extends Vue {
 
 			this.sunRData.chartMode = chartMode;
 			this.sunRData.noFoot = true;
-            this.sunRData.thatDay = this.startDate; //單天記錄時間日期
-             this.reportTableTitle.headTitle = this._('w_ReportDemographic_DemographicByHours');
+			this.sunRData.thatDay = this.startDate; //單天記錄時間日期
+			this.reportTableTitle.headTitle = this._('w_ReportDemographic_DemographicByHours');
 
 			//head
 			this.sunRData.head = [];
@@ -428,8 +417,8 @@ export default class ReportDemographic extends Vue {
 							site: summaryData.site,
 							area: summaryData.area,
 							group: deviceGroup,
-						  item1: [],
-                        item2: []
+							item1: [],
+							item2: []
 						};
 
 						if (
@@ -447,8 +436,8 @@ export default class ReportDemographic extends Vue {
 						site: summaryData.site,
 						area: summaryData.area,
 						group: null,
-					  item1: [],
-                        item2: []
+						item1: [],
+						item2: []
 					};
 
 					if (
@@ -475,73 +464,37 @@ export default class ReportDemographic extends Vue {
 							continue;
 						}
 						if (tempArray[index].group != null) {
-                            for (let deviceGroup of summaryData.deviceGroups) {
-							    if (
-							    	tempArray[index].group.objectId ==
-							    	deviceGroup.objectId
-							    ) {
-							    	item1Count.value +=  this.checkedEmployee(
-                                    summaryData.maleTotal,
-                                    summaryData.maleEmployeeTotal
-                                );
-							    	item1Count.valueRatio += ReportService.countRatio(
-							    	 this.checkedEmployee(
-                                    summaryData.maleTotal,
-                                    summaryData.maleEmployeeTotal
-                                ),
-                                 this.checkedEmployee(
-                                    summaryData.prevMaleTotal,
-                                    summaryData.prevMaleEmployeeTotal
-                                )
-							    	);
-							    	item2Count.value += this.checkedEmployee(
-                                    summaryData.femaleTotal,
-                                    summaryData.femaleEmployeeTotal
-                                );
-							    	item2Count.valueRatio += ReportService.countRatio(
-							    		 this.checkedEmployee(
-                                    summaryData.femaleTotal,
-                                    summaryData.femaleEmployeeTotal
-                                ),
-                                 this.checkedEmployee(
-                                    summaryData.prevFemaleTotal,
-                                    summaryData.prevFemaleEmployeeTotal
-                                )
-							    	);
-                                }
-                            }
+							for (let deviceGroup of summaryData.deviceGroups) {
+								if (
+									tempArray[index].group.objectId ==
+									deviceGroup.objectId
+								) {
+									item1Count.value += summaryData.maleTotal;
+									item1Count.valueRatio += ReportService.countRatio(
+										summaryData.maleTotal,
+										summaryData.prevMaleTotal
+									);
+									item2Count.value += summaryData.femaleTotal;
+									item2Count.valueRatio += ReportService.countRatio(
+										summaryData.femaleTotal,
+										summaryData.prevFemaleTotal
+									);
+								}
+							}
 						} else {
 							if (
 								tempArray[index].area.objectId ==
 								summaryData.area.objectId
 							) {
-								item1Count.value += this.checkedEmployee(
-                                    summaryData.maleTotal,
-                                    summaryData.maleEmployeeTotal
-                                );
+								item1Count.value += summaryData.maleTotal;
 								item1Count.valueRatio += ReportService.countRatio(
-									 this.checkedEmployee(
-                                    summaryData.maleTotal,
-                                    summaryData.maleEmployeeTotal
-                                ),
-                                 this.checkedEmployee(
-                                    summaryData.prevMaleTotal,
-                                    summaryData.prevMaleEmployeeTotal
-                                )
+									summaryData.maleTotal,
+									summaryData.prevMaleTotal
 								);
-								item2Count.value +=  this.checkedEmployee(
-                                    summaryData.femaleTotal,
-                                    summaryData.femaleEmployeeTotal
-                                );
+								item2Count.value += summaryData.femaleTotal;
 								item2Count.valueRatio += ReportService.countRatio(
-									 this.checkedEmployee(
-                                    summaryData.femaleTotal,
-                                    summaryData.femaleEmployeeTotal
-                                ),
-                                 this.checkedEmployee(
-                                    summaryData.prevFemaleTotal,
-                                    summaryData.prevFemaleEmployeeTotal
-                                )
+									summaryData.femaleTotal,
+									summaryData.prevFemaleTotal
 								);
 							}
 						}
@@ -582,8 +535,8 @@ export default class ReportDemographic extends Vue {
 			switch (chartMode) {
 				case EChartMode.site1Day1:
 				case EChartMode.siteXDay1:
-                    this.rData.thatDay = this.startDate; //單天記錄時間日期
-                    this.reportTableTitle.headTitle =this._('w_ReportDemographic_DemographicByHours');
+					this.rData.thatDay = this.startDate; //單天記錄時間日期
+					this.reportTableTitle.headTitle =this._('w_ReportDemographic_DemographicByHours');
 					for (let siteItem of this.sites) {
 						for (let officeHourItem of siteItem.officeHour) {
 							if (
@@ -610,7 +563,7 @@ export default class ReportDemographic extends Vue {
 					break;
 				case EChartMode.site1DayX:
 				case EChartMode.siteXDayX:
-                    this.reportTableTitle.headTitle =  this._('w_ReportDemographic_DemographicByDays');
+					this.reportTableTitle.headTitle =  this._('w_ReportDemographic_DemographicByDays');
 					this.rData.thatDay = null; //多天無當天時間
 					let sDate = new Date(this.startDate);
 					let eDate = new Date(this.endDate);
@@ -623,8 +576,7 @@ export default class ReportDemographic extends Vue {
 
 			//body
 			this.rData.body = [];
-            let tempArray = [];
-
+			let tempArray = [];
 			//篩選出所有店
 			for (let summaryData of this.responseData.summaryDatas) {
 				if (
@@ -636,9 +588,9 @@ export default class ReportDemographic extends Vue {
 							site: summaryData.site,
 							area: summaryData.area,
 							group: deviceGroup,
-						  item1: [],
-                        item2: []
-                        };
+							item1: [],
+							item2: []
+						};
 
 						if (
 							tempArray.every(
@@ -654,8 +606,8 @@ export default class ReportDemographic extends Vue {
 					let body = {
 						site: summaryData.site,
 						area: summaryData.area,
-					  item1: [],
-                        item2: []
+						item1: [],
+						item2: []
 					};
 					if (
 						tempArray.every(
@@ -686,79 +638,43 @@ export default class ReportDemographic extends Vue {
 								) {
 									continue;
 								}
-									if (tempArray[index].group != null) {
-                                        for (let deviceGroup of summaryData.deviceGroups) {
-										   if (
-										    	tempArray[index].group.objectId ==
-										    	deviceGroup.objectId
-										    ) {
-										    	item1Count.value += this.checkedEmployee(
-                                                    summaryData.maleTotal,
-                                                    summaryData.maleEmployeeTotal
-                                                );
-										    	item1Count.valueRatio += ReportService.countRatio(
-										    		this.checkedEmployee(
-                                                    summaryData.maleTotal,
-                                                    summaryData.maleEmployeeTotal
-                                                    ),
-                                                     this.checkedEmployee(
-                                                        summaryData.prevMaleTotal,
-                                                        summaryData.prevMaleEmployeeTotal
-                                                    )
-								                     );
-								                     item2Count.value +=
-								                      this.checkedEmployee(
-                                                        summaryData.femaleTotal,
-                                                        summaryData.femaleEmployeeTotal
-                                                    );
-								                        item2Count.valueRatio += ReportService.countRatio(
-								                        this.checkedEmployee(
-                                                        summaryData.femaleTotal,
-                                                        summaryData.femaleEmployeeTotal
-                                                    ),
-                                                     this.checkedEmployee(
-                                                        summaryData.prevFemaleTotal,
-                                                        summaryData.prevFemaleEmployeeTotal
-                                                    )
-										    	);
-                                            }
-                                        }
-									} else {
-									if (
-											tempArray[index].area.objectId ==
-											summaryData.area.objectId
+								if (tempArray[index].group != null) {
+									for (let deviceGroup of summaryData.deviceGroups) {
+										if (
+											tempArray[index].group.objectId ==
+											deviceGroup.objectId
 										) {
-											item1Count.value += this.checkedEmployee(
-                                                    summaryData.maleTotal,
-                                                    summaryData.maleEmployeeTotal
-                                            );
+											item1Count.value += summaryData.maleTotal;
 											item1Count.valueRatio += ReportService.countRatio(
-											this.checkedEmployee(
-                                                    summaryData.maleTotal,
-                                                    summaryData.maleEmployeeTotal
-                                                    ),
-                                                     this.checkedEmployee(
-                                                        summaryData.prevMaleTotal,
-                                                        summaryData.prevMaleEmployeeTotal
-                                                    )
+												summaryData.maleTotal,
+												summaryData.prevMaleTotal
 											);
 											item2Count.value +=
-											  this.checkedEmployee(
-                                                        summaryData.femaleTotal,
-                                                        summaryData.femaleEmployeeTotal
-                                                    );
+												summaryData.femaleTotal;
 											item2Count.valueRatio += ReportService.countRatio(
-											 this.checkedEmployee(
-                                                        summaryData.femaleTotal,
-                                                        summaryData.femaleEmployeeTotal
-                                                    ),
-                                                     this.checkedEmployee(
-                                                        summaryData.prevFemaleTotal,
-                                                        summaryData.prevFemaleEmployeeTotal
-                                                    )
+												summaryData.femaleTotal,
+												summaryData.prevFemaleTotal
 											);
 										}
 									}
+								} else {
+									if (
+										tempArray[index].area.objectId ==
+										summaryData.area.objectId
+									) {
+										item1Count.value += summaryData.maleTotal;
+										item1Count.valueRatio += ReportService.countRatio(
+											summaryData.maleTotal,
+											summaryData.prevMaleTotal
+										);
+										item2Count.value +=
+											summaryData.femaleTotal;
+										item2Count.valueRatio += ReportService.countRatio(
+											summaryData.femaleTotal,
+											summaryData.prevFemaleTotal
+										);
+									}
+								}
 							}
 							tempArray[index].item1.push(item1Count);
 							tempArray[index].item2.push(item2Count);
@@ -787,79 +703,43 @@ export default class ReportDemographic extends Vue {
 									continue;
 								}
 
-									if (tempArray[index].group != null) {
-                                        for (let deviceGroup of summaryData.deviceGroups) {
-										   if (
-										    	tempArray[index].group.objectId ==
-										    	deviceGroup.objectId
-										    ) {
-										    	item1Count.value += this.checkedEmployee(
-                                                    summaryData.maleTotal,
-                                                    summaryData.maleEmployeeTotal
-                                            );
-										    	item1Count.valueRatio += ReportService.countRatio(
-										    	this.checkedEmployee(
-                                                    summaryData.maleTotal,
-                                                    summaryData.maleEmployeeTotal
-                                                    ),
-                                                     this.checkedEmployee(
-                                                        summaryData.prevMaleTotal,
-                                                        summaryData.prevMaleEmployeeTotal
-                                                    )
-										    	);
-										    	item2Count.value +=
-										    	 this.checkedEmployee(
-                                                        summaryData.femaleTotal,
-                                                        summaryData.femaleEmployeeTotal
-                                                    );
-										    	item2Count.valueRatio += ReportService.countRatio(
-										    	 this.checkedEmployee(
-                                                        summaryData.femaleTotal,
-                                                        summaryData.femaleEmployeeTotal
-                                                    ),
-                                                     this.checkedEmployee(
-                                                        summaryData.prevFemaleTotal,
-                                                        summaryData.prevFemaleEmployeeTotal
-                                                    )
-										    	);
-                                            }
-                                        }
-									} else {
-									if (
-											tempArray[index].area.objectId ==
-											summaryData.area.objectId
+								if (tempArray[index].group != null) {
+									for (let deviceGroup of summaryData.deviceGroups) {
+										if (
+											tempArray[index].group.objectId ==
+											deviceGroup.objectId
 										) {
-											item1Count.value += this.checkedEmployee(
-                                                    summaryData.maleTotal,
-                                                    summaryData.maleEmployeeTotal
-                                            );
+											item1Count.value += summaryData.maleTotal;
 											item1Count.valueRatio += ReportService.countRatio(
-											this.checkedEmployee(
-                                                    summaryData.maleTotal,
-                                                    summaryData.maleEmployeeTotal
-                                                    ),
-                                                     this.checkedEmployee(
-                                                        summaryData.prevMaleTotal,
-                                                        summaryData.prevMaleEmployeeTotal
-                                                    )
+												summaryData.maleTotal,
+												summaryData.prevMaleTotal
 											);
 											item2Count.value +=
-												 this.checkedEmployee(
-                                                        summaryData.femaleTotal,
-                                                        summaryData.femaleEmployeeTotal
-                                                    );
+												summaryData.femaleTotal;
 											item2Count.valueRatio += ReportService.countRatio(
-											 this.checkedEmployee(
-                                                        summaryData.femaleTotal,
-                                                        summaryData.femaleEmployeeTotal
-                                                    ),
-                                                     this.checkedEmployee(
-                                                        summaryData.prevFemaleTotal,
-                                                        summaryData.prevFemaleEmployeeTotal
-                                                    )
-										    	);
+												summaryData.femaleTotal,
+												summaryData.prevFemaleTotal
+											);
 										}
 									}
+								} else {
+									if (
+										tempArray[index].area.objectId ==
+										summaryData.area.objectId
+									) {
+										item1Count.value += summaryData.maleTotal;
+										item1Count.valueRatio += ReportService.countRatio(
+											summaryData.maleTotal,
+											summaryData.prevMaleTotal
+										);
+										item2Count.value +=
+											summaryData.femaleTotal;
+										item2Count.valueRatio += ReportService.countRatio(
+											summaryData.femaleTotal,
+											summaryData.prevFemaleTotal
+										);
+									}
+								}
 							}
 							tempArray[index].item1.push(item1Count);
 							tempArray[index].item2.push(item2Count);
@@ -903,17 +783,16 @@ export default class ReportDemographic extends Vue {
 				};
 
 				let summaryTableDatas;
-                let officeHours;
-                Loading.show();
+				let officeHours;
+				Loading.show();
 				await this.$server
 					.C("/report/demographic/summary", filterData)
 					.then((response: any) => {
-                        ResponseFilter.successCheck(this, response,
-                            (response: any) => {
-                                    summaryTableDatas = response.summaryDatas;
-                                this.initSunReportTable(summaryTableDatas);
-                            }
-                        );
+						Loading.hide();
+						if (response !== undefined) {
+							summaryTableDatas = response.summaryDatas;
+							this.initSunReportTable(summaryTableDatas);
+						}
 					})
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
@@ -922,6 +801,9 @@ export default class ReportDemographic extends Vue {
 				// this.toDetailReportTable(thatDay, sunTime, sunSite, sunArea);
 			}
 		}
+
+
+
 
 		////////////////////////////////////// Tina Start //////////////////////////////////////
 
@@ -945,25 +827,22 @@ export default class ReportDemographic extends Vue {
 			let tempSitesSelectItem = {};
 
 			const readAllSiteParam: {
-                type: string;
-                paging: object;
+				type: string;
 			} = {
-                type: "all",
-                paging: { all: true }
+				type: "all"
 			};
 
 			await this.$server
 				.R("/location/site/all", readAllSiteParam)
 				.then((response: any) => {
-                    ResponseFilter.successCheck(this, response,
-                        (response: any) => {
-                            for (const returnValue of response) {
-                                tempSitesSelectItem[returnValue.objectId] =
-                                    returnValue.name;
-						    }
-						    this.sitesSelectItem = tempSitesSelectItem
-                        }
-                    );
+					if (response != undefined) {
+						for (const returnValue of response) {
+							// 自定義 sitesSelectItem 的 key 的方式
+							tempSitesSelectItem[returnValue.objectId] =
+								returnValue.name;
+						}
+						this.sitesSelectItem = tempSitesSelectItem;
+					}
 				})
 				.catch((e: any) => {
 					return ResponseFilter.catchError(this, e);
@@ -971,20 +850,19 @@ export default class ReportDemographic extends Vue {
 		}
 
 		async initSelectItemTag() {
-            let tempTagSelectItem = {};
-            let param: any = { paging: { all: true } };
+			let tempTagSelectItem = {};
+
 			await this.$server
-				.R("/tag/all", param)
+				.R("/tag/all")
 				.then((response: any) => {
-                    ResponseFilter.successCheck(this, response,
-                        (response: any) => {
-                           	for (const returnValue of response) {
-                                tempTagSelectItem[returnValue.objectId] =
-                                    returnValue.name;
-                            }
-                            this.tagSelectItem = tempTagSelectItem;
-                        }
-                    );
+					if (response != undefined) {
+						for (const returnValue of response) {
+							// 自定義 tagSelectItem 的 key 的方式
+							tempTagSelectItem[returnValue.objectId] =
+								returnValue.name;
+						}
+						this.tagSelectItem = tempTagSelectItem;
+					}
 				})
 				.catch((e: any) => {
 					return ResponseFilter.catchError(this, e);
@@ -992,20 +870,20 @@ export default class ReportDemographic extends Vue {
 		}
 
 		async initSelectItemTree() {
-            let param: any = { paging: { all: true } };
+			let param: any = { paging: { all: true } };
 			await this.$server
 				.R("/location/tree", param)
 				.then((response: any) => {
-                    ResponseFilter.successCheck(this, response, (response: any) => {
-                        let tempTree = ReportService.resolveUserSite(
-                            this,
-                            response
-                        );
-                        this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
-                            tempTree
-                        );
-                        this.regionTreeItem.region = this.regionTreeItem.tree;
-                    });
+					ResponseFilter.successCheck(this, response, (response: any) => {
+						let tempTree = ReportService.resolveUserSite(
+							this,
+							response
+						);
+						this.regionTreeItem.tree = RegionAPI.analysisApiResponse(
+							tempTree
+						);
+						this.regionTreeItem.region = this.regionTreeItem.tree;
+					});
 				})
 				.catch((e: any) => {
 					return ResponseFilter.catchError(this, e);
@@ -1016,34 +894,31 @@ export default class ReportDemographic extends Vue {
 			let tempAreaSelectItem = {all: this._("w_AllAreas")};
 
 			const readParam: {
-                siteId: string;
-                paging: object;
+				siteId: string;
 			} = {
-                siteId: this.filterData.firstSiteId,
-                paging: { all: true }
+				siteId: this.filterData.firstSiteId
 			};
 
 			if (!this.filterData.firstSiteId) {
 				return false;
-            }
-
-            await this.$server
+			} else {
+				await this.$server
 					.R("/location/area/all", readParam)
 					.then((response: any) => {
-                        ResponseFilter.successCheck(this, response,
-                            (response: any) => {
-                                for (const returnValue of response) {
-                                    tempAreaSelectItem[returnValue.objectId] =
-                                        returnValue.name;
-                                }
-                                this.areaSelectItem = tempAreaSelectItem;
-                            }
-                        );
+						if (response != undefined) {
+							for (const returnValue of response) {
+								// 自定義 sitesSelectItem 的 key 的方式
+								tempAreaSelectItem[returnValue.objectId] =
+									returnValue.name;
+								// this.$set(this.areaSelectItem, returnValue.objectId, returnValue.name);
+							}
+							this.areaSelectItem = tempAreaSelectItem;
+						}
 					})
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
 					});
-
+			}
 		}
 
 		async initSelectItemDeviceGroup() {
@@ -1053,43 +928,80 @@ export default class ReportDemographic extends Vue {
 			let readParam: {
 				siteId: string;
 				areaId?: string;
-                mode: string;
-                paging: object;
+				mode: string;
 			} = {
 				siteId: this.filterData.firstSiteId,
-                mode: this.deviceMode,
-                paging: { all: true }
-            };
-
+				mode: this.deviceMode
+			};
 			if (!this.filterData.firstSiteId) {
 				return false;
-            }
 
-            if (this.inputFormData.areaId) {
-                readParam.areaId = this.inputFormData.areaId !== "all" ? this.inputFormData.areaId : "";
-            }
-
-             // 只選擇site
+				// 只選擇site
+			} else if (this.filterData.firstSiteId && !this.inputFormData.areaId) {
 				await this.$server
 					.R("/device/group/all", readParam)
 					.then((response: any) => {
-                        ResponseFilter.successCheck(this, response,
-                            (response: any) => {
-                                for (const returnValue of response) {
-                                    tempDeviceGroupSelectItem[returnValue.objectId] =
-                                        returnValue.name;
-                                }
-                                this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
-                            }
-                        );
+						if (response != undefined) {
+							for (const returnValue of response) {
+								// 自定義 tempDeviceGroupSelectItem 的 key 的方式
+								tempDeviceGroupSelectItem[returnValue.objectId] =
+									returnValue.name;
+							}
+							this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
+						}
 					})
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
 					});
+
+			} else if (
+				this.filterData.firstSiteId &&
+				this.inputFormData.areaId &&
+				this.inputFormData.areaId !== "all"
+			) {
+				// 選擇site和單一area
+				readParam.areaId = this.inputFormData.areaId;
+				await this.$server
+					.R("/device/group/all", readParam)
+					.then((response: any) => {
+						if (response != undefined) {
+							for (const returnValue of response) {
+								// 自定義 tempDeviceGroupSelectItem 的 key 的方式
+								tempDeviceGroupSelectItem[returnValue.objectId] =
+									returnValue.name;
+							}
+							this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
+						}
+					})
+					.catch((e: any) => {
+						return ResponseFilter.catchError(this, e);
+					});
+
+			} else if (
+				this.filterData.firstSiteId &&
+				this.inputFormData.areaId &&
+				this.inputFormData.areaId === "all"
+			) {
+				// 選擇site和all area
+				await this.$server
+					.R("/device/group/all", readParam)
+					.then((response: any) => {
+						if (response != undefined) {
+							for (const returnValue of response) {
+								// 自定義 tempDeviceGroupSelectItem 的 key 的方式
+								tempDeviceGroupSelectItem[returnValue.objectId] =
+									returnValue.name;
+							}
+							this.deviceGroupSelectItem = tempDeviceGroupSelectItem;
+						}
+					})
+					.catch((e: any) => {
+						return ResponseFilter.catchError(this, e);
+					});
+			}
 		}
 
 		async initSelectItemDevice() {
-
 			let tempDeviceSelectItem = {all: this._("w_AllDevices")};
 			this.deviceSelectItem = {};
 
@@ -1097,72 +1009,219 @@ export default class ReportDemographic extends Vue {
 				siteId: string;
 				areaId?: string;
 				groupId?: string;
-                mode: string;
-                paging: object;
+				mode: string;
 			} = {
 				siteId: this.filterData.firstSiteId,
-                mode: this.deviceMode,
-                paging: { all: true }
-            };
-
+				mode: this.deviceMode
+			};
 			if (!this.filterData.firstSiteId) {
-                return false;
-            }
+				return false;
 
-            if (this.inputFormData.areaId) {
-                readParam.areaId =
-                    this.inputFormData.areaId !== "all"
-                        ? this.inputFormData.areaId
-                        : "";
-            }
-
-            if (this.inputFormData.groupId) {
-                readParam.groupId =
-                    this.inputFormData.groupId !== "all"
-                        ? this.inputFormData.groupId
-                        : "";
-            }
-
-            await this.$server
+				// 只選擇site
+			} else if (
+				this.filterData.firstSiteId &&
+				!this.inputFormData.areaId &&
+				!this.inputFormData.groupId
+			) {
+				await this.$server
 					.R("/device", readParam)
 					.then((response: any) => {
-                        ResponseFilter.successCheck(this, response,
-                            (response: any) => {
-                                if (response.results != undefined && response.results.length > 0) {
-                                    for (const returnValue of response.results) {
-                                        tempDeviceSelectItem[returnValue.objectId] =
-                                        returnValue.name;
-                                    }
-                                    this.deviceSelectItem = tempDeviceSelectItem;
-                                }
-                            }
-                        );
+						if (response.results.length > 0) {
+							for (const returnValue of response.results) {
+								// 自定義 tempDeviceSelectItem 的 key 的方式
+								tempDeviceSelectItem[returnValue.objectId] =
+									returnValue.name;
+							}
+							this.deviceSelectItem = tempDeviceSelectItem;
+						}
 					})
 					.catch((e: any) => {
 						return ResponseFilter.catchError(this, e);
-                    });
+					});
 
-        }
+			} else if (
+				this.filterData.firstSiteId &&
+				this.inputFormData.areaId &&
+				this.inputFormData.areaId !== "all" &&
+				!this.inputFormData.groupId
+			) {
+				// 選擇site和單一area
+				readParam.areaId = this.inputFormData.areaId;
+				await this.$server
+					.R("/device", readParam)
+					.then((response: any) => {
+						if (response.results.length > 0) {
+							for (const returnValue of response.results) {
+								// 自定義 tempDeviceSelectItem 的 key 的方式
+								tempDeviceSelectItem[returnValue.objectId] =
+									returnValue.name;
+							}
+							this.deviceSelectItem = tempDeviceSelectItem;
+						}
+					})
+					.catch((e: any) => {
+						return ResponseFilter.catchError(this, e);
+					});
+
+			} else if (
+				this.filterData.firstSiteId &&
+				this.inputFormData.areaId &&
+				this.inputFormData.areaId !== "all" &&
+				this.inputFormData.groupId &&
+				this.inputFormData.groupId !== "all"
+			) {
+				// 選擇site和單一area和單一device group
+				readParam.groupId = this.inputFormData.groupId;
+				await this.$server
+					.R("/device", readParam)
+					.then((response: any) => {
+						if (response.results.length > 0) {
+							for (const returnValue of response.results) {
+								// 自定義 tempDeviceSelectItem 的 key 的方式
+								tempDeviceSelectItem[returnValue.objectId] =
+									returnValue.name;
+							}
+							this.deviceSelectItem = tempDeviceSelectItem;
+						}
+						if (response.results.length === 0) {
+							this.deviceSelectItem = {};
+						}
+					})
+					.catch((e: any) => {
+						return ResponseFilter.catchError(this, e);
+					});
+
+
+			} else if (
+				this.filterData.firstSiteId &&
+				this.inputFormData.areaId &&
+				this.inputFormData.areaId !== "all" &&
+				this.inputFormData.groupId &&
+				this.inputFormData.groupId !== "all" &&
+				this.inputFormData.deviceId === "all"
+			) {
+				// 選擇site和單一area和單一device group和 all device
+				readParam.groupId = this.inputFormData.groupId;
+
+				await this.$server
+					.R("/device", readParam)
+					.then((response: any) => {
+						if (response.results.length > 0) {
+							for (const returnValue of response.results) {
+								// 自定義 tempDeviceSelectItem 的 key 的方式
+								tempDeviceSelectItem[returnValue.objectId] =
+									returnValue.name;
+							}
+							this.deviceSelectItem = tempDeviceSelectItem;
+						}
+						if (response.results.length === 0) {
+							this.deviceSelectItem = {};
+						}
+					})
+					.catch((e: any) => {
+						return ResponseFilter.catchError(this, e);
+					});
+
+			} else if (
+				this.filterData.firstSiteId &&
+				this.inputFormData.areaId &&
+				this.inputFormData.areaId === "all" &&
+				(this.inputFormData.groupId === undefined ||
+					this.inputFormData.groupId === "") &&
+				this.inputFormData.groupId !== "all"
+			) {
+				// 選擇site和all area
+				readParam.areaId = "";
+				await this.$server
+					.R("/device", readParam)
+					.then((response: any) => {
+						if (response.results.length > 0) {
+							for (const returnValue of response.results) {
+								// 自定義 tempDeviceSelectItem 的 key 的方式
+								tempDeviceSelectItem[returnValue.objectId] =
+									returnValue.name;
+							}
+							this.deviceSelectItem = tempDeviceSelectItem;
+						}
+					})
+					.catch((e: any) => {
+						return ResponseFilter.catchError(this, e);
+					});
+
+			} else if (
+				this.filterData.firstSiteId &&
+				this.inputFormData.areaId &&
+				this.inputFormData.areaId === "all" &&
+				this.inputFormData.groupId &&
+				this.inputFormData.groupId === "all"
+			) {
+				// 選擇site和all area和all device group
+				readParam.groupId = this.inputFormData.groupId;
+				await this.$server
+					.R("/device", readParam)
+					.then((response: any) => {
+						if (response.results.length > 0) {
+							for (const returnValue of response.results) {
+								// 自定義 tempDeviceSelectItem 的 key 的方式
+								tempDeviceSelectItem[returnValue.objectId] =
+									returnValue.name;
+							}
+							this.deviceSelectItem = tempDeviceSelectItem;
+						}
+						if (response.results.length === 0) {
+							this.deviceSelectItem = {};
+						}
+					})
+					.catch((e: any) => {
+						return ResponseFilter.catchError(this, e);
+					});
+
+			} else if (
+				this.filterData.firstSiteId &&
+				this.inputFormData.areaId &&
+				this.inputFormData.areaId !== "all" &&
+				this.inputFormData.groupId &&
+				this.inputFormData.groupId === "all"
+			) {
+				// 選擇site和單一area和all device group
+				readParam.areaId = this.inputFormData.areaId;
+				readParam.groupId = "";
+				await this.$server
+					.R("/device", readParam)
+					.then((response: any) => {
+						if (response.results.length > 0) {
+							for (const returnValue of response.results) {
+								// 自定義 tempDeviceSelectItem 的 key 的方式
+								tempDeviceSelectItem[returnValue.objectId] =
+									returnValue.name;
+							}
+							this.deviceSelectItem = tempDeviceSelectItem;
+						}
+						if (response.results.length === 0) {
+							this.deviceSelectItem = {};
+						}
+					})
+					.catch((e: any) => {
+						return ResponseFilter.catchError(this, e);
+					});
+			}
+		}
 
 		async initSelectItemUsers() {
-            let tempUserSelectItem = {};
-            let param: any = { paging: { all: true } };
+			let tempUserSelectItem = {};
 
 			await this.$server
-				.R("/user/user",param)
+				.R("/user/user")
 				.then((response: any) => {
-                    ResponseFilter.successCheck(this, response,
-                        (response: any) => {
-                            if (response.results != undefined  && response.results.length > 0) {
-                                  for (const returnValue of response.results) {
-                                tempUserSelectItem[
-                                    returnValue.objectId
-                                    ] = `${returnValue.username} - ${returnValue.email}`;
-                            }
-                            this.userSelectItem = tempUserSelectItem;
-                            }
-                        }
-                    );
+					if (response != undefined) {
+						for (const returnValue of response.results) {
+							// 自定義 userSelectItem 的 key 的方式
+							tempUserSelectItem[
+								returnValue.objectId
+								] = `${returnValue.username} - ${returnValue.email}`;
+						}
+						this.userSelectItem = tempUserSelectItem;
+					}
 				})
 				.catch((e: any) => {
 					return ResponseFilter.catchError(this, e);
@@ -1176,14 +1235,14 @@ export default class ReportDemographic extends Vue {
 
 		receiveModalShowData(data) {
 			this.modalShow = data;
-        }
+		}
 
 		//// 以下為 analysis filter ////
 
 		async receiveFilterData(filterData: IFilterCondition, designationPeriod: EDesignationPeriod) {
 
-            let param = JSON.parse(JSON.stringify(filterData));
-            this.filterData = filterData;
+			let param = JSON.parse(JSON.stringify(filterData));
+			this.filterData = filterData;
 			this.designationPeriod = designationPeriod;
 			this.inputFormData = {
 				areaId: "",
@@ -1191,25 +1250,25 @@ export default class ReportDemographic extends Vue {
 				deviceId: "",
 				type: "",
 				isIncludedEmployee: "no"
-            };
-            Loading.show();
+			};
+			Loading.show();
 			await this.$server
 				.C("/report/demographic/summary", param)
 				.then((response: any) => {
-                    ResponseFilter.successCheck(this, response,
-                        (response: any) => {
-                           this.responseData = response;
-                            this.officeHourItemDetail = this.responseData.officeHours;
-                            this.resolveSummary();
-                        },
-                    );
+					Loading.hide();
+					if (response !== undefined) {
+						this.responseData = response;
+						this.officeHourItemDetail = this.responseData.officeHours;
+						this.resolveSummary();
+					}
 				})
 				.catch((e: any) => {
 					return ResponseFilter.catchError(this, e);
-                });
-        }
+				});
 
-        resolveSummary () {
+		}
+
+		resolveSummary () {
 
 			if (this.filterData.siteIds.length === 1) {
 				this.initSelectItemArea();
@@ -1254,21 +1313,7 @@ export default class ReportDemographic extends Vue {
 						}
 					}
 				}
-            }
-
-               //追加沒有的資料site傳入陣列 以便chart 單店多店判斷
-        for (const filterSiteId of this.filterData.siteIds) {
-            if (this.sites.some(x => x.objectId == filterSiteId)) {
-                continue;
-            }
-            let tempISite = {
-                objectId: filterSiteId,
-                name: this.sitesSelectItem.filter(x => x.id == filterSiteId)[0]
-                    .text,
-                officeHour: []
-            };
-            this.sites.push(tempISite);
-        }
+			}
 
 			// this.sites.push(tempISite);
 			this.dTimeMode = this.filterData.type;
@@ -1283,11 +1328,11 @@ export default class ReportDemographic extends Vue {
 			//Ben
 			this.initDashboardData();
 			this.initReportTable();
-        }
+		}
 
-          fetchZero(value) {
-        return value < 10 ? "0" + value : value;
-    }
+		fetchZero(value) {
+			return value < 10 ? "0" + value : value;
+		}
 		analysisTitle(): string {
 
 			let title = 'Analysis - ';
@@ -1302,8 +1347,8 @@ export default class ReportDemographic extends Vue {
 				title += `${this._('w_Title_Many_Site_Start')} ${this.filterData.siteIds.length} ${this._('w_Title_Many_Site_End')} `;
 			}
 
-			title += `${this._('w_Title_StartDate')} ${Datetime.DateTime2String(this.filterData.startDate, Datetime.FormatDate)}. `;
-			title += `${this._('w_Title_EndDate')} ${Datetime.DateTime2String(this.filterData.endDate, Datetime.FormatDate)}. `;
+			title += `${this._('w_Title_StartDate')} ${Datetime.DateTime2String(this.filterData.startDate, "YYYY/MM/DD")}. `;
+			title += `${this._('w_Title_EndDate')} ${Datetime.DateTime2String(this.filterData.endDate, "YYYY/MM/DD")}. `;
 
 			if (this.filterData.tagIds.length === 1) {
 				for (const tagId in this.tagSelectItem) {
@@ -1349,7 +1394,6 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.lower20,
 						maleCount: 0,
 						femaleCount: 0,
-						dwellTimeRanges: []
 					};
 					let tempDateChartDataM21_30 = {
 						date: tempDate,
@@ -1360,7 +1404,6 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.m21_30,
 						maleCount: 0,
 						femaleCount: 0,
-						dwellTimeRanges: []
 					};
 					let tempDateChartDataM31_40 = {
 						date: tempDate,
@@ -1371,7 +1414,6 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.m31_40,
 						maleCount: 0,
 						femaleCount: 0,
-						dwellTimeRanges: []
 					};
 					let tempDateChartDataM41_50 = {
 						date: tempDate,
@@ -1382,7 +1424,6 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.m41_50,
 						maleCount: 0,
 						femaleCount: 0,
-						dwellTimeRanges: []
 					};
 					let tempDateChartDataM51_60 = {
 						date: tempDate,
@@ -1393,7 +1434,6 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.m51_60,
 						maleCount: 0,
 						femaleCount: 0,
-						dwellTimeRanges: []
 					};
 					let tempDateChartDataUpper61 = {
 						date: tempDate,
@@ -1404,7 +1444,6 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.upper61,
 						maleCount: 0,
 						femaleCount: 0,
-						dwellTimeRanges: []
 					};
 
 					for (let siteId of this.filterData.siteIds) {
@@ -1462,7 +1501,6 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.lower20,
 						maleCount: 0,
 						femaleCount: 0,
-						dwellTimeRanges: []
 					};
 					let tempDateChartDataM21_30 = {
 						date: new Date(dateItem.getTime()),
@@ -1473,7 +1511,6 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.m21_30,
 						maleCount: 0,
 						femaleCount: 0,
-						dwellTimeRanges: []
 					};
 					let tempDateChartDataM31_40 = {
 						date: new Date(dateItem.getTime()),
@@ -1484,7 +1521,6 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.m31_40,
 						maleCount: 0,
 						femaleCount: 0,
-						dwellTimeRanges: []
 					};
 					let tempDateChartDataM41_50 = {
 						date: new Date(dateItem.getTime()),
@@ -1495,7 +1531,6 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.m41_50,
 						maleCount: 0,
 						femaleCount: 0,
-						dwellTimeRanges: []
 					};
 					let tempDateChartDataM51_60 = {
 						date: new Date(dateItem.getTime()),
@@ -1506,7 +1541,6 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.m51_60,
 						maleCount: 0,
 						femaleCount: 0,
-						dwellTimeRanges: []
 					};
 					let tempDateChartDataUpper61 = {
 						date: new Date(dateItem.getTime()),
@@ -1517,7 +1551,6 @@ export default class ReportDemographic extends Vue {
 						ageRange: EAgeRange.upper61,
 						maleCount: 0,
 						femaleCount: 0,
-						dwellTimeRanges: []
 					};
 
 					for (let siteId of this.filterData.siteIds) {
@@ -1561,91 +1594,66 @@ export default class ReportDemographic extends Vue {
 			for (let tempChartData of tempChartDatas) {
 				let tempDateFormat = isOneDay
 					? Datetime.DateTime2String(tempChartData.date, ReportService.datetimeFormat.hour)
-                    : Datetime.DateTime2String(tempChartData.date, ReportService.datetimeFormat.date);
+					: Datetime.DateTime2String(tempChartData.date, ReportService.datetimeFormat.date);
 
-                // 計算 maleCount、femaleCount
-                for (let summary of datas) {
+				// 計算 maleCount、femaleCount
+				for (let summary of datas) {
+					let summaryDateFormat = isOneDay
+						? Datetime.DateTime2String(
+							new Date(summary.date),
+							ReportService.datetimeFormat.hour
+						)
+						: Datetime.DateTime2String(
+							new Date(summary.date),
+							ReportService.datetimeFormat.date
+						);
 
-                    let summaryDateFormat = isOneDay
-                        ? Datetime.DateTime2String(
-                            new Date(summary.date),
-                            ReportService.datetimeFormat.hour
-                        )
-                        : Datetime.DateTime2String(
-                            new Date(summary.date),
-                            ReportService.datetimeFormat.date
-                        );
+					if (
+						summaryDateFormat == tempDateFormat &&
+						summary.site.objectId == tempChartData.siteObjectId
+					) {
+						let ageRangeIndex = 0;
+						switch (tempChartData.ageRange) {
+							case EAgeRange.lower20:
+								ageRangeIndex = 0;
+								break;
+							case EAgeRange.m21_30:
+								ageRangeIndex = 1;
+								break;
+							case EAgeRange.m31_40:
+								ageRangeIndex =2;
+								break;
+							case EAgeRange.m41_50:
+								ageRangeIndex = 3;
+								break;
+							case EAgeRange.m51_60:
+								ageRangeIndex =4;
+								break;
+							case EAgeRange.upper61:
+								ageRangeIndex = 5;
+								break;
+						}
 
-                        if (
-                            summaryDateFormat == tempDateFormat &&
-                            summary.site.objectId == tempChartData.siteObjectId
-                        ) {
+						summary.maleRanges[ageRangeIndex] = summary.maleRanges[ageRangeIndex] === null ? 0 : summary.maleRanges[ageRangeIndex];
+						summary.femaleRanges[ageRangeIndex] = summary.femaleRanges[ageRangeIndex] === null ? 0 : summary.femaleRanges[ageRangeIndex];
+						summary.maleEmployeeRanges[ageRangeIndex] = summary.maleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.maleEmployeeRanges[ageRangeIndex];
+						summary.femaleEmployeeRanges[ageRangeIndex] = summary.femaleEmployeeRanges[ageRangeIndex] === null ? 0 : summary.femaleEmployeeRanges[ageRangeIndex];
 
-	                        let ageRangeIndex = 0;
+						tempChartData.maleCount += summary.maleRanges[ageRangeIndex];
+						tempChartData.femaleCount += summary.femaleRanges[ageRangeIndex];
 
-                            switch (tempChartData.ageRange) {
-                                case EAgeRange.lower20:
-                                    ageRangeIndex = 0;
-	                                tempChartData.dwellTimeRanges = summary.ageRanges[ageRangeIndex].dwellTimeRanges;
-	                                if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
-		                                tempChartData.dwellTimeRanges = this.sortNoEmployeeRanges(summary.ageRanges[ageRangeIndex].dwellTimeRanges, summary.ageRanges[ageRangeIndex].dwellTimeEmployeeRanges)
-	                                }
-                                    break;
-                                case EAgeRange.m21_30:
-                                    ageRangeIndex = 1;
-	                                tempChartData.dwellTimeRanges = summary.ageRanges[ageRangeIndex].dwellTimeRanges;
-	                                if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
-		                                tempChartData.dwellTimeRanges = this.sortNoEmployeeRanges(summary.ageRanges[ageRangeIndex].dwellTimeRanges, summary.ageRanges[ageRangeIndex].dwellTimeEmployeeRanges)
-	                                }
-                                    break;
-                                case EAgeRange.m31_40:
-                                    ageRangeIndex = 2;
-	                                tempChartData.dwellTimeRanges = summary.ageRanges[ageRangeIndex].dwellTimeRanges;
-	                                if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
-		                                tempChartData.dwellTimeRanges = this.sortNoEmployeeRanges(summary.ageRanges[ageRangeIndex].dwellTimeRanges, summary.ageRanges[ageRangeIndex].dwellTimeEmployeeRanges)
-	                                }
-                                    break;
-                                case EAgeRange.m41_50:
-                                    ageRangeIndex = 3;
-	                                tempChartData.dwellTimeRanges = summary.ageRanges[ageRangeIndex].dwellTimeRanges;
-	                                if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
-		                                tempChartData.dwellTimeRanges = this.sortNoEmployeeRanges(summary.ageRanges[ageRangeIndex].dwellTimeRanges, summary.ageRanges[ageRangeIndex].dwellTimeEmployeeRanges)
-	                                }
-                                    break;
-                                case EAgeRange.m51_60:
-	                                tempChartData.dwellTimeRanges = summary.ageRanges[ageRangeIndex].dwellTimeRanges;
-	                                if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
-		                                tempChartData.dwellTimeRanges = this.sortNoEmployeeRanges(summary.ageRanges[ageRangeIndex].dwellTimeRanges, summary.ageRanges[ageRangeIndex].dwellTimeEmployeeRanges)
-	                                }
-                                    break;
-                                case EAgeRange.upper61:
-	                                tempChartData.dwellTimeRanges = summary.ageRanges[ageRangeIndex].dwellTimeRanges;
-	                                if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
-		                                tempChartData.dwellTimeRanges = this.sortNoEmployeeRanges(summary.ageRanges[ageRangeIndex].dwellTimeRanges, summary.ageRanges[ageRangeIndex].dwellTimeEmployeeRanges)
-	                                }
-                                    break;
-                            }
+						if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
+							tempChartData.maleCount -= summary.maleEmployeeRanges[ageRangeIndex];
+							tempChartData.femaleCount -= summary.femaleEmployeeRanges[ageRangeIndex];
+						}
 
-                            summary.ageRanges[ageRangeIndex].male = summary.ageRanges[ageRangeIndex].male === null ? 0 : summary.ageRanges[ageRangeIndex].male;
-                            summary.ageRanges[ageRangeIndex].female = summary.ageRanges[ageRangeIndex].female === null ? 0 : summary.ageRanges[ageRangeIndex].female;
-                            summary.ageRanges[ageRangeIndex].maleEmployee = summary.ageRanges[ageRangeIndex].maleEmployee === null ? 0 : summary.ageRanges[ageRangeIndex].maleEmployee;
-                            summary.ageRanges[ageRangeIndex].femaleEmployee = summary.ageRanges[ageRangeIndex].femaleEmployee === null ? 0 : summary.ageRanges[ageRangeIndex].femaleEmployee;
+					}
+				}
 
-                            tempChartData.maleCount += summary.ageRanges[ageRangeIndex].male;
-                            tempChartData.femaleCount += summary.ageRanges[ageRangeIndex].female;
-
-	                        if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
-                                tempChartData.maleCount -= summary.ageRanges[ageRangeIndex].maleEmployee;
-                                tempChartData.femaleCount -= summary.ageRanges[ageRangeIndex].femaleEmployee;
-                            }
-
-                        }
-                }
-
-                // 取得天氣
-                for (let i in this.responseData.weathers) {
-                    let weather = this.responseData.weathers[i];
-                    let weatherDateFormat = isOneDay
+				// 取得天氣
+				for (let i in this.responseData.weathers) {
+					let weather = this.responseData.weathers[i];
+					let weatherDateFormat = isOneDay
 						? Datetime.DateTime2String(
 							new Date(weather.date),
 							ReportService.datetimeFormat.hour
@@ -1653,7 +1661,7 @@ export default class ReportDemographic extends Vue {
 						: Datetime.DateTime2String(
 							new Date(weather.date),
 							ReportService.datetimeFormat.date
-                        );
+						);
 
 					if (
 						weatherDateFormat == tempDateFormat &&
@@ -1668,17 +1676,27 @@ export default class ReportDemographic extends Vue {
 					}
 				}
 
-            }
+				//
+				// // TODO: Dwell time
+				// let tempRandomDwellTime = Math.floor(Math.random()*6);
+				// if (tempRandomDwellTime == 0) {
+				// 	tempChartData.dwellTimeRange = EDwellTimeRange.lower5;
+				// } else if (tempRandomDwellTime == 1) {
+				// 	tempChartData.dwellTimeRange = EDwellTimeRange.m5_15;
+				// } else if (tempRandomDwellTime == 2) {
+				// 	tempChartData.dwellTimeRange = EDwellTimeRange.m15_30;
+				// } else if (tempRandomDwellTime == 3) {
+				// 	tempChartData.dwellTimeRange = EDwellTimeRange.m30_60;
+				// } else if (tempRandomDwellTime == 4) {
+				// 	tempChartData.dwellTimeRange = EDwellTimeRange.m60_120;
+				// } else {
+				// 	tempChartData.dwellTimeRange = EDwellTimeRange.upper120;
+				// }
+				// // TODO: Dwell time
+
+			}
 
 			this.chartDatas = tempChartDatas;
-		}
-
-		sortNoEmployeeRanges(allPeople: number[], onlyEmployee: number[]): number[] {
-			let result = [];
-			for (let i = 0; i < 6; i++) {
-				result.push(allPeople[i] - onlyEmployee[i])
-			}
-			return result;
 		}
 
 		async receiveAreaId(areaId) {
@@ -1765,16 +1783,14 @@ export default class ReportDemographic extends Vue {
 				// 依照單一deviceGroup篩選
 				for (const singleData of this.areaSummaryFilter) {
 					for (const detailKey in singleData) {
-                        const tempSingleData = singleData[detailKey];
+						const tempSingleData = singleData[detailKey];
 
 						if (detailKey === "deviceGroups") {
-							if (tempSingleData.length > 0) {
-								if (
-									this.inputFormData.groupId ===
-									tempSingleData[0].objectId
-								) {
-									this.deviceGroupSummaryFilter.push(singleData);
-								}
+							if (
+								this.inputFormData.groupId ===
+								tempSingleData[0].objectId
+							) {
+								this.deviceGroupSummaryFilter.push(singleData);
 							}
 						}
 					}
@@ -1985,8 +2001,7 @@ export default class ReportDemographic extends Vue {
 
 				await this.initSelectItemArea();
 				await this.initSelectItemDeviceGroup();
-                await this.initSelectItemDevice();
-                this.initReportTable();
+				await this.initSelectItemDevice();
 
 				this.inputFormData.areaId = "all";
 				this.inputFormData.groupId = "all";
@@ -2023,36 +2038,36 @@ export default class ReportDemographic extends Vue {
 
 
 		exportExcel(fType) {
-            let reportTable: any = null;
-            if (this.tableStep == ETableStep.mainTable) {
-                reportTable = this.$refs.reportTable;
-            } else {
-                reportTable = this.$refs.sunReportTable;
-            }
+			let reportTable: any = null;
+			if (this.tableStep == ETableStep.mainTable) {
+				reportTable = this.$refs.reportTable;
+			} else {
+				reportTable = this.$refs.sunReportTable;
+			}
 
-            let tableData = reportTable.tableToArray();
+			let tableData = reportTable.tableToArray();
 
 			//th
 			let th = [];
 			for (let title of tableData[0]) {
 				th.push(title);
-            }
+			}
 
 			//data
 			let data = [];
 			for (let bodys of tableData) {
-                if (tableData.indexOf(bodys) == 0) continue;
-                    data.push(bodys);
-            }
+				if (tableData.indexOf(bodys) == 0) continue;
+				data.push(bodys);
+			}
 			let [fileName, fileType, sheetName] = [
 				this._("w_Navigation_VideoSources_Demographic"),
 				fType,
-				Datetime.DateTime2String(this.startDate, Datetime.FormatCheckDate)
-            ];
+				Datetime.DateTime2String(this.startDate, "YYYY-MM-DD")
+			];
 			toExcel({th, data, fileName, fileType, sheetName});
 		}
 
-        // Author: Morris
+		// Author: Morris
 		exportPDF() {
 			let title = "";
 			title += this._("w_Navigation_Report_Demographic");
@@ -2060,13 +2075,13 @@ export default class ReportDemographic extends Vue {
 			title += Datetime.DateTime2String(
 				this.startDate,
 				HighchartsService.datetimeFormat.date
-            );
-            ReportPDFService.exportPDF(title);
-        }
+			);
+			ReportPDFService.exportPDF(title);
+		}
 
-        /////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////
 
-        // Author: Morris, Product remove
+		// Author: Morris, Product remove
 		initChartDeveloper() {
 			this.timeMode = ETimeMode.day;
 			this.areaMode = EAreaMode.single;
@@ -2098,12 +2113,12 @@ export default class ReportDemographic extends Vue {
 
 				for (let i = 1; i < 30; i++) {
 					let ageRange = EAgeRange.none;
-                    let dwellTimeRange = EDwellTimeRange.none;
-                    let weather = EWeather.none;
+					let dwellTimeRange = EDwellTimeRange.none;
+					let weather = EWeather.none;
 
-                    let tempAgeRangeNumber = Math.floor(Math.random() * 300);
-                    let tempDwellTimeRangeNumber = Math.floor(Math.random() * 300);
-                    let tempWeatherNumber = Math.floor(Math.random() * 300);
+					let tempAgeRangeNumber = Math.floor(Math.random() * 300);
+					let tempDwellTimeRangeNumber = Math.floor(Math.random() * 300);
+					let tempWeatherNumber = Math.floor(Math.random() * 300);
 
 					if (tempAgeRangeNumber % 6 == 0) {
 						ageRange = EAgeRange.lower20;
@@ -2117,9 +2132,9 @@ export default class ReportDemographic extends Vue {
 						ageRange = EAgeRange.m51_60;
 					} else if (tempAgeRangeNumber % 6 == 5) {
 						ageRange = EAgeRange.upper61;
-                    }
+					}
 
-                    if (tempDwellTimeRangeNumber % 6 == 0) {
+					if (tempDwellTimeRangeNumber % 6 == 0) {
 						dwellTimeRange = EDwellTimeRange.lower5;
 					} else if (tempDwellTimeRangeNumber % 6 == 1) {
 						dwellTimeRange = EDwellTimeRange.m5_15;
@@ -2131,9 +2146,9 @@ export default class ReportDemographic extends Vue {
 						dwellTimeRange = EDwellTimeRange.m60_120;
 					} else if (tempDwellTimeRangeNumber % 6 == 5) {
 						dwellTimeRange = EDwellTimeRange.upper120;
-                    }
+					}
 
-                    if (tempWeatherNumber % 10 == 0) {
+					if (tempWeatherNumber % 10 == 0) {
 						weather = EWeather.clearDay;
 					} else if (tempWeatherNumber % 10 == 1) {
 						weather = EWeather.clearNight;
@@ -2168,11 +2183,10 @@ export default class ReportDemographic extends Vue {
 						temperatureMin: iNumber,
 						temperatureMax: iNumber,
 						weather: weather,
-                        ageRange: ageRange,
-                        dwellTimeRange: dwellTimeRange,
+						ageRange: ageRange,
+						dwellTimeRange: dwellTimeRange,
 						maleCount: Math.floor(Math.random() * 300),
-						femaleCount: Math.floor(Math.random() * 300),
-						dwellTimeRanges: []
+						femaleCount: Math.floor(Math.random() * 300)
 					};
 
 					if (!isNaN(tempChartData.date.getTime())) {
@@ -2181,7 +2195,7 @@ export default class ReportDemographic extends Vue {
 				}
 			}
 		}
-}
+	}
 </script>
 
 

@@ -77,25 +77,25 @@
 
                 <div class="font-weight-bold"> {{ _('w_iSap_Use') }}</div>
 
-<!--                <b-button-->
-<!--                    class="button mt-3 mb-1"-->
-<!--                    size="md"-->
-<!--                    variant="success"-->
-<!--                    type="button"-->
-<!--                    @click="pageToAddByiSapFRS(eAddStep.frs)"-->
-<!--                >-->
-<!--                    {{ _('w_iSapFRS') }}-->
-<!--                </b-button>-->
+                <b-button
+                    class="button mt-3 mb-1"
+                    size="md"
+                    variant="success"
+                    type="button"
+                    @click="pageToAddByiSapFRS(eAddStep.frs)"
+                >
+                    {{ _('w_iSapFRS') }}
+                </b-button>
 
-<!--                <b-button-->
-<!--                    variant="link"-->
-<!--                    class="mt-4"-->
-<!--                    @click="goToSetFRSServer"-->
-<!--                >-->
-<!--                    {{ _('w_SetFRS') }}-->
-<!--                </b-button>-->
+                <b-button
+                    variant="link"
+                    class="mt-4"
+                    @click="goToSetFRSServer"
+                >
+                    {{ _('w_SetFRS') }}
+                </b-button>
 
-<!--                <br>-->
+                <br>
 
                 <b-button
                     class="button mt-3 mb-1"
@@ -1550,6 +1550,9 @@ export default class Demographic extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Direction")}
                  * @uiPlaceHolder - ${this._("w_Direction")}
+                 * @uiHidden - ${
+                            this.addStep === EAddStep.frs ? "true" : "false"
+                        }
                  */
                 direction: ${toEnumInterface({
                     in: this._("w_In"),
@@ -1647,6 +1650,9 @@ export default class Demographic extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Direction")}
                  * @uiType - iv-form-label
+                 * @uiHidden - ${
+                        this.addStep === EAddStep.frs ? "true" : "false"
+                    }
                  */
                 direction?: direction;
 
