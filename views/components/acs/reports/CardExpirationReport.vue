@@ -7,6 +7,8 @@
         :isBusy="isBusy"
         :fields="fields"
         v-model="filter"
+        :itemsProvider="itemsProvider"
+        :total="total"
         v-on:input="onSubmit()"
      />          
 </template>
@@ -22,6 +24,7 @@ export default class CardExpirationReport extends Vue  {
     fields:any[] =[];
     isBusy:boolean=false;
     filter:any={};
+    total:number=0;
     async created(){        
         this.fields = 
         [     
@@ -67,20 +70,28 @@ export default class CardExpirationReport extends Vue  {
         ];
 
     }
-    
-  private async getData() { 
-      try{
-      if(!this.filter)return;
-      if(this.filter.End)this.filter.EndDate = this.filter.End.toISOString();
-        this.isBusy=true;            
-        let resp: any=await this.$server.R("/report/expiredcard" as any, Object.assign({"expired":true}, this.filter));
-        this.records = resp.results;
-      }catch(err){
-          console.error(err);
-      }finally{
-        this.isBusy=false;
+  itemsProvider (ctx) {
+        // Here we don't set isBusy prop, so busy state will be
+        // handled by table itself
+        // this.isBusy = true
+
+        console.log("filter", this.filter);
+
+        let promise = this.$server.C('/report/expiredcard'as any, Object.assign({paging:{page:ctx.currentPage, pageSize:ctx.perPage}}, this.filter));
+
+        return promise.then(async (data:any) => {
+          this.total = data.paging.total;          
+          // Here we could override the busy state, setting isBusy to false
+          // this.isBusy = false
+          return(data.results);
+        }).catch(error => {
+          // Here we could override the busy state, setting isBusy to false
+          // this.isBusy = false
+          // Returning an empty array, allows table to correctly handle
+          // internal busy state in case of error
+          return []
+        })
       }
-  }
 
 
     inf():string{
@@ -118,7 +129,7 @@ export default class CardExpirationReport extends Vue  {
     
     async onSubmit(){      
         console.log("filter", this.filter) ;
-        await this.getData();
+        //wait this.getData();
     }
 }
 </script>
