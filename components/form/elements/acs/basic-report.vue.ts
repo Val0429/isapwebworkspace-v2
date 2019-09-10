@@ -17,7 +17,7 @@ export class BasicReport extends Vue{
         required: true
     })
     records: any[];
-    processedRecords:any[];
+    processedRecords:any[]=[];
     @Prop({   
         type:String,     
         required: true
@@ -33,7 +33,11 @@ export class BasicReport extends Vue{
         required: true
     })
     isBusy: boolean;
-
+    @Prop({        
+        type:Number,
+        required: true
+    })
+    total: number;
     sortedFields:any[]=[];
     
     currentPage: number=1;
@@ -42,7 +46,11 @@ export class BasicReport extends Vue{
     perPage: number=10;
     
     selectedColumns: any[]=[];
-    
+    @Prop({                
+        required: true
+    })
+    itemsProvider:any;
+
     data: any[]=[];
     showTable:boolean=false;
     isMounted:boolean=false;
@@ -57,6 +65,7 @@ export class BasicReport extends Vue{
     onRecordUpdated(value:any[], oldValue:any[]){
         this.reprocessRecords();
     }
+    
     // @Watch("fields",{immediate:true})
     // onFieldsUpdated(value:any[], oldValue:any[]){
     //     this.reprocessRecords();
@@ -64,23 +73,8 @@ export class BasicReport extends Vue{
     private reprocessRecords() {
         console.log("record updated",this.sortedFields.length, this.fields.length);
         let processedRecords = [];
-        let stringProcessedRecords = [];
-        for (let record of this.records) {
-            let newItem = {};
-            for (let field of this.sortedFields) {
-                newItem[field.key] = record[field.key];
-            }
-            if(this.sortedFields.length < (this.fields.length/2)){
-                let exists = stringProcessedRecords.find(x=> x == this.getJsonValue(newItem));
-                if(!exists){
-                    //console.log("new Item", JSON.stringify(newItem).substr(0,20), processedRecords.length);
-                    stringProcessedRecords.push(this.getJsonValue(newItem));
-                    processedRecords.push(newItem);
-                }
-            }else{
-                processedRecords.push(newItem);
-            }
-            
+        for (let record of this.records) {            
+            processedRecords.push(record);
         }
         this.processedRecords = processedRecords;//.filter((value, index, self) => self.indexOf(value) === index);
     }

@@ -35,26 +35,30 @@
         
         <iv-card            
             :label="title"
-            v-if="showTable">
+            v-if="showTable"
+            >
             <template #toolbox>
                 <iv-toolbox-export @click="exportToExcel()"/>
                 
             </template>        
-           <b-table 
-                striped hover 
-                ref="table"
-                :items="processedRecords" 
-                :fields="sortedFields" 
+            <b-table striped hover
+                ref="reportTable"
+                :items="itemsProvider" 
+                :fields="sortedFields"
                 :per-page="perPage"
-                :busy="isBusy"
-                :current-page="currentPage"
-           ></b-table>
-           <b-pagination
-            v-model="currentPage"
-            :total-rows="processedRecords.length"
-            :per-page="perPage"
-            aria-controls="my-table"
-            ></b-pagination>
+                :current-page="currentPage">
+                <!-- A virtual column -->
+                <template slot="index" slot-scope="data">
+                    {{ data.index + (currentPage-1)*perPage+ 1 }}
+                </template>
+                   
+                </b-table>
+                <b-pagination
+                v-model="currentPage"
+                :total-rows="total"
+                :per-page="perPage"
+                aria-controls="my-table"
+                />           
            
         </iv-card> 
  
