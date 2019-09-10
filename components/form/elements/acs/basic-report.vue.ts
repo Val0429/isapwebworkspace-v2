@@ -127,6 +127,7 @@ export class BasicReport extends Vue{
     }
     onSubmit($event:any){        
         this.showTable = true;
+        $event.selectedColumns = this.sortedFields;
         this.$emit("input", $event);        
     }
     onReset(){        
