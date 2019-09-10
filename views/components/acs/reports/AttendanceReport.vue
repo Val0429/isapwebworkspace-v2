@@ -189,7 +189,7 @@ export default class EmployeeReport extends Vue  {
     async onSubmit(){      
         console.log("filter", this.filter) ;
         //await this.getData();
-        (this.$refs.reportTable as any).refresh();
+        //(this.$refs.reportTable as any).refresh();
     }
 }
 </script>

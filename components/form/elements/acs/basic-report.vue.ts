@@ -123,10 +123,11 @@ export class BasicReport extends Vue{
         this.showTable = true;
         $event.selectedColumns = this.sortedFields;
         this.$emit("input", $event);        
+        (this.$refs.reportTable as any).refresh();
     }
     onReset(){        
-        this.showTable = false;
-        this.$emit("input", undefined);        
+        this.showTable = false;        
+        this.$emit("input", {selectedColumns:this.sortedFields});
     }
 }
 export default BasicReport
