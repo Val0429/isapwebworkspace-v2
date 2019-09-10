@@ -102,7 +102,12 @@
         :server="{ path: '/acs/member' }"
         @selected="selectedItem($event)"
       >
-
+        <template #startDate="{$attrs, $listeners}">
+          {{momento($attrs.value).format("YYYY-MM-DD")}}
+        </template>
+        <template #endDate="{$attrs, $listeners}">
+            {{momento($attrs.value).format("YYYY-MM-DD")}}
+        </template>
         <template #Actions="{$attrs, $listeners}">
           <iv-toolbox-more size="sm" :disabled="isSelected.length !== 1">
             <iv-toolbox-view @click="pageToView" />
@@ -307,7 +312,7 @@ enum ITemplateCard {
 })
 export default class Member extends Vue {
   serverUrl = ServerConfig.url;
-  
+  momento = moment;
   
   beforeMount() {
     if (!this.$user || !this.$user.permissions) return;
@@ -603,14 +608,17 @@ export default class Member extends Vue {
       let resp:any = await this.$server.R("/acs/member", {objectId:this.selectedDetail[0].objectId, showImage:"true"}) ;
        // Master form      
       this.inputFormData = resp.results[0];
-      console.log("image", this.inputFormData.cardholderPortrait.substr(0,100))
+      console.log("image", this.inputFormData.cardholderPortrait ? this.inputFormData.cardholderPortrait.substr(0,100): "")
      
 
       if (this.inputFormData.permissionTable) {
         console.log("pushing from access rules")
         for (let rule of this.inputFormData.permissionTable) {
-              this.permissionSelected.push(rule.toString());            
+              this.permissionSelected.push(rule.objectId);            
         }
+      }
+      if(this.inputFormData.lastEditTime){
+        this.inputFormData.lastEditTime = moment(this.inputFormData.lastEditTime).format("YYYY-MM-DD HH:mm:ss");
       }
       let defaultWg=this.workGroupSelectItems.find(x=>x.groupname=="正職");
       this.inputFormData.personType = (this.inputFormData.primaryWorkgroupId || (defaultWg ? defaultWg.groupid : 1)).toString();
@@ -648,11 +656,11 @@ export default class Member extends Vue {
         .R("/acs/permissiontable", {"paging.all":"true","system":0})
         .then((response: any) => {
           this.storedPermissionOptions=response.results
-          .filter((x, index, self)=>{ return x.tableid && x.tablename && self.indexOf(x)===index})
+          .filter((x, index, self)=>{ return x.objectId && x.tablename && self.indexOf(x)===index})
           .map(content=>{
             return{
-              value: content.tableid.toString(),
-              text: content.tablename.toString()
+              value: content.objectId,
+              text: content.tablename
           }})        
         });
     }
@@ -1834,9 +1842,12 @@ export default class Member extends Vue {
             CardNumber?: string;
              /**
              * @uiColumnGroup - row2
-             * @uiLabel - ${this._("cardType")}
+             * @uiLabel - ${this._("personType")}
              */
-            CardType?: ${toEnumInterface(this.certificateOptions as any, false)};
+            PersonType?: ${toEnumInterface(
+                  this.workGroupSelectItem as any,
+                  false
+                )};
             /**
              * @uiColumnGroup - row2
              * @uiLabel - ${this._("chineseName")}
