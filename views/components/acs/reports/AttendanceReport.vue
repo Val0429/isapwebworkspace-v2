@@ -86,20 +86,6 @@ export default class EmployeeReport extends Vue  {
         
     }
     
-  private async getData() {    
-      try{    
-        if(!this.filter){
-            this.filter= {DateStart: new Date(), DateEnd : new Date()};
-            return;
-        }
-        this.isBusy=true;           
-        await this.getAttendanceRecord();
-      }catch(err){
-          console.error(err);
-      }finally{
-        this.isBusy=false;
-      }
-  }
     itemsProvider (ctx) {
         // Here we don't set isBusy prop, so busy state will be
         // handled by table itself
@@ -123,19 +109,7 @@ export default class EmployeeReport extends Vue  {
         })
       }
 
-    async getAttendanceRecord(){ 
-        this.total=0; 
-        this.filter.DateStart.setHours(0,0,0,0);        
-        this.filter.DateEnd.setHours(23,59,59,999);
-        // let card_no = this.filter.CardNumber;
-        let start = this.filter.DateStart.toISOString();
-        let end = this.filter.DateEnd.toISOString();
-        let resp: any=await this.$server.C("/report/attendance" as any, Object.assign(this.filter, {start, end}));
-        this.records=resp.results;
-        this.total = resp.paging.total;
-        
-        console.log("this.records", this.records);
-    }
+    
 
     inf():string{
         return `interface {
