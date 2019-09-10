@@ -1,14 +1,17 @@
 <template >
-
+<div>
      <ivc-basic-report      
         :inf="inf()"
         :title="_('w_DoorReport')"
         :records="records"
         :isBusy="isBusy"
         :fields="fields"
+        :total="total"
+        :itemsProvider="itemsProvider"
         v-model="filter"
         v-on:input="onSubmit()"
      />          
+</div>
 </template>
            
 
@@ -22,6 +25,7 @@ export default class DoorReport extends Vue  {
     fields:any[] =[];
     isBusy:boolean=false;
     filter:any={};
+    total:number=0;
     created(){        
         this.fields = 
        [       
@@ -64,7 +68,7 @@ export default class DoorReport extends Vue  {
                 label: this._('resignationDate')
             },
             {
-                key: "Status",
+                key: "status",
                 label: this._('w_Member_Status')
             },
             {
@@ -88,20 +92,30 @@ export default class DoorReport extends Vue  {
         
     }
     
-  private async getData() {        
-        try{    
-            this.isBusy=true;
-            if(this.filter && this.filter.ResignDate) this.filter.ResignationDate=this.filter.ResignDate.toISOString();
-            let resp: any=await this.$server.R("/report/door" as any,this.filter||{});
-            this.records=resp.results;
-        }catch(err){
-            console.error(err);
-        }finally{
-            this.isBusy=false;
-        }
-  }
+  
 
+    itemsProvider (ctx) {
+        // Here we don't set isBusy prop, so busy state will be
+        // handled by table itself
+        // this.isBusy = true
 
+        console.log("filter", this.filter);
+
+        let promise = this.$server.C('/report/door'as any, Object.assign({paging:{page:ctx.currentPage, pageSize:ctx.perPage}}, this.filter));
+
+        return promise.then(async (data:any) => {
+          this.total = data.paging.total;          
+          // Here we could override the busy state, setting isBusy to false
+          // this.isBusy = false
+          return(data.results);
+        }).catch(error => {
+          // Here we could override the busy state, setting isBusy to false
+          // this.isBusy = false
+          // Returning an empty array, allows table to correctly handle
+          // internal busy state in case of error
+          return []
+        })
+      }
 
 
     inf():string{
@@ -124,7 +138,7 @@ export default class DoorReport extends Vue  {
     
     async onSubmit(){      
         console.log("filter", this.filter) ;
-        await this.getData();
+        //await this.getData();
     }
 }
 </script>
