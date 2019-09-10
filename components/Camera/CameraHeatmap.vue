@@ -96,7 +96,12 @@ export class CameraHeatmap extends Vue {
     heatMapPosition: IHeatMapPosition[];
 
     @Watch("heatMapPosition", { deep: true })
-    private watchPageType(newVal, oldVal) {
+    private watchHeatMapPosition(newVal, oldVal) {
+        this.initMap();
+    }
+
+    @Watch("mapImage", { deep: true })
+    private watchMapImage(newVal, oldVal) {
         this.initMap();
     }
 
