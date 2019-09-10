@@ -738,13 +738,17 @@ export default class Member extends Vue {
     }
   }
   async checkDuplication(member:any):Promise<boolean>{
+    console.log("employee number check", member.employeeNumber);
     let empNoDuplication:any = await this.$server.R("/acs/member",{eEmployeeNumber:member.employeeNumber});
       if(empNoDuplication.results.length>0){        
         let isDuplicate = member.objectId ? empNoDuplication.results[0].objectId!=member.objectId : true;
-        if(isDuplicate)alert(this._("w_Error_DuplicateEmployeeNumber"));
-        return isDuplicate;
+        if(isDuplicate){
+          alert(this._("w_Error_DuplicateEmployeeNumber"));
+          return isDuplicate;
+        }
       }
       if(!member.cardNumber)return false;
+      console.log("card number check", member.cardNumber);
       let cardDuplication:any = await this.$server.R("/acs/member",{eCardNumber:member.cardNumber});
       if(cardDuplication.results.length>0){          
         let isDuplicate = member.objectId ? cardDuplication.results[0].objectId!=member.objectId : true;          
