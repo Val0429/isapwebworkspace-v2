@@ -50,6 +50,7 @@ import Datetime from '@/services/Datetime';
 export class ToolRepeatVisitorFilter extends Vue {
 
     siteSelectItem: any = {};
+    numberOfVisitorSelectItem: any = {};
 
     // 收合card控制
     visible: boolean = true;
@@ -58,13 +59,26 @@ export class ToolRepeatVisitorFilter extends Vue {
         siteIds: [],
         startDate: new Date(),
         endDate: new Date(),
+        numberOfVisitor: undefined
     };
 
     created() {
         this.initSelectItemSite();
+        this.initNumberOfVisitorSelectItem();
     }
 
     mounted() {
+    }
+
+    initNumberOfVisitorSelectItem() {
+        this.numberOfVisitorSelectItem = {
+            1: this._('w_ReportVisitor_1'),
+            2: this._('w_ReportVisitor_2'),
+            3: this._('w_ReportVisitor_3'),
+            4: this._('w_ReportVisitor_4'),
+            5: this._('w_ReportVisitor_55'),
+            6: this._('w_ReportVisitor_5'),
+        }
     }
 
     async initSelectItemSite() {
@@ -106,6 +120,9 @@ export class ToolRepeatVisitorFilter extends Vue {
             case 'endDate':
                 this.inputFormData.endDate = data.value;
                 break;
+                case 'numberOfVisitor':
+                this.inputFormData.numberOfVisitor = data.value;
+                break;
         }
     }
 
@@ -115,6 +132,7 @@ export class ToolRepeatVisitorFilter extends Vue {
             siteIds: data.siteIds,
             startDate: data.startDate,
             endDate: data.endDate,
+            numberOfVisitor: data.numberOfVisitor
         };
 
         if (!Datetime.CheckDate(data.startDate, data.endDate)) {
@@ -129,6 +147,8 @@ export class ToolRepeatVisitorFilter extends Vue {
             submitParam.startDate = Datetime.DateStart(data.startDate).toISOString();
             submitParam.endDate = Datetime.DateEnd(data.endDate).toISOString();
         }
+
+        console.log('submitParam ~ ', submitParam)
 
         this.visible = false;
         this.$emit('filter', submitParam)
@@ -164,6 +184,12 @@ export class ToolRepeatVisitorFilter extends Vue {
                 */
                 endDate: any;
 
+
+                /**
+                 * @uiLabel - ${this._("w_ReportVisitor_numberOfVisitor")}
+                 * @uiColumnGroup - row1
+                 */
+                numberOfVisitor?: ${toEnumInterface(this.numberOfVisitorSelectItem as any, false)};
             }
         `;
     }
