@@ -395,9 +395,10 @@ export default class Member extends Vue {
     await this.initCredentialProfile();
     
   }
-  getMemberFields(){
-    if(this.savedFieldOptions.length==0 && (this.$refs as any).listTable.result.results.length>0){
-      for(let key of Object.keys((this.$refs as any).listTable.result.results[0])){
+  async getMemberFields(){
+    if(this.savedFieldOptions.length==0){
+      let memberFields:any = await this.$server.R("/acs/memberfields" as any, {});
+      for(let key of memberFields){
         if(this.excludeFields.find(x=>x==key))continue;
         this.savedFieldOptions.push({value:key, text:this._(key as any)});
       }
@@ -406,14 +407,14 @@ export default class Member extends Vue {
     }
     console.log("savedFieldOptions", this.savedFieldOptions);
   }
-  showExportDialog(){
-    this.getMemberFields();
+  async showExportDialog(){
+    await this.getMemberFields();
     this.exportVisible=true;
   }
   importVisible:boolean=false;
   async showImportDialog(){
     if(this.storedPermissionOptions.length==0) await this.initPremission();
-    this.getMemberFields();
+    await this.getMemberFields();
     this.importVisible=true;
   }
   importRecords:any[]=[];
@@ -595,7 +596,11 @@ export default class Member extends Vue {
   savedFieldOptions=[];
   fieldOptions=[];
   fieldSelected=[];
-  excludeFields = ["objectId","cardAllNumber","pinDigit","profileName", "technologyCode", "pinMode","primaryWorkgroupId","void", "cardholderPortrait"];
+  excludeFields = ["cardAllNumber","pinDigit","profileName", 
+              "technologyCode", "token", "status","permissionTable.tablename",
+              "createdAt","updatedAt","isImageChanged",
+              "pinMode","primaryWorkgroupId",
+              "cardholderPortrait"];
   selectedItem(data) {
     this.isSelected = data;
     this.selectedDetail = data;
