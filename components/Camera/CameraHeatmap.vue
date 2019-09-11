@@ -161,15 +161,9 @@ export class CameraHeatmap extends Vue {
         me.image.src = me.mapImage.src;
 
         me.image.onload = () => {
-            me.width_r = me.mapImage.width / me.image.width;
-            me.height_r = me.mapImage.height / me.image.height;
-            me.cx.drawImage(
-                me.image,
-                0,
-                0,
-                me.mapImage.width,
-                me.mapImage.height
-            );
+            me.width_r = 600 / me.mapImage.width;
+            me.height_r = 400 / me.mapImage.height;
+            me.cx.drawImage(me.image, 0, 0, 600, 400);
             me.initHeatmap();
         };
     }
