@@ -63,8 +63,8 @@ export default class VisitorCardReport extends Vue  {
 
         ];
 
-        this.filter.DateStart = new Date();
-        this.filter.DateEnd = new Date();
+        this.filter.Start = new Date();
+        this.filter.End = new Date();
         
     }
     
@@ -104,13 +104,13 @@ export default class VisitorCardReport extends Vue  {
              * @uiType - iv-form-date
              * @uiLabel - ${this._('w_Report_DateStart')}
              */
-            DateStart:Date;
+            Start:Date;
             /**
              * @uiColumnGroup - row1
              * @uiType - iv-form-date
              * @uiLabel - ${this._('w_Report_DateEnd')}
              */
-            DateEnd:Date;
+            End:Date;
         }`;
             
     }

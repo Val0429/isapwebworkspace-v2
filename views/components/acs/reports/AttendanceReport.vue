@@ -82,7 +82,7 @@ export default class EmployeeReport extends Vue  {
             }
 
         ];
-        this.filter= {DateStart: new Date(), DateEnd : new Date()};
+        this.filter= {Start: new Date(), End : new Date()};
         
     }
     
@@ -149,13 +149,13 @@ export default class EmployeeReport extends Vue  {
              * @uiType - iv-form-date
              * @uiLabel - ${this._('w_Report_DateStart')}
              */
-            DateStart:Date;
+            Start:Date;
             /**
              * @uiColumnGroup - datefilter
              * @uiType - iv-form-date
              * @uiLabel - ${this._('w_Report_DateEnd')}
              */
-            DateEnd:Date;
+            End:Date;
         }`;
             
     }
