@@ -7,6 +7,8 @@
         :isBusy="isBusy"
         :fields="fields"
         v-model="filter"
+        :total="total"
+        :itemsProvider="itemsProvider"
         v-on:input="onSubmit($event)"        
         v-on:update="onUpdate($event)"
      />                  
@@ -21,6 +23,7 @@ import moment, { months } from 'moment';
 @Component
 export default class ContractorReport extends Vue  {
     records:any[]=[];
+    total:number=0;
     fields:any[] =[];
     isBusy:boolean=false;
     filter:any={
@@ -96,31 +99,29 @@ export default class ContractorReport extends Vue  {
 
     }
     
-  private async getData() { 
-      try{    
-        if(!this.filter){            
-            this.filter = {
-                Start : moment(new Date()).add(-3, 'M').toDate(),
-                End : new Date()
-            };
-            return;
-        }
-        this.isBusy=true;           
-        this.filter.Start.setHours(0,0,0,0);        
-        this.filter.End.setHours(23,59,59,999);
-        // let card_no = this.filter.CardNumber;
-        let start = this.filter.Start.toISOString();
-        let end = this.filter.End.toISOString();
-        let resp: any=await this.$server.R("/report/contractor" as any, Object.assign(this.filter, {start, end}));
-        this.records= resp.results;
+  
+    itemsProvider (ctx) {
+        // Here we don't set isBusy prop, so busy state will be
+        // handled by table itself
+        // this.isBusy = true
 
-      }catch(err){
-          console.error(err);
-      }finally{
-        this.isBusy=false;
+        console.log("filter", this.filter);
+
+        let promise = this.$server.C('/report/contractor'as any, Object.assign({paging:{page:ctx.currentPage, pageSize:ctx.perPage}}, this.filter));
+
+        return promise.then(async (data:any) => {
+          this.total = data.paging.total;          
+          // Here we could override the busy state, setting isBusy to false
+          // this.isBusy = false
+          return(data.results);
+        }).catch(error => {
+          // Here we could override the busy state, setting isBusy to false
+          // this.isBusy = false
+          // Returning an empty array, allows table to correctly handle
+          // internal busy state in case of error
+          return []
+        })
       }
-  }
-
 
     inf():string{
         return `interface {
@@ -189,7 +190,7 @@ export default class ContractorReport extends Vue  {
     async onSubmit($event){    
         //this.filter=$event;  
         console.log("filter", this.filter) ;
-        await this.getData();
+       
     }
     
      
