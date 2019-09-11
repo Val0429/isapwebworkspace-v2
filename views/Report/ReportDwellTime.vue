@@ -216,7 +216,6 @@ import excel2json from "@/services/Excel/excel2json";
 import ReportPDFService from "@/components/Reports/models/ReportPDFService";
 import { EFileType, IReportTableTitle } from "@/components/Reports";
 
-
 enum ETableStep {
     mainTable = "mainTable",
     sunTable = "sunTable",
@@ -549,13 +548,16 @@ export default class ReportDwellTime extends Vue {
                                     ) {
                                         item1Count.value += Math.round(
                                             summaryData.total /
-                                                summaryData.count
+                                                summaryData.count /
+                                                60
                                         );
                                         item1Count.valueRatio += ReportService.countRatio(
                                             summaryData.total /
-                                                summaryData.count,
+                                                summaryData.count /
+                                                60,
                                             summaryData.prevTotal /
-                                                summaryData.prevCount
+                                                summaryData.prevCount /
+                                                60
                                         );
                                     }
                                 }
@@ -565,7 +567,9 @@ export default class ReportDwellTime extends Vue {
                                     summaryData.area.objectId
                                 ) {
                                     item1Count.value += Math.round(
-                                        summaryData.total / summaryData.count
+                                        summaryData.total /
+                                            summaryData.count /
+                                            60
                                     );
                                     item1Count.valueRatio += 0;
                                 }
@@ -613,13 +617,16 @@ export default class ReportDwellTime extends Vue {
                                     ) {
                                         item1Count.value += Math.round(
                                             summaryData.total /
-                                                summaryData.count
+                                                summaryData.count /
+                                                60
                                         );
                                         item1Count.valueRatio += ReportService.countRatio(
                                             summaryData.total /
-                                                summaryData.count,
+                                                summaryData.count /
+                                                60,
                                             summaryData.prevTotal /
-                                                summaryData.prevCount
+                                                summaryData.prevCount /
+                                                60
                                         );
                                     }
                                 }
@@ -629,12 +636,17 @@ export default class ReportDwellTime extends Vue {
                                     summaryData.area.objectId
                                 ) {
                                     item1Count.value += Math.round(
-                                        summaryData.total / summaryData.count
+                                        summaryData.total /
+                                            summaryData.count /
+                                            60
                                     );
                                     item1Count.valueRatio += ReportService.countRatio(
-                                        summaryData.total / summaryData.count,
+                                        summaryData.total /
+                                            summaryData.count /
+                                            60,
                                         summaryData.prevTotal /
-                                            summaryData.prevCount
+                                            summaryData.prevCount /
+                                            60
                                     );
                                 }
                             }
@@ -738,7 +750,7 @@ export default class ReportDwellTime extends Vue {
 
         // TODO: wait api
         await this.$server
-                        .C("/report/dwell-time/summary-threshold", filterData)
+            .C("/report/dwell-time/summary-threshold", filterData)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     this.detailRData = response;
@@ -850,12 +862,13 @@ export default class ReportDwellTime extends Vue {
                                 deviceGroup.objectId
                             ) {
                                 item1Count.value += Math.round(
-                                    summaryData.total / summaryData.count
+                                    summaryData.total / summaryData.count / 60
                                 );
                                 item1Count.valueRatio += ReportService.countRatio(
-                                    summaryData.total / summaryData.count,
+                                    summaryData.total / summaryData.count / 60,
                                     summaryData.prevTotal /
-                                        summaryData.prevCount
+                                        summaryData.prevCount /
+                                        60
                                 );
                             }
                         }
@@ -865,11 +878,13 @@ export default class ReportDwellTime extends Vue {
                             summaryData.area.objectId
                         ) {
                             item1Count.value += Math.round(
-                                summaryData.total / summaryData.count
+                                summaryData.total / summaryData.count / 60
                             );
                             item1Count.valueRatio += ReportService.countRatio(
-                                summaryData.total / summaryData.count,
-                                summaryData.prevTotal / summaryData.prevCount
+                                summaryData.total / summaryData.count / 60,
+                                summaryData.prevTotal /
+                                    summaryData.prevCount /
+                                    60
                             );
                         }
                     }
@@ -2649,62 +2664,93 @@ export default class ReportDwellTime extends Vue {
                     summaryDateFormat == tempDateFormat &&
                     summary.site.objectId == tempChartData.siteObjectId
                 ) {
-
                     let ageRangeIndex = 0;
                     let dwellTimeRangeIndex = 0;
 
                     switch (tempChartData.dwellTimeRange) {
                         case EDwellTimeRange.lower5:
                             dwellTimeRangeIndex = 0;
-                            this.switchAgeRange(summary, dwellTimeRangeIndex, ageRangeIndex, tempChartData);
+                            this.switchAgeRange(
+                                summary,
+                                dwellTimeRangeIndex,
+                                ageRangeIndex,
+                                tempChartData
+                            );
                             break;
                         case EDwellTimeRange.m5_15:
                             dwellTimeRangeIndex = 1;
-                            this.switchAgeRange(summary, dwellTimeRangeIndex, ageRangeIndex, tempChartData);
+                            this.switchAgeRange(
+                                summary,
+                                dwellTimeRangeIndex,
+                                ageRangeIndex,
+                                tempChartData
+                            );
                             break;
                         case EDwellTimeRange.m15_30:
                             dwellTimeRangeIndex = 2;
-                            this.switchAgeRange(summary, dwellTimeRangeIndex, ageRangeIndex, tempChartData);
+                            this.switchAgeRange(
+                                summary,
+                                dwellTimeRangeIndex,
+                                ageRangeIndex,
+                                tempChartData
+                            );
                             break;
                         case EDwellTimeRange.m30_60:
                             dwellTimeRangeIndex = 3;
-                            this.switchAgeRange(summary, dwellTimeRangeIndex, ageRangeIndex, tempChartData);
+                            this.switchAgeRange(
+                                summary,
+                                dwellTimeRangeIndex,
+                                ageRangeIndex,
+                                tempChartData
+                            );
                             break;
                         case EDwellTimeRange.m60_120:
                             dwellTimeRangeIndex = 4;
-                            this.switchAgeRange(summary, dwellTimeRangeIndex, ageRangeIndex, tempChartData);
+                            this.switchAgeRange(
+                                summary,
+                                dwellTimeRangeIndex,
+                                ageRangeIndex,
+                                tempChartData
+                            );
                             break;
                         case EDwellTimeRange.upper120:
                             dwellTimeRangeIndex = 5;
-                            this.switchAgeRange(summary, dwellTimeRangeIndex, ageRangeIndex, tempChartData);
+                            this.switchAgeRange(
+                                summary,
+                                dwellTimeRangeIndex,
+                                ageRangeIndex,
+                                tempChartData
+                            );
                             break;
                     }
-                    this.sortMaleAndFemaleCountPercentData(summary, dwellTimeRangeIndex, tempChartData);
+                    this.sortMaleAndFemaleCountPercentData(
+                        summary,
+                        dwellTimeRangeIndex,
+                        tempChartData
+                    );
                 }
             }
 
             for (let saleRecord of this.responseData.salesRecords) {
-
                 let saleDateFormat = isOneDay
                     ? Datetime.DateTime2String(
-                        new Date(saleRecord.date),
-                        `${Datetime.FormatCheckDate} HH`
-                    )
+                          new Date(saleRecord.date),
+                          `${Datetime.FormatCheckDate} HH`
+                      )
                     : Datetime.DateTime2String(
-                        new Date(saleRecord.date),
-                        Datetime.FormatCheckDate
-                    );
-
+                          new Date(saleRecord.date),
+                          Datetime.FormatCheckDate
+                      );
 
                 let tempDateFormat = isOneDay
                     ? Datetime.DateTime2String(
-                        tempChartData.date,
-                        `${Datetime.FormatCheckDate} HH`
-                    )
+                          tempChartData.date,
+                          `${Datetime.FormatCheckDate} HH`
+                      )
                     : Datetime.DateTime2String(
-                        tempChartData.date,
-                        Datetime.FormatCheckDate
-                    );
+                          tempChartData.date,
+                          Datetime.FormatCheckDate
+                      );
                 if (
                     saleDateFormat == tempDateFormat &&
                     saleRecord.site.objectId == tempChartData.siteObjectId
@@ -2715,15 +2761,14 @@ export default class ReportDwellTime extends Vue {
                     break;
                 }
 
-                    if (
-                        saleDateFormat == tempDateFormat &&
-                        saleRecord.site.objectId == tempChartData.siteObjectId
-                    ) {
-                        tempChartData.revenue += saleRecord.revenue;
-                        tempChartData.transaction += saleRecord.transaction;
-                        break;
-                    }
-
+                if (
+                    saleDateFormat == tempDateFormat &&
+                    saleRecord.site.objectId == tempChartData.siteObjectId
+                ) {
+                    tempChartData.revenue += saleRecord.revenue;
+                    tempChartData.transaction += saleRecord.transaction;
+                    break;
+                }
             }
 
             // 取得天氣
@@ -2756,51 +2801,107 @@ export default class ReportDwellTime extends Vue {
         this.chartDatas = tempChartDatas;
     }
 
-    switchAgeRange(summary: any, dwellTimeRangeIndex: number, ageRangeIndex: number, tempChartData:any) {
+    switchAgeRange(
+        summary: any,
+        dwellTimeRangeIndex: number,
+        ageRangeIndex: number,
+        tempChartData: any
+    ) {
         ageRangeIndex = 0;
         switch (tempChartData.ageRange) {
             case EAgeRange.lower20:
                 ageRangeIndex = 0;
-                this.sortSummaryData(summary, dwellTimeRangeIndex, ageRangeIndex, tempChartData);
+                this.sortSummaryData(
+                    summary,
+                    dwellTimeRangeIndex,
+                    ageRangeIndex,
+                    tempChartData
+                );
                 break;
             case EAgeRange.m21_30:
                 ageRangeIndex = 1;
-                this.sortSummaryData(summary, dwellTimeRangeIndex, ageRangeIndex, tempChartData);
+                this.sortSummaryData(
+                    summary,
+                    dwellTimeRangeIndex,
+                    ageRangeIndex,
+                    tempChartData
+                );
                 break;
             case EAgeRange.m31_40:
                 ageRangeIndex = 2;
-                this.sortSummaryData(summary, dwellTimeRangeIndex, ageRangeIndex, tempChartData);
+                this.sortSummaryData(
+                    summary,
+                    dwellTimeRangeIndex,
+                    ageRangeIndex,
+                    tempChartData
+                );
                 break;
             case EAgeRange.m41_50:
                 ageRangeIndex = 3;
-                this.sortSummaryData(summary, dwellTimeRangeIndex, ageRangeIndex, tempChartData);
+                this.sortSummaryData(
+                    summary,
+                    dwellTimeRangeIndex,
+                    ageRangeIndex,
+                    tempChartData
+                );
                 break;
             case EAgeRange.m51_60:
                 ageRangeIndex = 4;
-                this.sortSummaryData(summary, dwellTimeRangeIndex, ageRangeIndex, tempChartData);
+                this.sortSummaryData(
+                    summary,
+                    dwellTimeRangeIndex,
+                    ageRangeIndex,
+                    tempChartData
+                );
                 break;
             case EAgeRange.upper61:
                 ageRangeIndex = 5;
-                this.sortSummaryData(summary, dwellTimeRangeIndex, ageRangeIndex, tempChartData);
+                this.sortSummaryData(
+                    summary,
+                    dwellTimeRangeIndex,
+                    ageRangeIndex,
+                    tempChartData
+                );
                 break;
         }
     }
 
-    sortSummaryData(summary: any, dwellTimeRangeIndex: number, ageRangeIndex: number, tempChartData:any) {
-        let tempMaleRange = summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[ageRangeIndex];
-        let tempFemaleRange = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[ageRangeIndex];
-        let tempMaleEmployeeRange = summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[ageRangeIndex];
-        let tempFemaleEmployeeRange = summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[ageRangeIndex];
+    sortSummaryData(
+        summary: any,
+        dwellTimeRangeIndex: number,
+        ageRangeIndex: number,
+        tempChartData: any
+    ) {
+        let tempMaleRange =
+            summary.dwellTimeRanges[dwellTimeRangeIndex].maleRanges[
+                ageRangeIndex
+            ];
+        let tempFemaleRange =
+            summary.dwellTimeRanges[dwellTimeRangeIndex].femaleRanges[
+                ageRangeIndex
+            ];
+        let tempMaleEmployeeRange =
+            summary.dwellTimeRanges[dwellTimeRangeIndex].maleEmployeeRanges[
+                ageRangeIndex
+            ];
+        let tempFemaleEmployeeRange =
+            summary.dwellTimeRanges[dwellTimeRangeIndex].femaleEmployeeRanges[
+                ageRangeIndex
+            ];
 
         tempMaleRange = tempMaleRange === null ? 0 : tempMaleRange;
         tempFemaleRange = tempFemaleRange === null ? 0 : tempFemaleRange;
-        tempMaleEmployeeRange = tempMaleEmployeeRange === null ? 0 : tempMaleEmployeeRange;
-        tempFemaleEmployeeRange = tempFemaleEmployeeRange === null ? 0 : tempFemaleEmployeeRange;
+        tempMaleEmployeeRange =
+            tempMaleEmployeeRange === null ? 0 : tempMaleEmployeeRange;
+        tempFemaleEmployeeRange =
+            tempFemaleEmployeeRange === null ? 0 : tempFemaleEmployeeRange;
 
         tempChartData.maleCount += tempMaleRange;
         tempChartData.femaleCount += tempFemaleRange;
 
-        tempChartData.dwellTime = HighchartsService.formatFloat(summary.total / 60);
+        tempChartData.dwellTime = HighchartsService.formatFloat(
+            summary.total / 60
+        );
 
         if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
             tempChartData.maleCount -= tempMaleEmployeeRange;
@@ -2808,18 +2909,27 @@ export default class ReportDwellTime extends Vue {
         }
     }
 
-    sortMaleAndFemaleCountPercentData(summary: any, dwellTimeRangeIndex: number, tempChartData:any) {
+    sortMaleAndFemaleCountPercentData(
+        summary: any,
+        dwellTimeRangeIndex: number,
+        tempChartData: any
+    ) {
         let maleTotal = summary.maleTotal;
         let femaleTotal = summary.femaleTotal;
         let maleAndFemaleTotal = maleTotal + femaleTotal;
 
         let maleNoEmployeeTotal = maleTotal - summary.maleEmployeeTotal;
         let femaleNoEmployeeTotal = femaleTotal - summary.femaleEmployeeTotal;
-        let maleAndFemaleNoEmployeeTotal = maleNoEmployeeTotal + femaleNoEmployeeTotal;
+        let maleAndFemaleNoEmployeeTotal =
+            maleNoEmployeeTotal + femaleNoEmployeeTotal;
 
         if (maleAndFemaleTotal > 0 && maleTotal > 0 && femaleTotal > 0) {
-	        tempChartData.maleCountPercent = HighchartsService.formatFloat((maleTotal / maleAndFemaleNoEmployeeTotal) * 100);
-	        tempChartData.femaleCountPercent = HighchartsService.formatFloat((femaleNoEmployeeTotal / maleAndFemaleNoEmployeeTotal) * 100);
+            tempChartData.maleCountPercent = HighchartsService.formatFloat(
+                (maleTotal / maleAndFemaleNoEmployeeTotal) * 100
+            );
+            tempChartData.femaleCountPercent = HighchartsService.formatFloat(
+                (femaleNoEmployeeTotal / maleAndFemaleNoEmployeeTotal) * 100
+            );
         } else if (femaleTotal > 0 && femaleTotal === 0) {
             tempChartData.maleCountPercent = 100;
             tempChartData.femaleCountPercent = 0;
@@ -2829,9 +2939,17 @@ export default class ReportDwellTime extends Vue {
         }
 
         if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
-            if (maleAndFemaleNoEmployeeTotal > 0 && maleNoEmployeeTotal > 0 && femaleNoEmployeeTotal > 0) {
-                tempChartData.maleCountPercent = HighchartsService.formatFloat((maleNoEmployeeTotal / maleAndFemaleNoEmployeeTotal) * 100);
-                tempChartData.femaleCountPercent = HighchartsService.formatFloat((femaleNoEmployeeTotal / maleAndFemaleNoEmployeeTotal) * 100);
+            if (
+                maleAndFemaleNoEmployeeTotal > 0 &&
+                maleNoEmployeeTotal > 0 &&
+                femaleNoEmployeeTotal > 0
+            ) {
+                tempChartData.maleCountPercent = HighchartsService.formatFloat(
+                    (maleNoEmployeeTotal / maleAndFemaleNoEmployeeTotal) * 100
+                );
+                tempChartData.femaleCountPercent = HighchartsService.formatFloat(
+                    (femaleNoEmployeeTotal / maleAndFemaleNoEmployeeTotal) * 100
+                );
             } else if (maleNoEmployeeTotal > 0 && femaleNoEmployeeTotal === 0) {
                 tempChartData.maleCountPercent = 100;
                 tempChartData.femaleCountPercent = 0;
