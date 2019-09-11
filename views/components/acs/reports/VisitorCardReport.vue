@@ -7,6 +7,8 @@
         :isBusy="isBusy"
         :fields="fields"
         v-model="filter"
+        :total="total"
+        :itemsProvider="itemsProvider"
         v-on:input="onSubmit()"
      />          
      
@@ -24,7 +26,7 @@ export default class VisitorCardReport extends Vue  {
     fields:any[] =[];
     isBusy:boolean=false;
     filter:any={};
-    
+    total:number=0;
   members: any[];
     created(){        
         this.fields = 
@@ -66,25 +68,28 @@ export default class VisitorCardReport extends Vue  {
         
     }
     
-  private async getData() {    
-      try{    
-        if(!this.filter)return;
-        this.isBusy=true;           
-        
-        this.filter.DateStart.setHours(0,0,0,0);        
-        this.filter.DateEnd.setHours(23,59,59,999);
-        let start = this.filter.DateStart.toISOString();
-        let end = this.filter.DateEnd.toISOString();
-        let resp: any=await this.$server.R("/report/visitor" as any, Object.assign(this.filter, {start, end}));
-        this.records = resp.results;
-        console.log("this.records", this.records);
+    itemsProvider (ctx) {
+        // Here we don't set isBusy prop, so busy state will be
+        // handled by table itself
+        // this.isBusy = true
 
-      }catch(err){
-          console.error(err);
-      }finally{
-        this.isBusy=false;
+        console.log("filter", this.filter);
+
+        let promise = this.$server.C('/report/visitor'as any, Object.assign({paging:{page:ctx.currentPage, pageSize:ctx.perPage}}, this.filter));
+
+        return promise.then(async (data:any) => {
+          this.total = data.paging.total;          
+          // Here we could override the busy state, setting isBusy to false
+          // this.isBusy = false
+          return(data.results);
+        }).catch(error => {
+          // Here we could override the busy state, setting isBusy to false
+          // this.isBusy = false
+          // Returning an empty array, allows table to correctly handle
+          // internal busy state in case of error
+          return []
+        })
       }
-  }
 
     inf():string{
         return `interface {            
@@ -112,7 +117,6 @@ export default class VisitorCardReport extends Vue  {
     
     async onSubmit(){      
         console.log("filter", this.filter) ;
-        await this.getData();
     }
 }
 </script>
