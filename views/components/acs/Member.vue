@@ -727,11 +727,14 @@ export default class Member extends Vue {
   }
   async saveAddOrEdit(inputFormData:any, accessRules:string[], checkDuplication:boolean=true,refreshAfterwards:boolean=true) {
     inputFormData.permissionTable = accessRules;
+    let defaultWg=this.workGroupSelectItems.find(x=>x.groupname=="正職");
+    this.inputFormData.personType = parseInt(this.inputFormData.personType || defaultWg.groupid );
     if (inputFormData.objectId) {
       if(checkDuplication){
         let isDuplicateFound = await this.checkDuplication(inputFormData);
         if(isDuplicateFound)return;
       }
+      
       await this.$server
         .U("/acs/member", inputFormData)
         .then((response: any) => {
