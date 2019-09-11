@@ -159,7 +159,6 @@ export class CameraHeatmap extends Vue {
         me.cx = me.canvasEl.getContext("2d");
         me.image = new Image();
         me.image.src = me.mapImage.src;
-
         me.image.onload = () => {
             me.width_r = 600 / me.mapImage.width;
             me.height_r = 400 / me.mapImage.height;
@@ -189,8 +188,8 @@ Vue.component("camera-heatmap", CameraHeatmap);
 
 .legend-area {
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: 2px;
+    right: -170px;
     padding: 10px;
     background: white;
     outline: 2px solid black;
