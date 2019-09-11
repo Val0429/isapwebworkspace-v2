@@ -758,6 +758,8 @@ export default class ReportHeatmap extends Vue {
 
 
         this.mapImage.src = datas[0] ? ServerConfig.url + datas[0].imageSrc : ImageBase64.pngEmpty;
+        this.mapImage.height = datas[0].height;
+        this.mapImage.width = datas[0].width;
         this.heatMapPosition = heatmap;
     }
 
@@ -786,6 +788,8 @@ export default class ReportHeatmap extends Vue {
                     heatmap = [].concat(...heatmaps);
                 }
                 this.mapImage.src = ServerConfig.url + summary.imageSrc;
+                this.mapImage.height = datas[0].height;
+                this.mapImage.width = datas[0].width;
             }
         }
 
@@ -820,6 +824,8 @@ export default class ReportHeatmap extends Vue {
                     heatmap = [].concat(...heatmaps);
                 }
                 this.mapImage.src = ServerConfig.url + summary.imageSrc;
+                this.mapImage.height = datas[0].height;
+                this.mapImage.width = datas[0].width;
             }
         }
 
