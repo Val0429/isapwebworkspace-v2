@@ -143,9 +143,9 @@ export default class QueryPermission extends Vue {
 
         return promise.then(async (data:any) => {
           this.total = data.paging.total;
-          let members = await this.getMembers(data.results.map(x=>x.tableid).join(","));
+          let members = await this.getMembers(data.results.map(x=>x.tablename).join(","));
             for(let item of data.results){
-                item.members = members.filter(x=>x.permissionTable.find(y=> y == item.tableid));
+                item.members = members.filter(x=>x.permissionTable.find(y=> y.objectId == item.objectId));
                 item.membercount = item.members.length;
                 item.doors = [];
                 item.doorcount = 0;
