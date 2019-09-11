@@ -1,0 +1,16 @@
+{
+    "name": "workspace-master",
+    "version": "1.00.00",
+    "description": "ISap",
+    "scripts": {
+        "start": "npm run start --prefix ../",
+        "build": "npm run build --prefix ../",
+        "create-project": "git checkout --orphan"
+    },
+    "dependencies": {
+        "jspdf": "^1.5.3",
+        "vue-html2canvas": "0.0.4",
+        "vue-loading-overlay": "^3.2.0",
+        "jssha": "^2.3.1"
+    }
+}
