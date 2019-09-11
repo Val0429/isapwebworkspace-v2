@@ -266,6 +266,8 @@ export default class LangObject {
     w_Acs_Card_Range = 'Card Range';
     w_Acs_Card_Staff = 'Staff';
     w_Acs_Card_Visitor = 'Visitor';
+    w_Acs_Card_Min = 'Min';
+    w_Acs_Card_Max = 'Max';
     w_Acs_3rd_Acs = 'Using 3rd Party ACS';
     w_Acs_Acs = 'ACS server Setting';
     w_Acs_IPAddress = 'IP Address';

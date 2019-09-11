@@ -266,6 +266,8 @@ export default class LangObject {
     w_Acs_Card_Range = '卡號範圍';
     w_Acs_Card_Staff = '員工';
     w_Acs_Card_Visitor = '訪客';
+    w_Acs_Card_Min = '最小';
+    w_Acs_Card_Max = '最大';
     w_Acs_3rd_Acs = '是否使用3rd Party ACS';
     w_Acs_Acs = 'ACS server 設定';
     w_Acs_IPAddress = 'IP地址';

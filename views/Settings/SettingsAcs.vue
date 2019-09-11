@@ -4,30 +4,12 @@
             :visible="true"
             :label="_('w_Acs_Card_Range')"
         >
-            <ul v-if="hasData">
-                <li
-                    class="row col-sm"
-                    v-for="(i, index) in rangeType"
-                >
-                    {{ index == 0 ? _('w_Acs_Card_Staff') : _('w_Acs_Card_Visitor') }}
-                    <dl
-                        class="col-sm"
-                        v-for="(j, index) in i"
-                    >
-                        <dt>
-                            {{  index }}</dt>
-                        <dd>
-                            {{ j }}</dd>
-                    </dl>
-                </li>
-            </ul>
-            <div class="row col-sm">
-                <p>{{ _('w_Acs_3rd_Acs') }}</p>
-                <iv-form-switch
-                    class="col-sm"
-                    @input="getStatus($event)"
-                />
-            </div>
+            <iv-form
+                :interface="ICardRangeComponent()"
+                :value="initCardRange"
+                @update:*="dataUpdate"
+                @submit="cardRangeApi($event)"
+            ></iv-form>
         </iv-auto-card>
 
         <iv-auto-card
@@ -64,9 +46,7 @@ interface IInputFormData {
     enable: boolean;
 }
 
-@Component({
-    components: {}
-})
+@Component
 export default class SetupsEmail extends Vue {
     modalShow: boolean = false;
     hasData: boolean = false;
@@ -83,16 +63,7 @@ export default class SetupsEmail extends Vue {
     };
 
     rangeType: any = {};
-    cardRange: any = {
-        staffCardRange: {
-            min: 0,
-            max: 0
-        },
-        visitorCardRange: {
-            min: 0,
-            max: 0
-        }
-    };
+    initCardRange: any = {};
 
     inputTestEmail: string = "";
 
@@ -127,11 +98,8 @@ export default class SetupsEmail extends Vue {
             .R("/setting/acs")
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    this.hasData = true;
-                    this.rangeType = [
-                        response.staffCardRange,
-                        response.visitorCardRange
-                    ];
+                    this.isUse = response.isUseACSServer;
+                    this.initCardRange = response;
                     // Dialog.success(this._("w_MailSetting_EmailSuccess"));
                 });
             })
@@ -144,6 +112,22 @@ export default class SetupsEmail extends Vue {
             });
     }
 
+    async cardRangeApi(data) {
+        await this.$server
+            .U("/setting/acs", data)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    Dialog.success(this._("w_MailSetting_EmailSuccess"));
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_MailServer_Setting_Fail")
+                );
+            });
+    }
     // 新增MailServer
     async saveMailServer(data) {
         // port正則
@@ -190,8 +174,62 @@ export default class SetupsEmail extends Vue {
         //         );
         //     });
     }
-    getStatus(data: any) {
-        this.isUse = data;
+    dataUpdate(data: any) {
+        if (data.key == "isUseACSServer") {
+            this.isUse = data.value;
+        }
+    }
+
+    ICardRangeComponent() {
+        return `
+            interface ICardRangeComponent {
+                /**
+                 * @uiLabel - ${this._("w_Acs_Card_Staff")}
+                 */
+                staffCardRange: interface {
+                    /**
+                     * @uiLabel - ${this._("w_Acs_Card_Min")}
+                     * @uiPlaceHolder - ${this._("w_Acs_Card_Min")}
+                     * @uiType - iv-form-number
+                     * @uiColumnGroup - staff-range
+                     */
+                    min: number;
+                    /**
+                     * @uiLabel - ${this._("w_Acs_Card_Max")}
+                     * @uiPlaceHolder - ${this._("w_Acs_Card_Max")}
+                     * @uiType - iv-form-number
+                     * @uiColumnGroup - staff-range
+                     */
+                    max: number;
+                };
+
+                /**
+                 * @uiLabel - ${this._("w_Acs_Card_Visitor")}
+                 */
+                visitorCardRange: interface {
+                    /**
+                     * @uiLabel - ${this._("w_Acs_Card_Min")}
+                     * @uiPlaceHolder - ${this._("w_Acs_Card_Min")}
+                     * @uiType - iv-form-number
+                     * @uiColumnGroup - visitor-range
+                     */
+                    min: number;
+                    /**
+                     * @uiLabel - ${this._("w_Acs_Card_Max")}
+                     * @uiPlaceHolder - ${this._("w_Acs_Card_Max")}
+                     * @uiType - iv-form-number
+                     * @uiColumnGroup - visitor-range
+                     */
+                    max: number;
+                };
+
+                /**
+                 * @uiLabel - ${this._("w_Acs_3rd_Acs")}
+                 * @uiType - iv-form-switch
+                 */
+                isUseACSServer?: boolean;
+            }
+        `;
     }
 
     IMailServerComponent() {
@@ -203,7 +241,6 @@ export default class SetupsEmail extends Vue {
                  * @uiType - iv-form-ip
                  */
                 ip: string;
-
 
                  /**
                  * @uiLabel - ${this._("w_Acs_HTTPPort")}

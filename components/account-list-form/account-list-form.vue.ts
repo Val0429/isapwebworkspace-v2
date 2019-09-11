@@ -102,15 +102,23 @@ export class AccountListForm extends Vue implements IFormQuick {
 
                         /**
                          * @uiLabel - ${this._('w_Account_CompanyName')}
+                         * @uiHidden - ${type == EFormQuick.Add && !this.selectedRole}
                          * @uiDisabled - ${type !== EFormQuick.Add}
                          */
                         company: ${type !== EFormQuick.Add ? 'string' : toEnumInterface(this.selectItem.company, false)};
 
                         /**
                          * @uiLabel - ${this._('w_Account_FloorName')}
+                         * @uiHidden - ${type !== EFormQuick.Preview}
                          * @uiDisabled - ${type === EFormQuick.Preview}
                          */
-                        floors: ${type == EFormQuick.Preview ? 'string' : toEnumInterface(this.selectItem.floors, true)};
+                        floorsText?: ${type == EFormQuick.Preview ? 'string' : toEnumInterface(this.selectItem.floors, true)};
+
+                        /**
+                         * @uiLabel - ${this._('w_Account_FloorName')}
+                         * @uiHidden - ${type === EFormQuick.Preview}
+                         */
+                        floors?: ${toEnumInterface(this.selectItem.floors, true)};
 
                         /**
                          * @uiLabel - ${this._('w_Account_UserName')}
@@ -154,23 +162,21 @@ export class AccountListForm extends Vue implements IFormQuick {
     //     row = { ...row, username: this.$user.user.username, data: { firstname: row.firstname, groups: row.groups }, roles: row.groups };
     //     return row;
     // }
-
     prePreview(row: any) {
-        row = { ...row, role: row.role, company: row.company.name, floors: row.floors.map((v) => v.name).join(', ') };
+        row = { ...row, role: row.role, company: row.company.name, floorsText: row.floors.map((v) => v.name).join(', '), floors: row.floors.map((v) => v.name) };
+        console.log('prePreview', row);
         return row;
     }
-    preEdit?(row: any) {
-        console.log('Edit', row);
-        // row = { ...row, groups: row.data.groups.map((v) => v.name), firstname: row.data.firstname, roles: row.roles.map((v) => v.name) };
-        // return row;
-    }
-    // postEdit?(row: any) {
-    //     row = { ...row, username: this.$user.user.username, data: { firstname: row.firstname, groups: row.groups }, roles: row.groups };
+    // preEdit(row: any) {
+    //     row = { ...row, groups: row.data.groups.map((v) => v.name), firstname: row.data.firstname, roles: row.roles.map((v) => v.name) };
     //     return row;
     // }
+    postEdit?(row: any) {
+        row = { datas: [{ ...row, floorIds: row.floors }] };
+        return row;
+    }
 
-    private selectedRole: boolean = false;
-    private selectedCompany: boolean = this.selectedRole ? true : false;
+    selectedRole: boolean = false;
     selectItem: {
         role: any;
         company: any;
@@ -180,13 +186,10 @@ export class AccountListForm extends Vue implements IFormQuick {
         company: {},
         floors: {},
     };
+    companiesData: any = {};
     private async doMounted() {
         this.initSelectItemRole();
         this.initSelectItemCompanyWithAPI();
-    }
-
-    selectedItem(datas: any) {
-        console.log(datas);
     }
 
     updateData(datas: any) {
@@ -196,7 +199,6 @@ export class AccountListForm extends Vue implements IFormQuick {
         if (datas.key == 'company') {
             this.initSelectItemFloorWithCompany(datas.value);
         }
-        // this.inputFormData[datas.key] = datas.value;
     }
 
     initSelectItemRole() {
@@ -236,7 +238,7 @@ export class AccountListForm extends Vue implements IFormQuick {
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     if (response.results != undefined && response.results.length > 0) {
-                        // this.companies = JSON.parse(JSON.stringify(response.results));
+                        this.companiesData = JSON.parse(JSON.stringify(response.results));
                         for (let ret of response.results) {
                             if (ret.objectId != undefined && ret.name != undefined) {
                                 this.$set(this.selectItem.company, ret.objectId, ret.name);
@@ -249,14 +251,11 @@ export class AccountListForm extends Vue implements IFormQuick {
                 return ResponseFilter.catchError(this, e);
             });
     }
-
     async initSelectItemFloorWithCompany(companyId: string) {
         this.selectItem.floors = {};
-        for (let company of this.selectItem.company) {
-            console.log(company);
+        for (let company of this.companiesData) {
             if (companyId == company.objectId) {
                 for (let floor of company.floors) {
-                    console.log('!!! floor', floor);
                     this.$set(this.selectItem.floors, floor.objectId, floor.name);
                 }
                 break;

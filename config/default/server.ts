@@ -17,6 +17,7 @@ interface RestfulRequest extends ApisRequestBase {
 
         ////// Setting //////
         '/setting/acs': [any, any, false];
+        '/setting/acs-group': [any, any, false];
         '/setting/push-notification': [any, any, false];
         '/setting/sgsms': [any, any, false];
         '/setting/smtp': [any, any, false];
@@ -53,6 +54,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/client/hikvision': [any, any, false];
 
         ////// Setting //////
+        '/setting/acs-group': [any, any, false];
         '/setting/sgsms/test': [any, any, false];
         '/setting/smtp/test': [any, any, false];
 
@@ -78,6 +80,7 @@ interface RestfulRequest extends ApisRequestBase {
 
         ////// Setting //////
         '/setting/acs': [any, any, false];
+        '/setting/acs-group': [any, any, false];
         '/setting/push-notification': [any, any, false];
         '/setting/sgsms': [any, any, false];
         '/setting/smtp': [any, any, false];
@@ -91,6 +94,9 @@ interface RestfulRequest extends ApisRequestBase {
     Delete: {
         ////// User //////
         '/user/web': [any, any, false];
+
+        ////// Setting //////
+        '/setting/acs-group': [any, any, false];
 
         ////// Location //////
         '/location/building': [any, any, false];

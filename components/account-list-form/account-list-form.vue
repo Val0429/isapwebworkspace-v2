@@ -2,7 +2,6 @@
     <iv-form-quick
         ref="account-list"
         @mounted="doMounted"
-        @selected="selectedItem"
         @update:*="updateData($event)"
     >
         <!-- 50) custom view templates with <template #view.* /> -->
