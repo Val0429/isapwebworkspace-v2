@@ -146,7 +146,8 @@
 
         <template #imageSrc="{ $attrs, $listeners}" v-if="inputFormData.cardholderPortrait">
           <label class="col-md-12">{{_("w_Member_PersonPic")}}</label>
-          <img class="imgSide" v-bind="$attrs" v-on="$listeners" :src="inputFormData.cardholderPortrait" />
+          <img class="imgSide" v-bind="$attrs" v-on="$listeners"
+             :src="inputFormData.cardholderPortrait.indexOf(',')>-1?inputFormData.cardholderPortrait:('data:image/png;base64,'+inputFormData.cardholderPortrait)" />
         </template>
 
         <template #permissionTable="{ $attr }">
@@ -1918,12 +1919,12 @@ export default class Member extends Vue {
     if ($event.EndDateEnd) $event.end2 = $event.EndDateEnd.toISOString();
     
     let params = $event;
-    for (const key in params) {
-      let value = params[key];
-      if(!value)continue;
-      let indexOfhash = value.indexOf('#');
-      if(indexOfhash>-1)params[key]=value.substr(0, indexOfhash);
-    }
+    // for (const key in params) {
+    //   let value = params[key];
+    //   if(!value)continue;
+    //   let indexOfhash = value.indexOf('#');
+    //   if(indexOfhash>-1)params[key]=value.substr(0, indexOfhash);
+    // }
     this.getParams = params;
     this.submitClicked=true;
   }
