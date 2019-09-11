@@ -433,7 +433,7 @@ export default class ReportTraffic extends Vue {
 
         for (let site of this.sites) {
             let item = {
-                value: site.objectId,
+                id: site.objectId,
                 text: site.name,
                 officeHour: site.officeHour
             };

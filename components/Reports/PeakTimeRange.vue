@@ -298,7 +298,7 @@ export class PeakTimeRange extends Vue {
 
             //body
             for (let siteItem of this.siteItems) {
-                if (siteItem.value == timeRangeDataItem.site) {
+                if (siteItem.id == timeRangeDataItem.site) {
                     for (let bodyItme of timeRangeDataItem.body) {
                         let contexts = [];
                         for (let headItem of this.pData.head) {

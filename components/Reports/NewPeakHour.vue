@@ -1,12 +1,13 @@
 <template>
     <div>
         <h2 v-if="dayXSiteX != eDayXSiteX.none">{{_('w_PeakHours')}}</h2>
-        <b-form-select
+        <iv-form-selection
             v-if="dayXSiteX == eDayXSiteX.siteXDayX"
             v-model="site"
             :options="siteItems"
-            @change="changeSite()"
-        ></b-form-select>
+            class="mt-4 mb-0"
+            @input="changeSite()"
+        ></iv-form-selection>
         <apexchart
             v-if="chartItem.mount"
             type=heatmap
@@ -365,14 +366,14 @@ export class NewPeakHour extends Vue {
         }
 
         if (this.site == "") {
-            this.site = this.siteItems[0].value;
+            this.site = this.siteItems[0].id;
         }
 
         for (let data of this.timeRangeData) {
             let sTime = null;
             let eTime = null;
             for (let officeHourItem of this.siteItems.filter(
-                x => x.value == data.site
+                x => x.id == data.site
             )[0].officeHour) {
                 if (
                     sTime == null ||
@@ -405,7 +406,7 @@ export class NewPeakHour extends Vue {
             }
 
             this.chartItem.series.push({
-                name: this.siteItems.filter(x => x.value == data.site)[0].text,
+                name: this.siteItems.filter(x => x.id == data.site)[0].text,
                 data: JSON.parse(JSON.stringify(yList))
             });
         }
@@ -484,7 +485,7 @@ export class NewPeakHour extends Vue {
         }
 
         if (this.site == "") {
-            this.site = this.siteItems[0].value;
+            this.site = this.siteItems[0].id;
         }
 
         for (let data of this.timeRangeData) {
@@ -494,7 +495,7 @@ export class NewPeakHour extends Vue {
             let sTime = null;
             let eTime = null;
             for (let officeHourItem of this.siteItems.filter(
-                x => x.value == this.site
+                x => x.id == this.site
             )[0].officeHour) {
                 if (
                     sTime == null ||

@@ -1,5 +1,5 @@
 interface ISiteItems {
-    value: string; //ObjectId
+    id: string; //ObjectId
     text: string; //Site Name
     officeHour: any[]; //officeTime
 }
