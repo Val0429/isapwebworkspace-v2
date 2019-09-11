@@ -105,11 +105,6 @@ export class CameraHeatmap extends Vue {
         this.initMap();
     }
 
-    @Watch("mapImage", { deep: true })
-    private watchMapImage(newVal, oldVal) {
-        this.initMap();
-    }
-
     created() {
         this.legendTitle = this._("w_Navigation_Report_HeatmapLegend");
     }

@@ -388,7 +388,7 @@ export default class ReportHeatmap extends Vue {
     }
 
     async initSelectItemArea() {
-        let tempAreaSelectItem = { all: this._("w_AllAreas") };
+        let tempAreaSelectItem = {};
 
         const readParam: {
             siteId: string;
@@ -420,7 +420,7 @@ export default class ReportHeatmap extends Vue {
     }
 
     async initSelectItemDeviceGroup() {
-        let tempDeviceGroupSelectItem = { all: this._("w_AllDeviceGroups") };
+        let tempDeviceGroupSelectItem = {};
         this.deviceGroupSelectItem = {};
 
         let readParam: {
@@ -462,7 +462,7 @@ export default class ReportHeatmap extends Vue {
     }
 
     async initSelectItemDevice() {
-        let tempDeviceSelectItem = { all: this._("w_AllDevices") };
+        let tempDeviceSelectItem = {};
         this.deviceSelectItem = {};
 
         const readParam: {
@@ -1201,6 +1201,7 @@ export default class ReportHeatmap extends Vue {
                 return false;
             }
         }
+        console.log('this.deviceSummaryFilter ~ ', this.deviceSummaryFilter)
     }
 
     receiveType(type) {
