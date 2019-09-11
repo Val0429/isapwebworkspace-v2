@@ -248,11 +248,31 @@ export default class LangObject {
     w_Blacklist_Company = '所屬公司';
     w_Blacklist_Reason = '原因';
 
+    ////////////////// HikVision FR Tablet //////////////////
+    w_Hik_FrList = 'FR Tablet 列表';
+    w_Hik_AddFr = '增加 FR Tablet';
+    w_Hik_EditFr = '編輯 FR Tablet';
+    w_Hik_DelFr = '刪除 FR Tablet';
+    w_Hik_ViewFr = '預覽 FR Tablet';
+    w_Hik_Index = 'Index';
+    w_Hik_IPAddress = 'IP 地址';
+    w_Hik_HTTPPort = 'HTTP 埠';
+    w_Hik_Device_Name = '設備名稱';
+    w_Hik_Position = '設備所在';
+    w_Hik_Status = 'Tablet 狀態';
+    w_Hik_Endpoint_Name = 'Endpoint Name';
+
     ////////////////// ACS Setting //////////////////
+    w_Acs_Card_Range = '卡號範圍';
+    w_Acs_Card_Staff = '員工';
+    w_Acs_Card_Visitor = '訪客';
+    w_Acs_3rd_Acs = '是否使用3rd Party ACS';
     w_Acs_Acs = 'ACS server 設定';
     w_Acs_IPAddress = 'IP地址';
     w_Acs_HTTPPort = 'HTTP埠';
+    w_Acs_ServiceName = 'Service Name';
     w_Acs_FingerPrinter = 'Finger Printer';
+    w_Acs_AccessGroupName = 'Access Group Name';
 
     ////////////////// SMTP Setting //////////////////
     w_Smtp_Smtp = 'SMTP 設定';

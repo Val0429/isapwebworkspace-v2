@@ -1,8 +1,38 @@
 <template>
     <div class="animated fadeIn">
-
         <iv-auto-card
             :visible="true"
+            :label="_('w_Acs_Card_Range')"
+        >
+            <ul v-if="hasData">
+                <li
+                    class="row col-sm"
+                    v-for="(i, index) in rangeType"
+                >
+                    {{ index == 0 ? _('w_Acs_Card_Staff') : _('w_Acs_Card_Visitor') }}
+                    <dl
+                        class="col-sm"
+                        v-for="(j, index) in i"
+                    >
+                        <dt>
+                            {{  index }}</dt>
+                        <dd>
+                            {{ j }}</dd>
+                    </dl>
+                </li>
+            </ul>
+            <div class="row col-sm">
+                <p>{{ _('w_Acs_3rd_Acs') }}</p>
+                <iv-form-switch
+                    class="col-sm"
+                    @input="getStatus($event)"
+                />
+            </div>
+        </iv-auto-card>
+
+        <iv-auto-card
+            v-if="isUse"
+            :visible="isUse"
             :label="_('w_Acs_Acs')"
         >
 
@@ -11,15 +41,6 @@
                 :value="inputFormData"
                 @submit="saveMailServer($event)"
             ></iv-form>
-
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToEmailTest()"
-                >{{ _('w_Test') }}
-                </b-button>
-            </template>
 
         </iv-auto-card>
 
@@ -48,6 +69,8 @@ interface IInputFormData {
 })
 export default class SetupsEmail extends Vue {
     modalShow: boolean = false;
+    hasData: boolean = false;
+    isUse: boolean = false;
 
     // input框綁定model資料
     inputFormData: IInputFormData = {
@@ -59,6 +82,18 @@ export default class SetupsEmail extends Vue {
         enable: true
     };
 
+    rangeType: any = {};
+    cardRange: any = {
+        staffCardRange: {
+            min: 0,
+            max: 0
+        },
+        visitorCardRange: {
+            min: 0,
+            max: 0
+        }
+    };
+
     inputTestEmail: string = "";
 
     created() {
@@ -66,7 +101,7 @@ export default class SetupsEmail extends Vue {
     }
 
     mounted() {
-        this.readMailServer();
+        this.initAcsApi();
     }
 
     clearMailServerData() {
@@ -87,51 +122,26 @@ export default class SetupsEmail extends Vue {
         this.modalShow = !this.modalShow;
     }
 
-    // 送出測試
-    async sendEmailTest() {
-        const mailServerObject: {
-            email: string;
-        } = {
-            email: this.inputTestEmail
-        };
-        Loading.show();
-        // await this.$server
-        //     .C("/test/email", mailServerObject)
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             Dialog.success(this._("w_MailServer_Test_Success"));
-        //             this.modalShow = !this.modalShow;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         this.modalShow = !this.modalShow;
-        //         return ResponseFilter.catchError(
-        //             this,
-        //             e,
-        //             this._("w_MailServer_Read_FailMsg")
-        //         );
-        //     });
-    }
-
-    async readMailServer() {
-        // await this.$server
-        //     .R("/config")
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             this.inputFormData.email = response.smtp.email;
-        //             this.inputFormData.host = response.smtp.host;
-        //             this.inputFormData.password = response.smtp.password;
-        //             this.inputFormData.port = response.smtp.port;
-        //             this.inputFormData.enable = response.smtp.enable;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(
-        //             this,
-        //             e,
-        //             this._("w_MailServer_Read_Fail")
-        //         );
-        //     });
+    async initAcsApi() {
+        await this.$server
+            .R("/setting/acs")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    this.hasData = true;
+                    this.rangeType = [
+                        response.staffCardRange,
+                        response.visitorCardRange
+                    ];
+                    // Dialog.success(this._("w_MailSetting_EmailSuccess"));
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e
+                    // this._("w_MailServer_Setting_Fail")
+                );
+            });
     }
 
     // 新增MailServer
@@ -180,12 +190,13 @@ export default class SetupsEmail extends Vue {
         //         );
         //     });
     }
+    getStatus(data: any) {
+        this.isUse = data;
+    }
 
     IMailServerComponent() {
         return `
              interface IMailServerComponent {
-
-
                 /**
                  * @uiLabel - ${this._("w_Acs_IPAddress")}
                  * @uiPlaceHolder - ${this._("w_Acs_IPAddress")}
@@ -205,24 +216,36 @@ export default class SetupsEmail extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Account")}
                  * @uiPlaceHolder - ${this._("w_Account")}
+                 * @uiHidden - true
                  */
                 account: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Password")}
                  * @uiPlaceHolder - ${this._("w_Password")}
                  * @uiType - iv-form-password
+                 * @uiHidden - true
                  */
                 password: string;
 
+                /**
+                 * @uiLabel - ${this._("w_Acs_ServiceName")}
+                 * @uiPlaceHolder - ${this._("w_Acs_ServiceName")}
+                 */
+                servicename: string;
 
                 /**
                  * @uiLabel - ${this._("w_Acs_FingerPrinter")}
                  * @uiPlaceHolder - ${this._("w_Acs_FingerPrinter")}
+                 * @uiHidden - true
                  */
                 fingerprinter: string;
 
+                /**
+                 * @uiLabel - ${this._("w_Acs_AccessGroupName")}
+                 * @uiPlaceHolder - ${this._("w_Acs_AccessGroupName")}
+                 */
+                accessgroup: string;
             }
         `;
     }

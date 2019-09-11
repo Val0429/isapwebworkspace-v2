@@ -248,11 +248,31 @@ export default class LangObject {
     w_Blacklist_Company = 'Company';
     w_Blacklist_Reason = 'Reason';
 
+    ////////////////// HikVision FR Tablet //////////////////
+    w_Hik_FrList = 'FR Tablet List';
+    w_Hik_AddFr = 'Add FR Tablet';
+    w_Hik_EditFr = 'Edit FR Tablet';
+    w_Hik_DelFr = 'Delete FR Tablet';
+    w_Hik_ViewFr = 'Preview FR Tablet';
+    w_Hik_Index = 'Index';
+    w_Hik_IPAddress = 'IP Address';
+    w_Hik_HTTPPort = 'HTTP Port';
+    w_Hik_Device_Name = 'Device Name';
+    w_Hik_Position = 'Device Postion';
+    w_Hik_Status = 'Status';
+    w_Hik_Endpoint_Name = 'Endpoint Name';
+
     ////////////////// ACS Setting //////////////////
+    w_Acs_Card_Range = 'Card Range';
+    w_Acs_Card_Staff = 'Staff';
+    w_Acs_Card_Visitor = 'Visitor';
+    w_Acs_3rd_Acs = 'Using 3rd Party ACS';
     w_Acs_Acs = 'ACS server Setting';
     w_Acs_IPAddress = 'IP Address';
     w_Acs_HTTPPort = 'HTTP Port';
+    w_Acs_ServiceName = 'Service Name';
     w_Acs_FingerPrinter = 'Finger Printer';
+    w_Acs_AccessGroupName = 'Access Group Name';
 
     ////////////////// SMTP Setting //////////////////
     w_Smtp_Smtp = 'SMTP Setting';

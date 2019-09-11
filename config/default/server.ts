@@ -16,6 +16,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/client/hikvision': [any, any, false];
 
         ////// Setting //////
+        '/setting/acs': [any, any, false];
         '/setting/push-notification': [any, any, false];
         '/setting/sgsms': [any, any, false];
         '/setting/smtp': [any, any, false];
@@ -76,6 +77,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/client/hikvision': [any, any, false];
 
         ////// Setting //////
+        '/setting/acs': [any, any, false];
         '/setting/push-notification': [any, any, false];
         '/setting/sgsms': [any, any, false];
         '/setting/smtp': [any, any, false];
