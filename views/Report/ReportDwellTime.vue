@@ -2800,7 +2800,7 @@ export default class ReportDwellTime extends Vue {
         tempChartData.maleCount += tempMaleRange;
         tempChartData.femaleCount += tempFemaleRange;
 
-        tempChartData.dwellTime = HighchartsService.formatFloat(summary.total / 60);
+        tempChartData.dwellTime = HighchartsService.formatFloat(summary.total / summary.count / 60);
 
         if (this.inputFormData.isIncludedEmployee === EIncludedEmployee.no) {
             tempChartData.maleCount -= tempMaleEmployeeRange;
