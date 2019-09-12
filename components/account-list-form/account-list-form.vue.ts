@@ -189,7 +189,9 @@ export class AccountListForm extends Vue implements IFormQuick {
 
     updateData(datas: any) {
         if (datas.key == 'role') {
-            this.selectedRole = true;
+            if (datas.value !== 'Administrator') {
+                this.selectedRole = true;
+            }
         }
         if (datas.key == 'company') {
             this.initSelectItemFloorWithCompany(datas.value);
