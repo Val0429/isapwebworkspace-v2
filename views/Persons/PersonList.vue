@@ -416,12 +416,12 @@ export default class SetupsFloor extends Vue {
     async initSelectItemCompanyWithStorage() {
         this.selectItem.company = {};
         this.selectItem.company[
-            this.$user.user.data.company.objectId
-        ] = this.$user.user.data.company.name;
+            this.$user.user.company.objectId
+        ] = this.$user.user.company.name;
     }
 
     async initSelectItemFloorWithAPI() {
-        for (let ret of this.$user.user.data.floor) {
+        for (let ret of this.$user.user.floors) {
             if (ret.objectId != undefined && ret.name != undefined) {
                 this.$set(this.selectItem.floor, ret.objectId, ret.name);
             }
@@ -445,7 +445,6 @@ export default class SetupsFloor extends Vue {
     }
 
     async saveAddOrEdit(data) {
-        console.log(data);
         let param: any = {
             datas: [
                 {
@@ -743,6 +742,7 @@ export default class SetupsFloor extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Person_Company")}
+                 * @uiHidden - ${RoleService.haveTenantAdministrator(this)}
                  */
                 permissionCompanyId: ${toEnumInterface(
                     this.selectItem.company,

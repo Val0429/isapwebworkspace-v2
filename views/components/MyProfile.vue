@@ -94,6 +94,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import RegexServices from "@/services/RegexServices";
+import RoleService from "@/services/Role/RoleService";
 
 interface IInputMyProfile {
     objectId: string;
@@ -185,8 +186,8 @@ export default class MyProfile extends Vue {
             objectId: this.$user.user.objectId,
             username: this.$user.user.name,
             email: this.$user.user.email,
-            companyName: this.$user.user.data
-                ? this.$user.user.data.company.name
+            companyName: this.$user.user.company
+                ? this.$user.user.company.name
                 : ""
         };
     }
@@ -262,6 +263,7 @@ export default class MyProfile extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Account_CompanyName")}
                  * @uiType - iv-form-label
+                 * @uiHidden - ${!RoleService.haveTenantAdministrator(this)}
                  */
                 companyName?: string;
 
