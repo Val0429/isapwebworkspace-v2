@@ -260,13 +260,10 @@ export default class Blacklist extends Vue {
     }
 
     async initSelectItemFloorWithCompany(companyId: string) {
-        console.log("datas", companyId);
         this.selectItem.floor = {};
         for (let company of this.companies) {
-            console.log("!!! company", this.companies);
             if (companyId == company.objectId) {
                 for (let floor of company.floor) {
-                    console.log("!!! floor", floor);
                     this.$set(
                         this.selectItem.floor,
                         floor.objectId,
