@@ -1,21 +1,23 @@
 <template>
     <div class="animated fadeIn">
+
         <iv-auto-transition
             :step="transition.step"
             :type="transition.type"
         >
 
+            <!-- List -->
             <iv-card
                 key="transition_1"
                 v-show="transition.step === 1"
-                :label="_('w_Person_PersonList')"
+                :label=" _('w_Person_PersonList') "
             >
                 <template #toolbox>
+
                     <iv-toolbox-view
                         :disabled="selectedDetail.length !== 1"
                         @click="pageToView"
                     />
-
                     <iv-toolbox-edit
                         :disabled="selectedDetail.length !== 1"
                         @click="pageToEdit()"
@@ -24,47 +26,40 @@
                         :disabled="selectedDetail.length === 0"
                         @click="doDelete"
                     />
-
                     <iv-toolbox-divider />
                     <iv-toolbox-add @click="pageToAdd()" />
+
                 </template>
 
                 <iv-table
                     ref="listTable"
                     :interface="ITableList()"
                     :multiple="tableMultiple"
-                    :server="{ path: '/user/web' }"
+                    :server="{ path: '/person/staff' }"
                     @selected="selectedItem($event)"
                 >
 
+                    <template #imageBase64="{ $attrs }">
+                        <img :src="$attrs.value" />
+                    </template>
+
                     <template #Actions="{$attrs, $listeners}">
-                        <iv-toolbox-more
-                            size="sm"
-                            :disabled="selectedDetail.length !== 1"
-                        >
+                        <iv-toolbox-more :disabled="selectedDetail.length !== 1">
                             <iv-toolbox-view @click="pageToView" />
-                            <iv-toolbox-edit @click="pageToEdit" />
+                            <iv-toolbox-edit @click="pageToEdit()" />
                             <iv-toolbox-delete @click="doDelete" />
-
                         </iv-toolbox-more>
-                    </template>
-
-                    <template #floorName="{$attrs}">
-                        <div v-html="tableFloorString($attrs.row)"></div>
-                    </template>
-                    <template #companyName="{$attrs}">
-                        <div v-html="tableCompanyString($attrs.row)"></div>
                     </template>
 
                 </iv-table>
             </iv-card>
 
             <!-- view -->
-            <iv-auto-card
+            <iv-card
                 key="transition_2"
                 v-show="transition.step === 2"
                 :visible="true"
-                :label="_('w_Account_ViewUser') "
+                :label=" _('w_Account_ViewUser') "
             >
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
@@ -74,6 +69,12 @@
                     :interface="IViewForm()"
                     :value="inputFormData"
                 >
+                    <template #imageBase64="{$attrs}">
+                        <img
+                            :src="$attrs.value"
+                            alt=""
+                        >
+                    </template>
                 </iv-form>
 
                 <template #footer>
@@ -85,14 +86,14 @@
                     </b-button>
                 </template>
 
-            </iv-auto-card>
+            </iv-card>
 
-            <!-- Modify -->
+            <!--From (Add and Edit)-->
             <iv-auto-card
                 key="transition_3"
                 v-show="transition.step === 3"
                 :visible="true"
-                :label="inputFormData.objectId == '' ? _('w_Person_AddStaff') : _('w_Person_EditStaff') "
+                :label="inputFormData.objectId == '' ? _('w_Person_AddStaff') :  _('w_Person_EditStaff')"
             >
                 <template #toolbox>
                     <iv-toolbox-back @click="pageToList()" />
@@ -101,9 +102,10 @@
                 <iv-form
                     :interface="IModifyForm()"
                     :value="inputFormData"
-                    @update:*="updateModifyForm"
-                    @submit="saveModifyForm($event)"
+                    @update:*="updateInputFormData"
+                    @submit="saveAddOrEdit($event)"
                 >
+
                 </iv-form>
 
                 <template #footer-before>
@@ -123,27 +125,30 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-
-// Transition
-import Transition from "@/services/Transition";
-import { ITransition } from "@/services/Transition";
+import { Ws } from "@/services/WebSocket/Ws";
 
 // Custom
 import { EUserRole } from "@/services/Role";
 
 // Service
-import Dialog from "@/services/Dialog";
-import RoleService from "@/services/Role/RoleService";
 import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import RegexServices from "@/services/RegexServices";
+import ImageBase64 from "@/services/ImageBase64";
+import RoleService from "@/services/Role/RoleService";
+
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
+import ServerConfig from "@/services/ServerConfig";
 
 @Component({
     components: {}
 })
-export default class SetupsAccount extends Vue {
+export default class SetupsFloor extends Vue {
     transition: ITransition = {
         type: Transition.type,
         prevStep: 1,
@@ -152,25 +157,25 @@ export default class SetupsAccount extends Vue {
 
     tableMultiple: boolean = true;
     selectedDetail: any = [];
+    newImg = new Image();
+    newImgSrc = "";
 
-    inputFormData = {
+    inputFormData: any = {
         objectId: "",
-        username: "",
         email: "",
         phone: "",
         remark: "",
-        rolesText: "",
         companiesText: "",
         floorsText: "",
-        role: "",
         name: "",
-        companies: "",
-        password: "",
-        confirmPassword: "",
-        floors: [],
+        permissionCompanyId: "",
+        permissionFloorIds: [],
+        imageBase64: "",
+        nric: "",
         realRoles: [],
         useCompany: false,
-        useFloor: false
+        useFloor: false,
+        agreeTc: false
     };
 
     selectItem: {
@@ -185,68 +190,99 @@ export default class SetupsAccount extends Vue {
 
     companies = [];
 
-    created() {}
+    async created() {}
 
     mounted() {}
+
+    clearInputData() {
+        this.inputFormData = {
+            objectId: "",
+            email: "",
+            phone: "",
+            remark: "",
+            companiesText: "",
+            floorsText: "",
+            name: "",
+            permissionCompanyId: "",
+            permissionFloorIds: [],
+            imageBase64: "",
+            nric: ""
+        };
+    }
+
+    selectedItem(data) {
+        console.log("!!! data", data);
+        this.selectedDetail = data;
+    }
+
+    getInputData() {
+        this.clearInputData();
+        for (const param of this.selectedDetail) {
+            this.inputFormData = {
+                objectId: param.objectId,
+                name: param.name,
+                email: param.email,
+                endDate: param.endDate,
+                imageBase64: param.imageBase64,
+                isUseSuntecReward: param.isUseSuntecReward,
+                nric: param.nric,
+                permissionCompany: param.permissionCompany,
+                permissionFloors: param.permissionFloors,
+                phone: param.phone,
+                position: param.position,
+                remark: param.remark,
+                startDate: param.startDate,
+                unitNumber: param.unitNumber
+            };
+        }
+    }
+
+    updateInputFormData(data) {
+        if (data.key == "imageBase64") {
+            ImageBase64.fileToBase64(data.value, (base64 = "") => {
+                if (base64 != "") {
+                    this.newImg = new Image();
+                    this.newImg.src = base64;
+                    this.newImg.onload = () => {
+                        this.newImgSrc = base64;
+                        return;
+                    };
+                } else {
+                    Dialog.error(this._("w_Region_ErrorFileToLarge"));
+                }
+            });
+        }
+        if (data.key == "companies") {
+            this.initSelectItemFloorWithCompany(data.value);
+        }
+        this.inputFormData[data.key] = data.value;
+    }
 
     pageToList() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
-        this.clearInputData();
         (this.$refs.listTable as any).reload();
     }
 
     pageToView() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 2;
-        this.clearInputData();
         this.getInputData();
     }
 
     pageToAdd() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
-        this.initSelectItem();
         this.clearInputData();
+        this.initSelectItem();
     }
 
     pageToEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
+        this.getInputData();
         this.initSelectItem();
         this.clearInputData();
-        this.getInputData();
-    }
-
-    async doDelete() {
-        await Dialog.confirm(
-            this._("w_Delete_ConfirmContent"),
-            this._("w_Delete_ConfirmLabel"),
-            () => {
-                Loading.show();
-                for (let detail of this.selectedDetail) {
-                    let param = {
-                        objectId: detail.objectId
-                    };
-
-                    param = RegexServices.trim(param);
-                    this.$server
-                        .D("/user/web", param)
-                        .then((response: any) => {
-                            ResponseFilter.successCheck(
-                                this,
-                                response,
-                                (response: any) => {
-                                    this.pageToList();
-                                }
-                            );
-                        })
-                        .catch((e: any) => {
-                            return ResponseFilter.catchError(this, e);
-                        });
-                }
-            }
-        );
     }
 
     async initSelectItem() {
@@ -256,21 +292,20 @@ export default class SetupsAccount extends Vue {
 
         if (RoleService.haveSystemAdministrator(this)) {
             await this.initSelectItemRole();
-            // await this.initSelectItemCompanyWithAPI();
+            await this.initSelectItemCompanyWithAPI();
         }
 
         if (RoleService.haveAdministrator(this)) {
             await this.initSelectItemRole();
-            // await this.initSelectItemCompanyWithAPI();
-
+            await this.initSelectItemCompanyWithAPI();
             for (const param of this.selectedDetail) {
                 if (
-                    param.data != undefined &&
-                    param.data.company != undefined &&
-                    param.data.company.objectId != undefined
+                    param != undefined &&
+                    param.company != undefined &&
+                    param.company.objectId != undefined
                 ) {
                     await this.initSelectItemFloorWithCompany(
-                        param.data.company.objectId
+                        param.company.objectId
                     );
                 }
             }
@@ -282,19 +317,6 @@ export default class SetupsAccount extends Vue {
             await this.initSelectItemFloorWithAPI();
         }
     }
-
-    haveSystemAdministrator() {
-        return RoleService.haveSystemAdministrator(this);
-    }
-
-    haveAdministrator() {
-        return RoleService.haveAdministrator(this);
-    }
-
-    haveTenantAdministrator() {
-        return RoleService.haveTenantAdministrator(this);
-    }
-
     initSelectItemRole() {
         let settingRole = {
             SystemAdministrator: false,
@@ -383,7 +405,7 @@ export default class SetupsAccount extends Vue {
         this.selectItem.floor = {};
         for (let company of this.companies) {
             if (companyId == company.objectId) {
-                for (let floor of company.floor) {
+                for (let floor of company.floors) {
                     this.$set(
                         this.selectItem.floor,
                         floor.objectId,
@@ -395,285 +417,134 @@ export default class SetupsAccount extends Vue {
         }
     }
 
-    clearInputData() {
-        this.inputFormData = {
-            objectId: "",
-            username: "",
-            password: "",
-            confirmPassword: "",
-            role: "",
-            name: "",
-            email: "",
-            phone: "",
-            remark: "",
-            rolesText: "",
-            companiesText: "",
-            floorsText: "",
-            companies: "",
-            floors: [],
-            realRoles: [],
-            useCompany: false,
-            useFloor: false
-        };
-    }
-
-    getInputData() {
-        this.checkTenant();
-        for (const param of this.selectedDetail) {
-            this.inputFormData = {
-                objectId: param.objectId,
-                username: param.username,
-                password: "",
-                confirmPassword: "",
-                role: "",
-                name: "",
-                email: param.email,
-                phone: param.phone,
-                remark: "",
-                rolesText: this.formRoleText(param),
-                companiesText: this.formCompanyText(param),
-                floorsText: this.formFloorText(param),
-                companies: "",
-                floors: [],
-                realRoles: [],
-                useCompany: false,
-                useFloor: false
-            };
-            if (param.role != undefined && param.role[0] != undefined) {
-                this.inputFormData.role = param.role[0].name;
-            }
-            for (let loopData of param.role) {
-                if (loopData.name == EUserRole.TenantAdministrator) {
-                    this.inputFormData.useCompany = true;
-                    this.inputFormData.useFloor = true;
-                }
-                this.inputFormData.realRoles.push(loopData.name);
-            }
-            if (param.datas != undefined) {
-                if (
-                    param.datas.company != undefined &&
-                    param.datas.company.objectId != undefined
-                ) {
-                    this.inputFormData.companies = param.datas.company.objectId;
-                }
-                if (param.datas.floor != undefined) {
-                    for (let loopFloor of param.datas.floor) {
-                        this.inputFormData.floors.push(loopFloor.objectId);
-                    }
-                }
-            }
-        }
-    }
-
-    selectedItem(datas: any) {
-        this.selectedDetail = datas;
-    }
-
-    // talbeRolesString(datas: any): string {
-    //     let result: string = "";
-    //     result += "<ul>";
-    //     for (let loopData of datas) {
-    //         let tempText = RoleService.roleString(this, loopData.name);
-    //         result += `<li>${tempText}</li>`;
-    //     }
-    //     result += "</ul>";
-    //     return result;
-    // }
-
-    tableFloorString(datas: any): string {
-        let result: string = "";
-        result += "<ul>";
-        if (datas.data != undefined && datas.data.floor != undefined) {
-            for (let loopData of datas.data.floor) {
-                let tempText = loopData.name;
-                result += `<li>${tempText}</li>`;
-            }
-        }
-        result += "</ul>";
-        return result;
-    }
-
-    tableCompanyString(datas: any): string {
-        let result: string = "";
-        result += "<ul>";
-        if (
-            datas.data != undefined &&
-            datas.data.company != undefined &&
-            datas.data.company.name != undefined
-        ) {
-            result += `<li>${datas.data.company.name}</li>`;
-        }
-        result += "</ul>";
-        return result;
-    }
-
-    formRoleText(datas: any): string {
-        let result: string = "";
-        if (datas.role != undefined) {
-            // for (let loopData of datas.role) {
-            //     result += `${loopData.name}, `;
-            // }
-            if (datas.role.length > 0) {
-                result = result.substr(0, result.length - 2);
-            }
-            result = datas.role;
-        }
-        return result;
-    }
-
-    formCompanyText(datas: any): string {
-        let result: string = "";
-        if (
-            datas.data != undefined &&
-            datas.data.company != undefined &&
-            datas.data.company.name != undefined
-        ) {
-            result = `${datas.data.company.name}`;
-        }
-        return result;
-    }
-
-    formFloorText(datas: any): string {
-        let result: string = "";
-        if (datas.data != undefined && datas.data.floor != undefined) {
-            for (let loopData of datas.data.floor) {
-                result += `${loopData.name}, `;
-            }
-            if (datas.data.floor.length > 0) {
-                result = result.substr(0, result.length - 2);
-            }
-        }
-        return result;
-    }
-
-    checkTenant() {
-        this.inputFormData.useCompany = false;
-        this.inputFormData.useFloor = false;
-        for (let loopData of this.selectedDetail) {
-            if (loopData.role != undefined) {
-                for (let loopRole of loopData.role) {
-                    if (loopRole.name == EUserRole.TenantAdministrator) {
-                        this.inputFormData.useCompany = true;
-                        this.inputFormData.useFloor = true;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    updateModifyForm(datas: any) {
-        if (datas.key == "role") {
-            if (datas.value == EUserRole.SystemAdministrator) {
-                this.inputFormData.useCompany = false;
-                this.inputFormData.useFloor = false;
-            }
-            if (datas.value == EUserRole.Administrator) {
-                this.inputFormData.useCompany = false;
-                this.inputFormData.useFloor = false;
-            }
-            if (datas.value == EUserRole.TenantAdministrator) {
-                this.inputFormData.useCompany = true;
-                this.inputFormData.useFloor = true;
-            }
-        }
-        if (datas.key == "companies") {
-            this.initSelectItemFloorWithCompany(datas.value);
-        }
-        this.inputFormData[datas.key] = datas.value;
-    }
-
-    async saveModifyForm(event: any) {
-        // let param: any = {
-        //     objectId: this.inputFormData.objectId,
-        //     username: this.inputFormData.username,
-        //     phone: this.inputFormData.phone,
-        //     email: this.inputFormData.email,
-        //     role: [this.inputFormData.role],
-        //     data: {
-        //         company: this.inputFormData.companies,
-        //         description: "",
-        //         floor: this.inputFormData.floors
-        //     }
-        // };
-        let datas: any = {
+    async saveAddOrEdit(data) {
+        console.log("data", data);
+        let param: any = {
             datas: [
                 {
-                    objectId: this.inputFormData.objectId,
-                    username: this.inputFormData.username,
-                    phone: this.inputFormData.phone,
-                    email: this.inputFormData.email,
-                    role: this.inputFormData.role
+                    imageBase64: this.newImgSrc,
+                    isUseSuntecReward: data.isUseSuntecReward,
+                    permissionFloorIds: data.floors,
+                    permissionCompanyId: data.companies,
+                    name: data.name,
+                    email: data.email,
+                    nric: data.nric,
+                    position: data.position,
+                    phone: data.phone,
+                    remark: data.remark,
+                    startDate: data.startDate,
+                    endDate: data.endDate
                 }
             ]
         };
 
-        // append old role
-        for (let loopData of this.inputFormData.realRoles) {
-            let haveLoopData = false;
-            for (let paramData of datas.role) {
-                if (loopData == paramData) {
-                    haveLoopData = true;
-                    break;
-                }
-            }
-            if (!haveLoopData) {
-                datas.role.push(loopData);
-            }
-        }
-
-        // check TenantAdministrator and company
-        if (
-            datas.data.company == "" &&
-            RoleService.haveTenantAdministrator(this)
-        ) {
-            if (
-                this.$user.user != undefined &&
-                this.$user.user.data != undefined &&
-                this.$user.user.data.company != undefined &&
-                this.$user.user.data.company.objectId != undefined
-            ) {
-                datas.data.company = this.$user.user.data.company.objectId;
-            }
-        }
-
-        if (datas.objectId == "") {
-            datas.password = this.inputFormData.password;
-
+        // add
+        if (!this.inputFormData.objectId) {
             Loading.show();
-            datas = RegexServices.trim(datas);
+            param = RegexServices.trim(param);
             await this.$server
-                .C("/user/web", datas)
+                .C("/person/staff", param)
                 .then((response: any) => {
                     ResponseFilter.successCheck(
                         this,
                         response,
                         (response: any) => {
+                            Dialog.success(this._("w_Dialog_SuccessTitle"));
                             this.pageToList();
                         }
                     );
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_Dialog_ErrorTitle")
+                    );
                 });
         } else {
+            param.datas[0].objectId = data.objectId;
+
             Loading.show();
-            datas = RegexServices.trim(datas);
+            param = RegexServices.trim(param);
             await this.$server
-                .U("/user/web", datas)
+                .U("/person/staff", param)
                 .then((response: any) => {
                     ResponseFilter.successCheck(
                         this,
                         response,
                         (response: any) => {
-                            this.pageToList();
+                            if (response.datas) {
+                                if (response.datas[0].statusCode == 200) {
+                                    Dialog.success(
+                                        this._("w_Dialog_SuccessTitle")
+                                    );
+                                    this.pageToList();
+                                } else {
+                                    Dialog.error(response.message);
+                                }
+                            }
                         }
                     );
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_Dialog_ErrorTitle")
+                    );
                 });
         }
+    }
+
+    tableStatus(values: any) {
+        let result = "";
+        for (const value of values) {
+            value;
+        }
+    }
+
+    async doDelete() {
+        Dialog.confirm(
+            this._("w_Buildings_DeleteConfirm"),
+            this._("w_DeleteConfirm"),
+            () => {
+                for (const deleteParam of this.selectedDetail) {
+                    let param: {
+                        objectId: string;
+                    } = {
+                        objectId: deleteParam.objectId
+                    };
+
+                    Loading.show();
+                    param = RegexServices.trim(param);
+                    this.$server
+                        .D("/person/staff", param)
+                        .then((response: any) => {
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
+                                    if (response.datas) {
+                                        if (
+                                            response.datas[0].statusCode == 200
+                                        ) {
+                                            this.pageToList();
+                                        } else {
+                                            Dialog.error(response.message);
+                                        }
+                                    }
+                                },
+                                this._("w_DeleteFailed")
+                            );
+                        })
+                        .catch((e: any) => {
+                            return ResponseFilter.catchError(this, e);
+                        });
+
+                    Loading.hide();
+                }
+            }
+        );
     }
 
     ITableList() {
@@ -692,31 +563,32 @@ export default class SetupsAccount extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Person_Building")}
+                 * @uiHidden - true
                  */
                 buildingName: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Floor")}
                  */
-                floorName: string;
+                permissionFloorIds: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Door")}
+                 * @uiHidden - true
                  */
                 doorName: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Enable_Permission")}
                  */
-                enableDate: Date;
+                startDate: Date;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Disable_Permission")}
                  */
-                disableDate: Date;
+                endDate: Date;
 
                 Actions: any;
-
             }
         `;
     }
@@ -728,7 +600,7 @@ export default class SetupsAccount extends Vue {
                  * @uiLabel - ${this._("w_Person_Image")}
                  * @uiType - iv-form-label
                  */
-                image?: string;
+                imageBase64?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Name")}
@@ -741,12 +613,12 @@ export default class SetupsAccount extends Vue {
                  * @uiType - iv-form-label
                  * @uiHidden - ${!this.inputFormData.useCompany}
                  */
-                companiesText: any;
+                permissionCompanyId: any;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Building")}
                  * @uiType - iv-form-label
-                 * @uiHidden - ${!this.inputFormData.useFloor}
+                 * @uiHidden - true
                  */
                 buildingName: string;
 
@@ -755,19 +627,19 @@ export default class SetupsAccount extends Vue {
                  * @uiType - iv-form-label
                  * @uiHidden - ${!this.inputFormData.useFloor}
                  */
-                floorsText: string;
+                permissionFloorIds: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Door")}
                  * @uiType - iv-form-label
-                 * @uiHidden - ${!this.inputFormData.useFloor}
+                 * @uiHidden - true
                  */
                 doorName: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Unit")}
                  * @uiType - iv-form-label
-                 * @uiHidden - ${!this.inputFormData.useFloor}
+                 * @uiHidden - true
                  */
                 unitName: string;
 
@@ -789,40 +661,38 @@ export default class SetupsAccount extends Vue {
                  * @uiType - iv-form-switch
                  * @uiDisabled- true
                  */
-                agreeApp?: boolean;
+                isUseSuntecReward?: boolean;
                 
                 /**
                  * @uiLabel - ${this._("w_Person_Remark")}
-                 * @uiType - iv-form-switch
-                 * @uiDisabled- true
+                 * @uiType - iv-form-textarea
                  */
-                Remark?: boolean;
+                remark?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Enable_Permission")}
                  * @uiColumnGroup - date-group
                  */
-                enableDate: Date;
+                startDate: Date;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Disable_Permission")}
                  * @uiColumnGroup - date-group
                  */
-                disableDate?: Date;
+                endDate?: Date;
                 
                 /**
                  * @uiLabel - ${this._("w_Person_Card_Number")}
                  * @uiType - iv-form-label
                  */
-                cardNo?: string;
+                card?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_NRIC")}
                  * @uiType - iv-form-label
                  */
                 nric?: string;
-
-            }
+                    }
         `;
     }
 
@@ -833,59 +703,84 @@ export default class SetupsAccount extends Vue {
                  * @uiLabel - ${this._("w_Person_Image")}
                  * @uiType - iv-form-file
                  */
-                image?: any;
+                imageBase64?: any;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Name")}
-                 * @uiType - iv-form-label
+                 * @uiType - ${
+                     this.inputFormData.objectId == ""
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
                  */
                 name: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Person_Company")}
-                 * @uiType - iv-form-label
-                 * @uiHidden - ${!this.inputFormData.useCompany}
+                 * @uiLabel - ${this._("w_Account_UserTitles")}
+                 * @uiType - ${
+                     this.inputFormData.objectId == ""
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
                  */
-                companiesText: any;
+                position?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Account_Phone")}
+                 * @uiType - ${
+                     this.inputFormData.objectId == ""
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
+                 * @uiValidation - ${RegexServices.regexItem.phoneNumber}
+                 */
+                phone?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Person_Company")}
+                 */
+                companies: ${toEnumInterface(this.selectItem.company, false)};
 
                 /**
                  * @uiLabel - ${this._("w_Person_Building")}
                  * @uiType - iv-form-label
-                 * @uiHidden - ${!this.inputFormData.useFloor}
+                 * @uiHidden - true
                  */
-                buildingName: string;
+                buildingName?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Floor")}
-                 * @uiType - iv-form-label
-                 * @uiHidden - ${!this.inputFormData.useFloor}
                  */
-                floorsText: string;
+                floors: ${toEnumInterface(this.selectItem.floor, true)};
 
                 /**
                  * @uiLabel - ${this._("w_Person_Door")}
                  * @uiType - iv-form-label
-                 * @uiHidden - ${!this.inputFormData.useFloor}
+                 * @uiHidden - true
                  */
                 doorName: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Unit")}
                  * @uiType - iv-form-label
-                 * @uiHidden - ${!this.inputFormData.useFloor}
+                 * @uiHidden - true
                  */
                 unitName: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Email")}
-                 * @uiType - iv-form-label
+                 * @uiType - ${
+                     this.inputFormData.objectId == ""
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
+                 * @uiValidation - ${RegexServices.regexItem.email}
                  */
                 email: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Agree_Tc")}
                  * @uiType - iv-form-switch
-                 * @uiDisabled- true
                  */
                 agreeTc: boolean;
                 
@@ -894,53 +789,38 @@ export default class SetupsAccount extends Vue {
                  * @uiType - iv-form-switch
                  * @uiDisabled- true
                  */
-                agreeApp?: boolean;
+                isUseSuntecReward?: boolean;
                 
                 /**
                  * @uiLabel - ${this._("w_Person_Remark")}
-                 * @uiType - iv-form-switch
-                 * @uiDisabled- true
+                 * @uiType - iv-form-textarea
                  */
-                Remark?: boolean;
+                remark?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Enable_Permission")}
+                 * @uiType - iv-form-date
                  * @uiColumnGroup - date-group
                  */
-                enableDate: Date;
+                startDate: Date;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Disable_Permission")}
+                 * @uiType - iv-form-date
                  * @uiColumnGroup - date-group
                  */
-                disableDate?: Date;
+                endDate?: Date;
 
                 /**
                  * @uiLabel - ${this._("w_Person_NRIC")}
-                 * @uiType - iv-form-label
+                 * @uiType - ${
+                     this.inputFormData.objectId == ""
+                         ? "iv-form-number"
+                         : "iv-form-string"
+                 }
                  */
-                nric?: string;
-
-            }
-        `;
-    }
-
-    IPasswordForm() {
-        return `
-            interface {
-                /**
-                 * @uiLabel - ${this._("w_Account_Password")}
-                 * @uiType - iv-form-password
-                 */
-                password: string;
-
-                /**
-                 * @uiLabel - ${this._("w_Account_ConfirmPassword")}
-                 * @uiType - iv-form-password
-                 * @uiValidation - (value, all) => value === all.password
-                 */
-                confirmPassword: string;
-            }
+                nric?: number;
+                    }
         `;
     }
 }

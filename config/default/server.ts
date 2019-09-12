@@ -15,6 +15,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/location/company': [any, any, false];
 
         ////// Person //////
+        '/person/staff': [any, any, false];
         '/person/staff-blacklist': [any, any, false];
 
         ////// Frs //////
@@ -55,6 +56,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/location/company': [any, any, false];
 
         ////// Person //////
+        '/person/staff': [any, any, false];
         '/person/staff-blacklist': [any, any, false];
 
         ////// Frs //////
@@ -88,6 +90,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/location/company': [any, any, false];
 
         ////// Person //////
+        '/person/staff': [any, any, false];
         '/person/staff-blacklist': [any, any, false];
 
         ////// Frs //////
@@ -120,6 +123,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/location/company': [any, any, false];
 
         ////// Person //////
+        '/person/staff': [any, any, false];
         '/person/staff-blacklist': [any, any, false];
 
         ////// Frs //////
