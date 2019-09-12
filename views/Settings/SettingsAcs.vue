@@ -158,40 +158,41 @@ export default class SetupsEmail extends Vue {
     ICardRangeComponent() {
         return `
             interface ICardRangeComponent {
-                /**
-                 * @uiLabel - ${this._("w_Acs_Card_Staff")}
-                 */
                 staffCardRange: interface {
                     /**
-                     * @uiLabel - ${this._("w_Acs_Card_Min")}
-                     * @uiPlaceHolder - ${this._("w_Acs_Card_Min")}
+                     * @uiLabel - ${this._("w_Acs_Card_Staff") +
+                         this._("w_Acs_Card_Min")}
+                     * @uiPlaceHolder - ${this._("w_Acs_Card_Staff") +
+                         this._("w_Acs_Card_Min")}
                      * @uiType - iv-form-number
                      * @uiColumnGroup - staff-range
                      */
                     min: number;
                     /**
-                     * @uiLabel - ${this._("w_Acs_Card_Max")}
-                     * @uiPlaceHolder - ${this._("w_Acs_Card_Max")}
+                     * @uiLabel - ${this._("w_Acs_Card_Staff") +
+                         this._("w_Acs_Card_Max")}
+                     * @uiPlaceHolder - ${this._("w_Acs_Card_Staff") +
+                         this._("w_Acs_Card_Max")}
                      * @uiType - iv-form-number
                      * @uiColumnGroup - staff-range
                      */
                     max: number;
                 };
-
-                /**
-                 * @uiLabel - ${this._("w_Acs_Card_Visitor")}
-                 */
                 visitorCardRange: interface {
                     /**
-                     * @uiLabel - ${this._("w_Acs_Card_Min")}
-                     * @uiPlaceHolder - ${this._("w_Acs_Card_Min")}
+                     * @uiLabel - ${this._("w_Acs_Card_Visitor") +
+                         this._("w_Acs_Card_Min")}
+                     * @uiPlaceHolder - ${this._("w_Acs_Card_Visitor") +
+                         this._("w_Acs_Card_Min")}
                      * @uiType - iv-form-number
                      * @uiColumnGroup - visitor-range
                      */
                     min: number;
                     /**
-                     * @uiLabel - ${this._("w_Acs_Card_Max")}
-                     * @uiPlaceHolder - ${this._("w_Acs_Card_Max")}
+                     * @uiLabel - ${this._("w_Acs_Card_Visitor") +
+                         this._("w_Acs_Card_Max")}
+                     * @uiPlaceHolder - ${this._("w_Acs_Card_Visitor") +
+                         this._("w_Acs_Card_Max")}
                      * @uiType - iv-form-number
                      * @uiColumnGroup - visitor-range
                      */

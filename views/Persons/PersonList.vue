@@ -155,11 +155,12 @@ import Loading from "@/services/Loading";
 import RegexServices from "@/services/RegexServices";
 import ImageBase64 from "@/services/ImageBase64";
 import RoleService from "@/services/Role/RoleService";
+import Datetime from "@/services/Datetime";
+import ServerConfig from "@/services/ServerConfig";
 
 // Transition
 import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
-import ServerConfig from "@/services/ServerConfig";
 
 @Component({
     components: {}
@@ -192,7 +193,9 @@ export default class SetupsFloor extends Vue {
         useCompany: false,
         useFloor: false,
         agreeTc: false,
-        isUseSuntecRewardText: ""
+        isUseSuntecRewardText: "",
+        startDateString: "",
+        endDateString: ""
     };
 
     selectItem: {
@@ -229,7 +232,10 @@ export default class SetupsFloor extends Vue {
             useCompany: false,
             useFloor: false,
             agreeTc: false,
-            isUseSuntecRewardText: ""
+            isUseSuntecReward: false,
+            card: "",
+            startDateString: "",
+            endDateString: ""
         };
     }
 
@@ -249,17 +255,29 @@ export default class SetupsFloor extends Vue {
                 objectId: param.objectId,
                 name: param.name,
                 email: param.email,
-                endDate: new Date(param.endDate),
+
                 imageBase64: param.imageBase64,
-                isUseSuntecReward: param.isUseSuntecReward,
+                isUseSuntecReward: param.isUseSuntecReward ? "是" : "否",
                 nric: param.nric,
                 permissionCompanyId: param.permissionCompany.objectId,
                 permissionFloors: floors,
                 phone: param.phone,
                 position: param.position,
                 remark: param.remark,
+                unitNumber: param.unitNumber,
+                card: param.card,
                 startDate: new Date(param.startDate),
-                unitNumber: param.unitNumber
+                endDate: new Date(param.endDate),
+                startDateString: Datetime.DateTime2String(
+                    new Date(param.startDate),
+                    "YYYY-MM-DD"
+                ),
+                endDateString: param.endDate
+                    ? Datetime.DateTime2String(
+                          new Date(param.endDate),
+                          "YYYY-MM-DD"
+                      )
+                    : ""
             };
         }
     }
@@ -281,6 +299,11 @@ export default class SetupsFloor extends Vue {
         }
         if (data.key == "permissionCompanyId") {
             this.initSelectItemFloorWithCompany(data.value);
+        }
+        if (data.key == "agreeTc" && data.value) {
+            this.inputFormData.check = true;
+        } else {
+            this.inputFormData.check = undefined;
         }
         this.inputFormData[data.key] = data.value;
     }
@@ -465,8 +488,8 @@ export default class SetupsFloor extends Vue {
                 }
             ]
         };
-        if (this.newImgSrc == ImageBase64.pngEmpty) {
-            param.datas[0].imageBase64 = this.newImgSrc;
+        if (this.newImgSrc !== ImageBase64.pngEmpty) {
+            param.datas[0]["imageBase64"] = this.newImgSrc;
         }
 
         // add
@@ -677,32 +700,33 @@ export default class SetupsFloor extends Vue {
                  * @uiLabel - ${this._("w_Person_Agree_App")}
                  * @uiType - iv-form-label
                  */
-                isUseSuntecRewardText?: string;
+                isUseSuntecReward?: string;
                 
                 /**
                  * @uiLabel - ${this._("w_Person_Remark")}
-                 * @uiType - iv-form-textarea
-                 * @uiDisabled- true
+                 * @uiType - iv-form-label
                  */
                 remark?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Enable_Permission")}
                  * @uiColumnGroup - date-group
+                 * @uiType - iv-form-label
                  */
-                startDate: Date;
+                startDateString: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Disable_Permission")}
                  * @uiColumnGroup - date-group
+                 * @uiType - iv-form-label
                  */
-                endDate?: Date;
+                endDateString?: string;
                 
                 /**
                  * @uiLabel - ${this._("w_Person_Card_Number")}
                  * @uiType - iv-form-label
                  */
-                card?: string;
+                card?: number;
 
                 /**
                  * @uiLabel - ${this._("w_Person_NRIC")}
@@ -829,7 +853,9 @@ export default class SetupsFloor extends Vue {
                  * @uiType - iv-form-number
                  */
                 nric?: number;
-                    }
+
+                check: any;
+            }
         `;
     }
 }
