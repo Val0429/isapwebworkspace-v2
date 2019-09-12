@@ -150,7 +150,7 @@ export default class SetupsFloor extends Vue {
     inputFormData: any = {
         objectId: "",
         name: "",
-        floor: 0
+        acs: ""
     };
 
     async created() {}
@@ -160,8 +160,7 @@ export default class SetupsFloor extends Vue {
     clearInputData() {
         this.inputFormData = {
             objectId: "",
-            name: "",
-            floor: 0
+            name: ""
         };
     }
 
@@ -171,15 +170,30 @@ export default class SetupsFloor extends Vue {
         this.selectedDetail = data;
     }
 
-    getInputData() {
+    async getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
             this.inputFormData = {
                 objectId: param.objectId,
                 name: param.name,
-                floor: param.floor
+                acs: ""
             };
         }
+        await this.initAcsGroup();
+    }
+
+    async initAcsGroup() {
+        let param = { objectId: this.inputFormData.objectId };
+        await this.$server
+            .R("/setting/acs-group", param)
+            .then((response: any) => {
+                if (response.group) {
+                    this.inputFormData.acs = response.group;
+                }
+            })
+            .catch(e => {
+                console.log(e);
+            });
     }
 
     updateInputFormData(data) {
@@ -231,8 +245,36 @@ export default class SetupsFloor extends Vue {
                         this,
                         response,
                         (response: any) => {
-                            Dialog.success(this._("w_Buildings_AddSuccess"));
-                            this.pageToList();
+                            let aceParam = {
+                                datas: [
+                                    {
+                                        buildingId: response.datas[0].objectId,
+                                        group: this.inputFormData.acs
+                                    }
+                                ]
+                            };
+                            this.$server
+                                .C("/setting/acs-group", aceParam)
+                                .then((response: any) => {
+                                    ResponseFilter.successCheck(
+                                        this,
+                                        response,
+                                        (response: any) => {
+                                            Dialog.success(
+                                                this._("w_Buildings_AddSuccess")
+                                            );
+                                            this.pageToList();
+                                        },
+                                        this._("w_Buildings_ADDFailed")
+                                    );
+                                })
+                                .catch((e: any) => {
+                                    return ResponseFilter.catchError(
+                                        this,
+                                        e,
+                                        this._("w_Buildings_ADDFailed")
+                                    );
+                                });
                         },
                         this._("w_Buildings_ADDFailed")
                     );
@@ -256,8 +298,36 @@ export default class SetupsFloor extends Vue {
                         this,
                         response,
                         (response: any) => {
-                            Dialog.success(this._("w_Buildings_EditSuccess"));
-                            this.pageToList();
+                            let aceParam = {
+                                datas: [
+                                    {
+                                        objectId: response.datas[0].objectId,
+                                        group: this.inputFormData.acs
+                                    }
+                                ]
+                            };
+                            this.$server
+                                .U("/setting/acs-group", aceParam)
+                                .then((response: any) => {
+                                    ResponseFilter.successCheck(
+                                        this,
+                                        response,
+                                        (response: any) => {
+                                            Dialog.success(
+                                                this._("w_Buildings_AddSuccess")
+                                            );
+                                            this.pageToList();
+                                        },
+                                        this._("w_Buildings_ADDFailed")
+                                    );
+                                })
+                                .catch((e: any) => {
+                                    return ResponseFilter.catchError(
+                                        this,
+                                        e,
+                                        this._("w_Buildings_ADDFailed")
+                                    );
+                                });
                         },
                         this._("w_Buildings_EditFailed")
                     );
@@ -345,6 +415,12 @@ export default class SetupsFloor extends Vue {
                  */
                 name: string;
 
+                /**
+                 * @uiLabel - ${this._("w_Acs_AccessGroupName")}
+                 * @uiPlaceHolder - ${this._("w_Acs_AccessGroupName")}
+                 */
+                group: string;
+
             }
         `;
     }
@@ -358,6 +434,12 @@ export default class SetupsFloor extends Vue {
                  * @uiPlaceHolder - ${this._("w_Buildings_BuildingName")}
                  */
                 name: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Acs_AccessGroupName")}
+                 * @uiPlaceHolder - ${this._("w_Acs_AccessGroupName")}
+                 */
+                acs: string;
 
             }
         `;

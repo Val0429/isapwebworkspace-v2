@@ -120,34 +120,50 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Watch } from "vue-property-decorator";
-    import { toEnumInterface } from "@/../core";
+import { Vue, Component, Watch } from "vue-property-decorator";
+import { toEnumInterface } from "@/../core";
 
-    // Service
-    import ResponseFilter from "@/services/ResponseFilter";
-    import Dialog from "@/services/Dialog";
-    import Loading from "@/services/Loading";
+// Service
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
 
-    // Transition
-    import Transition from "@/services/Transition";
-    import { ITransition } from "@/services/Transition";
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
 
+@Component({
+    components: {}
+})
+export default class HikVision extends Vue {
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
 
-    @Component({
-        components: {}
-    })
-    export default class HikVision extends Vue {
-        transition: ITransition = {
-            type: Transition.type,
-            prevStep: 1,
-            step: 1
-        };
+    tableMultiple: boolean = true;
 
-        tableMultiple: boolean = true;
+    selectedDetail: any = [];
 
-        selectedDetail: any = [];
+    inputFormData: any = {
+        objectId: "",
+        floorId: "",
+        name: "",
+        protocol: "http",
+        ip: "",
+        port: null,
+        account: "",
+        password: "",
+        floorText: ""
+    };
 
-        inputFormData: any = {
+    created() {}
+
+    mounted() {}
+
+    clearInputData() {
+        this.inputFormData = {
             objectId: "",
             floorId: "",
             name: "",
@@ -156,207 +172,189 @@
             port: null,
             account: "",
             password: "",
-            floorText: ''
+            floorText: ""
+        };
+    }
+
+    selectedItem(data) {
+        this.selectedDetail = data;
+    }
+
+    getInputData() {
+        this.clearInputData();
+        for (const param of this.selectedDetail) {
+            this.inputFormData = {
+                objectId: param.objectId,
+                floorId:
+                    param.floor && param.floor.objectId
+                        ? param.floor.objectId
+                        : "",
+                ip: param.ip,
+                account: param.account,
+                name: param.name,
+                password: param.password,
+                port: param.port,
+                protocol: param.protocol,
+                floorText:
+                    param.floor && param.floor.name ? param.floor.name : ""
+            };
+        }
+    }
+
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+    }
+
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.getInputData();
+    }
+
+    pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearInputData();
+    }
+
+    pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.getInputData();
+    }
+
+    async saveAddOrEdit(data) {
+        let dataObject: {
+            name?: string;
+            protocol: string;
+            ip: string;
+            port: number;
+            account: string;
+            password: string;
+            floorId: string;
+            objectId?: string;
+        } = {
+            protocol: data.protocol,
+            ip: data.ip,
+            port: data.port,
+            account: data.account,
+            password: data.password,
+            floorId: data.floorId
         };
 
-        created() {}
+        // add
+        if (this.inputFormData.objectId == "") {
+            dataObject.name = data.name;
+            const datas: any = [dataObject];
 
-        mounted() {}
-
-        clearInputData() {
-            this.inputFormData = {
-                objectId: "",
-                floorId: "",
-                name: "",
-                protocol: "http",
-                ip: "",
-                port: null,
-                account: "",
-                password: "",
-                floorText: ''
+            const addParam = {
+                datas
             };
-        }
-
-        selectedItem(data) {
-            this.selectedDetail = data;
-            this.selectedDetail = [];
-            this.selectedDetail = data;
-        }
-
-        getInputData() {
-            this.clearInputData();
-            for (const param of this.selectedDetail) {
-                this.inputFormData = {
-                    objectId: param.objectId,
-                    floorId: param.floor && param.floor.objectId ? param.floor.objectId : '',
-                    ip: param.ip,
-                    account: param.account,
-                    name: param.name,
-                    password: param.password,
-                    port: param.port,
-                    protocol: param.protocol,
-                    floorText: param.floor && param.floor.name ? param.floor.name : ''
-                };
-            }
-        }
-
-        pageToList() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 1;
-            (this.$refs.listTable as any).reload();
-        }
-
-        pageToView() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 2;
-            this.getInputData();
-        }
-
-        pageToAdd() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 3;
-            this.clearInputData();
-        }
-
-        pageToEdit() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 3;
-            this.getInputData();
-        }
-
-        async saveAddOrEdit(data) {
-
-            let dataObject: {
-                name?: string;
-                protocol: string;
-                ip: string;
-                port: number;
-                account: string;
-                password: string;
-                floorId: string;
-                objectId?: string;
-            } = {
-                protocol: data.protocol,
-                ip: data.ip,
-                port: data.port,
-                account: data.account,
-                password: data.password,
-                floorId: data.floorId,
-            };
-
-
-            // add
-            if (this.inputFormData.objectId == "") {
-                dataObject.name = data.name;
-                const datas: any = [dataObject];
-
-                const addParam = {
-                    datas
-                };
-                Loading.show();
-                await this.$server
-                    .C("/client/hikvision", addParam)
-                    .then((response: any) => {
-                        ResponseFilter.successCheck(
-                            this,
-                            response,
-                            (response: any) => {
-                                for (const responseElement of response.datas) {
-                                    if (responseElement.statusCode === 200) {
-                                        Dialog.success(this._("w_Hik_AddSuccess"));
-                                        this.pageToList();
-                                    } else {
-                                        Dialog.error(responseElement.message);
-                                    }
-                                }
-                            },
-                            this._("w_Hik_AddFailed")
-                        );
-                    })
-                    .catch((e: any) => {
-                        return ResponseFilter.catchError(
-                            this,
-                            e,
-                            this._("w_Hik_AddFailed")
-                        );
-                    });
-            } else {
-                dataObject.objectId = data.objectId;
-                const datas: any = [dataObject];
-
-                const editParam = {
-                    datas
-                };
-                Loading.show();
-                await this.$server
-                    .U("/client/hikvision", editParam)
-                    .then((response: any) => {
-                        ResponseFilter.successCheck(
-                            this,
-                            response,
-                            (response: any) => {
-                                for (const responseElement of response.datas) {
-                                    if (responseElement.statusCode === 200) {
-                                        Dialog.success(this._("w_Hik_EditSuccess"));
-                                        this.pageToList();
-                                    } else {
-                                        Dialog.error(responseElement.message);
-                                    }
-                                }
-                            },
-                            this._("w_Hik_EditFailed")
-                        );
-                    })
-                    .catch((e: any) => {
-                        return ResponseFilter.catchError(
-                            this,
-                            e,
-                            this._("w_Hik_EditFailed")
-                        );
-                    });
-            }
-        }
-
-        async doDelete() {
-            Dialog.confirm(
-                this._("w_Hik_DeleteConfirm"),
-                this._("w_DeleteConfirm"),
-                () => {
-
-                    let deleteParam: {
-                        objectId: any;
-                    } = {
-                        objectId: []
-                    };
-
-                    for (const param of this.selectedDetail) {
-                        deleteParam.objectId.push(param.objectId);
-                    }
-
-                    Loading.show();
-                    this.$server
-                        .D("/client/hikvision", deleteParam)
-                        .then((response: any) => {
-                            ResponseFilter.successCheck(
-                                this,
-                                response,
-                                (response: any) => {
+            Loading.show();
+            await this.$server
+                .C("/client/hikvision", addParam)
+                .then((response: any) => {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            for (const responseElement of response.datas) {
+                                if (responseElement.statusCode === 200) {
+                                    Dialog.success(this._("w_Hik_AddSuccess"));
                                     this.pageToList();
-                                },
-                                this._("w_DeleteFailed")
-                            );
-                        })
-                        .catch((e: any) => {
-                            return ResponseFilter.catchError(this, e);
-                        });
+                                } else {
+                                    Dialog.error(responseElement.message);
+                                }
+                            }
+                        },
+                        this._("w_Hik_AddFailed")
+                    );
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_Hik_AddFailed")
+                    );
+                });
+        } else {
+            dataObject.objectId = data.objectId;
+            const datas: any = [dataObject];
 
-                    Loading.hide();
-                }
-            );
+            const editParam = {
+                datas
+            };
+            Loading.show();
+            await this.$server
+                .U("/client/hikvision", editParam)
+                .then((response: any) => {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            for (const responseElement of response.datas) {
+                                if (responseElement.statusCode === 200) {
+                                    Dialog.success(this._("w_Hik_EditSuccess"));
+                                    this.pageToList();
+                                } else {
+                                    Dialog.error(responseElement.message);
+                                }
+                            }
+                        },
+                        this._("w_Hik_EditFailed")
+                    );
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_Hik_EditFailed")
+                    );
+                });
         }
+    }
 
-        ITableList() {
-            return `
+    async doDelete() {
+        Dialog.confirm(
+            this._("w_Hik_DeleteConfirm"),
+            this._("w_DeleteConfirm"),
+            () => {
+                let deleteParam: {
+                    objectId: any;
+                } = {
+                    objectId: []
+                };
+
+                for (const param of this.selectedDetail) {
+                    deleteParam.objectId.push(param.objectId);
+                }
+
+                Loading.show();
+                this.$server
+                    .D("/client/hikvision", deleteParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                this.pageToList();
+                            },
+                            this._("w_DeleteFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(this, e);
+                    });
+
+                Loading.hide();
+            }
+        );
+    }
+
+    ITableList() {
+        return `
             interface {
 
                 /**
@@ -407,10 +405,10 @@
 
             }
         `;
-        }
+    }
 
-        IAddAndEditForm() {
-            return `
+    IAddAndEditForm() {
+        return `
             interface {
 
                 /**
@@ -424,10 +422,10 @@
                  * @uiLabel - ${this._("w_Name")}
                  * @uiPlaceHolder - ${this._("w_Name")}
                  * @uiType - ${
-                        this.inputFormData.objectId === ""
-                            ? "iv-form-string"
-                            : "iv-form-label"
-                    }
+                     this.inputFormData.objectId === ""
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
                  */
                 name: string;
 
@@ -457,7 +455,7 @@
 
 
                 /**
-                 * @uiLabel - ${this._('w_Frs_Setting_Ip')}
+                 * @uiLabel - ${this._("w_Frs_Setting_Ip")}
                  * @uiPlaceHolder - ${this._("w_Frs_Setting_Ip")}
                  * @uiType - iv-form-ip
                  */
@@ -473,10 +471,10 @@
 
             }
         `;
-        }
+    }
 
-        IViewForm() {
-            return `
+    IViewForm() {
+        return `
             interface {
 
 
@@ -531,8 +529,8 @@
 
             }
         `;
-        }
     }
+}
 </script>
 
 <style lang="scss" scoped>

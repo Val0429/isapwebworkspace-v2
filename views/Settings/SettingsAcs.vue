@@ -234,12 +234,6 @@ export default class SetupsEmail extends Vue {
                  * @uiHidden - true
                  */
                 fingerprinter: string;
-
-                /**
-                 * @uiLabel - ${this._("w_Acs_AccessGroupName")}
-                 * @uiPlaceHolder - ${this._("w_Acs_AccessGroupName")}
-                 */
-                accessgroup: string;
             }
         `;
     }

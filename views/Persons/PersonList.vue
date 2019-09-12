@@ -5,7 +5,6 @@
             :step="transition.step"
             :type="transition.type"
         >
-
             <!-- List -->
             <iv-card
                 key="transition_1"
@@ -40,7 +39,10 @@
                 >
 
                     <template #imageBase64="{ $attrs }">
-                        <img :src="$attrs.value" />
+                        <img
+                            :src="newImgSrc"
+                            style="margin-left: 30px;"
+                        />
                     </template>
 
                     <template #Actions="{$attrs, $listeners}">
@@ -75,6 +77,14 @@
                             alt=""
                         >
                     </template>
+
+                    <template #image>
+                        <img
+                            class="form-image"
+                            :src="newImgSrc"
+                        />
+                    </template>
+
                 </iv-form>
 
                 <template #footer>
@@ -105,6 +115,13 @@
                     @update:*="updateInputFormData"
                     @submit="saveAddOrEdit($event)"
                 >
+
+                    <template #image>
+                        <img
+                            class="form-image"
+                            :src="newImgSrc"
+                        />
+                    </template>
 
                 </iv-form>
 
@@ -158,7 +175,7 @@ export default class SetupsFloor extends Vue {
     tableMultiple: boolean = true;
     selectedDetail: any = [];
     newImg = new Image();
-    newImgSrc = "";
+    newImgSrc = ImageBase64.pngEmpty;
 
     inputFormData: any = {
         objectId: "",
@@ -175,7 +192,8 @@ export default class SetupsFloor extends Vue {
         realRoles: [],
         useCompany: false,
         useFloor: false,
-        agreeTc: false
+        agreeTc: false,
+        isUseSuntecRewardText: ""
     };
 
     selectItem: {
@@ -195,6 +213,7 @@ export default class SetupsFloor extends Vue {
     mounted() {}
 
     clearInputData() {
+        this.newImgSrc = ImageBase64.pngEmpty;
         this.inputFormData = {
             objectId: "",
             email: "",
@@ -206,32 +225,41 @@ export default class SetupsFloor extends Vue {
             permissionCompanyId: "",
             permissionFloorIds: [],
             imageBase64: "",
-            nric: ""
+            nric: "",
+            realRoles: [],
+            useCompany: false,
+            useFloor: false,
+            agreeTc: false,
+            isUseSuntecRewardText: ""
         };
     }
 
     selectedItem(data) {
-        console.log("!!! data", data);
         this.selectedDetail = data;
     }
 
     getInputData() {
         this.clearInputData();
         for (const param of this.selectedDetail) {
+            let floors = [];
+            this.initSelectItemFloorWithCompany(
+                param.permissionCompany.objectId
+            );
+            this.newImgSrc = param.imageBase64;
             this.inputFormData = {
                 objectId: param.objectId,
                 name: param.name,
                 email: param.email,
-                endDate: param.endDate,
+                endDate: new Date(param.endDate),
                 imageBase64: param.imageBase64,
                 isUseSuntecReward: param.isUseSuntecReward,
                 nric: param.nric,
-                permissionCompany: param.permissionCompany,
-                permissionFloors: param.permissionFloors,
+                permissionCompanyId: param.permissionCompany.objectId,
+                permissionFloors: floors,
                 phone: param.phone,
                 position: param.position,
                 remark: param.remark,
-                startDate: param.startDate,
+                startDate: new Date(param.startDate),
                 unitNumber: param.unitNumber
             };
         }
@@ -252,7 +280,7 @@ export default class SetupsFloor extends Vue {
                 }
             });
         }
-        if (data.key == "companies") {
+        if (data.key == "permissionCompanyId") {
             this.initSelectItemFloorWithCompany(data.value);
         }
         this.inputFormData[data.key] = data.value;
@@ -277,12 +305,11 @@ export default class SetupsFloor extends Vue {
         this.initSelectItem();
     }
 
-    pageToEdit() {
+    async pageToEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
+        await this.initSelectItem();
         this.getInputData();
-        this.initSelectItem();
-        this.clearInputData();
     }
 
     async initSelectItem() {
@@ -418,14 +445,13 @@ export default class SetupsFloor extends Vue {
     }
 
     async saveAddOrEdit(data) {
-        console.log("data", data);
+        console.log(data);
         let param: any = {
             datas: [
                 {
-                    imageBase64: this.newImgSrc,
                     isUseSuntecReward: data.isUseSuntecReward,
-                    permissionFloorIds: data.floors,
-                    permissionCompanyId: data.companies,
+                    permissionFloorIds: data.permissionFloors,
+                    permissionCompanyId: data.permissionCompanyId,
                     name: data.name,
                     email: data.email,
                     nric: data.nric,
@@ -437,6 +463,9 @@ export default class SetupsFloor extends Vue {
                 }
             ]
         };
+        if (this.newImgSrc == ImageBase64.pngEmpty) {
+            param.datas[0].imageBase64 = this.newImgSrc;
+        }
 
         // add
         if (!this.inputFormData.objectId) {
@@ -455,11 +484,7 @@ export default class SetupsFloor extends Vue {
                     );
                 })
                 .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_Dialog_ErrorTitle")
-                    );
+                    return ResponseFilter.catchError(this, e);
                 });
         } else {
             param.datas[0].objectId = data.objectId;
@@ -596,11 +621,8 @@ export default class SetupsFloor extends Vue {
     IViewForm() {
         return `
             interface {
-                /**
-                 * @uiLabel - ${this._("w_Person_Image")}
-                 * @uiType - iv-form-label
-                 */
-                imageBase64?: string;
+
+                image?: any;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Name")}
@@ -648,24 +670,17 @@ export default class SetupsFloor extends Vue {
                  * @uiType - iv-form-label
                  */
                 email: string;
-
-                /**
-                 * @uiLabel - ${this._("w_Person_Agree_Tc")}
-                 * @uiType - iv-form-switch
-                 * @uiDisabled- true
-                 */
-                agreeTc: boolean;
                 
                 /**
                  * @uiLabel - ${this._("w_Person_Agree_App")}
-                 * @uiType - iv-form-switch
-                 * @uiDisabled- true
+                 * @uiType - iv-form-label
                  */
-                isUseSuntecReward?: boolean;
+                isUseSuntecRewardText?: string;
                 
                 /**
                  * @uiLabel - ${this._("w_Person_Remark")}
                  * @uiType - iv-form-textarea
+                 * @uiDisabled- true
                  */
                 remark?: string;
 
@@ -705,33 +720,23 @@ export default class SetupsFloor extends Vue {
                  */
                 imageBase64?: any;
 
+                image?: any;
+
                 /**
                  * @uiLabel - ${this._("w_Person_Name")}
-                 * @uiType - ${
-                     this.inputFormData.objectId == ""
-                         ? "iv-form-string"
-                         : "iv-form-label"
-                 }
+                 * @uiType - iv-form-string
                  */
                 name: string;
 
                 /**
                  * @uiLabel - ${this._("w_Account_UserTitles")}
-                 * @uiType - ${
-                     this.inputFormData.objectId == ""
-                         ? "iv-form-string"
-                         : "iv-form-label"
-                 }
+                 * @uiType - iv-form-string
                  */
                 position?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Account_Phone")}
-                 * @uiType - ${
-                     this.inputFormData.objectId == ""
-                         ? "iv-form-string"
-                         : "iv-form-label"
-                 }
+                 * @uiType - iv-form-string
                  * @uiValidation - ${RegexServices.regexItem.phoneNumber}
                  */
                 phone?: string;
@@ -739,7 +744,10 @@ export default class SetupsFloor extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Person_Company")}
                  */
-                companies: ${toEnumInterface(this.selectItem.company, false)};
+                permissionCompanyId: ${toEnumInterface(
+                    this.selectItem.company,
+                    false
+                )};
 
                 /**
                  * @uiLabel - ${this._("w_Person_Building")}
@@ -751,7 +759,10 @@ export default class SetupsFloor extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Person_Floor")}
                  */
-                floors: ${toEnumInterface(this.selectItem.floor, true)};
+                permissionFloors: ${toEnumInterface(
+                    this.selectItem.floor,
+                    true
+                )};
 
                 /**
                  * @uiLabel - ${this._("w_Person_Door")}
@@ -769,11 +780,6 @@ export default class SetupsFloor extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Person_Email")}
-                 * @uiType - ${
-                     this.inputFormData.objectId == ""
-                         ? "iv-form-string"
-                         : "iv-form-label"
-                 }
                  * @uiValidation - ${RegexServices.regexItem.email}
                  */
                 email: string;
@@ -813,11 +819,7 @@ export default class SetupsFloor extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Person_NRIC")}
-                 * @uiType - ${
-                     this.inputFormData.objectId == ""
-                         ? "iv-form-number"
-                         : "iv-form-string"
-                 }
+                 * @uiType - iv-form-number
                  */
                 nric?: number;
                     }
@@ -825,3 +827,11 @@ export default class SetupsFloor extends Vue {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.form-image {
+    max-width: 100px;
+    max-height: 100px;
+    margin-left: 30px;
+}
+</style>

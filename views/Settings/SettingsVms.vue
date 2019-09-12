@@ -224,6 +224,7 @@ export default class SetingVms extends Vue {
     }
 
     getInputData() {
+        this.clearInputData();
         for (const param of this.selectedDetail) {
             this.inputFormData = {
                 objectId: param.objectId,
