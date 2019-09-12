@@ -1,6 +1,6 @@
 <template>
     <div class="animated fadeIn">
-
+        {{$user.user}}
         <iv-auto-transition
             :step="transition.step"
             :type="transition.type"
@@ -742,7 +742,11 @@ export default class SetupsFloor extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Person_Company")}
-                 * @uiHidden - ${RoleService.haveTenantAdministrator(this)}
+                 * @uiHidden - ${
+                     this.$user.user.roles[0].name !== "TenantAdministrator"
+                         ? false
+                         : true
+                 }
                  */
                 permissionCompanyId: ${toEnumInterface(
                     this.selectItem.company,
