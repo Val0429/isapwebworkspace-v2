@@ -13,9 +13,7 @@
             </div>
         </template>
 
-        <template #footer>
-            © 2019
-        </template>
+        <template #footer>© 2019</template>
 
         <template #nav>
             <SidebarNav>
@@ -59,7 +57,11 @@
 
                 <iv-permission :allow="['SystemAdministrator', 'Administrator']">
                     <!-- <SidebarNavItem
+<<<<<<< HEAD
                         :label="_('m_Navigation_Frs')"
+=======
+                        :label="_('m_Navigation_ISAPFrs')"
+>>>>>>> 7bfab362b51dc204054f641242dcd7c0fb429267
                         url="/client/frs"
                     /> -->
 
@@ -92,6 +94,12 @@
                             :label="_('m_Navigation_Settings_Vms')"
                             url="/settings/vms"
                         />
+
+                        <SidebarNavItem
+                            :label="_('m_Navigation_Frs')"
+                            url="/settings/vms"
+                        />
+
                         <SidebarNavItem
                             :label="_('m_Navigation_Settings_Email')"
                             url="/settings/email"
@@ -106,14 +114,19 @@
                 <!-- <SidebarNavItem
                     :label="_('m_Navigation_Reports')"
                     url="/reports"
-                />
+                /> -->
 
                 <iv-permission :allow="['SystemAdministrator', 'Administrator']">
-                    <SidebarNavItem
+                    <!-- <SidebarNavItem
                         :label="_('m_Navigation_Logs')"
                         url="/logs"
+<<<<<<< HEAD
                     />
                 </iv-permission> -->
+=======
+                    /> -->
+                </iv-permission>
+>>>>>>> 7bfab362b51dc204054f641242dcd7c0fb429267
 
             </SidebarNav>
 
