@@ -216,27 +216,24 @@
         async saveAddOrEdit(data) {
 
             let dataObject: {
-                name?: string;
-                protocol: string;
-                ip: string;
-                port: number;
-                account: string;
-                password: string;
-                floorId: string;
+                name: string;
+                position: string;
+                phone: string;
+                email: number;
+                remark: string;
                 objectId?: string;
+
             } = {
-                protocol: data.protocol,
-                ip: data.ip,
-                port: data.port,
-                account: data.account,
-                password: data.password,
-                floorId: data.floorId,
+                name: data.name,
+                position: data.position,
+                phone: data.phone,
+                email: data.email,
+                remark: data.remark,
             };
 
 
             // add
-            if (this.inputFormData.objectId == "") {
-                dataObject.name = data.name;
+            if (!this.inputFormData.objectId) {
                 const datas: any = [dataObject];
 
                 const addParam = {
@@ -255,7 +252,7 @@
                                         Dialog.success(this._("w_MailSetting_AddEmailAddSuccess"));
                                         this.pageToList();
                                     } else {
-                                        Dialog.error(response.message);
+                                        Dialog.error(responseElement.message);
                                     }
                                 }
                             },
@@ -289,7 +286,7 @@
                                         Dialog.success(this._("w_MailSetting_EditEmailSuccess"));
                                         this.pageToList();
                                     } else {
-                                        Dialog.error(response.message);
+                                        Dialog.error(responseElement.message);
                                     }
                                 }
                             },
@@ -399,11 +396,6 @@
                 /**
                  * @uiLabel - ${this._("w_Name")}
                  * @uiPlaceHolder - ${this._("w_Name")}
-                 * @uiType - ${
-                        this.inputFormData.objectId === ""
-                            ? "iv-form-string"
-                            : "iv-form-label"
-                    }
                  */
                 name: string;
 

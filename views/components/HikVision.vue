@@ -266,7 +266,7 @@
                                         Dialog.success(this._("w_Hik_AddSuccess"));
                                         this.pageToList();
                                     } else {
-                                        Dialog.error(response.message);
+                                        Dialog.error(responseElement.message);
                                     }
                                 }
                             },
@@ -300,7 +300,7 @@
                                         Dialog.success(this._("w_Hik_EditSuccess"));
                                         this.pageToList();
                                     } else {
-                                        Dialog.error(response.message);
+                                        Dialog.error(responseElement.message);
                                     }
                                 }
                             },
