@@ -315,6 +315,12 @@ export default class LangObject {
     w_Hik_Position = 'Device Postion';
     w_Hik_Status = 'Status';
     w_Hik_Endpoint_Name = 'Endpoint Name';
+    w_Hik_floorId = 'Floor Id';
+    w_Hik_AddSuccess = 'Hik Add Success';
+    w_Hik_AddFailed = 'Hik Add Failed';
+    w_Hik_EditSuccess = 'Hik Edit Success';
+    w_Hik_EditFailed = 'Hik Edit Failed';
+    w_Hik_DeleteConfirm = 'Are you sure to delete selected HikVision FR Tablet(s)?';
 
     ////////////////// Suntec Setting //////////////////
     w_Suntec_Suntec = 'Suntec App server';
@@ -360,8 +366,13 @@ export default class LangObject {
 
     ////////////////// VMS Setting //////////////////
     w_Vms_Vms = 'VMS Setting';
+    w_Vms_VmsList = 'VMS List';
     w_Vms_Name = 'Name';
     w_Vms_Protocol = 'Protocol';
+    w_Vms_IP = 'IP';
+    w_Vms_Port = 'Port';
+    w_Vms_Acctount = 'Account';
+    w_Vms_Password = 'Password';
 
     ////////////////// FRS Setting //////////////////
     w_FrsServer_Enable = 'FRS Enable';

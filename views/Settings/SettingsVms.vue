@@ -1,224 +1,416 @@
 <template>
     <div class="animated fadeIn">
-
-        <iv-auto-card
-            :visible="true"
-            :label="_('w_Vms_Vms')"
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
         >
+            <iv-card
+                key="transition_1"
+                v-show="transition.step === 1"
+                :label="_('w_Vms_VmsList')"
+            >
+                <template #toolbox>
+                    <iv-toolbox-view
+                        :disabled="selectedDetail.length !== 1"
+                        @click="pageToView"
+                    />
 
-            <iv-form
-                :interface="IFormComponent()"
-                :value="inputFormData"
-                @submit="updateFormApi($event)"
-            ></iv-form>
+                    <iv-toolbox-edit
+                        :disabled="selectedDetail.length !== 1"
+                        @click="pageToEdit()"
+                    />
+                    <iv-toolbox-delete
+                        :disabled="selectedDetail.length === 0"
+                        @click="doDelete"
+                    />
+                    <iv-toolbox-divider />
+                    <iv-toolbox-add @click="pageToAdd()" />
+                </template>
 
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToEmailTest()"
-                >{{ _('w_Test') }}
-                </b-button>
-            </template>
+                <iv-table
+                    ref="listTable"
+                    :interface="ITableList()"
+                    :multiple="tableMultiple"
+                    :server="{ path: '/client/vms' }"
+                    @selected="selectedItem($event)"
+                >
+                    <template #Actions="{$attrs, $listeners}">
+                        <iv-toolbox-more
+                            size="sm"
+                            :disabled="selectedDetail.length !== 1"
+                        >
+                            <iv-toolbox-view @click="pageToView" />
+                            <iv-toolbox-edit @click="pageToEdit" />
+                            <iv-toolbox-delete @click="doDelete" />
 
-        </iv-auto-card>
+                        </iv-toolbox-more>
+                    </template>
+
+                </iv-table>
+            </iv-card>
+
+            <!-- view -->
+            <iv-auto-card
+                key="transition_2"
+                v-show="transition.step === 2"
+                :visible="true"
+                :label="_('w_Account_ViewUser') "
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="IViewForm()"
+                    :value="inputFormData"
+                >
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+            <!-- Modify -->
+            <iv-auto-card
+                key="transition_3"
+                v-show="transition.step === 3"
+                :visible="true"
+                :label="inputFormData.objectId == '' ? _('w_Account_AddUser') : _('w_Account_EditUser') "
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="IModifyForm()"
+                    :value="inputFormData"
+                    @update:*="updateModifyForm"
+                    @submit="saveModifyForm($event)"
+                >
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+        </iv-auto-transition>
 
     </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from "vue-property-decorator";
+import { Vue, Component } from "vue-property-decorator";
+import { toEnumInterface } from "@/../core";
+
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
 
 // Service
-import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
+import ResponseFilter from "@/services/ResponseFilter";
 import Loading from "@/services/Loading";
-
-interface IInputFormData {
-    email: string;
-    testEmail: string;
-    host: string;
-    password: string;
-    port: number;
-    enable: boolean;
-}
+import RegexServices from "@/services/RegexServices";
 
 @Component({
     components: {}
 })
-export default class SetupsEmail extends Vue {
-    modalShow: boolean = false;
-
-    // input框綁定model資料
-    inputFormData: IInputFormData = {
-        email: "",
-        testEmail: "",
-        host: "",
-        password: "",
-        port: 0,
-        enable: true
+export default class SetingVms extends Vue {
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
     };
 
-    inputTestEmail: string = "";
+    tableMultiple: boolean = true;
+    selectedDetail: any = [];
 
-    created() {
-        this.clearMailServerData();
+    inputFormData = {
+        objectId: "",
+        name: "",
+        protocol: "http",
+        ip: "0.0.0.0",
+        port: 80,
+        account: "",
+        password: ""
+    };
+
+    created() {}
+
+    mounted() {}
+
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        this.clearInputData();
+        (this.$refs.listTable as any).reload();
     }
 
-    mounted() {
-        this.readMailServer();
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.clearInputData();
+        this.getInputData();
     }
 
-    clearMailServerData() {
-        this.inputFormData = {
-            testEmail: "",
-            host: "",
-            password: "",
-            email: "",
-            port: null,
-            enable: true
-        };
-
-        this.inputTestEmail = "";
+    pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearInputData();
     }
 
-    pageToEmailTest() {
-        this.inputTestEmail = "";
-        this.modalShow = !this.modalShow;
+    pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearInputData();
+        this.getInputData();
     }
 
-    // 送出測試
-    async sendEmailTest() {
-        const mailServerObject: {
-            email: string;
-        } = {
-            email: this.inputTestEmail
-        };
-        Loading.show();
-        // await this.$server
-        //     .C("/test/email", mailServerObject)
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             Dialog.success(this._("w_MailServer_Test_Success"));
-        //             this.modalShow = !this.modalShow;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         this.modalShow = !this.modalShow;
-        //         return ResponseFilter.catchError(
-        //             this,
-        //             e,
-        //             this._("w_MailServer_Read_FailMsg")
-        //         );
-        //     });
-    }
+    async doDelete() {
+        await Dialog.confirm(
+            this._("w_Delete_ConfirmContent"),
+            this._("w_Delete_ConfirmLabel"),
+            () => {
+                Loading.show();
+                for (let detail of this.selectedDetail) {
+                    let param = {
+                        objectId: detail.objectId
+                    };
 
-    async readMailServer() {
-        // await this.$server
-        //     .R("/config")
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             this.inputFormData.email = response.smtp.email;
-        //             this.inputFormData.host = response.smtp.host;
-        //             this.inputFormData.password = response.smtp.password;
-        //             this.inputFormData.port = response.smtp.port;
-        //             this.inputFormData.enable = response.smtp.enable;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(
-        //             this,
-        //             e,
-        //             this._("w_MailServer_Read_Fail")
-        //         );
-        //     });
-    }
-
-    async updateFormApi(data) {
-        // port正則
-        const portRegex = /^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/;
-
-        if (!portRegex.test(data.port)) {
-            Dialog.error(this._("w_Error_Port"));
-            return false;
-        }
-
-        const smtp: {
-            email: string;
-            host: string;
-            password: string;
-            port: number;
-            enable: string;
-        } = {
-            email: data.email,
-            host: data.host,
-            password: data.password,
-            port: data.port,
-            enable: data.enable
-        };
-
-        const addParam = {
-            data: {
-                smtp
+                    param = RegexServices.trim(param);
+                    this.$server
+                        .D("/client/vms", param)
+                        .then((response: any) => {
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
+                                    this.pageToList();
+                                }
+                            );
+                        })
+                        .catch((e: any) => {
+                            return ResponseFilter.catchError(this, e);
+                        });
+                }
             }
-        };
-
-        Loading.show();
-        // await this.$server
-        //     .C("/config", addParam)
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             Dialog.success(this._("w_MailSetting_EmailSuccess"));
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(
-        //             this,
-        //             e,
-        //             this._("w_MailServer_Setting_Fail")
-        //         );
-        //     });
+        );
     }
 
-    IFormComponent() {
+    clearInputData() {
+        this.inputFormData = {
+            objectId: "",
+            name: "",
+            protocol: "http",
+            ip: "",
+            port: 0,
+            account: "",
+            password: ""
+        };
+    }
+
+    getInputData() {
+        for (const param of this.selectedDetail) {
+            this.inputFormData = {
+                objectId: param.objectId,
+                name: param.name,
+                protocol: param.protocol,
+                ip: param.ip,
+                port: param.port,
+                account: param.account,
+                password: param.password
+            };
+        }
+    }
+
+    selectedItem(datas: any) {
+        this.selectedDetail = datas;
+    }
+
+    updateModifyForm(datas: any) {
+        this.inputFormData[datas.key] = datas.value;
+    }
+
+    async saveModifyForm(event: any) {
+        let datas: any = {
+            datas: [
+                {
+                    name: this.inputFormData.name,
+                    protocol: this.inputFormData.protocol,
+                    ip: this.inputFormData.ip,
+                    port: this.inputFormData.port,
+                    account: this.inputFormData.account,
+                    password: this.inputFormData.password
+                }
+            ]
+        };
+
+        if (this.inputFormData.objectId == "") {
+            Loading.show();
+            datas = RegexServices.trim(datas);
+            await this.$server
+                .C("/client/vms", datas)
+                .then((response: any) => {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            this.pageToList();
+                        }
+                    );
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(this, e);
+                });
+        } else {
+            Loading.show();
+            datas = RegexServices.trim(datas);
+            await this.$server
+                .U("/client/vms", datas)
+                .then((response: any) => {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            this.pageToList();
+                        }
+                    );
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(this, e);
+                });
+        }
+    }
+
+    ITableList() {
         return `
-             interface IFormComponent {
+            interface {
+                /**
+                 * @uiLabel - ${this._("w_No")}
+                 * @uiType - iv-cell-auto-index
+                 */
+                no: string;
+
                 /**
                  * @uiLabel - ${this._("w_Vms_Name")}
-                 * @uiPlaceHolder - ${this._("w_Vms_Name")}
-                 * @uiHidden - true
                  */
                 name: string;
 
                 /**
                  * @uiLabel - ${this._("w_Vms_Protocol")}
-                 * @uiPlaceHolder - ${this._("w_Vms_Protocol")}
                  */
                 protocol: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Acs_IPAddress")}
-                 * @uiPlaceHolder - ${this._("w_Acs_IPAddress")}
+                 * @uiLabel - ${this._("w_Vms_IP")}
+                 */
+                ip: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Vms_Port")}
+                 */
+                port: string;
+
+            }
+        `;
+    }
+
+    IViewForm() {
+        return `
+            interface {
+                /**
+                 * @uiLabel - ${this._("w_Vms_Name")}
+                 * @uiType - iv-form-label
+                 */
+                name?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Vms_Protocol")}
+                 * @uiType - iv-form-label
+                 */
+                protocol?: string;
+
+                /*
+                * @uiLabel - ${this._("w_Vms_IP")}
+                * @uiType - iv-form-label
+                */
+                ip?: string;
+
+                /*
+                * @uiLabel - ${this._("w_Vms_Port")}
+                * @uiType - iv-form-label
+                */
+                port?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Account_UserTitles")}
+                 * @uiType - iv-form-label
+                 */
+                account?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Vms_Password")}
+                 * @uiType - iv-form-label
+                 */
+                password?: string;
+            }
+        `;
+    }
+
+    IModifyForm() {
+        return `
+            interface {
+                 /**
+                 * @uiLabel - ${this._("w_Vms_Name")}
+                 * @uiPlaceHolder - ${this._("w_Vms_Name")}
+                 */
+                name: string;
+
+                 /**
+                 * @uiLabel - ${this._("w_Vms_Protocol")}
+                 */
+                protocol: ${toEnumInterface({
+                    http: "http",
+                    https: "https"
+                })};
+
+                /**
+                 * @uiLabel - ${this._("w_Vms_IP")}
+                 * @uiPlaceHolder - ${this._("w_Vms_IP")}
                  * @uiType - iv-form-ip
                  */
                 ip: string;
 
-                 /**
-                 * @uiLabel - ${this._("w_Acs_HTTPPort")}
-                 * @uiPlaceHolder - ${this._("w_Acs_HTTPPort")}
+                /**
+                 * @uiLabel - ${this._("w_Port")}
+                 * @uiPlaceHolder - ${this._("w_Port")}
                  * @uiAttrs - { max: 65535, min: 1}
                  */
                 port: number;
 
                 /**
-                 * @uiLabel - ${this._("w_Account")}
-                 * @uiPlaceHolder - ${this._("w_Account")}
+                 * @uiLabel - ${this._("w_Vms_Acctount")}
+                 * @uiPlaceHolder - ${this._("w_Vms_Acctount")}
                  */
                 account: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Password")}
-                 * @uiPlaceHolder - ${this._("w_Password")}
+                 * @uiLabel - ${this._("w_Vms_Password")}
+                 * @uiPlaceHolder - ${this._("w_Vms_Password")}
                  * @uiType - iv-form-password
                  */
                 password: string;
@@ -227,4 +419,10 @@ export default class SetupsEmail extends Vue {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+</style>
+
+
+
 
