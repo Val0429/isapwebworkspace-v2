@@ -29,10 +29,14 @@
                 <template slot="index" slot-scope="data">
                     {{ data.index + (page-1)*perPage+ 1 }}
                 </template>
-                    <template slot="Actions" slot-scope="data">
-                        
-                            <iv-toolbox-view @click="pageToView(data.item)" />
-                        
+                    <template slot="Actions" slot-scope="data">                        
+                            <iv-toolbox-view @click="pageToView(data.item)" />                        
+                    </template>
+                     <template slot="membercount" slot-scope="data">
+                        {{ data.item.members ? data.item.members.length : 0 }}
+                    </template>
+                    <template slot="doorcount" slot-scope="data">
+                        {{ data.item.doors ? data.item.doors.length : 0 }}
                     </template>
                 </b-table>
                 <b-pagination
@@ -55,6 +59,7 @@
                 <template slot="index" slot-scope="data">
                     {{ data.index + (memberPage-1)*perPage + 1 }}
                 </template>
+                
            </b-table>
            <b-pagination
             v-model="memberPage"
@@ -141,28 +146,8 @@ export default class QueryPermission extends Vue {
 
         let promise = this.$server.R('/acs/querypermissiontable'as any, Object.assign({system:800,paging:{page:ctx.currentPage, pageSize:ctx.perPage}}, this.filter));
 
-        return promise.then(async (data:any) => {
+        return promise.then((data:any) => {
           this.total = data.paging.total;
-          let members = await this.getMembers(data.results.map(x=>x.tablename).join(","));
-            for(let item of data.results){
-                item.members = members.filter(x=>x.permissionTable.find(y=> y.objectId == item.objectId));
-                item.membercount = item.members.length;
-                item.doors = [];
-                item.doorcount = 0;
-                if(!item.accesslevels || item.accesslevels.length<=0) continue;                
-                let doors = [];
-                for(let accesslevel of item.accesslevels){
-                    if(accesslevel.type=="doorgroup" && accesslevel.doorgroup){
-                        doors.push(...accesslevel.doorgroup.doors);
-                    }
-                    if(accesslevel.type=="door" && accesslevel.door){
-                        doors.push(accesslevel.door);
-                    }
-                    
-                }
-                item.doors = doors;
-                item.doorcount = doors.length;               
-            }
           // Here we could override the busy state, setting isBusy to false
           // this.isBusy = false
           return(data.results);
@@ -175,10 +160,7 @@ export default class QueryPermission extends Vue {
         })
       }
    
-    async getMembers(permissions:any[]){
-         let resp:any = await this.$server.R("/acs/member" as any, {PermissionTable:permissions});
-         return resp.results;
-    }
+    
     created() {
         this.fields = [
             {
