@@ -158,10 +158,37 @@ export default class HikVision extends Vue {
         floorText: ""
     };
 
+    floors: any = [];
+
     created() {}
 
-    mounted() {}
+    mounted() {
+        this.getFloorApi();
+    }
 
+    async getFloorApi() {
+        await this.$server
+            .R("/location/floor")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (let ret of response.results) {
+                        if (
+                            ret.objectId != undefined &&
+                            ret.name != undefined
+                        ) {
+                            this.$set(this.floors, ret.objectId, ret.name);
+                        }
+                    }
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_Dialog_ErrorTitle")
+                );
+            });
+    }
     clearInputData() {
         this.inputFormData = {
             objectId: "",
@@ -415,8 +442,7 @@ export default class HikVision extends Vue {
                  * @uiLabel - ${this._("w_Hik_floorId")}
                  * @uiPlaceHolder - ${this._("w_Hik_floorId")}
                  */
-                floorId: string;
-
+                floorId: ${toEnumInterface(this.floors)};
 
                 /**
                  * @uiLabel - ${this._("w_Name")}
