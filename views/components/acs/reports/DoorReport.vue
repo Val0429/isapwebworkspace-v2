@@ -131,7 +131,7 @@ export default class DoorReport extends Vue  {
              * @uiType - iv-form-date
              * @uiLabel - ${this._('resignationDate')}
              */
-            ResignDate?:Date;
+            ResignationDate?:Date;
         }`;
             
     }

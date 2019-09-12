@@ -130,7 +130,7 @@ itemsProvider (ctx) {
              * @uiType - iv-form-date
              * @uiLabel - ${this._('resignationDate')}
              */
-            ResignDate?:Date;
+            ResignationDate?:Date;
         }`;
             
     }
