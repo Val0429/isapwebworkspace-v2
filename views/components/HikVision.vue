@@ -479,6 +479,15 @@
             return `
             interface {
 
+
+            /**
+             * @uiLabel - ${this._("w_Hik_floorId")}
+             * @uiType - iv-form-label
+             */
+            floorId: string;
+
+
+
             /**
              * @uiLabel - ${this._("w_Account_FloorName")}
              * @uiType - iv-form-label
