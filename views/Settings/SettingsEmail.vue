@@ -1,284 +1,484 @@
 <template>
     <div class="animated fadeIn">
 
-        <iv-auto-card
-            :visible="true"
-            :label="_('w_MailSetting_Test_EmailSetting')"
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
         >
 
-            <iv-form
-                :interface="IMailServerComponent()"
-                :value="inputFormData"
-                @submit="saveMailServer($event)"
-            ></iv-form>
+            <!-- List -->
+            <iv-card
+                key="transition_1"
+                v-show="transition.step === 1"
+                :label=" _('w_MailSetting_List') "
+            >
+                <template #toolbox>
 
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToEmailTest()"
-                >{{ _('w_Test') }}
-                </b-button>
-            </template>
+                    <iv-toolbox-view
+                        :disabled="selectedDetail.length !== 1"
+                        @click="pageToView"
+                    />
+                    <iv-toolbox-edit
+                        :disabled="selectedDetail.length !== 1"
+                        @click="pageToEdit()"
+                    />
+                    <iv-toolbox-delete
+                        :disabled="selectedDetail.length === 0"
+                        @click="doDelete"
+                    />
+                    <iv-toolbox-divider />
+                    <iv-toolbox-add @click="pageToAdd()" />
 
-        </iv-auto-card>
+                </template>
 
-        <!-- 點擊彈出測試輸入框 -->
-        <b-modal
-            hide-footer
-            size="md"
-            :title="_('w_MailSetting_Test')"
-            v-model="modalShow"
-        >
-
-            <div class="card-content">
-                <b-form-group
-                    :label="_('w_MailSetting_Email')"
-                    :label-cols="3"
+                <iv-table
+                    ref="listTable"
+                    :interface="ITableList()"
+                    :multiple="tableMultiple"
+                    :server="{ path: '/notify/person-blacklist' }"
+                    @selected="selectedItem($event)"
                 >
-                    <b-row>
-                        <b-col>
-                            <b-form-input
-                                v-model="inputTestEmail"
-                                :placeholder="_('w_MailSetting_placeholder')"
-                            ></b-form-input>
-                        </b-col>
-                    </b-row>
-                </b-form-group>
-            </div>
 
-            <hr>
+                    <template #Actions="{$attrs, $listeners}">
 
-            <b-row>
-                <!-- 送出email按鈕 -->
-                <b-col
-                    cols="3"
-                    offset="6"
+                        <iv-toolbox-more :disabled="selectedDetail.length !== 1">
+                            <iv-toolbox-view @click="pageToView" />
+                            <iv-toolbox-edit @click="pageToEdit()" />
+                            <iv-toolbox-delete @click="doDelete" />
+                        </iv-toolbox-more>
+                    </template>
+
+                </iv-table>
+            </iv-card>
+
+            <!-- view -->
+            <iv-card
+                key="transition_2"
+                v-show="transition.step === 2"
+                :visible="true"
+                :label=" _('w_MailSetting_View') "
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="IViewForm()"
+                    :value="inputFormData"
                 >
-                    <b-button
-                        class="button button-full"
-                        variant="success"
-                        type="button"
-                        @click="sendEmailTest()"
-                    >{{ _('w_Send') }}
-                    </b-button>
-                </b-col>
-                <!-- 離開按鈕 -->
-                <b-col cols="3">
-                    <b-button
-                        class="button button-full"
-                        variant="secondary"
-                        type="button"
-                        @click="modalShow = !modalShow"
-                    >{{ _('w_Cancel') }}
-                    </b-button>
-                </b-col>
-            </b-row>
 
-        </b-modal>
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-card>
+
+            <!--From (Add and Edit)-->
+            <iv-auto-card
+                key="transition_3"
+                v-show="transition.step === 3"
+                :visible="true"
+                :label="inputFormData.objectId == '' ? _('w_MailSetting_Add') :  _('w_MailSetting_Edit')"
+            >
+                <template #toolbox>
+
+                    <iv-toolbox-back @click="pageToList()" />
+
+                </template>
+
+                <iv-form
+                    :interface="IAddAndEditForm()"
+                    :value="inputFormData"
+                    @submit="saveAddOrEdit($event)"
+                ></iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+        </iv-auto-transition>
 
     </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from "vue-property-decorator";
+    import { Vue, Component, Watch } from "vue-property-decorator";
+    import { toEnumInterface } from "@/../core";
 
-// Service
-import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog";
-import Loading from "@/services/Loading";
+    // Service
+    import ResponseFilter from "@/services/ResponseFilter";
+    import Dialog from "@/services/Dialog";
+    import Loading from "@/services/Loading";
 
-interface IInputFormData {
-    email: string;
-    testEmail: string;
-    host: string;
-    password: string;
-    port: number;
-    enable: boolean;
-}
+    // Transition
+    import Transition from "@/services/Transition";
+    import { ITransition } from "@/services/Transition";
+    import RegexServices from '@/services/RegexServices';
 
-@Component({
-    components: {}
-})
-export default class SetupsEmail extends Vue {
-    modalShow: boolean = false;
 
-    // input框綁定model資料
-    inputFormData: IInputFormData = {
-        email: "",
-        testEmail: "",
-        host: "",
-        password: "",
-        port: 0,
-        enable: true
-    };
+    @Component({
+        components: {}
+    })
+    export default class SettingsEmail extends Vue {
+        transition: ITransition = {
+            type: Transition.type,
+            prevStep: 1,
+            step: 1
+        };
 
-    inputTestEmail: string = "";
+        tableMultiple: boolean = true;
 
-    created() {
-        this.clearMailServerData();
-    }
+        selectedDetail: any = [];
 
-    mounted() {
-        this.readMailServer();
-    }
-
-    clearMailServerData() {
-        this.inputFormData = {
-            testEmail: "",
-            host: "",
-            password: "",
+        inputFormData: any = {
+            objectId: "",
+            name: "",
+            position: "",
+            phone: "",
             email: "",
-            port: null,
-            enable: true
+            remark: "",
+
         };
 
-        this.inputTestEmail = "";
-    }
+        created() {}
 
-    pageToEmailTest() {
-        this.inputTestEmail = "";
-        this.modalShow = !this.modalShow;
-    }
+        mounted() {}
 
-    // 送出測試
-    async sendEmailTest() {
-        const mailServerObject: {
-            email: string;
-        } = {
-            email: this.inputTestEmail
-        };
-        Loading.show();
-        // await this.$server
-        //     .C("/test/email", mailServerObject)
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             Dialog.success(this._("w_MailServer_Test_Success"));
-        //             this.modalShow = !this.modalShow;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         this.modalShow = !this.modalShow;
-        //         return ResponseFilter.catchError(
-        //             this,
-        //             e,
-        //             this._("w_MailServer_Read_FailMsg")
-        //         );
-        //     });
-    }
-
-    async readMailServer() {
-        // await this.$server
-        //     .R("/config")
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             this.inputFormData.email = response.smtp.email;
-        //             this.inputFormData.host = response.smtp.host;
-        //             this.inputFormData.password = response.smtp.password;
-        //             this.inputFormData.port = response.smtp.port;
-        //             this.inputFormData.enable = response.smtp.enable;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(
-        //             this,
-        //             e,
-        //             this._("w_MailServer_Read_Fail")
-        //         );
-        //     });
-    }
-
-    // 新增MailServer
-    async saveMailServer(data) {
-        // port正則
-        const portRegex = /^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/;
-
-        if (!portRegex.test(data.port)) {
-            Dialog.error(this._("w_Error_Port"));
-            return false;
+        clearInputData() {
+            this.inputFormData = {
+                objectId: "",
+                name: "",
+                position: "",
+                phone: "",
+                email: "",
+                remark: "",
+            };
         }
 
-        const smtp: {
-            email: string;
-            host: string;
-            password: string;
-            port: number;
-            enable: string;
-        } = {
-            email: data.email,
-            host: data.host,
-            password: data.password,
-            port: data.port,
-            enable: data.enable
-        };
+        selectedItem(data) {
+            this.selectedDetail = data;
+            this.selectedDetail = [];
+            this.selectedDetail = data;
+        }
 
-        const addParam = {
-            data: {
-                smtp
+        getInputData() {
+            this.clearInputData();
+            for (const param of this.selectedDetail) {
+                this.inputFormData = {
+                    objectId: param.objectId,
+                    name: param.name,
+                    position: param.position,
+                    phone: param.phone,
+                    email: param.email,
+                    remark: param.remark,
+                };
             }
-        };
+        }
 
-        Loading.show();
-        // await this.$server
-        //     .C("/config", addParam)
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             Dialog.success(this._("w_MailSetting_EmailSuccess"));
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(
-        //             this,
-        //             e,
-        //             this._("w_MailServer_Setting_Fail")
-        //         );
-        //     });
-    }
+        pageToList() {
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 1;
+            (this.$refs.listTable as any).reload();
+        }
 
-    IMailServerComponent() {
-        return `
-             interface IMailServerComponent {
+        pageToView() {
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 2;
+            this.getInputData();
+        }
+
+        pageToAdd() {
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 3;
+            this.clearInputData();
+        }
+
+        pageToEdit() {
+            this.transition.prevStep = this.transition.step;
+            this.transition.step = 3;
+            this.getInputData();
+        }
+
+        async saveAddOrEdit(data) {
+
+            let dataObject: {
+                name: string;
+                position: string;
+                phone: string;
+                email: number;
+                remark: string;
+                objectId?: string;
+
+            } = {
+                name: data.name,
+                position: data.position,
+                phone: data.phone,
+                email: data.email,
+                remark: data.remark,
+            };
+
+
+            // add
+            if (!this.inputFormData.objectId) {
+                const datas: any = [dataObject];
+
+                const addParam = {
+                    datas
+                };
+                Loading.show();
+                await this.$server
+                    .C("/notify/person-blacklist", addParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                for (const responseElement of response.datas) {
+                                    if (responseElement.statusCode === 200) {
+                                        Dialog.success(this._("w_MailSetting_AddEmailAddSuccess"));
+                                        this.pageToList();
+                                    } else {
+                                        Dialog.error(responseElement.message);
+                                    }
+                                }
+                            },
+                            this._("w_MailSetting_AddEmailFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(
+                            this,
+                            e,
+                            this._("w_MailSetting_AddEmailFailed")
+                        );
+                    });
+            } else {
+                dataObject.objectId = data.objectId;
+                const datas: any = [dataObject];
+
+                const editParam = {
+                    datas
+                };
+                Loading.show();
+                await this.$server
+                    .U("/notify/person-blacklist", editParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                for (const responseElement of response.datas) {
+                                    if (responseElement.statusCode === 200) {
+                                        Dialog.success(this._("w_MailSetting_EditEmailSuccess"));
+                                        this.pageToList();
+                                    } else {
+                                        Dialog.error(responseElement.message);
+                                    }
+                                }
+                            },
+                            this._("w_MailSetting_EditEmailFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(
+                            this,
+                            e,
+                            this._("w_MailSetting_EditEmailFailed")
+                        );
+                    });
+            }
+        }
+
+        async doDelete() {
+            Dialog.confirm(
+                this._("w_MailSetting_DeleteConfirm"),
+                this._("w_DeleteConfirm"),
+                () => {
+
+                    let deleteParam: {
+                        objectId: any;
+                    } = {
+                        objectId: []
+                    };
+
+                    for (const param of this.selectedDetail) {
+                        deleteParam.objectId.push(param.objectId);
+                    }
+
+                    Loading.show();
+                    this.$server
+                        .D("/notify/person-blacklist", deleteParam)
+                        .then((response: any) => {
+                            ResponseFilter.successCheck(
+                                this,
+                                response,
+                                (response: any) => {
+                                    this.pageToList();
+                                },
+                                this._("w_DeleteFailed")
+                            );
+                        })
+                        .catch((e: any) => {
+                            return ResponseFilter.catchError(this, e);
+                        });
+
+                    Loading.hide();
+                }
+            );
+        }
+
+        ITableList() {
+            return `
+            interface {
+
+                /**
+                 * @uiLabel - ${this._("w_No")}
+                 * @uiType - iv-cell-auto-index
+                 */
+                no: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_MailSetting_SMTPHostname")}
-                 * @uiPlaceHolder - ${this._("w_MailSetting_SMTPHostname")}
+                 * @uiLabel - ${this._("w_Account_UserName")}
                  */
-                host: string;
-
-
-                 /**
-                 * @uiLabel - ${this._("w_MailSetting_PortNumber")}
-                 * @uiPlaceHolder - ${this._("w_MailSetting_PortNumber")}
-                 * @uiAttrs - { max: 65535, min: 1}
-                 */
-                port: number;
+                name: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_MailSetting_Email")}
-                 * @uiPlaceHolder - ${this._("w_MailSetting_Email")}
+                 * @uiLabel - ${this._("w_Person_Position")}
+                 */
+                position: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Person_Phone")}
+                 */
+                phone: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Person_Email")}
                  */
                 email: string;
 
 
                 /**
-                 * @uiLabel - ${this._("w_Password")}
-                 * @uiPlaceHolder - ${this._("w_Password")}
-                 * @uiType - iv-form-password
+                 * @uiLabel - ${this._("w_Account_Remark")}
                  */
-                password: string;
+                remark: string;
 
 
-                /**
-                 * @uiLabel - ${this._("w_MailSetting_Enable")}
-                 * @uiType - iv-form-switch
-                 */
-                enable: boolean;
+                Actions: any
 
             }
         `;
+        }
+
+        IAddAndEditForm() {
+            return `
+            interface {
+
+
+                /**
+                 * @uiLabel - ${this._("w_Name")}
+                 * @uiPlaceHolder - ${this._("w_Name")}
+                 */
+                name: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Person_Position")}
+                 * @uiPlaceHolder - ${this._("w_Person_Position")}
+                 */
+                position: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Person_Phone")}
+                 * @uiPlaceHolder - ${this._("w_Person_Phone")}
+                 * @uiValidation - ${RegexServices.regexItem.phoneNumber}
+                 * @uiInvalidMessage - ${this._('w_Error_Phone')}
+                 */
+                phone: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Person_Email")}
+                 * @uiPlaceHolder - ${this._("w_Person_Email")}
+                 * @uiValidation - ${RegexServices.regexItem.email}
+                 * @uiInvalidMessage - ${this._('w_Error_Email')}
+                 */
+                email: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Account_Remark")}
+                 * @uiPlaceHolder - ${this._("w_Account_Remark")}
+                 */
+                remark: string;
+
+            }
+        `;
+        }
+
+        IViewForm() {
+            return `
+            interface {
+
+                /**
+                 * @uiLabel - ${this._("w_Name")}
+                 * @uiType - iv-form-label
+                 */
+                name?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Person_Position")}
+                 * @uiType - iv-form-label
+                 */
+                position?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Person_Phone")}
+                 * @uiType - iv-form-label
+                 */
+                phone?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Person_Email")}
+                 * @uiType - iv-form-label
+                 */
+                email?: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Account_Remark")}
+                 * @uiType - iv-form-label
+                 */
+                remark?: string;
+
+
+            }
+        `;
+        }
     }
-}
 </script>
 
+<style lang="scss" scoped>
+</style>

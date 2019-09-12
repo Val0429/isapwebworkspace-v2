@@ -24,6 +24,9 @@ interface RestfulRequest extends ApisRequestBase {
         ////// HikVision //////
         '/client/hikvision': [any, any, false];
 
+        ////// email //////
+        '/notify/person-blacklist': [any, any, false];
+
         ////// Setting //////
         '/setting/suntec-app': [any, any, false];
         '/setting/acs': [any, any, false];
@@ -65,6 +68,9 @@ interface RestfulRequest extends ApisRequestBase {
         ////// HikVision //////
         '/client/hikvision': [any, any, false];
 
+        ////// email //////
+        '/notify/person-blacklist': [any, any, false];
+
         ////// Setting //////
         '/setting/acs-group': [any, any, false];
         '/setting/smtp/test': [any, any, false];
@@ -99,6 +105,9 @@ interface RestfulRequest extends ApisRequestBase {
         ////// HikVision //////
         '/client/hikvision': [any, any, false];
 
+        ////// email //////
+        '/notify/person-blacklist': [any, any, false];
+
         ////// Setting //////
         '/setting/suntec-app': [any, any, false];
         '/setting/acs': [any, any, false];
@@ -131,6 +140,9 @@ interface RestfulRequest extends ApisRequestBase {
 
         ////// HikVision //////
         '/client/hikvision': [any, any, false];
+
+        ////// email //////
+        '/notify/person-blacklist': [any, any, false];
 
         ////// Setting //////
         '/setting/acs-group': [any, any, false];

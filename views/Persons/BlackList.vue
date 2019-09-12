@@ -259,18 +259,9 @@ export default class SetupsFloor extends Vue {
                         this,
                         response,
                         (response: any) => {
-                            if (response.datas) {
-                                if (response.datas[0].statusCode == 200) {
-                                    Dialog.success(
-                                        this._("w_Dialog_SuccessTitle")
-                                    );
-                                    this.pageToList();
-                                } else {
-                                    Dialog.error(response.message);
-                                }
-                            }
-                        },
-                        this._("w_Dialog_ErrorTitle")
+                            Dialog.success(this._("w_Dialog_SuccessTitle"));
+                            this.pageToList();
+                        }
                     );
                 })
                 .catch((e: any) => {

@@ -276,6 +276,7 @@ export default class LangObject {
     w_Person_Disable_Permission = '進出權限過期日';
     w_Person_Card_Number = '卡號';
     w_Person_NRIC = 'NRIC';
+    w_Person_Position = '職務';
 
     ////////////////// Blacklist List //////////////////
     w_Blacklist_Blacklist = '黑名單列表';
@@ -396,6 +397,17 @@ export default class LangObject {
     w_MailSetting_Email = '信箱';
 
     w_MailSetting_EmailSuccess = '信箱設定成功';
+
+    w_MailSetting_AddEmailAddSuccess = 'Email Notify Add Success';
+    w_MailSetting_AddEmailFailed = 'Email Notify Add Failed';
+    w_MailSetting_EditEmailSuccess = 'Email Notify Edit Failed';
+    w_MailSetting_EditEmailFailed= 'Email Notify Edit Failed';
+    w_MailSetting_DeleteConfirm= 'Are you sure to delete selected Email Notify(s)?';
+
+    w_MailSetting_List = 'Email Notify List';
+    w_MailSetting_Add = 'Add Email Notify';
+    w_MailSetting_Edit = 'Edit Email Notify';
+    w_MailSetting_View = 'View Email Notify';
 
     ////////////////// License //////////////////
     w_License_List = '憑證清單';
