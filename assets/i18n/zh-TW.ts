@@ -42,6 +42,7 @@ export default class LangObject {
     w_DeleteFailed = '刪除失敗';
     w_Delete_ConfirmLabel = '確認刪除';
     w_Delete_ConfirmContent = '請確認刪除的選項';
+    w_Region_ErrorFileToLarge = 'Image max size is 7MB';
 
     // Status
     w_Status_Enable = 'Enable';
