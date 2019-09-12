@@ -73,7 +73,7 @@ export default class CardExpirationReport extends Vue  {
   itemsProvider (ctx) {
         // Here we don't set isBusy prop, so busy state will be
         // handled by table itself
-        // this.isBusy = true
+        this.isBusy = true
 
         console.log("filter", this.filter);
 
@@ -82,11 +82,11 @@ export default class CardExpirationReport extends Vue  {
         return promise.then(async (data:any) => {
           this.total = data.paging.total;          
           // Here we could override the busy state, setting isBusy to false
-          // this.isBusy = false
+          this.isBusy = false
           return(data.results);
         }).catch(error => {
           // Here we could override the busy state, setting isBusy to false
-          // this.isBusy = false
+          this.isBusy = false
           // Returning an empty array, allows table to correctly handle
           // internal busy state in case of error
           return []
