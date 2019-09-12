@@ -393,7 +393,6 @@ export default class SetupsAccount extends Vue {
         for (let company of this.companies) {
             if (companyId == company.objectId) {
                 for (let floor of company.floors) {
-                    console.log("!!! floor", floor);
                     this.$set(
                         this.selectItem.floor,
                         floor.objectId,
@@ -599,8 +598,6 @@ export default class SetupsAccount extends Vue {
     }
 
     async saveModifyForm(event: any) {
-        console.log(event);
-        console.log(this.inputFormData);
         let datas: any = {
             datas: [
                 {
@@ -614,7 +611,6 @@ export default class SetupsAccount extends Vue {
                 }
             ]
         };
-        console.log(datas);
 
         // // append old role
         // for (let loopData of this.inputFormData.realRoles) {
@@ -673,7 +669,6 @@ export default class SetupsAccount extends Vue {
         } else {
             Loading.show();
             datas = RegexServices.trim(datas);
-            console.log(datas);
             // await this.$server
             //     .U("/user/web", datas)
             //     .then((response: any) => {

@@ -29,6 +29,7 @@ export default class LangObject {
     w_Email_Placeholder = 'ex : admin@isap.com';
     w_Leave = 'Leave';
     w_Check = 'Check';
+    w_URL = 'URL';
 
     w_CurrentPassword = 'Current Password';
     w_CurrentPasswordConfirm = 'Current PasswordConfirm';
@@ -355,7 +356,7 @@ export default class LangObject {
     w_Smtp_Read_Fail = 'Mail Server read failed.';
 
     ////////////////// FRS Setting //////////////////
-    w_Frs_Setting_FrList = 'FRS List';
+    w_Frs_Setting_FrList = 'FRS Setting';
     w_Frs_Setting_Account = 'Account';
     w_Frs_Setting_Password = 'Password';
     w_Frs_Setting_Ip = 'IP';
@@ -364,8 +365,24 @@ export default class LangObject {
 
     ////////////////// VMS Setting //////////////////
     w_Vms_Vms = 'VMS Setting';
+    w_Vms_VmsList = 'VMS List';
     w_Vms_Name = 'Name';
     w_Vms_Protocol = 'Protocol';
+    w_Vms_IP = 'IP';
+    w_Vms_Port = 'Port';
+    w_Vms_Acctount = 'Account';
+    w_Vms_Password = 'Password';
+
+    ////////////////// FRS Setting //////////////////
+    w_FrsServer_Enable = 'FRS Enable';
+    w_FrsServer_Setting = 'Set FRS Server';
+    w_FrsServer_Test = 'Test FRS';
+    w_FrsServer_Phone = 'Phone Number';
+    w_FrsServer_Setting_Success = 'FRS Server set success.';
+    w_FrsServer_Setting_Fail = 'FRS Server set failed.';
+    w_FrsServer_Setting_Test_Fail = 'FRS Server test failed.';
+    w_FrsServer_Setting_Test_Success = 'FRS Server test success.';
+    w_FrsServer_Read_Fail = 'FRS Server read failed.';
 
     ////////////////// Mail Notify Setting //////////////////
     w_MailSetting_Enable = 'Enable';
