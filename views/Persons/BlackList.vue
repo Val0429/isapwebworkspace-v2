@@ -445,7 +445,7 @@ export default class SetupsFloor extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Blacklist_NRIC")}
                  */
-                nric: string;
+                nric?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Blacklist_Company")}
