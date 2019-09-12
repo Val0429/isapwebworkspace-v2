@@ -30,12 +30,6 @@ export class ResponseFilter {
             return false;
         }
 
-        // not array
-        if (response.length == undefined) {
-            callback(response);
-            return false;
-        }
-
         if (response.datas == undefined) {
             callback(response);
             return false;
@@ -58,6 +52,7 @@ export class ResponseFilter {
                 }
             }
         }
+
         if (responseItem.errorLength > 0) {
             let message = '';
             for (let errorMessage of responseItem.errorMessageList) {
