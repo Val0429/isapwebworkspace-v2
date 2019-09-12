@@ -57,11 +57,7 @@
 
                 <iv-permission :allow="['SystemAdministrator', 'Administrator']">
                     <!-- <SidebarNavItem
-<<<<<<< HEAD
-                        :label="_('m_Navigation_Frs')"
-=======
                         :label="_('m_Navigation_ISAPFrs')"
->>>>>>> 7bfab362b51dc204054f641242dcd7c0fb429267
                         url="/client/frs"
                     /> -->
 
@@ -120,13 +116,8 @@
                     <!-- <SidebarNavItem
                         :label="_('m_Navigation_Logs')"
                         url="/logs"
-<<<<<<< HEAD
-                    />
-                </iv-permission> -->
-=======
                     /> -->
                 </iv-permission>
->>>>>>> 7bfab362b51dc204054f641242dcd7c0fb429267
 
             </SidebarNav>
 
