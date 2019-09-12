@@ -275,6 +275,7 @@ export default class LangObject {
     w_Person_Disable_Permission = 'Disble Permission Date';
     w_Person_Card_Number = 'Card Number';
     w_Person_NRIC = 'NRIC';
+    w_Person_Position = 'Position';
 
     ////////////////// Blacklist List //////////////////
     w_Blacklist_Blacklist = 'Blacklist';
@@ -401,6 +402,17 @@ export default class LangObject {
 
     w_MailSetting_EmailSuccess = 'Email Setting has been updated';
 
+    w_MailSetting_AddEmailAddSuccess = 'Email Notify Add Success';
+    w_MailSetting_AddEmailFailed = 'Email Notify Add Failed';
+    w_MailSetting_EditEmailSuccess = 'Email Notify Edit Failed';
+    w_MailSetting_EditEmailFailed= 'Email Notify Edit Failed';
+    w_MailSetting_DeleteConfirm= 'Are you sure to delete selected Email Notify(s)?';
+
+    w_MailSetting_List = 'Email Notify List';
+    w_MailSetting_Add = 'Add Email Notify';
+    w_MailSetting_Edit = 'Edit Email Notify';
+    w_MailSetting_View = 'View Email Notify';
+
     ////////////////// License //////////////////
     w_License_List = 'License List';
     w_License_Add = 'Add License';
@@ -455,4 +467,5 @@ export default class LangObject {
     w_Logs_Owner = 'Owner';
     w_Logs_Entity = 'Entity';
     w_Logs_Message = 'Message';
+
 }
