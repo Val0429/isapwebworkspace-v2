@@ -12,14 +12,14 @@ import Loading from '@/services/Loading';
 import RegexServices from '@/services/RegexServices';
 
 @Component
-export class HikvisionListForm extends Vue implements IFormQuick {
-    path: string = '/client/hikvision';
-    tView: string = "_('w_Hik_FrList')";
-    tAdd: string = "_('w_Hik_AddFr')";
-    tPreview?: string = "_('w_Hik_ViewFr')";
-    tEdit?: string = "_('w_Hik_EditFr')";
+export class BlacklistForm extends Vue implements IFormQuick {
+    path: string = '/person/staff-blacklist';
+    tView: string = "_('w_Blacklist_Blacklist')";
+    tAdd: string = "_('w_Blacklist_AddBlack')";
+    tPreview?: string = "_('w_Blacklist_ViewBlack')";
+    tEdit?: string = "_('w_Blacklist_EditBlack')";
     canAdd?: boolean = true;
-    canPreview?: boolean = true;
+    canPreview?: boolean = false;
     canEdit?: boolean = true;
     canDelete?: boolean = true;
 
@@ -43,32 +43,32 @@ export class HikvisionListForm extends Vue implements IFormQuick {
                         username: string;
 
                         /**
-                         * @uiLabel - ${this._('w_Hik_IPAddress')}
+                         * @uiLabel - ${this._('w_Frs_IPAddress')}
                          */
                         ip: string;
 
                         /**
-                         * @uiLabel - ${this._('w_Hik_HTTPPort')}
+                         * @uiLabel - ${this._('w_Frs_HTTPPort')}
                          */
                         port: string;
 
                         /**
-                         * @uiLabel - ${this._('w_Hik_Device_Name')}
+                         * @uiLabel - ${this._('w_Frs_Device_Name')}
                          */
                         deviceName: string;
 
                         /**
-                         * @uiLabel - ${this._('w_Hik_Position')}
+                         * @uiLabel - ${this._('w_Frs_Position')}
                          */
                         devicePostion: string;
 
                         /**
-                         * @uiLabel - ${this._('w_Hik_Status')}
+                         * @uiLabel - ${this._('w_Frs_Status')}
                          */
                         status?: string;
 
                         /**
-                         * @uiLabel - ${this._('w_Hik_Endpoint_Name')}
+                         * @uiLabel - ${this._('w_Frs_Endpoint')}
                          */
                         endpointName?: string;
                     }
@@ -104,39 +104,39 @@ export class HikvisionListForm extends Vue implements IFormQuick {
                         confirmPassword?: string;
 
                         /**
-                         * @uiLabel - ${this._('w_Hik_IPAddress')}
-                         * @uiPlaceHolder - ${this._('w_Hik_IPAddress')}
+                         * @uiLabel - ${this._('w_Frs_IPAddress')}
+                         * @uiPlaceHolder - ${this._('w_Frs_IPAddress')}
                          * @uiType - iv-form-ip
                          */
                         ip: string;
 
                         /**
-                         * @uiLabel - ${this._('w_Hik_HTTPPort')}
-                         * @uiPlaceHolder - ${this._('w_Hik_HTTPPort')}
+                         * @uiLabel - ${this._('w_Frs_HTTPPort')}
+                         * @uiPlaceHolder - ${this._('w_Frs_HTTPPort')}
                          * @uiAttrs - { max: 65535, min: 1}
                          */
                         port: string;
 
                         /**
-                         * @uiLabel - ${this._('w_Hik_Device_Name')}
+                         * @uiLabel - ${this._('w_Frs_Device_Name')}
                          * @uiType - iv-form-string
                          */
                         deviceName: string;
 
                         /**
-                         * @uiLabel - ${this._('w_Hik_Position')}
+                         * @uiLabel - ${this._('w_Frs_Position')}
                          * @uiType - iv-form-string
                          */
                         devicePostion: string;
 
                         /**
-                         * @uiLabel - ${this._('w_Hik_Status')}
+                         * @uiLabel - ${this._('w_Frs_Status')}
                          * @uiHidden - ${type !== EFormQuick.Preview}
                          */
                         status?: string;
 
                         /**
-                         * @uiLabel - ${this._('w_Hik_Endpoint_Name')}
+                         * @uiLabel - ${this._('w_Frs_Endpoint')}
                          * @uiType - iv-form-string
                          */
                         endpointName?: string;
@@ -160,4 +160,4 @@ export class HikvisionListForm extends Vue implements IFormQuick {
         return row;
     }
 }
-export default HikvisionListForm;
+export default BlacklistForm;

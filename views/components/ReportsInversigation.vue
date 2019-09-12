@@ -336,19 +336,19 @@ export default class ReportsInversigation extends Vue {
 
         Loading.show();
         param = RegexServices.trim(param);
-        await this.$server
-            .R("/flow2/investigation", param)
-            .then((response: any) => {
-                ResponseFilter.successCheck(this, response, (response: any) => {
-                    for (let result of response.results) {
-                        this.resolveInvestigationResponse(result);
-                    }
-                    this.initWS();
-                });
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
+        // await this.$server
+        //     .R("/flow2/investigation", param)
+        //     .then((response: any) => {
+        //         ResponseFilter.successCheck(this, response, (response: any) => {
+        //             for (let result of response.results) {
+        //                 this.resolveInvestigationResponse(result);
+        //             }
+        //             this.initWS();
+        //         });
+        //     })
+        //     .catch((e: any) => {
+        //         return ResponseFilter.catchError(this, e);
+        //     });
     }
 
     resolveInvestigationResponse(data: any) {

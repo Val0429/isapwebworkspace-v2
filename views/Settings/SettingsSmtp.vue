@@ -27,20 +27,20 @@
         <b-modal
             hide-footer
             size="md"
-            :title="_('w_MailServer_Test')"
+            :title="_('w_Smtp_Test')"
             v-model="modalShow"
         >
 
             <div class="card-content">
                 <b-form-group
-                    :label="_('w_MailSetting_Email')"
+                    :label="_('w_Smtp_Email')"
                     :label-cols="3"
                 >
                     <b-row>
                         <b-col>
                             <b-form-input
                                 v-model="inputTestEmail"
-                                :placeholder="_('w_MailServer_placeholder')"
+                                :placeholder="_('w_Email_Placeholder')"
                             ></b-form-input>
                         </b-col>
                     </b-row>
@@ -88,28 +88,28 @@ import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 
-interface IInputFormData {
-    email: string;
-    testEmail: string;
-    host: string;
-    password: string;
-    port: number;
+interface IinputFormData {
+    id: string;
     enable: boolean;
+    host: string;
+    port: number;
+    email: string;
+    password: string;
 }
 
 @Component({
     components: {}
 })
-export default class SetupsEmail extends Vue {
+export default class MailServer extends Vue {
     modalShow: boolean = false;
 
     // input框綁定model資料
-    inputFormData: IInputFormData = {
-        email: "",
-        testEmail: "",
+    inputFormData: IinputFormData = {
+        id: "",
         host: "",
         password: "",
-        port: 0,
+        email: "",
+        port: null,
         enable: true
     };
 
@@ -125,7 +125,7 @@ export default class SetupsEmail extends Vue {
 
     clearMailServerData() {
         this.inputFormData = {
-            testEmail: "",
+            id: "",
             host: "",
             password: "",
             email: "",
@@ -149,43 +149,44 @@ export default class SetupsEmail extends Vue {
             email: this.inputTestEmail
         };
         Loading.show();
-        // await this.$server
-        //     .C("/test/email", mailServerObject)
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             Dialog.success(this._("w_MailServer_Test_Success"));
-        //             this.modalShow = !this.modalShow;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         this.modalShow = !this.modalShow;
-        //         return ResponseFilter.catchError(
-        //             this,
-        //             e,
-        //             this._("w_MailServer_Read_FailMsg")
-        //         );
-        //     });
+        await this.$server
+            .C("/setting/smtp/test", mailServerObject)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    Dialog.success(this._("w_Smtp_Test_Success"));
+                    this.modalShow = !this.modalShow;
+                });
+            })
+            .catch((e: any) => {
+                this.modalShow = !this.modalShow;
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_Smtp_Test_Fail")
+                );
+            });
     }
 
     async readMailServer() {
-        // await this.$server
-        //     .R("/config")
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             this.inputFormData.email = response.smtp.email;
-        //             this.inputFormData.host = response.smtp.host;
-        //             this.inputFormData.password = response.smtp.password;
-        //             this.inputFormData.port = response.smtp.port;
-        //             this.inputFormData.enable = response.smtp.enable;
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(
-        //             this,
-        //             e,
-        //             this._("w_MailServer_Read_Fail")
-        //         );
-        //     });
+        let param: any = { paging: { all: true } };
+        await this.$server
+            .R("/setting/smtp", param)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    this.inputFormData.enable = response.enable;
+                    this.inputFormData.host = response.host;
+                    this.inputFormData.port = response.port;
+                    this.inputFormData.email = response.email;
+                    this.inputFormData.password = response.password;
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_Smtp_Read_Fail")
+                );
+            });
     }
 
     // 新增MailServer
@@ -198,41 +199,34 @@ export default class SetupsEmail extends Vue {
             return false;
         }
 
-        const smtp: {
-            email: string;
+        const mailServerObject: {
+            enable: boolean;
             host: string;
-            password: string;
             port: number;
-            enable: string;
+            email: string;
+            password: string;
         } = {
-            email: data.email,
+            enable: data.enable,
             host: data.host,
-            password: data.password,
             port: data.port,
-            enable: data.enable
+            email: data.email,
+            password: data.password
         };
-
-        const addParam = {
-            data: {
-                smtp
-            }
-        };
-
         Loading.show();
-        // await this.$server
-        //     .C("/config", addParam)
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             Dialog.success(this._("w_MailSetting_EmailSuccess"));
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(
-        //             this,
-        //             e,
-        //             this._("w_MailServer_Setting_Fail")
-        //         );
-        //     });
+        await this.$server
+            .U("/setting/smtp", mailServerObject)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    Dialog.success(this._("w_Smtp_Setting_Success"));
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_Smtp_Setting_Fail")
+                );
+            });
     }
 
     IMailServerComponent() {
@@ -241,23 +235,30 @@ export default class SetupsEmail extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_MailSetting_SMTPHostname")}
-                 * @uiPlaceHolder - ${this._("w_MailSetting_SMTPHostname")}
+                 * @uiLabel - ${this._("w_Smtp_Enable")}
+                 * @uiType - iv-form-switch
+                 */
+                enable: boolean;
+
+
+                /**
+                 * @uiLabel - ${this._("w_Host")}
+                 * @uiPlaceHolder - ${this._("w_Host")}
                  */
                 host: string;
 
 
                  /**
-                 * @uiLabel - ${this._("w_MailSetting_PortNumber")}
-                 * @uiPlaceHolder - ${this._("w_MailSetting_PortNumber")}
+                 * @uiLabel - ${this._("w_Port")}
+                 * @uiPlaceHolder - ${this._("w_Port_PlaceHolder")}
                  * @uiAttrs - { max: 65535, min: 1}
                  */
                 port: number;
 
 
                 /**
-                 * @uiLabel - ${this._("w_MailSetting_Email")}
-                 * @uiPlaceHolder - ${this._("w_MailSetting_Email")}
+                 * @uiLabel - ${this._("w_Smtp_Email")}
+                 * @uiPlaceHolder - ${this._("w_Email_Placeholder")}
                  */
                 email: string;
 
@@ -268,14 +269,6 @@ export default class SetupsEmail extends Vue {
                  * @uiType - iv-form-password
                  */
                 password: string;
-
-
-                /**
-                 * @uiLabel - ${this._("w_MailServer_Enable")}
-                 * @uiType - iv-form-switch
-                 */
-                enable: boolean;
-
             }
         `;
     }

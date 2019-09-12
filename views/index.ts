@@ -16,7 +16,9 @@ import SetupsDoor from './components/SetupsDoor.vue';
 import SetupsCompany from './components/SetupsCompany.vue';
 import PersonsPersonList from './Persons/PersonList.vue';
 import PersonsBlackList from './Persons/BlackList.vue';
+import IsapFrs from './components/IsapFrs.vue';
 import HikVision from './components/HikVision.vue';
+import SettingsSuntec from './Settings/SettingsSuntec.vue';
 import SettingsAcs from './Settings/SettingsAcs.vue';
 import SettingsSmtp from './Settings/SettingsSmtp.vue';
 import SettingsVms from './Settings/SettingsVms.vue';
@@ -36,11 +38,12 @@ $({ path: '/persons', name: "_('m_Navigation_Persons')", permission: true, redir
 $({ path: '/persons/personlist', name: "_('m_Navigation_Persons_PersonList')", icon: 'fa-user', permission: true })(PersonsPersonList);
 $({ path: '/persons/blacklist', name: "_('m_Navigation_Persons_BlackList')", icon: 'fa-ban', permission: true })(PersonsBlackList);
 
-$({ path: '/client', name: "_('m_Navigation_HikVision')", permission: true, redirect: '/client/hikvision' })();
+$({ path: '/client', name: "_('m_Navigation_Server')", permission: true, redirect: '/client/frs' })();
+$({ path: '/client/frs', name: "_('m_Navigation_Frs')", icon: 'fa-server', permission: true })(IsapFrs);
 $({ path: '/client/hikvision', name: "_('m_Navigation_HikVision')", icon: 'fa-server', permission: true })(HikVision);
 
 $({ path: '/settings', name: "_('m_Navigation_Settings')", permission: true, redirect: '/settings/email' })();
-$({ path: '/settings/suntec_app', name: "_('m_Navigation_Settings_SuntecAppServer')", icon: 'fa-server', permission: true })();
+$({ path: '/settings/suntec_app', name: "_('m_Navigation_Settings_SuntecAppServer')", icon: 'fa-server', permission: true })(SettingsSuntec);
 $({ path: '/settings/acs', name: "_('m_Navigation_Settings_AcsServer')", icon: 'fa-server', permission: true })(SettingsAcs);
 $({ path: '/settings/smtp', name: "_('m_Navigation_Settings_SmtpServer')", icon: 'fa-server', permission: true })(SettingsSmtp);
 $({ path: '/settings/vms', name: "_('m_Navigation_Settings_Vms')", icon: 'fa-server', permission: true })(SettingsVms);

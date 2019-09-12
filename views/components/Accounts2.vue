@@ -1,6 +1,133 @@
 <template>
-    <div key="main">
-        <ivc-blacklist-form key="AccountForm" />
+    <div class="animated fadeIn">
+        <iv-auto-transition
+            :step="transition.step"
+            :type="transition.type"
+        >
+            <iv-card
+                key="transition_1"
+                v-show="transition.step === 1"
+                :label="_('w_Account_AccountList')"
+            >
+                <template #toolbox>
+                    <iv-toolbox-view
+                        :disabled="selectedDetail.length !== 1"
+                        @click="pageToView"
+                    />
+
+                    <iv-toolbox-edit
+                        :disabled="selectedDetail.length !== 1"
+                        @click="pageToEdit()"
+                    />
+                    <iv-toolbox-delete
+                        :disabled="selectedDetail.length === 0"
+                        @click="doDelete"
+                    />
+                    <iv-toolbox-divider />
+                    <iv-toolbox-add @click="pageToAdd()" />
+                </template>
+
+                <iv-table
+                    ref="listTable"
+                    :interface="ITableList()"
+                    :multiple="tableMultiple"
+                    :server="{ path: '/user/web' }"
+                    @selected="selectedItem($event)"
+                >
+                    <template #Actions="{$attrs, $listeners}">
+                        <iv-toolbox-more
+                            size="sm"
+                            :disabled="selectedDetail.length !== 1"
+                        >
+                            <iv-toolbox-view @click="pageToView" />
+                            <iv-toolbox-edit @click="pageToEdit" />
+                            <iv-toolbox-delete @click="doDelete" />
+
+                        </iv-toolbox-more>
+                    </template>
+                    <!-- <template #floors="{$attrs}">
+                        <ul>
+                            <li
+                                v-for="f in $attrs.value"
+                                :key="f.objectId"
+                            >
+                                {{ f.name }}
+                            </li>
+                        </ul>
+                    </template>
+                    <template #company="{$attrs}">
+                        {{ $attrs.value.name }}
+                    </template> -->
+                    <template #floors="{$attrs}">
+                        <div v-html="tableFloorString($attrs.row)"></div>
+                    </template>
+                    <template #company="{$attrs}">
+                        <div v-html="tableCompanyString($attrs.row)"></div>
+                    </template>
+
+                </iv-table>
+            </iv-card>
+
+            <!-- view -->
+            <iv-auto-card
+                key="transition_2"
+                v-show="transition.step === 2"
+                :visible="true"
+                :label="_('w_Account_ViewUser') "
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="IViewForm()"
+                    :value="inputFormData"
+                >
+                </iv-form>
+
+                <template #footer>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+            <!-- Modify -->
+            <iv-auto-card
+                key="transition_3"
+                v-show="transition.step === 3"
+                :visible="true"
+                :label="inputFormData.objectId == '' ? _('w_Account_AddUser') : _('w_Account_EditUser') "
+            >
+                <template #toolbox>
+                    <iv-toolbox-back @click="pageToList()" />
+                </template>
+
+                <iv-form
+                    :interface="IModifyForm()"
+                    :value="inputFormData"
+                    @update:*="updateModifyForm"
+                    @submit="saveModifyForm($event)"
+                >
+                </iv-form>
+
+                <template #footer-before>
+                    <b-button
+                        variant="dark"
+                        size="lg"
+                        @click="pageToList()"
+                    >{{ _('w_Back') }}
+                    </b-button>
+                </template>
+
+            </iv-auto-card>
+
+        </iv-auto-transition>
+
     </div>
 </template>
 
@@ -22,8 +149,10 @@ import ResponseFilter from "@/services/ResponseFilter";
 import Loading from "@/services/Loading";
 import RegexServices from "@/services/RegexServices";
 
-@Component
-export default class Blacklist extends Vue {
+@Component({
+    components: {}
+})
+export default class SetupsAccount extends Vue {
     transition: ITransition = {
         type: Transition.type,
         prevStep: 1,
@@ -44,6 +173,7 @@ export default class Blacklist extends Vue {
         floorsText: "",
         role: "",
         name: "",
+        company: "",
         companies: "",
         password: "",
         confirmPassword: "",
@@ -136,21 +266,20 @@ export default class Blacklist extends Vue {
 
         if (RoleService.haveSystemAdministrator(this)) {
             await this.initSelectItemRole();
-            // await this.initSelectItemCompanyWithAPI();
+            await this.initSelectItemCompanyWithAPI();
         }
 
         if (RoleService.haveAdministrator(this)) {
             await this.initSelectItemRole();
-            // await this.initSelectItemCompanyWithAPI();
-
+            await this.initSelectItemCompanyWithAPI();
             for (const param of this.selectedDetail) {
                 if (
-                    param.data != undefined &&
-                    param.data.company != undefined &&
-                    param.data.company.objectId != undefined
+                    param != undefined &&
+                    param.company != undefined &&
+                    param.company.objectId != undefined
                 ) {
                     await this.initSelectItemFloorWithCompany(
-                        param.data.company.objectId
+                        param.company.objectId
                     );
                 }
             }
@@ -260,12 +389,10 @@ export default class Blacklist extends Vue {
     }
 
     async initSelectItemFloorWithCompany(companyId: string) {
-        console.log("datas", companyId);
         this.selectItem.floor = {};
         for (let company of this.companies) {
-            console.log("!!! company", this.companies);
             if (companyId == company.objectId) {
-                for (let floor of company.floor) {
+                for (let floor of company.floors) {
                     console.log("!!! floor", floor);
                     this.$set(
                         this.selectItem.floor,
@@ -292,6 +419,7 @@ export default class Blacklist extends Vue {
             rolesText: "",
             companiesText: "",
             floorsText: "",
+            company: "",
             companies: "",
             floors: [],
             realRoles: [],
@@ -316,14 +444,18 @@ export default class Blacklist extends Vue {
                 rolesText: this.formRoleText(param),
                 companiesText: this.formCompanyText(param),
                 floorsText: this.formFloorText(param),
+                company: this.formCompanyText(param),
                 companies: "",
                 floors: [],
                 realRoles: [],
                 useCompany: false,
                 useFloor: false
             };
-            if (param.role != undefined && param.role[0] != undefined) {
-                this.inputFormData.role = param.role[0].name;
+            if (param.role != undefined) {
+                this.inputFormData.role = param.role;
+            }
+            if (param.name != undefined) {
+                this.inputFormData.name = param.name;
             }
             for (let loopData of param.role) {
                 if (loopData.name == EUserRole.TenantAdministrator) {
@@ -366,8 +498,8 @@ export default class Blacklist extends Vue {
     tableFloorString(datas: any): string {
         let result: string = "";
         result += "<ul>";
-        if (datas.data != undefined && datas.data.floor != undefined) {
-            for (let loopData of datas.data.floor) {
+        if (datas != undefined && datas.floors != undefined) {
+            for (let loopData of datas.floors) {
                 let tempText = loopData.name;
                 result += `<li>${tempText}</li>`;
             }
@@ -380,11 +512,11 @@ export default class Blacklist extends Vue {
         let result: string = "";
         result += "<ul>";
         if (
-            datas.data != undefined &&
-            datas.data.company != undefined &&
-            datas.data.company.name != undefined
+            datas != undefined &&
+            datas.company != undefined &&
+            datas.company.name != undefined
         ) {
-            result += `<li>${datas.data.company.name}</li>`;
+            result += `<li>${datas.company.name}</li>`;
         }
         result += "</ul>";
         return result;
@@ -407,22 +539,22 @@ export default class Blacklist extends Vue {
     formCompanyText(datas: any): string {
         let result: string = "";
         if (
-            datas.data != undefined &&
-            datas.data.company != undefined &&
-            datas.data.company.name != undefined
+            datas != undefined &&
+            datas.company != undefined &&
+            datas.company.name != undefined
         ) {
-            result = `${datas.data.company.name}`;
+            result = `${datas.company.name}`;
         }
         return result;
     }
 
     formFloorText(datas: any): string {
         let result: string = "";
-        if (datas.data != undefined && datas.data.floor != undefined) {
-            for (let loopData of datas.data.floor) {
+        if (datas != undefined && datas.floors != undefined) {
+            for (let loopData of datas.floors) {
                 result += `${loopData.name}, `;
             }
-            if (datas.data.floor.length > 0) {
+            if (datas.floors.length > 0) {
                 result = result.substr(0, result.length - 2);
             }
         }
@@ -467,61 +599,60 @@ export default class Blacklist extends Vue {
     }
 
     async saveModifyForm(event: any) {
-        // let param: any = {
-        //     objectId: this.inputFormData.objectId,
-        //     username: this.inputFormData.username,
-        //     phone: this.inputFormData.phone,
-        //     email: this.inputFormData.email,
-        //     role: [this.inputFormData.role],
-        //     data: {
-        //         company: this.inputFormData.companies,
-        //         description: "",
-        //         floor: this.inputFormData.floors
-        //     }
-        // };
+        console.log(event);
+        console.log(this.inputFormData);
         let datas: any = {
             datas: [
                 {
-                    objectId: this.inputFormData.objectId,
                     username: this.inputFormData.username,
-                    phone: this.inputFormData.phone,
+                    name: this.inputFormData.name,
                     email: this.inputFormData.email,
-                    role: this.inputFormData.role
+                    role: this.inputFormData.role,
+                    companyId: this.inputFormData.companies,
+                    floorIds: this.inputFormData.floors,
+                    remark: this.inputFormData.remark
                 }
             ]
         };
+        console.log(datas);
 
-        // append old role
-        for (let loopData of this.inputFormData.realRoles) {
-            let haveLoopData = false;
-            for (let paramData of datas.role) {
-                if (loopData == paramData) {
-                    haveLoopData = true;
-                    break;
-                }
-            }
-            if (!haveLoopData) {
-                datas.role.push(loopData);
-            }
+        // // append old role
+        // for (let loopData of this.inputFormData.realRoles) {
+        //     let haveLoopData = false;
+        //     for (let paramData of datas.role) {
+        //         if (loopData == paramData) {
+        //             haveLoopData = true;
+        //             break;
+        //         }
+        //     }
+        //     if (!haveLoopData) {
+        //         datas.role.push(loopData);
+        //     }
+        // }
+
+        // // check TenantAdministrator and company
+        // if (
+        //     datas.data.company == "" &&
+        //     RoleService.haveTenantAdministrator(this)
+        // ) {
+        //     if (
+        //         this.$user.user != undefined &&
+        //         this.$user.user.data != undefined &&
+        //         this.$user.user.data.company != undefined &&
+        //         this.$user.user.data.company.objectId != undefined
+        //     ) {
+        //         datas.data.company = this.$user.user.data.company.objectId;
+        //     }
+        // }
+
+        if (this.inputFormData.phone != "") {
+            datas.datas[0]["phone"] = this.inputFormData.phone;
         }
-
-        // check TenantAdministrator and company
-        if (
-            datas.data.company == "" &&
-            RoleService.haveTenantAdministrator(this)
-        ) {
-            if (
-                this.$user.user != undefined &&
-                this.$user.user.data != undefined &&
-                this.$user.user.data.company != undefined &&
-                this.$user.user.data.company.objectId != undefined
-            ) {
-                datas.data.company = this.$user.user.data.company.objectId;
-            }
+        if (this.inputFormData.objectId != "") {
+            datas.datas[0]["objectId"] = this.inputFormData.objectId;
         }
-
-        if (datas.objectId == "") {
-            datas.password = this.inputFormData.password;
+        if (this.inputFormData.objectId == "") {
+            datas.datas[0].password = this.inputFormData.password;
 
             Loading.show();
             datas = RegexServices.trim(datas);
@@ -542,20 +673,21 @@ export default class Blacklist extends Vue {
         } else {
             Loading.show();
             datas = RegexServices.trim(datas);
-            await this.$server
-                .U("/user/web", datas)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(
-                        this,
-                        response,
-                        (response: any) => {
-                            this.pageToList();
-                        }
-                    );
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(this, e);
-                });
+            console.log(datas);
+            // await this.$server
+            //     .U("/user/web", datas)
+            //     .then((response: any) => {
+            //         ResponseFilter.successCheck(
+            //             this,
+            //             response,
+            //             (response: any) => {
+            //                 this.pageToList();
+            //             }
+            //         );
+            //     })
+            //     .catch((e: any) => {
+            //         return ResponseFilter.catchError(this, e);
+            //     });
         }
     }
 
@@ -569,14 +701,29 @@ export default class Blacklist extends Vue {
                 no: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Blacklist_Image")}
+                 * @uiLabel - ${this._("w_Account_UserName")}
                  */
-                image?: string;
+                name: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Blacklist_NRIC")}
+                 * @uiLabel - ${this._("w_Account_Roles")}
                  */
-                nric?: string;
+                role: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Account_FloorName")}
+                 */
+                floors: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Account_CompanyName")}
+                 */
+                company: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Account_Email")}
+                 */
+                email: string;
 
                 Actions: any;
 
@@ -588,24 +735,59 @@ export default class Blacklist extends Vue {
         return `
             interface {
                 /**
-                 * @uiLabel - ${this._("w_Blacklist_Image")}
+                 * @uiLabel - ${this._("w_Account_Account")}
+                 * @uiType - iv-form-label
                  */
-                image?: string;
+                username?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Blacklist_NRIC")}
+                 * @uiLabel - ${this._("w_Account_Roles")}
+                 * @uiType - iv-form-label
                  */
-                nric?: string;
+                rolesText?: string;
+
+                /*
+                * @uiLabel - ${this._("w_Account_CompanyName")}
+                * @uiType - iv-form-label
+                */
+                company: string;
+
+                /*
+                * @uiLabel - ${this._("w_Account_FloorName")}
+                * @uiType - iv-form-label
+                */
+                floorsText: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Blacklist_Company")}
+                 * @uiLabel - ${this._("w_Account_UserName")}
+                 * @uiType - iv-form-label
                  */
-                companiesText?: any;
+                name?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Blacklist_Reason")}
+                 * @uiLabel - ${this._("w_Account_UserTitles")}
+                 * @uiType - iv-form-label
                  */
-                reason: string;
+                titles?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Account_Phone")}
+                 * @uiType - iv-form-label
+                 */
+                phone?: string;
+
+                 /**
+                 * @uiLabel - ${this._("w_Account_Email")}
+                 * @uiType - iv-form-label
+                 */
+                email?: string;
+
+                 /**
+                 * @uiLabel - ${this._("w_Account_Remark")}
+                 * @uiType - iv-form-textarea
+                 * @uiDisabled - true
+                 */
+                remark?: string;
             }
         `;
     }
@@ -613,32 +795,113 @@ export default class Blacklist extends Vue {
     IModifyForm() {
         return `
             interface {
-                /**
-                 * @uiLabel - ${this._("w_Blacklist_Image")}
+                 /**
+                 * @uiLabel - ${this._("w_Account_Account")}
+                 * @uiType - ${
+                     this.inputFormData.objectId == ""
+                         ? "iv-form-string"
+                         : "iv-form-label"
+                 }
                  */
-                image?: string;
+                username: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Blacklist_NRIC")}
-                 * @uiType - iv-form-label
+                 * @uiLabel - ${this._("w_Account_Password")}
+                 * @uiType - iv-form-password
+                 * @uiHidden - ${this.inputFormData.objectId != ""}
+                 * @uiRequired - true
+                 * @uiColumnGroup - password
                  */
-                nric?: string;
+                password?: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Blacklist_Company")}
-                 * @uiType - iv-form-label
+                 * @uiLabel - ${this._("w_Account_ConfirmPassword")}
+                 * @uiType - iv-form-password
+                 * @uiHidden - ${this.inputFormData.objectId != ""}
+                 * @uiRequired - true
+                 * @uiValidation - (value, all) => value === all.password
+                 * @uiColumnGroup - password
+                 */
+                confirmPassword?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Account_Roles")}
+                 * @uiType - ${
+                     this.inputFormData.objectId != "" ? "iv-form-string" : ""
+                 }
+                role: ${toEnumInterface(this.selectItem.role, false)};
+
+                /**
+                 * @uiLabel - ${this._("w_Account_CompanyName")}
                  * @uiHidden - ${!this.inputFormData.useCompany}
+                 * @uiRequired - true
                  */
-                companiesText?: any;
+                companies: ${toEnumInterface(this.selectItem.company, false)};
 
                 /**
-                 * @uiLabel - ${this._("w_Blacklist_Reason")}
-                 * @uiType - iv-form-label
-                 * @uiHidden - ${!this.inputFormData.useCompany}
+                 * @uiLabel - ${this._("w_Account_FloorName")}
+                 * @uiHidden - ${!this.inputFormData.useFloor}
+                 * @uiRequired - true
                  */
-                reason: string;
+                floors: ${toEnumInterface(this.selectItem.floor, true)};
+
+                 /**
+                 * @uiLabel - ${this._("w_Account_UserName")}
+                 * @uiType - iv-form-string
+                 */
+                name: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Account_UserTitles")}
+                 */
+                titles?: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Account_Phone")}
+                 * @uiValidation - ${RegexServices.regexItem.phoneNumber}
+                 */
+                phone?: string;
+
+                 /**
+                 * @uiLabel - ${this._("w_Account_Email")}
+                 * @uiValidation - ${RegexServices.regexItem.email}
+                 * @uiInvalidMessage - ${this._("w_Error_Email")}
+                 */
+                email: string;
+
+                 /**
+                 * @uiLabel - Remark
+                 * @uiType - iv-form-textarea
+                 */
+                remark?: string;
+            }
+        `;
+    }
+
+    IPasswordForm() {
+        return `
+            interface {
+                /**
+                 * @uiLabel - ${this._("w_Account_Password")}
+                 * @uiType - iv-form-password
+                 */
+                password: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Account_ConfirmPassword")}
+                 * @uiType - iv-form-password
+                 * @uiValidation - (value, all) => value === all.password
+                 */
+                confirmPassword: string;
             }
         `;
     }
 }
 </script>
+
+<style lang="scss" scoped>
+</style>
+
+
+
+

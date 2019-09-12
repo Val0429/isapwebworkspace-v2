@@ -116,9 +116,9 @@ export class AccountListForm extends Vue implements IFormQuick {
 
                         /**
                          * @uiLabel - ${this._('w_Account_FloorName')}
-                         * @uiHidden - ${type === EFormQuick.Preview}
+                         * @uiHidden - ${type === EFormQuick.Preview || !this.selectedRole}
                          */
-                        floors?: ${toEnumInterface(this.selectItem.floors, true)};
+                        floors: ${toEnumInterface(this.selectItem.floors, true)};
 
                         /**
                          * @uiLabel - ${this._('w_Account_UserName')}
@@ -158,10 +158,10 @@ export class AccountListForm extends Vue implements IFormQuick {
                 `;
         }
     }
-    // postAdd(row: any) {
-    //     row = { ...row, username: this.$user.user.username, data: { firstname: row.firstname, groups: row.groups }, roles: row.groups };
-    //     return row;
-    // }
+    postAdd(row: any) {
+        row = { datas: [{ ...row, companyId: row.company, floorIds: row.floors }] };
+        return row;
+    }
     prePreview(row: any) {
         row = { ...row, role: row.role, company: row.company.name, floorsText: row.floors.map((v) => v.name).join(', '), floors: row.floors.map((v) => v.name) };
         console.log('prePreview', row);

@@ -59,6 +59,11 @@
 
                 <iv-permission :allow="['SystemAdministrator', 'Administrator']">
                     <SidebarNavItem
+                        :label="_('m_Navigation_Frs')"
+                        url="/client/frs"
+                    />
+
+                    <SidebarNavItem
                         :label="_('m_Navigation_HikVision')"
                         url="/client/hikvision"
                     />

@@ -3,7 +3,7 @@
 
         <iv-auto-card
             :visible="true"
-            :label="_('w_MailServer_Test_EmailSetting')"
+            :label="_('w_MailSetting_Test_EmailSetting')"
         >
 
             <iv-form
@@ -27,7 +27,7 @@
         <b-modal
             hide-footer
             size="md"
-            :title="_('w_MailServer_Test')"
+            :title="_('w_MailSetting_Test')"
             v-model="modalShow"
         >
 
@@ -40,7 +40,7 @@
                         <b-col>
                             <b-form-input
                                 v-model="inputTestEmail"
-                                :placeholder="_('w_MailServer_placeholder')"
+                                :placeholder="_('w_MailSetting_placeholder')"
                             ></b-form-input>
                         </b-col>
                     </b-row>
@@ -271,7 +271,7 @@ export default class SetupsEmail extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_MailServer_Enable")}
+                 * @uiLabel - ${this._("w_MailSetting_Enable")}
                  * @uiType - iv-form-switch
                  */
                 enable: boolean;

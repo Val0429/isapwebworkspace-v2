@@ -23,6 +23,16 @@ export default class LangObject {
     w_Account = 'Account';
     w_Test = 'Test';
     w_Send = 'Send';
+    w_Host = 'Host';
+    w_Port = 'Port';
+    w_Port_PlaceHolder = 'Port , 1~65535';
+    w_Email_Placeholder = 'ex : admin@isap.com';
+    w_Leave = 'Leave';
+    w_Check = 'Check';
+
+    w_CurrentPassword = 'Current Password';
+    w_CurrentPasswordConfirm = 'Current PasswordConfirm';
+
     w_Error_Port = 'Port should be in 1~65535';
     w_Error_Phone = 'Please check Phone Format';
     w_Error_Email = 'Please check Email Format';
@@ -72,8 +82,28 @@ export default class LangObject {
     w_Login_Error_401 = 'Incorrect username or password';
 
     // Forgot Password
+    w_ForgetPassword = 'Forget Password Step';
+
     w_ForgotPassword_Success = 'Send new Password to E-mail';
     w_ForgotPassword_Failed = 'Not find User, Please try again';
+
+    w_ForgetPassword_Step1 = 'Input basic info';
+    w_ForgetPassword_Step1_info = 'Please input account and SettingEmail then submit to get a verification code.';
+    w_ForgetPassword_Step1_GetVerificationCode = 'Get Verification Code';
+    w_ForgetPassword_Step1Success = 'Submit success. Please receiving letter.';
+    w_ForgetPassword_Step1Failed = 'Submit failed. Please try again.';
+
+    w_ForgetPassword_Step2 = 'Input verification code';
+    w_ForgetPassword_Step2_info = 'Please input verification code and check it right or not.';
+    w_ForgetPassword_Step2Success = 'Verification code.';
+    w_ForgetPassword_Step2Failed = 'Verification code check failed. Please try again.';
+
+    w_ForgetPassword_Step3 = 'Update Password';
+    w_ForgetPassword_Step3_info = 'Please update your password.';
+    w_ForgetPassword_Step3Success = 'Update password success.';
+    w_ForgetPassword_Step3Failed = 'Update password failed. Please try again.';
+
+    w_ForgetPassword_VerificationCode = 'Verification code';
 
     // Logout
     w_Logout = 'Logout';
@@ -106,12 +136,14 @@ export default class LangObject {
     m_Navigation_Persons_PersonList = 'Person List';
     m_Navigation_Persons_BlackList = 'Black List';
     m_Navigation_HikVision = 'HikVision FR Tablet';
+    m_Navigation_Server = 'Server';
+    m_Navigation_Frs = 'iSAP FR Server';
     m_Navigation_Settings = 'Settings';
     m_Navigation_Settings_SuntecAppServer = 'Suntec App Server';
     m_Navigation_Settings_AcsServer = 'ACS Server';
     m_Navigation_Settings_SmtpServer = 'SMTP';
     m_Navigation_Settings_Vms = 'VMS';
-    m_Navigation_Settings_Email = 'Email';
+    m_Navigation_Settings_Email = 'Email Notify';
     m_Navigation_Settings_License = 'License';
     m_Navigation_Reports = 'Report';
     m_Navigation_Reports_Dashboard = 'Dashboard';
@@ -243,10 +275,27 @@ export default class LangObject {
 
     ////////////////// Blacklist List //////////////////
     w_Blacklist_Blacklist = 'Blacklist';
+    w_Blacklist_AddBlack = 'Add Blacklist';
+    w_Blacklist_EditBlack = 'Edit Blacklist';
+    w_Blacklist_DelBlack = 'Delete Blacklist';
     w_Blacklist_Image = 'Image';
     w_Blacklist_NRIC = 'NRIC';
     w_Blacklist_Company = 'Company';
     w_Blacklist_Reason = 'Reason';
+
+    ////////////////// Isap FRS //////////////////
+    w_Frs_FrList = 'iSAP FR Server List';
+    w_Frs_AddFr = 'Add iSAP FR Server';
+    w_Frs_EditFr = 'Edit iSAP FR Server';
+    w_Frs_DelFr = 'Delete iSAP FR Server';
+    w_Frs_ViewFr = 'Preview iSAP FR Server';
+    w_Frs_Index = 'Index';
+    w_Frs_IPAddress = 'IP Address';
+    w_Frs_HTTPPort = 'HTTP Port';
+    w_Frs_Device_Name = 'Device Name';
+    w_Frs_Position = 'Device Postion';
+    w_Frs_Status = 'FRS Status';
+    w_Frs_Endpoint = 'Endpoints';
 
     ////////////////// HikVision FR Tablet //////////////////
     w_Hik_FrList = 'FR Tablet List';
@@ -261,6 +310,11 @@ export default class LangObject {
     w_Hik_Position = 'Device Postion';
     w_Hik_Status = 'Status';
     w_Hik_Endpoint_Name = 'Endpoint Name';
+
+    ////////////////// Suntec Setting //////////////////
+    w_Suntec_Suntec = 'Suntec App server';
+    w_Suntec_Card_Host = 'Host';
+    w_Suntec_Card_Token = 'Token';
 
     ////////////////// ACS Setting //////////////////
     w_Acs_Card_Range = 'Card Range';
@@ -278,20 +332,32 @@ export default class LangObject {
 
     ////////////////// SMTP Setting //////////////////
     w_Smtp_Smtp = 'SMTP Setting';
+    w_Smtp_Enable = 'Mail Server Enable';
+    w_Smtp_placeholder = '設定測試信箱給 xxx@xxx.com';
+    w_Smtp_Test = 'Test Email';
+
+    w_Smtp_Email = 'Email Account';
+    w_Smtp_Setting = 'Set Mail Server';
+
+    w_Smtp_Setting_Success = 'Email Server set success.';
+    w_Smtp_Setting_Fail = 'Email Server set failed.';
+    w_Smtp_Test_Success = 'Email Server test success.';
+    w_Smtp_Test_Fail = 'Email Server test failed.';
+    w_Smtp_Read_Fail = 'Mail Server read failed.';
 
     ////////////////// VMS Setting //////////////////
     w_Vms_Vms = 'VMS Setting';
 
-    ////////////////// Mail Setting //////////////////
-    w_MailServer_Enable = 'Enable';
-    w_MailServer_placeholder = 'Set Test Email to xxx@xxx.com';
-    w_MailServer_Test = 'Test Email';
+    ////////////////// Mail Notify Setting //////////////////
+    w_MailSetting_Enable = 'Enable';
+    w_MailSetting_placeholder = 'Set Test Email to xxx@xxx.com';
+    w_MailSetting_Test = 'Test Email';
 
-    w_MailServer_Setting_Fail = 'Email Server set failed';
-    w_MailServer_Test_Success = 'Email Server test success';
-    w_MailServer_Test_EmailSetting = 'Email Setting';
-    w_MailServer_Read_Fail = 'Mail Server read failed';
-    w_MailServer_Read_FailMsg = 'Internal Server Error, please contact administrator';
+    w_MailSetting_Setting_Fail = 'Email Server set failed';
+    w_MailSetting_Test_Success = 'Email Server test success';
+    w_MailSetting_Test_EmailSetting = 'Email Setting';
+    w_MailSetting_Read_Fail = 'Mail Server read failed';
+    w_MailSetting_Read_FailMsg = 'Internal Server Error, please contact administrator';
 
     w_MailSetting_SMTPHostname = 'SMTP Hostname';
     w_MailSetting_PortNumber = 'Port Number';
