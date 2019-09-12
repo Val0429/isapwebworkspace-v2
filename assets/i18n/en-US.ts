@@ -42,6 +42,7 @@ export default class LangObject {
     w_DeleteFailed = 'Delete Failed';
     w_Delete_ConfirmLabel = 'Confirm Delete';
     w_Delete_ConfirmContent = 'Please confirm delete choose';
+    w_Region_ErrorFileToLarge = 'Image max size is 7MB';
 
     // Status
     w_Status_Enable = 'Enable';
