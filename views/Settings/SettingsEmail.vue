@@ -35,7 +35,7 @@
                     ref="listTable"
                     :interface="ITableList()"
                     :multiple="tableMultiple"
-                    :server="{ path: '/client/hikvision' }"
+                    :server="{ path: '/notify/person-blacklist' }"
                     @selected="selectedItem($event)"
                 >
 
@@ -241,7 +241,7 @@
                 };
                 Loading.show();
                 await this.$server
-                    .C("/client/hikvision", addParam)
+                    .C("/notify/person-blacklist", addParam)
                     .then((response: any) => {
                         ResponseFilter.successCheck(
                             this,
@@ -275,7 +275,7 @@
                 };
                 Loading.show();
                 await this.$server
-                    .U("/client/hikvision", editParam)
+                    .U("/notify/person-blacklist", editParam)
                     .then((response: any) => {
                         ResponseFilter.successCheck(
                             this,
@@ -321,7 +321,7 @@
 
                     Loading.show();
                     this.$server
-                        .D("/client/hikvision", deleteParam)
+                        .D("/notify/person-blacklist", deleteParam)
                         .then((response: any) => {
                             ResponseFilter.successCheck(
                                 this,
