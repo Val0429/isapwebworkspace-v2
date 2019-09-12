@@ -45,12 +45,6 @@
 
                         </iv-toolbox-more>
                     </template>
-                    <template #floors="{$attrs}">
-                        <div v-html="tableFloorString($attrs.row)"></div>
-                    </template>
-                    <template #company="{$attrs}">
-                        <div v-html="tableCompanyString($attrs.row)"></div>
-                    </template>
 
                 </iv-table>
             </iv-card>
@@ -126,12 +120,8 @@ import { toEnumInterface } from "@/../core";
 import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
 
-// Custom
-import { EUserRole } from "@/services/Role";
-
 // Service
 import Dialog from "@/services/Dialog";
-import RoleService from "@/services/Role/RoleService";
 import ResponseFilter from "@/services/ResponseFilter";
 import Loading from "@/services/Loading";
 import RegexServices from "@/services/RegexServices";
@@ -151,36 +141,13 @@ export default class SetingVms extends Vue {
 
     inputFormData = {
         objectId: "",
-        username: "",
-        email: "",
-        phone: "",
-        remark: "",
-        rolesText: "",
-        companiesText: "",
-        floorsText: "",
-        role: "",
         name: "",
-        company: "",
-        companies: "",
-        password: "",
-        confirmPassword: "",
-        floors: [],
-        realRoles: [],
-        useCompany: false,
-        useFloor: false
+        protocol: "http",
+        ip: "0.0.0.0",
+        port: 80,
+        account: "",
+        password: ""
     };
-
-    selectItem: {
-        role: any;
-        company: any;
-        floor: any;
-    } = {
-        role: {},
-        company: {},
-        floor: {}
-    };
-
-    companies = [];
 
     created() {}
 
@@ -203,14 +170,12 @@ export default class SetingVms extends Vue {
     pageToAdd() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
-        this.initSelectItem();
         this.clearInputData();
     }
 
     pageToEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
-        this.initSelectItem();
         this.clearInputData();
         this.getInputData();
     }
@@ -246,84 +211,29 @@ export default class SetingVms extends Vue {
         );
     }
 
-    async initSelectItem() {
-        this.selectItem.role = {};
-        this.selectItem.company = {};
-        this.selectItem.floor = {};
-    }
-
     clearInputData() {
         this.inputFormData = {
             objectId: "",
-            username: "",
-            password: "",
-            confirmPassword: "",
-            role: "",
             name: "",
-            email: "",
-            phone: "",
-            remark: "",
-            rolesText: "",
-            companiesText: "",
-            floorsText: "",
-            company: "",
-            companies: "",
-            floors: [],
-            realRoles: [],
-            useCompany: false,
-            useFloor: false
+            protocol: "http",
+            ip: "",
+            port: 0,
+            account: "",
+            password: ""
         };
     }
 
     getInputData() {
-        this.checkTenant();
         for (const param of this.selectedDetail) {
             this.inputFormData = {
                 objectId: param.objectId,
-                username: param.username,
-                password: "",
-                confirmPassword: "",
-                role: "",
-                name: "",
-                email: param.email,
-                phone: param.phone,
-                remark: "",
-                rolesText: this.formRoleText(param),
-                companiesText: this.formCompanyText(param),
-                floorsText: this.formFloorText(param),
-                company: this.formCompanyText(param),
-                companies: "",
-                floors: [],
-                realRoles: [],
-                useCompany: false,
-                useFloor: false
+                name: param.name,
+                protocol: param.protocol,
+                ip: param.ip,
+                port: param.port,
+                account: param.account,
+                password: param.password
             };
-            if (param.role != undefined) {
-                this.inputFormData.role = param.role;
-            }
-            if (param.name != undefined) {
-                this.inputFormData.name = param.name;
-            }
-            for (let loopData of param.role) {
-                if (loopData.name == EUserRole.TenantAdministrator) {
-                    this.inputFormData.useCompany = true;
-                    this.inputFormData.useFloor = true;
-                }
-                this.inputFormData.realRoles.push(loopData.name);
-            }
-            if (param.datas != undefined) {
-                if (
-                    param.datas.company != undefined &&
-                    param.datas.company.objectId != undefined
-                ) {
-                    this.inputFormData.companies = param.datas.company.objectId;
-                }
-                if (param.datas.floor != undefined) {
-                    for (let loopFloor of param.datas.floor) {
-                        this.inputFormData.floors.push(loopFloor.objectId);
-                    }
-                }
-            }
         }
     }
 
@@ -331,114 +241,7 @@ export default class SetingVms extends Vue {
         this.selectedDetail = datas;
     }
 
-    // talbeRolesString(datas: any): string {
-    //     let result: string = "";
-    //     result += "<ul>";
-    //     for (let loopData of datas) {
-    //         let tempText = RoleService.roleString(this, loopData.name);
-    //         result += `<li>${tempText}</li>`;
-    //     }
-    //     result += "</ul>";
-    //     return result;
-    // }
-
-    tableFloorString(datas: any): string {
-        let result: string = "";
-        result += "<ul>";
-        if (datas != undefined && datas.floors != undefined) {
-            for (let loopData of datas.floors) {
-                let tempText = loopData.name;
-                result += `<li>${tempText}</li>`;
-            }
-        }
-        result += "</ul>";
-        return result;
-    }
-
-    tableCompanyString(datas: any): string {
-        let result: string = "";
-        result += "<ul>";
-        if (
-            datas != undefined &&
-            datas.company != undefined &&
-            datas.company.name != undefined
-        ) {
-            result += `<li>${datas.company.name}</li>`;
-        }
-        result += "</ul>";
-        return result;
-    }
-
-    formRoleText(datas: any): string {
-        let result: string = "";
-        if (datas.role != undefined) {
-            // for (let loopData of datas.role) {
-            //     result += `${loopData.name}, `;
-            // }
-            if (datas.role.length > 0) {
-                result = result.substr(0, result.length - 2);
-            }
-            result = datas.role;
-        }
-        return result;
-    }
-
-    formCompanyText(datas: any): string {
-        let result: string = "";
-        if (
-            datas != undefined &&
-            datas.company != undefined &&
-            datas.company.name != undefined
-        ) {
-            result = `${datas.company.name}`;
-        }
-        return result;
-    }
-
-    formFloorText(datas: any): string {
-        let result: string = "";
-        if (datas != undefined && datas.floors != undefined) {
-            for (let loopData of datas.floors) {
-                result += `${loopData.name}, `;
-            }
-            if (datas.floors.length > 0) {
-                result = result.substr(0, result.length - 2);
-            }
-        }
-        return result;
-    }
-
-    checkTenant() {
-        this.inputFormData.useCompany = false;
-        this.inputFormData.useFloor = false;
-        for (let loopData of this.selectedDetail) {
-            if (loopData.role != undefined) {
-                for (let loopRole of loopData.role) {
-                    if (loopRole.name == EUserRole.TenantAdministrator) {
-                        this.inputFormData.useCompany = true;
-                        this.inputFormData.useFloor = true;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
     updateModifyForm(datas: any) {
-        if (datas.key == "role") {
-            if (datas.value == EUserRole.SystemAdministrator) {
-                this.inputFormData.useCompany = false;
-                this.inputFormData.useFloor = false;
-            }
-            if (datas.value == EUserRole.Administrator) {
-                this.inputFormData.useCompany = false;
-                this.inputFormData.useFloor = false;
-            }
-            if (datas.value == EUserRole.TenantAdministrator) {
-                this.inputFormData.useCompany = true;
-                this.inputFormData.useFloor = true;
-            }
-        }
         this.inputFormData[datas.key] = datas.value;
     }
 
@@ -446,26 +249,17 @@ export default class SetingVms extends Vue {
         let datas: any = {
             datas: [
                 {
-                    username: this.inputFormData.username,
                     name: this.inputFormData.name,
-                    email: this.inputFormData.email,
-                    role: this.inputFormData.role,
-                    companyId: this.inputFormData.companies,
-                    floorIds: this.inputFormData.floors,
-                    remark: this.inputFormData.remark
+                    protocol: this.inputFormData.protocol,
+                    ip: this.inputFormData.ip,
+                    port: this.inputFormData.port,
+                    account: this.inputFormData.account,
+                    password: this.inputFormData.password
                 }
             ]
         };
 
-        if (this.inputFormData.phone != "") {
-            datas.datas[0]["phone"] = this.inputFormData.phone;
-        }
-        if (this.inputFormData.objectId != "") {
-            datas.datas[0]["objectId"] = this.inputFormData.objectId;
-        }
         if (this.inputFormData.objectId == "") {
-            datas.datas[0].password = this.inputFormData.password;
-
             Loading.show();
             datas = RegexServices.trim(datas);
             await this.$server
@@ -586,11 +380,13 @@ export default class SetingVms extends Vue {
                  */
                 name: string;
 
-                /**
+                 /**
                  * @uiLabel - ${this._("w_Vms_Protocol")}
-                 * @uiPlaceHolder - ${this._("w_Vms_Protocol")}
                  */
-                protocol: string;
+                protocol: ${toEnumInterface({
+                    http: "http",
+                    https: "https"
+                })};
 
                 /**
                  * @uiLabel - ${this._("w_Vms_IP")}
