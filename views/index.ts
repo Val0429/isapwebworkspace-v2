@@ -21,6 +21,7 @@ import HikVision from './components/HikVision.vue';
 import SettingsSuntec from './Settings/SettingsSuntec.vue';
 import SettingsAcs from './Settings/SettingsAcs.vue';
 import SettingsSmtp from './Settings/SettingsSmtp.vue';
+import SettingsFrs from './Settings/SettingsFrs.vue';
 import SettingsVms from './Settings/SettingsVms.vue';
 import SettingsEmail from './Settings/SettingsEmail.vue';
 import SettingsLicense from './Settings/SettingsLicense.vue';
@@ -46,6 +47,7 @@ $({ path: '/settings', name: "_('m_Navigation_Settings')", permission: true, red
 $({ path: '/settings/suntec_app', name: "_('m_Navigation_Settings_SuntecAppServer')", icon: 'fa-server', permission: true })(SettingsSuntec);
 $({ path: '/settings/acs', name: "_('m_Navigation_Settings_AcsServer')", icon: 'fa-server', permission: true })(SettingsAcs);
 $({ path: '/settings/smtp', name: "_('m_Navigation_Settings_SmtpServer')", icon: 'fa-server', permission: true })(SettingsSmtp);
+$({ path: '/settings/frs', name: "_('m_Navigation_Settings_Frs')", icon: 'fa-server', permission: true })(SettingsFrs);
 $({ path: '/settings/vms', name: "_('m_Navigation_Settings_Vms')", icon: 'fa-server', permission: true })(SettingsVms);
 $({ path: '/settings/email', name: "_('m_Navigation_Settings_Email')", icon: 'fa-inbox', permission: true })(SettingsEmail);
 $({ path: '/settings/license', name: "_('m_Navigation_Settings_License')", icon: 'fa-certificate', permission: true })(SettingsLicense);

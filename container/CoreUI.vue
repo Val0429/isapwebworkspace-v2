@@ -32,10 +32,10 @@
                         :label="_('m_Navigation_Floor')"
                         url="/floor"
                     />
-                    <SidebarNavItem
+                    <!-- <SidebarNavItem
                         :label="_('m_Navigation_Door')"
                         url="/door"
-                    />
+                    /> -->
                     <SidebarNavItem
                         :label="_('m_Navigation_Company')"
                         url="/company"
@@ -58,10 +58,10 @@
                 </SidebarNavItem>
 
                 <iv-permission :allow="['SystemAdministrator', 'Administrator']">
-                    <SidebarNavItem
+                    <!-- <SidebarNavItem
                         :label="_('m_Navigation_Frs')"
                         url="/client/frs"
-                    />
+                    /> -->
 
                     <SidebarNavItem
                         :label="_('m_Navigation_HikVision')"
@@ -76,7 +76,6 @@
                             :label="_('m_Navigation_Settings_SuntecAppServer')"
                             url="/settings/suntec_app"
                         />
-
                         <SidebarNavItem
                             :label="_('m_Navigation_Settings_AcsServer')"
                             url="/settings/acs"
@@ -85,7 +84,10 @@
                             :label="_('m_Navigation_Settings_SmtpServer')"
                             url="/settings/smtp"
                         />
-
+                        <SidebarNavItem
+                            :label="_('m_Navigation_Settings_Frs')"
+                            url="/settings/frs"
+                        />
                         <SidebarNavItem
                             :label="_('m_Navigation_Settings_Vms')"
                             url="/settings/vms"
@@ -94,7 +96,6 @@
                             :label="_('m_Navigation_Settings_Email')"
                             url="/settings/email"
                         />
-
                         <SidebarNavItem
                             :label="_('m_Navigation_Settings_License')"
                             url="/settings/license"
@@ -102,7 +103,7 @@
                     </SidebarNavItem>
                 </iv-permission>
 
-                <SidebarNavItem
+                <!-- <SidebarNavItem
                     :label="_('m_Navigation_Reports')"
                     url="/reports"
                 />
@@ -112,7 +113,7 @@
                         :label="_('m_Navigation_Logs')"
                         url="/logs"
                     />
-                </iv-permission>
+                </iv-permission> -->
 
             </SidebarNav>
 

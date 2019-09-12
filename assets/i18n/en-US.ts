@@ -141,6 +141,7 @@ export default class LangObject {
     m_Navigation_Settings = 'Settings';
     m_Navigation_Settings_SuntecAppServer = 'Suntec App Server';
     m_Navigation_Settings_AcsServer = 'ACS Server';
+    m_Navigation_Settings_Frs = 'FRS';
     m_Navigation_Settings_SmtpServer = 'SMTP';
     m_Navigation_Settings_Vms = 'VMS';
     m_Navigation_Settings_Email = 'Email Notify';
@@ -279,6 +280,7 @@ export default class LangObject {
     w_Blacklist_EditBlack = 'Edit Blacklist';
     w_Blacklist_DelBlack = 'Delete Blacklist';
     w_Blacklist_Image = 'Image';
+    w_Blacklist_Name = 'Name';
     w_Blacklist_NRIC = 'NRIC';
     w_Blacklist_Company = 'Company';
     w_Blacklist_Reason = 'Reason';
@@ -345,8 +347,18 @@ export default class LangObject {
     w_Smtp_Test_Fail = 'Email Server test failed.';
     w_Smtp_Read_Fail = 'Mail Server read failed.';
 
+    ////////////////// FRS Setting //////////////////
+    w_Frs_Setting_FrList = 'FRS List';
+    w_Frs_Setting_Account = 'Account';
+    w_Frs_Setting_Password = 'Password';
+    w_Frs_Setting_Ip = 'IP';
+    w_Frs_Setting_Port = 'Port';
+    w_Frs_Setting_Protocol = 'Protocol';
+
     ////////////////// VMS Setting //////////////////
     w_Vms_Vms = 'VMS Setting';
+    w_Vms_Name = 'Name';
+    w_Vms_Protocol = 'Protocol';
 
     ////////////////// Mail Notify Setting //////////////////
     w_MailSetting_Enable = 'Enable';
@@ -388,6 +400,9 @@ export default class LangObject {
 
     w_License_MACAddress = 'MAC Address ';
     w_License_Expired = 'Expired';
+
+    w_License_Step1_mac = 'Add by license key and mac';
+    w_License_Step1_offline = 'Add by upload offline key';
 
     ////////////////// Investigation //////////////////
     w_Investigation_FilterTitle = 'Filter';

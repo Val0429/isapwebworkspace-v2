@@ -29,6 +29,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/setting/acs-group': [any, any, false];
         '/setting/acs-server': [any, any, false];
         '/setting/smtp': [any, any, false];
+        '/setting/frs': [any, any, false];
         '/client/vms': [any, any, false];
         '/license': [any, any, false];
 
@@ -100,6 +101,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/setting/acs-group': [any, any, false];
         '/setting/acs-server': [any, any, false];
         '/setting/smtp': [any, any, false];
+        '/setting/frs': [any, any, false];
         '/setting/vms': [any, any, false];
 
         '/setting/push-notification': [any, any, false];

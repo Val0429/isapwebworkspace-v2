@@ -211,7 +211,6 @@ export default class SetupsFloor extends Vue {
     }
 
     async saveAddOrEdit(data) {
-        console.log(data);
         let param: any = {
             datas: [
                 {
