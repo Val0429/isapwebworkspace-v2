@@ -29,6 +29,7 @@ export default class LangObject {
     w_Email_Placeholder = 'ex : admin@isap.com';
     w_Leave = 'Leave';
     w_Check = 'Check';
+    w_URL = 'URL';
 
     w_CurrentPassword = 'Current Password';
     w_CurrentPasswordConfirm = 'Current PasswordConfirm';
@@ -144,6 +145,7 @@ export default class LangObject {
     m_Navigation_Settings_AcsServer = 'ACS Server';
     m_Navigation_Settings_SmtpServer = 'SMTP';
     m_Navigation_Settings_Vms = 'VMS';
+    m_Navigation_Settings_Frs = 'FRS';
     m_Navigation_Settings_Email = 'Email Notify';
     m_Navigation_Settings_License = 'License';
     m_Navigation_Reports = '報告';
@@ -348,6 +350,17 @@ export default class LangObject {
 
     ////////////////// VMS Setting //////////////////
     w_Vms_Vms = 'VMS 設定';
+
+    ////////////////// FRS Setting //////////////////
+    w_FrsServer_Enable = 'FRS Enable';
+    w_FrsServer_Setting = 'Set FRS Server';
+    w_FrsServer_Test = 'Test FRS';
+    w_FrsServer_Phone = 'Phone Number';
+    w_FrsServer_Setting_Success = 'FRS Server set success.';
+    w_FrsServer_Setting_Fail = 'FRS Server set failed.';
+    w_FrsServer_Setting_Test_Fail = 'FRS Server test failed.';
+    w_FrsServer_Setting_Test_Success = 'FRS Server test success.';
+    w_FrsServer_Read_Fail = 'FRS Server read failed.';
 
     ////////////////// Mail Setting //////////////////
     w_MailSetting_Enable = '啟用';

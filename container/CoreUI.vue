@@ -91,7 +91,7 @@
 
                         <SidebarNavItem
                             :label="_('m_Navigation_Frs')"
-                            url="/settings/vms"
+                            url="/settings/frs"
                         />
 
                         <SidebarNavItem
