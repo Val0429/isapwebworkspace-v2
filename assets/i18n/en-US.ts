@@ -359,8 +359,13 @@ export default class LangObject {
 
     ////////////////// VMS Setting //////////////////
     w_Vms_Vms = 'VMS Setting';
+    w_Vms_VmsList = 'VMS List';
     w_Vms_Name = 'Name';
     w_Vms_Protocol = 'Protocol';
+    w_Vms_IP = 'IP';
+    w_Vms_Port = 'Port';
+    w_Vms_Acctount = 'Account';
+    w_Vms_Password = 'Password';
 
     ////////////////// FRS Setting //////////////////
     w_FrsServer_Enable = 'FRS Enable';

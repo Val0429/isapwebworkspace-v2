@@ -164,12 +164,8 @@ export class AccountListForm extends Vue implements IFormQuick {
     }
     prePreview(row: any) {
         row = { ...row, role: row.role, company: row.company.name, floorsText: row.floors.map((v) => v.name).join(', '), floors: row.floors.map((v) => v.name) };
-        console.log('prePreview', row);
         return row;
     }
-    // preEdit(row: any) {
-    //     console.log('preEdit', row);
-    // }
     postEdit?(row: any) {
         row = { datas: [{ ...row, floorIds: row.floors }] };
         return row;
