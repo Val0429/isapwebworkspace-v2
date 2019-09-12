@@ -4,6 +4,9 @@
         @update:*="doSubmit($event)"
     >
         <!-- 50) custom view templates with <template #view.* /> -->
+        <template #view.imageBase64="{ $attrs }">
+            <img :src="$attrs.value" />
+        </template>
         <!-- 51) custom edit / add template with <template #add.* /> -->
     </iv-form-quick>
 </template>

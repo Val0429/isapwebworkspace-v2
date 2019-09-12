@@ -144,8 +144,8 @@ export default class LangObject {
     m_Navigation_Settings_SuntecAppServer = 'Suntec App Server';
     m_Navigation_Settings_AcsServer = 'ACS Server';
     m_Navigation_Settings_SmtpServer = 'SMTP';
-    m_Navigation_Settings_Vms = 'VMS';
     m_Navigation_Settings_Frs = 'FRS';
+    m_Navigation_Settings_Vms = 'VMS';
     m_Navigation_Settings_Email = 'Email Notify';
     m_Navigation_Settings_License = 'License';
     m_Navigation_Reports = '報告';
@@ -282,6 +282,7 @@ export default class LangObject {
     w_Blacklist_EditBlack = '編輯黑名單';
     w_Blacklist_DelBlack = '刪除黑名單';
     w_Blacklist_Image = '照片';
+    w_Blacklist_Name = 'Name';
     w_Blacklist_NRIC = 'NRIC';
     w_Blacklist_Company = '所屬公司';
     w_Blacklist_Reason = '原因';
@@ -348,8 +349,18 @@ export default class LangObject {
     w_Smtp_Test_Fail = 'Email Server test failed.';
     w_Smtp_Read_Fail = 'Mail Server read failed.';
 
+    ////////////////// FRS Setting //////////////////
+    w_Frs_Setting_FrList = 'FRS 列表';
+    w_Frs_Setting_Account = 'Account';
+    w_Frs_Setting_Ip = 'IP';
+    w_Frs_Setting_Password = 'Password';
+    w_Frs_Setting_Port = 'Port';
+    w_Frs_Setting_Protocol = 'Protocol';
+
     ////////////////// VMS Setting //////////////////
     w_Vms_Vms = 'VMS 設定';
+    w_Vms_Name = 'Name';
+    w_Vms_Protocol = 'Protocol';
 
     ////////////////// FRS Setting //////////////////
     w_FrsServer_Enable = 'FRS Enable';
@@ -402,6 +413,9 @@ export default class LangObject {
 
     w_License_MACAddress = 'MAC地址';
     w_License_Expired = '過期';
+
+    w_License_Step1_mac = 'Add by license key and mac';
+    w_License_Step1_offline = 'Add by upload offline key';
 
     ////////////////// Investigation //////////////////
     w_Investigation_FilterTitle = '篩選';

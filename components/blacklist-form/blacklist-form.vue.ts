@@ -5,11 +5,7 @@ import { toEnumInterface } from '@/../core';
 import { EUserRole } from '@/services/Role';
 
 // Service
-import Dialog from '@/services/Dialog';
-import RoleService from '@/services/Role/RoleService';
-import ResponseFilter from '@/services/ResponseFilter';
-import Loading from '@/services/Loading';
-import RegexServices from '@/services/RegexServices';
+import ImageBase64 from '@/services/ImageBase64';
 
 @Component
 export class BlacklistForm extends Vue implements IFormQuick {
@@ -32,114 +28,61 @@ export class BlacklistForm extends Vue implements IFormQuick {
                 return `
                     interface {                        
                         /**
-                         * @uiLabel - ${this._('w_No')}
-                         * @uiType - iv-cell-auto-index
-                         */
-                        no: string;
+                 * @uiLabel - ${this._('w_Blacklist_Image')}
+                 */
+                imageBase64?: string;
 
-                        /**
-                         * @uiLabel - ${this._('w_Account_Account')}
-                         */
-                        username: string;
+                /**
+                 * @uiLabel - ${this._('w_Blacklist_NRIC')}
+                 */
+                name: string;
 
-                        /**
-                         * @uiLabel - ${this._('w_Frs_IPAddress')}
-                         */
-                        ip: string;
+                /**
+                 * @uiLabel - ${this._('w_Blacklist_NRIC')}
+                 */
+                nric: string;
 
-                        /**
-                         * @uiLabel - ${this._('w_Frs_HTTPPort')}
-                         */
-                        port: string;
+                /**
+                 * @uiLabel - ${this._('w_Blacklist_Company')}
+                 */
+                organization: any;
 
-                        /**
-                         * @uiLabel - ${this._('w_Frs_Device_Name')}
-                         */
-                        deviceName: string;
-
-                        /**
-                         * @uiLabel - ${this._('w_Frs_Position')}
-                         */
-                        devicePostion: string;
-
-                        /**
-                         * @uiLabel - ${this._('w_Frs_Status')}
-                         */
-                        status?: string;
-
-                        /**
-                         * @uiLabel - ${this._('w_Frs_Endpoint')}
-                         */
-                        endpointName?: string;
+                /**
+                 * @uiLabel - ${this._('w_Blacklist_Reason')}
+                 */
+                remark: string;
                     }
                 `;
             case EFormQuick.Add:
             case EFormQuick.Edit:
             case EFormQuick.Preview:
                 return `
-                    interface {
+                    interface {                        
                         /**
-                         * @uiLabel - ${this._('w_Account_Account')}
-                         * @uiType - iv-form-string
-                         */
-                        username: string;
+                 * @uiLabel - ${this._('w_Blacklist_Image')}
+                 * @uiType - iv-form-file
+                 */
+                imageBase64?: string;
 
-                        /**
-                         * @uiLabel - ${this._('w_Account_Password')}
-                         * @uiType - iv-form-password
-                         * @uiHidden - ${type !== EFormQuick.Add}
-                         * @uiRequired - true
-                         * @uiColumnGroup - password
-                         */
-                        password?: string;
+                /**
+                 * @uiLabel - ${this._('w_Blacklist_Name')}
+                 */
+                name: string;
 
-                        /**
-                         * @uiLabel - ${this._('w_Account_ConfirmPassword')}
-                         * @uiType - iv-form-password
-                         * @uiHidden - ${type !== EFormQuick.Add}
-                         * @uiRequired - true
-                         * @uiValidation - (value, all) => value === all.password
-                         * @uiColumnGroup - password
-                         */
-                        confirmPassword?: string;
+                /**
+                 * @uiLabel - ${this._('w_Blacklist_NRIC')}
+                 */
+                nric: string;
 
-                        /**
-                         * @uiLabel - ${this._('w_Frs_IPAddress')}
-                         * @uiPlaceHolder - ${this._('w_Frs_IPAddress')}
-                         * @uiType - iv-form-ip
-                         */
-                        ip: string;
+                /**
+                 * @uiLabel - ${this._('w_Blacklist_Company')}
+                 */
+                organization?: any;
 
-                        /**
-                         * @uiLabel - ${this._('w_Frs_HTTPPort')}
-                         * @uiPlaceHolder - ${this._('w_Frs_HTTPPort')}
-                         * @uiAttrs - { max: 65535, min: 1}
-                         */
-                        port: string;
-
-                        /**
-                         * @uiLabel - ${this._('w_Frs_Device_Name')}
-                         * @uiType - iv-form-string
-                         */
-                        deviceName: string;
-
-                        /**
-                         * @uiLabel - ${this._('w_Frs_Position')}
-                         * @uiType - iv-form-string
-                         */
-                        devicePostion: string;
-
-                        /**
-                         * @uiLabel - ${this._('w_Frs_Status')}
-                         * @uiHidden - ${type !== EFormQuick.Preview}
-                         */
-                        status?: string;
-
-                        /**
-                         * @uiLabel - ${this._('w_Frs_Endpoint')}
-                         * @uiType - iv-form-string
-                         */
-                        endpointName?: string;
+                /**
+                 * @uiLabel - ${this._('w_Blacklist_Reason')}
+                 */
+                remark: string;
                     }
                 `;
         }
@@ -159,5 +102,9 @@ export class BlacklistForm extends Vue implements IFormQuick {
         row = { datas: [row] };
         return row;
     }
+    imgToBase64(datas) {
+        ImageBase64.fileToBase64(datas, this.getBase);
+    }
+    getBase() {}
 }
 export default BlacklistForm;

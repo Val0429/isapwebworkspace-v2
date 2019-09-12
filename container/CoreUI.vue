@@ -74,7 +74,6 @@
                             :label="_('m_Navigation_Settings_SuntecAppServer')"
                             url="/settings/suntec_app"
                         />
-
                         <SidebarNavItem
                             :label="_('m_Navigation_Settings_AcsServer')"
                             url="/settings/acs"
@@ -83,7 +82,10 @@
                             :label="_('m_Navigation_Settings_SmtpServer')"
                             url="/settings/smtp"
                         />
-
+                        <SidebarNavItem
+                            :label="_('m_Navigation_Settings_Frs')"
+                            url="/settings/frs"
+                        />
                         <SidebarNavItem
                             :label="_('m_Navigation_Settings_Vms')"
                             url="/settings/vms"
@@ -98,7 +100,6 @@
                             :label="_('m_Navigation_Settings_Email')"
                             url="/settings/email"
                         />
-
                         <SidebarNavItem
                             :label="_('m_Navigation_Settings_License')"
                             url="/settings/license"

@@ -7,9 +7,9 @@
         >
 
             <iv-form
-                :interface="IMailServerComponent()"
+                :interface="IFormComponent()"
                 :value="inputFormData"
-                @submit="saveMailServer($event)"
+                @submit="updateFormApi($event)"
             ></iv-form>
 
             <template #footer-before>
@@ -134,8 +134,7 @@ export default class SetupsEmail extends Vue {
         //     });
     }
 
-    // 新增MailServer
-    async saveMailServer(data) {
+    async updateFormApi(data) {
         // port正則
         const portRegex = /^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/;
 
@@ -181,10 +180,21 @@ export default class SetupsEmail extends Vue {
         //     });
     }
 
-    IMailServerComponent() {
+    IFormComponent() {
         return `
-             interface IMailServerComponent {
+             interface IFormComponent {
+                /**
+                 * @uiLabel - ${this._("w_Vms_Name")}
+                 * @uiPlaceHolder - ${this._("w_Vms_Name")}
+                 * @uiHidden - true
+                 */
+                name: string;
 
+                /**
+                 * @uiLabel - ${this._("w_Vms_Protocol")}
+                 * @uiPlaceHolder - ${this._("w_Vms_Protocol")}
+                 */
+                protocol: string;
 
                 /**
                  * @uiLabel - ${this._("w_Acs_IPAddress")}
@@ -193,7 +203,6 @@ export default class SetupsEmail extends Vue {
                  */
                 ip: string;
 
-
                  /**
                  * @uiLabel - ${this._("w_Acs_HTTPPort")}
                  * @uiPlaceHolder - ${this._("w_Acs_HTTPPort")}
@@ -201,13 +210,11 @@ export default class SetupsEmail extends Vue {
                  */
                 port: number;
 
-
                 /**
                  * @uiLabel - ${this._("w_Account")}
                  * @uiPlaceHolder - ${this._("w_Account")}
                  */
                 account: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Password")}
@@ -215,7 +222,6 @@ export default class SetupsEmail extends Vue {
                  * @uiType - iv-form-password
                  */
                 password: string;
-
             }
         `;
     }

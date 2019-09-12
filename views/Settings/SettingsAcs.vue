@@ -36,62 +36,17 @@ import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 
-interface IInputFormData {
-    email: string;
-    testEmail: string;
-    host: string;
-    password: string;
-    port: number;
-    enable: boolean;
-}
-
 @Component
 export default class SetupsEmail extends Vue {
-    modalShow: boolean = false;
-    hasData: boolean = false;
     isUse: boolean = false;
-
-    // input框綁定model資料
-    inputFormData: IInputFormData = {
-        email: "",
-        testEmail: "",
-        host: "",
-        password: "",
-        port: 0,
-        enable: true
-    };
 
     rangeType: any = {};
     initCardRange: any = {};
     initAcsFormData: any = {};
 
-    inputTestEmail: string = "";
-
-    created() {
-        this.clearMailServerData();
-    }
-
     mounted() {
         this.initCardRangeApi();
         this.initAcsServerApi();
-    }
-
-    clearMailServerData() {
-        this.inputFormData = {
-            testEmail: "",
-            host: "",
-            password: "",
-            email: "",
-            port: null,
-            enable: true
-        };
-
-        this.inputTestEmail = "";
-    }
-
-    pageToEmailTest() {
-        this.inputTestEmail = "";
-        this.modalShow = !this.modalShow;
     }
 
     async initCardRangeApi() {
@@ -176,20 +131,6 @@ export default class SetupsEmail extends Vue {
         };
 
         Loading.show();
-        // await this.$server
-        //     .C("/config", addParam)
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             Dialog.success(this._("w_MailSetting_EmailSuccess"));
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(
-        //             this,
-        //             e,
-        //             this._("w_MailServer_Setting_Fail")
-        //         );
-        //     });
     }
     dataUpdate(data: any) {
         if (data.key == "isUseACSServer") {

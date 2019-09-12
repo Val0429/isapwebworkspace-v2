@@ -1,68 +1,15 @@
 <template>
     <div class="animated fadeIn">
-
         <iv-auto-card
             :visible="true"
-            :label="_('w_FrsServer_Setting')"
+            :label="_('w_Frs_Setting_FrList')"
         >
-
             <iv-form
-                :interface="ISmsServerComponent()"
-                :value="inputFormData"
-                @submit="saveSmsServer($event)"
+                :interface="IFormComponent()"
+                :value="initForm"
+                @submit="updateFormApi($event)"
             ></iv-form>
-            <template #footer-before>
-                <b-button
-                    variant="dark"
-                    size="lg"
-                    @click="pageToSmsTest()"
-                >{{ _('w_Test') }}
-                </b-button>
-            </template>
-
         </iv-auto-card>
-
-        <!-- 點擊彈出測試輸入框 -->
-        <b-modal
-            hide-footer
-            size="md"
-            :title="_('w_FrsServer_Test')"
-            v-model="modalShow"
-        >
-
-            <div class="card-content">
-                <b-form-group
-                    :label="_('w_FrsServer_Phone')"
-                    :label-cols="3"
-                >
-                    <b-row>
-                        <b-col>
-                            <b-form-input
-                                v-model="inputTestSmsPhone"
-                                :placeholder="_('w_Phone_Placeholder')"
-                            ></b-form-input>
-                        </b-col>
-                    </b-row>
-                </b-form-group>
-            </div>
-
-            <hr>
-
-            <b-row>
-                <!-- 離開按鈕 -->
-                <b-col cols="3">
-                    <b-button
-                        class="button button-full"
-                        variant="secondary"
-                        type="button"
-                        @click="modalShow = !modalShow"
-                    >{{ _('w_Cancel') }}
-                    </b-button>
-                </b-col>
-            </b-row>
-
-        </b-modal>
-
     </div>
 </template>
 
@@ -74,136 +21,85 @@ import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 
-interface IinputFormData {
-    id: string;
-    account: string;
-    password: string;
-    url: string;
-    enable: boolean;
-}
-
-@Component({
-    components: {}
-})
-export default class Frs extends Vue {
+@Component
+export default class SetupsEmail extends Vue {
     modalShow: boolean = false;
-
-    // input框綁定model資料
-    inputFormData: IinputFormData = {
-        id: "",
-        account: "",
-        password: "",
-        url: "",
-        enable: true
-    };
-
-    inputTestSmsPhone: string = "";
-
-    created() {
-        this.clearLicenseData();
-        this.readSmsServer();
-    }
-
+    initForm: any = {};
     mounted() {
-        this.readSmsServer();
+        this.initFormApi();
     }
 
-    clearLicenseData() {
-        this.inputFormData = {
-            id: "",
-            account: "",
-            password: "",
-            url: "",
-            enable: true
-        };
-
-        this.inputTestSmsPhone = "";
-    }
-
-    pageToSmsTest() {
-        this.inputTestSmsPhone = "";
-        this.modalShow = !this.modalShow;
-    }
-
-    async readSmsServer() {
-        let param: any = { paging: { all: true } };
+    async initFormApi() {
         await this.$server
-            .R("/setting/frs", param)
+            .R("/setting/frs")
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    this.inputFormData.enable = response.enable;
-                    this.inputFormData.password = response.password;
-                    this.inputFormData.account = response.account;
-                    this.inputFormData.url = response.url;
+                    this.initForm = response;
                 });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(
                     this,
                     e,
-                    this._("w_FrsServer_Read_Fail")
+                    this._("w_Dialog_ErrorTitle")
                 );
             });
     }
 
-    // 新增SmsServer
-    async saveSmsServer(data) {
-        const param: {
-            enable: boolean;
-            url: string;
-            account: string;
-            password: string;
-        } = {
-            enable: data.enable,
-            url: data.url,
-            account: data.account,
-            password: data.password
-        };
-        Loading.show();
+    async updateFormApi(data) {
         await this.$server
-            .U("/setting/frs", param)
+            .U("/setting/frs", data)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    Dialog.success(this._("w_FrsServer_Setting_Success"));
+                    Dialog.success(this._("w_Dialog_SuccessTitle"));
                 });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(
                     this,
                     e,
-                    this._("w_FrsServer_Setting_Fail")
+                    this._("w_Dialog_ErrorTitle")
                 );
             });
     }
-
-    ISmsServerComponent() {
+    IFormComponent() {
         return `
-            interface ISmsServerComponent {
-
+            interface IFormComponent {
                 /**
-                 * @uiLabel - ${this._("w_FrsServer_Enable")}
-                 * @uiType - iv-form-switch
-                 */
-                enable: boolean;
-
-                /**
-                 * @uiLabel - ${this._("w_Account")}
-                 * @uiPlaceHolder - ${this._("w_Account")}
+                 * @uiLabel - ${this._("w_Frs_Setting_Account")}
+                 * @uiPlaceHolder - ${this._("w_Frs_Setting_Account")}
                  */
                 account: string;
-
                 /**
-                 * @uiLabel - ${this._("w_Password")}
-                 * @uiPlaceHolder - ${this._("w_Password")}
+                 * @uiLabel - ${this._("w_Frs_Setting_Password")}
+                 * @uiPlaceHolder - ${this._("w_Frs_Setting_Password")}
                  * @uiType - iv-form-password
+                 * @uiColumnGroup - password
                  */
                 password: string;
-
                 /**
-                 * @uiLabel - ${this._("w_URL")}
-                 * @uiPlaceHolder - ${this._("w_URL")}
+                 * @uiLabel - ${this._("w_Account_ConfirmPassword")}
+                 * @uiPlaceHolder - ${this._("w_Account_ConfirmPassword")}
+                 * @uiType - iv-form-password
+                 * @uiColumnGroup - password
+                 * @uiValidation - (value, all) => value === all.password
                  */
-                url: string;
+                confirmPassword: string;
+                /**
+                 * @uiLabel - ${this._("w_Frs_Setting_Ip")}
+                 * @uiPlaceHolder - ${this._("w_Frs_Setting_Ip")}
+                 */
+                ip: string;
+                /**
+                 * @uiLabel - ${this._("w_Frs_Setting_Port")}
+                 * @uiPlaceHolder - ${this._("w_Frs_Setting_Port")}
+                 */
+                port: string;
+                /**
+                 * @uiLabel - ${this._("w_Frs_Setting_Protocol")}
+                 * @uiPlaceHolder - ${this._("w_Frs_Setting_Protocol")}
+                 */
+                protocol: string;
             }
         `;
     }

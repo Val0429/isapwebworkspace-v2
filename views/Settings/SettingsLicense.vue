@@ -22,8 +22,8 @@
                     ref="licenseTable"
                     :interface="IList()"
                     :server="{ path: '/license' }"
-                    :hidePaging="true"
                 >
+
                 </iv-table>
 
             </iv-card>
@@ -49,7 +49,7 @@
                             type="button"
                             @click="pageToAddByMac()"
                         >
-                            {{ _('w_License_RegisterOnline') }}
+                            {{ _('w_License_Step1_mac') }}
                         </b-button>
 
                     </template>
@@ -62,7 +62,7 @@
                             type="button"
                             @click="pageToAddByOffline()"
                         >
-                            {{ _('w_License_RegisterOffline') }}
+                            {{ _('w_License_Step1_offline') }}
                         </b-button>
 
                     </template>
@@ -154,7 +154,6 @@
                 <iv-form
                     :interface="IAddFromOffline()"
                     :value="licenseInputDataOffline"
-                    @update:*="updateOffline($event)"
                     @submit="saveAddLicenseOffLine($event)"
                 >
 
@@ -162,7 +161,7 @@
                         <div class="ml-3 mb-2 w-100">{{ _('w_License_UploadOfflineKey1') }}</div>
                     </template>
 
-                    <template #keyOrData="{$attrs, $listeners}">
+                    <template #data="{$attrs, $listeners}">
                         <div class="upload_file">
                             <b-form-file
                                 v-bind="$attrs"
@@ -222,14 +221,13 @@ interface ILicenseInputDataMac {
 }
 
 interface ILicenseInputDataOffline {
-    keyOrData: any;
-    mac: string;
+    data: any;
 }
 
 @Component({
     components: {}
 })
-export default class SetupsLicense extends Vue {
+export default class License extends Vue {
     macSelectItem: any = {};
 
     transition: ITransition = {
@@ -244,27 +242,26 @@ export default class SetupsLicense extends Vue {
     };
 
     licenseInputDataOffline: ILicenseInputDataOffline = {
-        keyOrData: "",
-        mac: ""
+        data: ""
     };
 
     mounted() {}
 
     async initMacSelectItem() {
-        let param: any = { paging: { all: true } };
-
-        // await this.$server
-        //     .R("/mac", param)
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(this, response, (response: any) => {
-        //             for (const returnValue of response) {
-        //                 this.macSelectItem[returnValue] = returnValue;
-        //             }
-        //         });
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(this, e);
-        //     });
+        await this.$server
+            .R("/server/network")
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response) {
+                        this.macSelectItem[
+                            returnValue.mac
+                        ] = `${returnValue.mac}, ${returnValue.ifname}`;
+                    }
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     clearInputData() {
@@ -274,8 +271,7 @@ export default class SetupsLicense extends Vue {
         };
 
         this.licenseInputDataOffline = {
-            keyOrData: "",
-            mac: ""
+            data: ""
         };
     }
 
@@ -297,9 +293,8 @@ export default class SetupsLicense extends Vue {
         this.transition.step = 3;
     }
 
-    async pageToAddByOffline() {
+    pageToAddByOffline() {
         this.clearInputData();
-        await this.initMacSelectItem();
         this.transition.prevStep = this.transition.step;
         this.transition.step = 4;
     }
@@ -314,23 +309,17 @@ export default class SetupsLicense extends Vue {
         const file = e.target.files[0];
         const reader = new FileReader();
         reader.onload = (e: any) => {
-            this.licenseInputDataOffline.keyOrData = e.target.result;
+            this.licenseInputDataOffline.data = e.target.result;
         };
         reader.readAsText(file);
     }
 
-    updateOffline(data) {
-        if (data.key === "mac") {
-            this.licenseInputDataOffline.mac = data.value;
-        }
-    }
-
     async saveAddLicenseMac(data) {
         const licenseParam: {
-            keyOrData: string;
+            key: string;
             mac: string;
         } = {
-            keyOrData: data.key,
+            key: data.key,
             mac: data.mac
         };
         Loading.show();
@@ -353,13 +342,10 @@ export default class SetupsLicense extends Vue {
 
     async saveAddLicenseOffLine(data) {
         const licenseParam: {
-            keyOrData: string;
-            mac: string;
+            data: string;
         } = {
-            keyOrData: data.keyOrData,
-            mac: data.mac
+            data: data.data
         };
-
         Loading.show();
         await this.$server
             .C("/license", licenseParam)
@@ -396,9 +382,22 @@ export default class SetupsLicense extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_License_MACAddress")}
+                 * @uiLabel - ${this._("w_License_productName")}
+                 */
+                productName: string;
+
+
+                /**
+                 * @uiLabel - ${this._("w_License_Mac")}
                  */
                 mac: string;
+
+
+
+                /**
+                 * @uiLabel - ${this._("w_License_Quantity")}
+                 */
+                count: number;
 
 
                 /**
@@ -414,9 +413,9 @@ export default class SetupsLicense extends Vue {
 
 
                 /**
-                 * @uiLabel - ${this._("w_License_Expired")}
+                 * @uiLabel - ${this._("w_License_ExpireDate")}
                  */
-                expired: boolean;
+                expireDate: string;
 
 
             }
@@ -460,21 +459,13 @@ export default class SetupsLicense extends Vue {
         return `
             interface {
 
-                /**
-                 * @uiLabel - ${this._("w_License_Mac")}
-                 * @uiPlaceHolder - ${this._("w_License_Mac")}
-                 */
-                mac?: ${toEnumInterface(this.macSelectItem as any)};
-
-
                 title?: any;
 
-
-               /**
+                /**
                 * @uiLabel - ${this._("w_License_UploadOfflineKey")}
                 * @uiPlaceHolder - ${this._("w_License_UploadOfflineKey")}
                 */
-                keyOrData: string;
+                data: string;
 
             }
         `;
