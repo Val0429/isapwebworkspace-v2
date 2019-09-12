@@ -13,9 +13,7 @@
             </div>
         </template>
 
-        <template #footer>
-            © 2019
-        </template>
+        <template #footer>© 2019</template>
 
         <template #nav>
             <SidebarNav>
@@ -32,10 +30,10 @@
                         :label="_('m_Navigation_Floor')"
                         url="/floor"
                     />
-                    <SidebarNavItem
+                    <!-- <SidebarNavItem
                         :label="_('m_Navigation_Door')"
                         url="/door"
-                    />
+                    /> -->
                     <SidebarNavItem
                         :label="_('m_Navigation_Company')"
                         url="/company"
@@ -58,10 +56,10 @@
                 </SidebarNavItem>
 
                 <iv-permission :allow="['SystemAdministrator', 'Administrator']">
-                    <SidebarNavItem
-                        :label="_('m_Navigation_Frs')"
+                    <!-- <SidebarNavItem
+                        :label="_('m_Navigation_ISAPFrs')"
                         url="/client/frs"
-                    />
+                    /> -->
 
                     <SidebarNavItem
                         :label="_('m_Navigation_HikVision')"
@@ -90,6 +88,12 @@
                             :label="_('m_Navigation_Settings_Vms')"
                             url="/settings/vms"
                         />
+
+                        <SidebarNavItem
+                            :label="_('m_Navigation_Frs')"
+                            url="/settings/vms"
+                        />
+
                         <SidebarNavItem
                             :label="_('m_Navigation_Settings_Email')"
                             url="/settings/email"
@@ -102,16 +106,16 @@
                     </SidebarNavItem>
                 </iv-permission>
 
-                <SidebarNavItem
+                <!-- <SidebarNavItem
                     :label="_('m_Navigation_Reports')"
                     url="/reports"
-                />
+                /> -->
 
                 <iv-permission :allow="['SystemAdministrator', 'Administrator']">
-                    <SidebarNavItem
+                    <!-- <SidebarNavItem
                         :label="_('m_Navigation_Logs')"
                         url="/logs"
-                    />
+                    /> -->
                 </iv-permission>
 
             </SidebarNav>

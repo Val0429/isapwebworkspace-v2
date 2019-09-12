@@ -1,7 +1,7 @@
 {
     "name": "workspace-master",
     "version": "1.00.00",
-    "description": "ISap",
+    "description": "FRS Manager System",
     "scripts": {
         "start": "npm run start --prefix ../",
         "build": "npm run build --prefix ../",

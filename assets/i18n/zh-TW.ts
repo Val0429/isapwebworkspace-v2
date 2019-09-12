@@ -136,7 +136,8 @@ export default class LangObject {
     m_Navigation_Persons_PersonList = '人員列表';
     m_Navigation_Persons_BlackList = '黑名單列表';
     m_Navigation_Server = 'Server';
-    m_Navigation_Frs = 'iSAP FR Server';
+    m_Navigation_ISAPFrs = 'iSAP FR Server';
+    m_Navigation_Frs = 'FRS';
     m_Navigation_HikVision = 'HikVision FR Tablet';
     m_Navigation_Settings = '設定';
     m_Navigation_Settings_SuntecAppServer = 'Suntec App Server';
