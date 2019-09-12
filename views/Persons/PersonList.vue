@@ -1,6 +1,5 @@
 <template>
     <div class="animated fadeIn">
-        {{$user.user}}
         <iv-auto-transition
             :step="transition.step"
             :type="transition.type"
@@ -338,7 +337,11 @@ export default class SetupsFloor extends Vue {
             }
         }
 
-        if (RoleService.haveTenantAdministrator(this)) {
+        if (
+            RoleService.haveTenantAdministrator(this) &&
+            !RoleService.haveAdministrator(this) &&
+            !RoleService.haveSystemAdministrator(this)
+        ) {
             await this.initSelectItemRole();
             await this.initSelectItemCompanyWithStorage();
             await this.initSelectItemFloorWithAPI();
