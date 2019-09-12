@@ -20,6 +20,7 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
+import { toEnumInterface } from "../../../core";
 
 @Component
 export default class SetupsEmail extends Vue {
@@ -71,8 +72,8 @@ export default class SetupsEmail extends Vue {
                  */
                 account: string;
                 /**
-                 * @uiLabel - ${this._("w_Frs_Setting_Password")}
-                 * @uiPlaceHolder - ${this._("w_Frs_Setting_Password")}
+                 * @uiLabel - ${this._("w_Account_Password")}
+                 * @uiPlaceHolder - ${this._("w_Account_Password")}
                  * @uiType - iv-form-password
                  * @uiColumnGroup - password
                  */
@@ -99,7 +100,10 @@ export default class SetupsEmail extends Vue {
                  * @uiLabel - ${this._("w_Frs_Setting_Protocol")}
                  * @uiPlaceHolder - ${this._("w_Frs_Setting_Protocol")}
                  */
-                protocol: string;
+                protocol: ${toEnumInterface({
+                    http: "http",
+                    https: "https"
+                })}
             }
         `;
     }

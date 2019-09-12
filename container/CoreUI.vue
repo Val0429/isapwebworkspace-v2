@@ -78,21 +78,19 @@
                             :label="_('m_Navigation_Settings_AcsServer')"
                             url="/settings/acs"
                         />
+
                         <SidebarNavItem
                             :label="_('m_Navigation_Settings_SmtpServer')"
                             url="/settings/smtp"
                         />
-                        <SidebarNavItem
-                            :label="_('m_Navigation_Settings_Frs')"
-                            url="/settings/frs"
-                        />
+
                         <SidebarNavItem
                             :label="_('m_Navigation_Settings_Vms')"
                             url="/settings/vms"
                         />
 
                         <SidebarNavItem
-                            :label="_('m_Navigation_Frs')"
+                            :label="_('m_Navigation_Settings_Frs')"
                             url="/settings/frs"
                         />
 
