@@ -314,6 +314,12 @@ export default class LangObject {
     w_Hik_Position = 'Device Postion';
     w_Hik_Status = 'Status';
     w_Hik_Endpoint_Name = 'Endpoint Name';
+    w_Hik_floorId = 'Floor Id';
+    w_Hik_AddSuccess = 'Hik Add Success';
+    w_Hik_AddFailed = 'Hik Add Failed';
+    w_Hik_EditSuccess = 'Hik Edit Success';
+    w_Hik_EditFailed = 'Hik Edit Failed';
+    w_Hik_DeleteConfirm = 'Are you sure to delete selected HikVision FR Tablet(s)?';
 
     ////////////////// Suntec Setting //////////////////
     w_Suntec_Suntec = 'Suntec App server';
