@@ -23,6 +23,7 @@
         <!-- 6) custom edit / add template with <template #add.* /> -->
         <template #add.reader="{$attrs, $listeners}">
             <ivc-multi-selections 
+            v-if="floorOptions"
             v-bind="$attrs" 
             v-on="$listeners" 
             :options="floorOptions" 
