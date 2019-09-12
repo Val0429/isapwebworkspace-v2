@@ -116,233 +116,233 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Watch } from "vue-property-decorator";
-    import { toEnumInterface } from "@/../core";
+import { Vue, Component, Watch } from "vue-property-decorator";
+import { toEnumInterface } from "@/../core";
 
-    // Service
-    import ResponseFilter from "@/services/ResponseFilter";
-    import Dialog from "@/services/Dialog";
-    import Loading from "@/services/Loading";
+// Service
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog";
+import Loading from "@/services/Loading";
 
-    // Transition
-    import Transition from "@/services/Transition";
-    import { ITransition } from "@/services/Transition";
-    import RegexServices from '@/services/RegexServices';
+// Transition
+import Transition from "@/services/Transition";
+import { ITransition } from "@/services/Transition";
+import RegexServices from "@/services/RegexServices";
 
+@Component({
+    components: {}
+})
+export default class SettingsEmail extends Vue {
+    transition: ITransition = {
+        type: Transition.type,
+        prevStep: 1,
+        step: 1
+    };
 
-    @Component({
-        components: {}
-    })
-    export default class SettingsEmail extends Vue {
-        transition: ITransition = {
-            type: Transition.type,
-            prevStep: 1,
-            step: 1
-        };
+    tableMultiple: boolean = true;
 
-        tableMultiple: boolean = true;
+    selectedDetail: any = [];
 
-        selectedDetail: any = [];
+    inputFormData: any = {
+        objectId: "",
+        name: "",
+        position: "",
+        phone: "",
+        email: "",
+        remark: ""
+    };
 
-        inputFormData: any = {
+    created() {}
+
+    mounted() {}
+
+    clearInputData() {
+        this.inputFormData = {
             objectId: "",
             name: "",
             position: "",
             phone: "",
             email: "",
-            remark: "",
+            remark: ""
+        };
+    }
 
+    selectedItem(data) {
+        this.selectedDetail = data;
+        this.selectedDetail = [];
+        this.selectedDetail = data;
+    }
+
+    getInputData() {
+        this.clearInputData();
+        for (const param of this.selectedDetail) {
+            this.inputFormData = {
+                objectId: param.objectId,
+                name: param.name,
+                position: param.position,
+                phone: param.phone,
+                email: param.email,
+                remark: param.remark
+            };
+        }
+    }
+
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+    }
+
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.getInputData();
+    }
+
+    pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearInputData();
+    }
+
+    pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.getInputData();
+    }
+
+    async saveAddOrEdit(data) {
+        let dataObject: {
+            name: string;
+            position: string;
+            phone: string;
+            email: number;
+            remark: string;
+            objectId?: string;
+        } = {
+            name: data.name,
+            position: data.position,
+            phone: data.phone,
+            email: data.email,
+            remark: data.remark
         };
 
-        created() {}
+        // add
+        if (!this.inputFormData.objectId) {
+            const datas: any = [dataObject];
 
-        mounted() {}
-
-        clearInputData() {
-            this.inputFormData = {
-                objectId: "",
-                name: "",
-                position: "",
-                phone: "",
-                email: "",
-                remark: "",
+            const addParam = {
+                datas
             };
-        }
-
-        selectedItem(data) {
-            this.selectedDetail = data;
-            this.selectedDetail = [];
-            this.selectedDetail = data;
-        }
-
-        getInputData() {
-            this.clearInputData();
-            for (const param of this.selectedDetail) {
-                this.inputFormData = {
-                    objectId: param.objectId,
-                    name: param.name,
-                    position: param.position,
-                    phone: param.phone,
-                    email: param.email,
-                    remark: param.remark,
-                };
-            }
-        }
-
-        pageToList() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 1;
-            (this.$refs.listTable as any).reload();
-        }
-
-        pageToView() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 2;
-            this.getInputData();
-        }
-
-        pageToAdd() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 3;
-            this.clearInputData();
-        }
-
-        pageToEdit() {
-            this.transition.prevStep = this.transition.step;
-            this.transition.step = 3;
-            this.getInputData();
-        }
-
-        async saveAddOrEdit(data) {
-
-            let dataObject: {
-                name: string;
-                position: string;
-                phone: string;
-                email: number;
-                remark: string;
-                objectId?: string;
-
-            } = {
-                name: data.name,
-                position: data.position,
-                phone: data.phone,
-                email: data.email,
-                remark: data.remark,
-            };
-
-
-            // add
-            if (!this.inputFormData.objectId) {
-                const datas: any = [dataObject];
-
-                const addParam = {
-                    datas
-                };
-                Loading.show();
-                await this.$server
-                    .C("/notify/person-blacklist", addParam)
-                    .then((response: any) => {
-                        ResponseFilter.successCheck(
-                            this,
-                            response,
-                            (response: any) => {
-                                for (const responseElement of response.datas) {
-                                    if (responseElement.statusCode === 200) {
-                                        Dialog.success(this._("w_MailSetting_AddEmailAddSuccess"));
-                                        this.pageToList();
-                                    } else {
-                                        Dialog.error(responseElement.message);
-                                    }
-                                }
-                            },
-                            this._("w_MailSetting_AddEmailFailed")
-                        );
-                    })
-                    .catch((e: any) => {
-                        return ResponseFilter.catchError(
-                            this,
-                            e,
-                            this._("w_MailSetting_AddEmailFailed")
-                        );
-                    });
-            } else {
-                dataObject.objectId = data.objectId;
-                const datas: any = [dataObject];
-
-                const editParam = {
-                    datas
-                };
-                Loading.show();
-                await this.$server
-                    .U("/notify/person-blacklist", editParam)
-                    .then((response: any) => {
-                        ResponseFilter.successCheck(
-                            this,
-                            response,
-                            (response: any) => {
-                                for (const responseElement of response.datas) {
-                                    if (responseElement.statusCode === 200) {
-                                        Dialog.success(this._("w_MailSetting_EditEmailSuccess"));
-                                        this.pageToList();
-                                    } else {
-                                        Dialog.error(responseElement.message);
-                                    }
-                                }
-                            },
-                            this._("w_MailSetting_EditEmailFailed")
-                        );
-                    })
-                    .catch((e: any) => {
-                        return ResponseFilter.catchError(
-                            this,
-                            e,
-                            this._("w_MailSetting_EditEmailFailed")
-                        );
-                    });
-            }
-        }
-
-        async doDelete() {
-            Dialog.confirm(
-                this._("w_MailSetting_DeleteConfirm"),
-                this._("w_DeleteConfirm"),
-                () => {
-
-                    let deleteParam: {
-                        objectId: any;
-                    } = {
-                        objectId: []
-                    };
-
-                    for (const param of this.selectedDetail) {
-                        deleteParam.objectId.push(param.objectId);
-                    }
-
-                    Loading.show();
-                    this.$server
-                        .D("/notify/person-blacklist", deleteParam)
-                        .then((response: any) => {
-                            ResponseFilter.successCheck(
-                                this,
-                                response,
-                                (response: any) => {
+            Loading.show();
+            await this.$server
+                .C("/notify/person-blacklist", addParam)
+                .then((response: any) => {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            for (const responseElement of response.datas) {
+                                if (responseElement.statusCode === 200) {
+                                    Dialog.success(
+                                        this._(
+                                            "w_MailSetting_AddEmailAddSuccess"
+                                        )
+                                    );
                                     this.pageToList();
-                                },
-                                this._("w_DeleteFailed")
-                            );
-                        })
-                        .catch((e: any) => {
-                            return ResponseFilter.catchError(this, e);
-                        });
+                                } else {
+                                    Dialog.error(responseElement.message);
+                                }
+                            }
+                        },
+                        this._("w_MailSetting_AddEmailFailed")
+                    );
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_MailSetting_AddEmailFailed")
+                    );
+                });
+        } else {
+            dataObject.objectId = data.objectId;
+            const datas: any = [dataObject];
 
-                    Loading.hide();
-                }
-            );
+            const editParam = {
+                datas
+            };
+            Loading.show();
+            await this.$server
+                .U("/notify/person-blacklist", editParam)
+                .then((response: any) => {
+                    ResponseFilter.successCheck(
+                        this,
+                        response,
+                        (response: any) => {
+                            for (const responseElement of response.datas) {
+                                if (responseElement.statusCode === 200) {
+                                    Dialog.success(
+                                        this._("w_MailSetting_EditEmailSuccess")
+                                    );
+                                    this.pageToList();
+                                } else {
+                                    Dialog.error(responseElement.message);
+                                }
+                            }
+                        },
+                        this._("w_MailSetting_EditEmailFailed")
+                    );
+                })
+                .catch((e: any) => {
+                    return ResponseFilter.catchError(
+                        this,
+                        e,
+                        this._("w_MailSetting_EditEmailFailed")
+                    );
+                });
         }
+    }
 
-        ITableList() {
-            return `
+    async doDelete() {
+        Dialog.confirm(
+            this._("w_MailSetting_DeleteConfirm"),
+            this._("w_DeleteConfirm"),
+            () => {
+                let deleteParam: {
+                    objectId: any;
+                } = {
+                    objectId: []
+                };
+
+                for (const param of this.selectedDetail) {
+                    deleteParam.objectId.push(param.objectId);
+                }
+
+                Loading.show();
+                this.$server
+                    .D("/notify/person-blacklist", deleteParam)
+                    .then((response: any) => {
+                        ResponseFilter.successCheck(
+                            this,
+                            response,
+                            (response: any) => {
+                                this.pageToList();
+                            },
+                            this._("w_DeleteFailed")
+                        );
+                    })
+                    .catch((e: any) => {
+                        return ResponseFilter.catchError(this, e);
+                    });
+
+                Loading.hide();
+            }
+        );
+    }
+
+    ITableList() {
+        return `
             interface {
 
                 /**
@@ -351,47 +351,39 @@
                  */
                 no: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Account_UserName")}
                  */
                 name: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Person_Position")}
                  */
                 position: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Person_Phone")}
                  */
                 phone: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Person_Email")}
                  */
                 email: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Account_Remark")}
                  */
                 remark: string;
 
-
                 Actions: any
-
             }
         `;
-        }
+    }
 
-        IAddAndEditForm() {
-            return `
+    IAddAndEditForm() {
+        return `
             interface {
-
 
                 /**
                  * @uiLabel - ${this._("w_Name")}
@@ -399,44 +391,39 @@
                  */
                 name: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Person_Position")}
                  * @uiPlaceHolder - ${this._("w_Person_Position")}
                  */
-                position: string;
-
+                position?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Phone")}
                  * @uiPlaceHolder - ${this._("w_Person_Phone")}
                  * @uiValidation - ${RegexServices.regexItem.phoneNumber}
-                 * @uiInvalidMessage - ${this._('w_Error_Phone')}
+                 * @uiInvalidMessage - ${this._("w_Error_Phone")}
                  */
-                phone: string;
-
+                phone?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Email")}
                  * @uiPlaceHolder - ${this._("w_Person_Email")}
                  * @uiValidation - ${RegexServices.regexItem.email}
-                 * @uiInvalidMessage - ${this._('w_Error_Email')}
+                 * @uiInvalidMessage - ${this._("w_Error_Email")}
                  */
                 email: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Account_Remark")}
                  * @uiPlaceHolder - ${this._("w_Account_Remark")}
                  */
-                remark: string;
-
+                remark?: string;
             }
         `;
-        }
+    }
 
-        IViewForm() {
-            return `
+    IViewForm() {
+        return `
             interface {
 
                 /**
@@ -445,13 +432,11 @@
                  */
                 name?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Person_Position")}
                  * @uiType - iv-form-label
                  */
                 position?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Person_Phone")}
@@ -459,13 +444,11 @@
                  */
                 phone?: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Person_Email")}
                  * @uiType - iv-form-label
                  */
                 email?: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Account_Remark")}
@@ -473,11 +456,10 @@
                  */
                 remark?: string;
 
-
             }
         `;
-        }
     }
+}
 </script>
 
 <style lang="scss" scoped>
