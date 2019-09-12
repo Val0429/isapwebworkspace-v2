@@ -349,7 +349,7 @@ export default class LangObject {
     w_Smtp_Read_Fail = 'Mail Server read failed.';
 
     ////////////////// FRS Setting //////////////////
-    w_Frs_Setting_FrList = 'FRS 列表';
+    w_Frs_Setting_FrList = 'FRS 設定';
     w_Frs_Setting_Account = 'Account';
     w_Frs_Setting_Ip = 'IP';
     w_Frs_Setting_Password = 'Password';
