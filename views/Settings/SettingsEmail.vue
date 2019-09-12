@@ -410,6 +410,8 @@
                 /**
                  * @uiLabel - ${this._("w_Person_Phone")}
                  * @uiPlaceHolder - ${this._("w_Person_Phone")}
+                 * @uiValidation - ${RegexServices.regexItem.phoneNumber}
+                 * @uiInvalidMessage - ${this._('w_Error_Email')}
                  */
                 phone: string;
 
