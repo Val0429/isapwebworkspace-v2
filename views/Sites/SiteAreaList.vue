@@ -85,7 +85,7 @@ export class SiteAreaList extends Vue {
 
     async initSiteListDeviceGroup() {
         this.deviceGroupAll = [];
-        let param: any = { paging: { all: true } };
+        let param: any = { paging: { pageSize: 9999 } };
 
         await this.$server
             .R("/device/group", param)
