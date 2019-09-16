@@ -178,7 +178,7 @@ export class SiteDeviceGroupView extends Vue {
                  */
                 areaName?: string;
 
-                  /**
+                 /**
                  * @uiLabel - ${this._("w_Site_GroupName")}
                  * @uiType - iv-form-label
                  */
@@ -196,27 +196,26 @@ export class SiteDeviceGroupView extends Vue {
                 */
                 devices?: string;
 
-                 
-                /**
-                 * @uiLabel - ${this._("w_Site_High")}
+                 /**
+                 * @uiLabel - ${this._("w_Site_Low")}
                  * @uiType - iv-form-label
-                 * @uiColumnGroup - threshold 
+                 * @uiColumnGroup - threshold
                  */
-                high?:number;
+                low?:number;
 
                  /**
                  * @uiLabel - ${this._("w_Site_Medium")}
                  * @uiType - iv-form-label
-                 * @uiColumnGroup - threshold 
+                 * @uiColumnGroup - threshold
                  */
-                medium?:number;
 
-                 /**
-                 * @uiLabel - ${this._("w_Site_Low")}
+                medium?:number;
+                /**
+                 * @uiLabel - ${this._("w_Site_High")}
                  * @uiType - iv-form-label
-                 * @uiColumnGroup - threshold 
+                 * @uiColumnGroup - threshold
                  */
-                low?:number;
+                high?:number;
 
             }`;
     }
