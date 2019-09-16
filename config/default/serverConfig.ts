@@ -7,7 +7,7 @@
 import { Config } from '@/../config/default/serverConfig';
 
 var config: Config = {
-    ip: '172.16.10.28',
+    ip: '172.16.10.21',
     port: 6067,
     ssl: false,
 

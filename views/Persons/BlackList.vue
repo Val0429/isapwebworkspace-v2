@@ -147,65 +147,20 @@ export default class SetupsFloor extends Vue {
     selectedDetail: any = [];
 
     newImg = new Image();
-    newImgSrc = "";
+    newImgSrc = ImageBase64.pngEmpty;
 
     inputFormData: any = {
         objectId: "",
         imageBase64: "",
         name: "",
         nric: "",
-        remark: ""
+        remark: "",
+        organization: ""
     };
 
     async created() {}
 
     mounted() {}
-
-    clearInputData() {
-        this.inputFormData = {
-            objectId: "",
-            imageBase64: "",
-            name: "",
-            nric: "",
-            remark: ""
-        };
-    }
-
-    selectedItem(data) {
-        this.isSelected = data;
-        this.selectedDetail = [];
-        this.selectedDetail = data;
-    }
-
-    getInputData() {
-        this.clearInputData();
-        for (const param of this.selectedDetail) {
-            this.inputFormData = {
-                objectId: param.objectId,
-                name: param.name,
-                floor: param.floor
-            };
-        }
-    }
-
-    updateInputFormData(data) {
-        if (data.key == "imageBase64") {
-            ImageBase64.fileToBase64(data.value, (base64 = "") => {
-                if (base64 != "") {
-                    this.newImg = new Image();
-                    this.newImg.src = base64;
-                    this.newImg.onload = () => {
-                        this.newImgSrc = base64;
-                        return;
-                    };
-                } else {
-                    Dialog.error(this._("w_Region_ErrorFileToLarge"));
-                }
-            });
-        }
-        this.inputFormData[data.key] = data.value;
-        console.log(this.inputFormData);
-    }
 
     pageToList() {
         this.transition.prevStep = this.transition.step;
@@ -233,17 +188,89 @@ export default class SetupsFloor extends Vue {
         this.getInputData();
     }
 
+    clearInputData() {
+        this.newImgSrc = ImageBase64.pngEmpty;
+        this.inputFormData = {
+            objectId: "",
+            imageBase64: "",
+            name: "",
+            nric: "",
+            remark: "",
+            organization: ""
+        };
+    }
+
+    selectedItem(data) {
+        this.isSelected = data;
+        this.selectedDetail = [];
+        this.selectedDetail = data;
+    }
+
+    getInputData() {
+        this.clearInputData();
+        for (const param of this.selectedDetail) {
+            this.newImgSrc = param.imageBase64;
+            this.inputFormData = {
+                objectId: param.objectId,
+                name: param.name,
+                nric: param.nric,
+                remark: param.remark,
+                organization: param.organization
+            };
+        }
+    }
+
+    updateInputFormData(data) {
+        if (data.key == "imageBase64") {
+            ImageBase64.fileToBase64(data.value, (base64 = "") => {
+                if (base64 != "") {
+                    this.newImg = new Image();
+                    this.newImg.src = base64;
+                    this.newImg.onload = () => {
+                        this.newImgSrc = base64;
+                        return;
+                    };
+                } else {
+                    Dialog.error(this._("w_Region_ErrorFileToLarge"));
+                }
+            });
+        }
+        this.inputFormData[data.key] = data.value;
+    }
+
     async saveAddOrEdit(data) {
         let param: any = {
             datas: [
                 {
-                    imageBase64: this.newImgSrc,
                     name: data.name,
                     nric: data.nric,
-                    remark: data.remark
+                    remark: data.remark,
+                    organization: data.organization
                 }
             ]
         };
+
+        if (this.newImgSrc !== ImageBase64.pngEmpty) {
+            param.datas[0]["imageBase64"] = this.newImgSrc;
+        }
+
+        // check
+        if (
+            param.datas[0]["imageBase64"] == undefined &&
+            !param.datas[0].nric
+        ) {
+            Dialog.error(this._("w_Blacklist_ErrorMediaType"));
+            return false;
+        }
+
+        if (
+            param.datas[0].nric &&
+            param.datas[0].nric != "" &&
+            !RegexServices.nric(param.datas[0].nric)
+        ) {
+            Dialog.error(this._("w_Blacklist_ErrorNricRegex"));
+            return false;
+        }
 
         // add
         if (!this.inputFormData.objectId) {
@@ -404,24 +431,28 @@ export default class SetupsFloor extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Blacklist_Name")}
+                 * @uiType - iv-form-label
                  */
                 name: string;
 
                 /**
                  * @uiLabel - ${this._("w_Blacklist_NRIC")}
+                 * @uiType - iv-form-label
                  */
                 nric: string;
 
                 /**
                  * @uiLabel - ${this._("w_Blacklist_Company")}
+                 * @uiType - iv-form-label
                  */
-                organization?: any;
+                organization?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Blacklist_Reason")}
+                 * @uiType - iv-form-label
                  */
                 remark: string;
-                    }
+            }
         `;
     }
 
@@ -447,13 +478,13 @@ export default class SetupsFloor extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Blacklist_Company")}
                  */
-                organization?: any;
+                organization?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Blacklist_Reason")}
                  */
                 remark: string;
-                    }
+            }
         `;
     }
 }

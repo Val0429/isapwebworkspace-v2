@@ -44,6 +44,14 @@
                         />
                     </template>
 
+                    <template #permissionFloorIds="{$attrs, $listeners}">
+                        <ul>
+                            <li v-for="floor in $attrs.row.permissionFloors">
+                                {{floor.name}}
+                            </li>
+                        </ul>
+                    </template>
+
                     <template #Actions="{$attrs, $listeners}">
                         <iv-toolbox-more :disabled="selectedDetail.length !== 1">
                             <iv-toolbox-view @click="pageToView" />
@@ -216,6 +224,33 @@ export default class SetupsFloor extends Vue {
 
     mounted() {}
 
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
+    }
+
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.getInputData();
+    }
+
+    async pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearInputData();
+        await this.initSelectItem();
+    }
+
+    async pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearInputData();
+        await this.initSelectItem();
+        this.getInputData();
+    }
+
     clearInputData() {
         this.newImgSrc = ImageBase64.pngEmpty;
         this.inputFormData = {
@@ -246,19 +281,17 @@ export default class SetupsFloor extends Vue {
         this.selectedDetail = data;
     }
 
-    getInputData() {
-        this.clearInputData();
+    async getInputData() {
         for (const param of this.selectedDetail) {
             let floors = [];
-            this.initSelectItemFloorWithCompany(
-                param.permissionCompany.objectId
-            );
+            for (let tempFloor of param.permissionFloors) {
+                floors.push(tempFloor.objectId);
+            }
             this.newImgSrc = param.imageBase64;
             this.inputFormData = {
                 objectId: param.objectId,
                 name: param.name,
                 email: param.email,
-
                 imageBase64: param.imageBase64,
                 isUseSuntecReward: param.isUseSuntecReward,
                 isUseSuntecRewardString: param.isUseSuntecReward
@@ -306,38 +339,14 @@ export default class SetupsFloor extends Vue {
         if (data.key == "permissionCompanyId") {
             this.initSelectItemFloorWithCompany(data.value);
         }
-        if (data.key == "agreeTc" && data.value) {
-            this.inputFormData.check = true;
-        } else {
-            this.inputFormData.check = undefined;
+        if (data.key == "agreeTc") {
+            if (data.value) {
+                this.inputFormData.check = true;
+            } else {
+                this.inputFormData.check = undefined;
+            }
         }
         this.inputFormData[data.key] = data.value;
-    }
-
-    pageToList() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 1;
-        (this.$refs.listTable as any).reload();
-    }
-
-    pageToView() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 2;
-        this.getInputData();
-    }
-
-    pageToAdd() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-        this.clearInputData();
-        this.initSelectItem();
-    }
-
-    async pageToEdit() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-        await this.initSelectItem();
-        this.getInputData();
     }
 
     async initSelectItem() {
@@ -376,6 +385,7 @@ export default class SetupsFloor extends Vue {
             await this.initSelectItemFloorWithAPI();
         }
     }
+
     initSelectItemRole() {
         let settingRole = {
             SystemAdministrator: false,
@@ -412,7 +422,6 @@ export default class SetupsFloor extends Vue {
 
     async initSelectItemCompanyWithAPI() {
         let param: any = { paging: { all: true } };
-
         param = RegexServices.trim(param);
         await this.$server
             .R("/location/company", param)
@@ -495,23 +504,42 @@ export default class SetupsFloor extends Vue {
             ]
         };
 
+        if (param.datas[0].permissionCompanyId == undefined) {
+            if (this.$user.user.company && this.$user.user.company.objectId) {
+                param.datas[0].permissionCompanyId = this.$user.user.company.objectId;
+            }
+        }
+
+        if (param.datas[0].permissionCompanyId == undefined) {
+            Dialog.error(this._('w_Person_ErrorCompanyUndefined'));
+            return false;
+        }
+
         if (this.newImgSrc !== ImageBase64.pngEmpty) {
             param.datas[0]["imageBase64"] = this.newImgSrc;
         }
 
+        // check
         if (
-            param.datas[0]["imageBase64"] == "" &&
+            param.datas[0]["imageBase64"] == undefined &&
             !param.datas[0].isUseSuntecReward
         ) {
-            Dialog.error("Image or Suntec Rewards must choose one");
+            Dialog.error(this._('w_Person_ErrorMediaType'));
             return false;
         }
 
-        if (param.datas[0].nric != "") {
-            if (!RegexServices.nric(param.datas[0].nric)) {
-                Dialog.error("NRIC only English and number, must 4 digits");
-                return false;
-            }
+        if (
+            param.datas[0].nric &&
+            param.datas[0].nric != "" &&
+            !RegexServices.nric(param.datas[0].nric)
+        ) {
+            Dialog.error(this._('w_Person_ErrorNricRegex'));
+            return false;
+        }
+
+        if (!RegexServices.email(param.datas[0].email)) {
+            Dialog.error("Email format error");
+            return false;
         }
 
         // add
@@ -636,7 +664,7 @@ export default class SetupsFloor extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Person_Floor")}
                  */
-                permissionFloorIds: string;
+                permissionFloorIds: any;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Enable_Permission")}

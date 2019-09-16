@@ -4,7 +4,7 @@ export class RegexService {
     regexItem: any = {
         number: /^[\d]*$/,
         phoneNumber: /^[\d+]*$/,
-        email: /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/i,
+        email: /^([^@]+)@([\da-z\.-]+)\.([a-z\.]{2,6})([^\.])$/,
         url: /(ws|ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
         nric: /^[0-9a-zA-Z]{4}$/,
     };

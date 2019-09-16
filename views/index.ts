@@ -35,7 +35,8 @@ $({ path: '/buildings', name: "_('m_Navigation_Buildings')", icon: 'fa-building'
 $({ path: '/floor', name: "_('m_Navigation_Floor')", icon: 'fa-level-up', permission: true })(SetupsFloor);
 $({ path: '/door', name: "_('m_Navigation_Door')", icon: 'fa-columns', permission: true })(SetupsDoor);
 $({ path: '/company', name: "_('m_Navigation_Company')", icon: 'fa-industry', permission: true })(SetupsCompany);
-$({ path: '/persons', name: "_('m_Navigation_Persons')", permission: true, redirect: '/persons/personlist' })();
+
+$({ path: '/persons', name: "_('m_Navigation_Persons')", icon: 'fa-users', permission: true, redirect: '/persons/personlist' })();
 $({ path: '/persons/personlist', name: "_('m_Navigation_Persons_PersonList')", icon: 'fa-user', permission: true })(PersonsPersonList);
 $({ path: '/persons/blacklist', name: "_('m_Navigation_Persons_BlackList')", icon: 'fa-ban', permission: true })(PersonsBlackList);
 
@@ -43,7 +44,7 @@ $({ path: '/client', name: "_('m_Navigation_Server')", permission: true, redirec
 $({ path: '/client/frs', name: "_('m_Navigation_Frs')", icon: 'fa-server', permission: true })(IsapFrs);
 $({ path: '/client/hikvision', name: "_('m_Navigation_HikVision')", icon: 'fa-server', permission: true })(HikVision);
 
-$({ path: '/settings', name: "_('m_Navigation_Settings')", permission: true, redirect: '/settings/email' })();
+$({ path: '/settings', icon: 'fa-cog', name: "_('m_Navigation_Settings')", permission: true, redirect: '/settings/email' })();
 $({ path: '/settings/suntec_app', name: "_('m_Navigation_Settings_SuntecAppServer')", icon: 'fa-server', permission: true })(SettingsSuntec);
 $({ path: '/settings/acs', name: "_('m_Navigation_Settings_AcsServer')", icon: 'fa-server', permission: true })(SettingsAcs);
 $({ path: '/settings/smtp', name: "_('m_Navigation_Settings_SmtpServer')", icon: 'fa-server', permission: true })(SettingsSmtp);
