@@ -218,7 +218,6 @@ export default class Invitation extends Vue {
         if (tempStatus != undefined) {
             this.routeQuery.status = tempStatus;
         }
-        console.log("!!!! initQuery", this.routeQuery);
     }
 
     isExpired(date, time, status) {

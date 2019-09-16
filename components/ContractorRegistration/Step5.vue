@@ -68,8 +68,6 @@ export class Step5 extends Vue {
     mounted() {}
 
     putFile(data) {
-        console.log("putFile", data);
-
         // Min 收 base64 的 string[]
         this.$emit("putStep5File", data);
     }

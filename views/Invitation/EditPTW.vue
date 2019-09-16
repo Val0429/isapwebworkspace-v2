@@ -547,8 +547,6 @@ export class EditPTW extends Vue {
     }
 
     async stepTo3() {
-        // console.log('stepTo3', this.inputFormData)
-
         let stepRef: any = this.$refs.step;
 
         if (
@@ -598,7 +596,6 @@ export class EditPTW extends Vue {
         this.inputFormData.workContact = step3Date.workContact;
         this.inputFormData.workContactPhone = step3Date.workContactPhone;
 
-        console.log("inputFormData ~ ", this.inputFormData);
         this.isChange = true;
     }
 
@@ -773,10 +770,6 @@ export class EditPTW extends Vue {
 
     receiveStep7Data(step7Date) {
         this.inputFormData.persons = step7Date;
-        console.log(
-            "this.inputFormData.step7PersonDetail ~ ",
-            this.inputFormData.persons
-        );
         this.isChange = true;
     }
 
@@ -930,9 +923,6 @@ export class EditPTW extends Vue {
     async doSubmit() {
         let stepRef: any = this.$refs.step;
 
-        // console.log('this.inputFormData.accessGroups.length ~ ', this.inputFormData.accessGroups.length)
-        // console.log('this.isApproval ~ ', this.isApproval)
-
         if (
             this.isApproval === undefined ||
             this.inputFormData.accessGroups.length === 0
@@ -947,13 +937,14 @@ export class EditPTW extends Vue {
         }
 
         Dialog.confirm(
-            this.isApproval ? this._("w_Save_Checked_ConfirmContentApprove") : this._('w_Save_Checked_ConfirmContentReject'),
+            this.isApproval
+                ? this._("w_Save_Checked_ConfirmContentApprove")
+                : this._("w_Save_Checked_ConfirmContentReject"),
             this._("w_Save_Checked_Confirm"),
             () => {
                 this.doSubmitApi();
             }
         );
-
     }
 
     async doSubmitApi() {

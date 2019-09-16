@@ -200,7 +200,6 @@ export class Step8NotExpire extends Vue {
             }
         }
 
-        // console.log(' ~ ',this.inputFormData.accessGroups )
         this.$emit("step8", this.inputFormData);
     }
 

@@ -795,7 +795,6 @@ export class StatusApproveNotExpireDate extends Vue {
         this.inputFormData.workEndDate = step8Date.workEndDate;
         this.inputFormData.workEndTime = step8Date.workEndTime;
         this.inputFormData.accessGroups = step8Date.accessGroups;
-        console.log("this.accessGroups ~ ", this.inputFormData.accessGroups);
 
         this.isChange = true;
     }

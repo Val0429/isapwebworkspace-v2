@@ -126,11 +126,18 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Model, Watch } from "vue-property-decorator";
+import {
+    Vue,
+    Component,
+    Prop,
+    Emit,
+    Model,
+    Watch
+} from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import Dialog from "@/services/Dialog";
 import { IStep7, IWorkPermitPerson } from ".";
-import RegexService from '@/services/RegexServices';
+import RegexService from "@/services/RegexServices";
 
 enum EPageStep {
     list = "list",
@@ -165,9 +172,11 @@ export class Step7 extends Vue {
 
     personTable: any = {
         title: [],
-        tableDataFromApi: this.selectedDetail.persons ? this.selectedDetail.persons : []
+        tableDataFromApi: this.selectedDetail.persons
+            ? this.selectedDetail.persons
+            : []
     };
-// this.personTable.tableDataFromApi ? this.personTable.tableDataFromApi :
+    // this.personTable.tableDataFromApi ? this.personTable.tableDataFromApi :
 
     inputFormData: IWorkPermitPerson = {
         name: "",
@@ -192,13 +201,11 @@ export class Step7 extends Vue {
     }
 
     initInputFormData() {
-
         if (this.selectedDetail.persons) {
             this.personTable.tableDataFromApi = this.selectedDetail.persons;
         } else {
             this.personTable.tableDataFromApi = [];
         }
-
     }
 
     initData() {
@@ -262,9 +269,7 @@ export class Step7 extends Vue {
         this.inputFormData[data.key] = data.value;
 
         if (data.key === "phone") {
-            this.inputFormData.phone = RegexService.numberReplace(
-                data.value
-            );
+            this.inputFormData.phone = RegexService.numberReplace(data.value);
             this.inputFormData.phone = RegexService.numberReplace(
                 this.inputFormData.phone
             );
@@ -273,10 +278,6 @@ export class Step7 extends Vue {
 
     pageToList() {
         this.pageStep = EPageStep.list;
-        console.log(
-            "this.personTable.tableDataFromApi ~ ",
-            this.personTable.tableDataFromApi
-        );
     }
 
     pageToAdd() {
@@ -292,14 +293,13 @@ export class Step7 extends Vue {
     }
 
     doSubmit(data) {
-
         let personObject: any = {
             name: data.name,
             phone: data.phone,
             nric: data.nric,
             occupation: data.occupation,
             unitNo: data.unitNo,
-            vehicle: data.vehicle ? data.vehicle : '',
+            vehicle: data.vehicle ? data.vehicle : "",
             companyName: data.companyName,
             shift: data.shift
         };
@@ -310,11 +310,11 @@ export class Step7 extends Vue {
         }
 
         for (const person of this.personTable.tableDataFromApi) {
-            if (person.name ===data.name) {
+            if (person.name === data.name) {
                 Dialog.error(this._("w_ViewPTW_Step7_NameError"));
                 return false;
             }
-            if (person.nric ===data.nric) {
+            if (person.nric === data.nric) {
                 Dialog.error(this._("w_ViewPTW_Step7_NRICFINError"));
                 return false;
             }

@@ -207,10 +207,7 @@ export class Step8 extends Vue {
             }
         }
 
-        // console.log(' ~ ',this.inputFormData.accessGroups )
         this.$emit("step8", this.inputFormData, this.approval);
-
-        // console.log(' ~ ',this.inputFormData.accessGroups )
     }
 
     changeApproval() {

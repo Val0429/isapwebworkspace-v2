@@ -245,10 +245,6 @@ export class ViewStep7 extends Vue {
 
     pageToList() {
         this.pageStep = EPageStep.list;
-        console.log(
-            "this.personTable.tableDataFromApi ~ ",
-            this.personTable.tableDataFromApi
-        );
     }
 
     pageToAdd() {

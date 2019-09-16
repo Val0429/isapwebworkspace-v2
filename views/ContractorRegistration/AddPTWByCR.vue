@@ -584,7 +584,6 @@ export class AddPTWByCR extends Vue {
                                     base64: base64
                                 };
                                 item.attachments.push(tempAttachment);
-                                console.log(item);
                             }
                         );
                     }
@@ -601,7 +600,6 @@ export class AddPTWByCR extends Vue {
 
     receiveStep1Data(step1Date) {
         this.inputFormData.pdpaAccepted = step1Date;
-        //        console.log(' ~ ', this.inputFormData.accepted)
     }
 
     async stepTo2() {
@@ -898,10 +896,6 @@ export class AddPTWByCR extends Vue {
 
     receiveStep7Data(step7Date) {
         this.inputFormData.persons = step7Date;
-        console.log(
-            "this.inputFormData.persons ~ ",
-            this.inputFormData.persons
-        );
     }
 
     async stepTo8() {}
@@ -927,17 +921,6 @@ export class AddPTWByCR extends Vue {
 
     async doSubmit() {
         let stepRef: any = this.$refs.step;
-
-        console.log(
-            "this.inputFormData.persons ~ ",
-            this.inputFormData.persons
-        );
-
-        // if (!this.inputFormData.persons) {
-        //     Dialog.error(this._("w_ViewPTW_Step_ErrorTipPerson"));
-        //     stepRef.currentStep = 7;
-        //     return false;
-        // }
 
         const doSubmitParam = {
             verify: this.inputFormData.verify
