@@ -302,7 +302,7 @@ export default class SetupsAccount extends Vue {
         }
 
         if (
-            !RoleService.haveSystemAdministrator(this) &&
+            RoleService.haveSystemAdministrator(this) ||
             RoleService.haveAdministrator(this)
         ) {
             settingRole.TenantAdministrator = true;
