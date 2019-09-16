@@ -544,9 +544,9 @@ export class SiteAreaForm extends Vue {
                  * @uiLabel - ${this._("w_Site_AreaName")}
                  * @uiPlaceHolder - ${this._("w_Site_AreaName")}
                  * @uiType - ${
-                        this.area.objectId === ""
-                            ? "iv-form-string"
-                            : "iv-form-label"
+                        this.area.objectId
+                            ? "iv-form-label"
+                            : "iv-form-string"
                     }
                  */
                 name: string;
