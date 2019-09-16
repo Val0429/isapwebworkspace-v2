@@ -23,6 +23,7 @@
                 ref="permTable"
                 :items="myProvider" 
                 :fields="fields"
+                :busy="isBusy"
                 :per-page="perPage"
                 :current-page="page">
                 <!-- A virtual column -->
@@ -81,8 +82,11 @@
                     <template slot="index" slot-scope="data">
                         {{ data.index + (doorPage-1)*perPage + 1 }}
                     </template>
+                    <template slot="type" slot-scope="data">
+                        {{ _(data.item.type=="doorGroup"? "w_DoorGroup" : "w_Door") }}
+                    </template>
                 </b-table>
-           <b-pagination
+           <b-pagination 
             v-model="doorPage"
             :total-rows="doorRecords.length"
             :per-page="perPage"
@@ -113,7 +117,7 @@ import { System } from '@/config/default/api/interfaces';
 export default class QueryPermission extends Vue {
     viewPage:boolean=false;    
     filter: any = {};
-    perPage:number=10;
+    perPage:number=20;
     page:number=1;
     total:number=0;
     records:any[]=[];
@@ -124,6 +128,7 @@ export default class QueryPermission extends Vue {
     fields:any=[];
     memberRecords:any=[];
     doorRecords:any=[];
+    isBusy:boolean=false;
     pageToView(permission:any){
         console.log("permission", permission);        
         this.viewPage=true;
@@ -140,7 +145,7 @@ export default class QueryPermission extends Vue {
     myProvider (ctx) {
         // Here we don't set isBusy prop, so busy state will be
         // handled by table itself
-        // this.isBusy = true
+        this.isBusy = true
 
         console.log("filter", this.filter);
 
@@ -149,11 +154,11 @@ export default class QueryPermission extends Vue {
         return promise.then((data:any) => {
           this.total = data.paging.total;
           // Here we could override the busy state, setting isBusy to false
-          // this.isBusy = false
+          this.isBusy = false
           return(data.results);
         }).catch(error => {
           // Here we could override the busy state, setting isBusy to false
-          // this.isBusy = false
+           this.isBusy = false
           // Returning an empty array, allows table to correctly handle
           // internal busy state in case of error
           return []
@@ -193,6 +198,10 @@ export default class QueryPermission extends Vue {
             {
                 key: "doorname",
                 label: this._('w_Door')
+            },
+            {
+                key: "type",
+                label: this._('w_DeviceType')
             }
         ];
         this.memberFields = [   
