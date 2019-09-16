@@ -683,4 +683,7 @@ export default class LangObject implements ILang {
     allCardNumber="All Card Number";
     void="void";
     objectId="id";
+    
+    w_Member_All="ALL";
+    w_Member_Deleted="Deleted";
 }

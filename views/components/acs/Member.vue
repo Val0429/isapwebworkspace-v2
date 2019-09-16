@@ -47,7 +47,18 @@
         :interface="filterInterface()"
         :value="getParams"
         @submit="onFilter($event)"
-      ></iv-form>
+      >
+        <template #Status="{$attrs,$listeners}">                   
+            <b-form-group :label="_('status')" 
+            class="col-md-6">     
+                <b-input-group>               
+                    <b-form-radio inline v-model="status" name="status" value="valid">{{_("w_Not_Selected")}}</b-form-radio>
+                    <b-form-radio inline v-model="status" name="status" value="all">{{_("w_Member_All")}}</b-form-radio>
+                    <b-form-radio inline v-model="status" name="status" value="deleted">{{_("w_Member_Deleted")}}</b-form-radio>
+                </b-input-group>    
+            </b-form-group>
+        </template>
+      </iv-form>
       <template v-if="isMounted">
         <div class="float-right">
           <b-button
@@ -61,7 +72,7 @@
             size="lg"
             v-bind="$refs.filterForm.resetBindings.$attrs"
             v-on="$refs.filterForm.resetBindings.$listeners"
-            @click="getParams={}"
+            @click="doReset()"
           >{{ _("wb_Reset") }}</b-button>
         </div>
       </template>
@@ -774,6 +785,10 @@ export default class Member extends Vue {
       }
       
       return false; 
+  }
+  doReset(){
+    this.status='valid';
+    this.getParams={Status:this.status};
   }
   async doDelete() {
      if(this.selectedDetail.length==0) return;
@@ -1906,11 +1921,14 @@ export default class Member extends Vue {
              * @uiLabel - ${this._("w_Interval")}
              */
             EndDateEnd?:Date;
+
+            Status?:string;
         }`;
   }
   private isMounted: boolean = false;
   private submitClicked: boolean = false;
-  getParams: any = {};
+  status:string="valid";
+  getParams: any = {Status:this.status};
   private doMounted() {
     this.isMounted = true;
   }
@@ -1920,8 +1938,11 @@ export default class Member extends Vue {
     if ($event.StartDateEnd) $event.end1 = $event.StartDateEnd.toISOString();
     if ($event.EndDateStart) $event.start2 = $event.EndDateStart.toISOString();
     if ($event.EndDateEnd) $event.end2 = $event.EndDateEnd.toISOString();
-    
+    delete($event.Status);
+    $event.Status=this.status;
     let params = $event;
+
+    console.log("params", params)
     // for (const key in params) {
     //   let value = params[key];
     //   if(!value)continue;

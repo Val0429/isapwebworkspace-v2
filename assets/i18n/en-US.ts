@@ -683,4 +683,6 @@ export default class LangObject {
     allCardNumber="All Card Number";
     void="void";
     objectId="id";
+    w_Member_All="ALL";
+    w_Member_Deleted="Deleted";
 }
