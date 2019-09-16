@@ -1,5 +1,6 @@
 import Dialog from '../Dialog';
 import Loading from '@/services/Loading';
+import ReportService from "@/components/Reports/models/ReportService";
 
 interface IResponseFilter {
     totalLength: number;
@@ -30,8 +31,8 @@ export class ResponseFilter {
             return false;
         }
 
-        // not array
-        if (response.length == undefined) {
+        // 空物件
+        if (ReportService.CheckObjectIfEmpty(response)) {
             callback(response);
             return false;
         }
