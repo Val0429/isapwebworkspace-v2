@@ -116,6 +116,11 @@ export class SiteAreaForm extends Vue {
     devices = [];
     device = {};
 
+    areaPhoto: any = {
+        add: `areaPhoto: string;`,
+        edit: `areaPhoto?: string;`,
+    };
+
     created() {}
 
     mounted() {
@@ -538,6 +543,11 @@ export class SiteAreaForm extends Vue {
                  /**
                  * @uiLabel - ${this._("w_Site_AreaName")}
                  * @uiPlaceHolder - ${this._("w_Site_AreaName")}
+                 * @uiType - ${
+                        this.area.objectId === ""
+                            ? "iv-form-string"
+                            : "iv-form-label"
+                    }
                  */
                 name: string;
 
@@ -546,7 +556,7 @@ export class SiteAreaForm extends Vue {
                 * @uiPlaceHolder - ${this._("w_Site_Photo")}
                 * @uiType - iv-form-file
                 */
-                areaPhoto: string;
+                ${ this.area.objectId ? this.areaPhoto.edit : this.areaPhoto.add }
 
                 imageSrc?:any;
 

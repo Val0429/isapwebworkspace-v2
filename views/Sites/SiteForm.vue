@@ -43,7 +43,7 @@
 
                 <template #imageSrc="{ $attrs, $listeners}">
                     <img
-                        class="imgSide"
+                        class="imgSide mb-3"
                         v-if="newImgSrc"
                         v-bind="$attrs"
                         v-on="$listeners"
@@ -52,7 +52,7 @@
                 </template>
 
                 <template #mapping="{ $attrs, $listeners }">
-                    <div class="googleMap">
+                    <div class="googleMap col-md-12">
                         <b-button
                             variant="secondary"
                             size="md"
@@ -140,6 +140,11 @@ export class SiteForm extends Vue {
     googleMap: IGoogleMap = {
         src: "https://maps.google.com/maps?output=embed",
         zSize: "16"
+    };
+
+    sitePhoto: any = {
+        add: `sitePhoto: string;`,
+        edit: `sitePhoto?: string;`,
     };
 
     created() {}
@@ -426,7 +431,7 @@ export class SiteForm extends Vue {
                 * @uiPlaceHolder - ${this._("w_Site_Photo")}
                 * @uiType - iv-form-file
                 */
-                sitePhoto: string;
+                ${ this.site.objectId ? this.sitePhoto.edit : this.sitePhoto.add }
 
                 imageSrc?:any;
 
