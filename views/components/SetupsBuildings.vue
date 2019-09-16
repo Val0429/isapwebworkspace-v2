@@ -421,7 +421,7 @@ export default class SetupsFloor extends Vue {
                  * @uiLabel - ${this._("w_Acs_AccessGroupName")}
                  * @uiPlaceHolder - ${this._("w_Acs_AccessGroupName")}
                  */
-                group: string;
+                acs: string;
 
             }
         `;
