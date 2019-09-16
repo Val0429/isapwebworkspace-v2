@@ -190,10 +190,12 @@ export default class SetupsFloor extends Vue {
         imageBase64: "",
         nric: "",
         realRoles: [],
+        card: "",
         useCompany: false,
         useFloor: false,
         agreeTc: false,
-        isUseSuntecRewardText: "",
+        isUseSuntecReward: false,
+        isUseSuntecRewardString: "",
         startDateString: "",
         endDateString: ""
     };
@@ -229,11 +231,12 @@ export default class SetupsFloor extends Vue {
             imageBase64: "",
             nric: "",
             realRoles: [],
+            card: "",
             useCompany: false,
             useFloor: false,
             agreeTc: false,
             isUseSuntecReward: false,
-            card: "",
+            isUseSuntecRewardString: "",
             startDateString: "",
             endDateString: ""
         };
@@ -257,7 +260,10 @@ export default class SetupsFloor extends Vue {
                 email: param.email,
 
                 imageBase64: param.imageBase64,
-                isUseSuntecReward: param.isUseSuntecReward ? "是" : "否",
+                isUseSuntecReward: param.isUseSuntecReward,
+                isUseSuntecRewardString: param.isUseSuntecReward
+                    ? this._("wb_Yes")
+                    : this._("wb_No"),
                 nric: param.nric,
                 permissionCompanyId: param.permissionCompany.objectId,
                 permissionFloors: floors,
@@ -488,8 +494,24 @@ export default class SetupsFloor extends Vue {
                 }
             ]
         };
+
         if (this.newImgSrc !== ImageBase64.pngEmpty) {
             param.datas[0]["imageBase64"] = this.newImgSrc;
+        }
+
+        if (
+            param.datas[0]["imageBase64"] == "" &&
+            !param.datas[0].isUseSuntecReward
+        ) {
+            Dialog.error("Image or Suntec Rewards must choose one");
+            return false;
+        }
+
+        if (param.datas[0].nric != "") {
+            if (!RegexServices.nric(param.datas[0].nric)) {
+                Dialog.error("NRIC only English and number, must 4 digits");
+                return false;
+            }
         }
 
         // add
@@ -612,21 +634,9 @@ export default class SetupsFloor extends Vue {
                 name: string;
 
                 /**
-                 * @uiLabel - ${this._("w_Person_Building")}
-                 * @uiHidden - true
-                 */
-                buildingName: string;
-
-                /**
                  * @uiLabel - ${this._("w_Person_Floor")}
                  */
                 permissionFloorIds: string;
-
-                /**
-                 * @uiLabel - ${this._("w_Person_Door")}
-                 * @uiHidden - true
-                 */
-                doorName: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Enable_Permission")}
@@ -663,32 +673,11 @@ export default class SetupsFloor extends Vue {
                 permissionCompanyId: any;
 
                 /**
-                 * @uiLabel - ${this._("w_Person_Building")}
-                 * @uiType - iv-form-label
-                 * @uiHidden - true
-                 */
-                buildingName: string;
-
-                /**
                  * @uiLabel - ${this._("w_Person_Floor")}
                  * @uiType - iv-form-label
                  * @uiHidden - ${!this.inputFormData.useFloor}
                  */
                 permissionFloorIds: string;
-
-                /**
-                 * @uiLabel - ${this._("w_Person_Door")}
-                 * @uiType - iv-form-label
-                 * @uiHidden - true
-                 */
-                doorName: string;
-
-                /**
-                 * @uiLabel - ${this._("w_Person_Unit")}
-                 * @uiType - iv-form-label
-                 * @uiHidden - true
-                 */
-                unitName: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Email")}
@@ -700,7 +689,7 @@ export default class SetupsFloor extends Vue {
                  * @uiLabel - ${this._("w_Person_Agree_App")}
                  * @uiType - iv-form-label
                  */
-                isUseSuntecReward?: string;
+                isUseSuntecRewardString?: string;
                 
                 /**
                  * @uiLabel - ${this._("w_Person_Remark")}
@@ -733,7 +722,7 @@ export default class SetupsFloor extends Vue {
                  * @uiType - iv-form-label
                  */
                 nric?: string;
-                    }
+            }
         `;
     }
 
@@ -781,33 +770,12 @@ export default class SetupsFloor extends Vue {
                 )};
 
                 /**
-                 * @uiLabel - ${this._("w_Person_Building")}
-                 * @uiType - iv-form-label
-                 * @uiHidden - true
-                 */
-                buildingName?: string;
-
-                /**
                  * @uiLabel - ${this._("w_Person_Floor")}
                  */
                 permissionFloors: ${toEnumInterface(
                     this.selectItem.floor,
                     true
                 )};
-
-                /**
-                 * @uiLabel - ${this._("w_Person_Door")}
-                 * @uiType - iv-form-label
-                 * @uiHidden - true
-                 */
-                doorName: string;
-
-                /**
-                 * @uiLabel - ${this._("w_Person_Unit")}
-                 * @uiType - iv-form-label
-                 * @uiHidden - true
-                 */
-                unitName: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Email")}
@@ -850,9 +818,8 @@ export default class SetupsFloor extends Vue {
 
                 /**
                  * @uiLabel - ${this._("w_Person_NRIC")}
-                 * @uiType - iv-form-number
                  */
-                nric?: number;
+                nric?: string;
 
                 check: any;
             }

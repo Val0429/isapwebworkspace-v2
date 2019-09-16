@@ -6,6 +6,7 @@ export class RegexService {
         phoneNumber: /^[\d+]*$/,
         email: /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/i,
         url: /(ws|ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
+        nric: /^[0-9a-zA-Z]{4}$/,
     };
 
     replaceItem: any = {
@@ -57,6 +58,10 @@ export class RegexService {
 
     phoneNumber(data: string): boolean {
         return this.regexItem.phoneNumber.test(data);
+    }
+
+    nric(data: string): boolean {
+        return this.regexItem.nric.test(data);
     }
 
     replaceNumber(data: string): string {

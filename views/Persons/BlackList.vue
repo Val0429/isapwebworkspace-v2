@@ -18,10 +18,6 @@
                         :disabled="isSelected.length !== 1"
                         @click="pageToView"
                     />
-                    <iv-toolbox-edit
-                        :disabled="isSelected.length !== 1"
-                        @click="pageToEdit()"
-                    />
                     <iv-toolbox-delete
                         :disabled="isSelected.length === 0"
                         @click="doDelete"
@@ -46,7 +42,6 @@
                     <template #Actions="{$attrs, $listeners}">
                         <iv-toolbox-more :disabled="isSelected.length !== 1">
                             <iv-toolbox-view @click="pageToView" />
-                            <iv-toolbox-edit @click="pageToEdit()" />
                             <iv-toolbox-delete @click="doDelete" />
                         </iv-toolbox-more>
                     </template>
@@ -221,6 +216,7 @@ export default class SetupsFloor extends Vue {
     pageToView() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 2;
+        this.clearInputData();
         this.getInputData();
     }
 
@@ -233,6 +229,7 @@ export default class SetupsFloor extends Vue {
     pageToEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
+        this.clearInputData();
         this.getInputData();
     }
 
