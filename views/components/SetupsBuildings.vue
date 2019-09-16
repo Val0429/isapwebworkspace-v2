@@ -209,6 +209,7 @@ export default class SetupsFloor extends Vue {
     pageToView() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 2;
+        this.clearInputData();
         this.getInputData();
     }
 
@@ -221,6 +222,7 @@ export default class SetupsFloor extends Vue {
     pageToEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
+        this.clearInputData();
         this.getInputData();
     }
 
@@ -419,7 +421,7 @@ export default class SetupsFloor extends Vue {
                  * @uiLabel - ${this._("w_Acs_AccessGroupName")}
                  * @uiPlaceHolder - ${this._("w_Acs_AccessGroupName")}
                  */
-                group: string;
+                acs: string;
 
             }
         `;

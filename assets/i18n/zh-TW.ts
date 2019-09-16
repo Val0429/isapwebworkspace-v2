@@ -277,9 +277,13 @@ export default class LangObject {
     w_Person_Card_Number = '卡號';
     w_Person_NRIC = 'NRIC';
     w_Person_Position = '職務';
+    w_Person_ErrorCompanyUndefined = 'permissionCompanyId is undefined';
+    w_Person_ErrorMediaType = 'Image or Suntec Rewards must choose one';
+    w_Person_ErrorNricRegex = 'NRIC only English and number, must 4 digits';
 
     ////////////////// Blacklist List //////////////////
     w_Blacklist_Blacklist = '黑名單列表';
+    w_Blacklist_ViewBlack = '黑名單預覽';
     w_Blacklist_AddBlack = '增加黑名單';
     w_Blacklist_EditBlack = '編輯黑名單';
     w_Blacklist_DelBlack = '刪除黑名單';
@@ -288,6 +292,8 @@ export default class LangObject {
     w_Blacklist_NRIC = 'NRIC';
     w_Blacklist_Company = '所屬公司';
     w_Blacklist_Reason = '原因';
+    w_Blacklist_ErrorMediaType = 'Image or NRIC must choose one';
+    w_Blacklist_ErrorNricRegex = 'NRIC only English and number, must 4 digits';
 
     ////////////////// Isap FRS //////////////////
     w_Frs_FrList = 'iSAP FR Server 列表';
@@ -401,8 +407,8 @@ export default class LangObject {
     w_MailSetting_AddEmailAddSuccess = 'Email Notify Add Success';
     w_MailSetting_AddEmailFailed = 'Email Notify Add Failed';
     w_MailSetting_EditEmailSuccess = 'Email Notify Edit Failed';
-    w_MailSetting_EditEmailFailed= 'Email Notify Edit Failed';
-    w_MailSetting_DeleteConfirm= 'Are you sure to delete selected Email Notify(s)?';
+    w_MailSetting_EditEmailFailed = 'Email Notify Edit Failed';
+    w_MailSetting_DeleteConfirm = 'Are you sure to delete selected Email Notify(s)?';
 
     w_MailSetting_List = 'Email Notify List';
     w_MailSetting_Add = 'Add Email Notify';
