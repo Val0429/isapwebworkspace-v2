@@ -388,7 +388,7 @@ export default class ReportHeatmap extends Vue {
     }
 
     async initSelectItemArea() {
-        let tempAreaSelectItem = {};
+        let tempAreaSelectItem = { all: this._("w_AllAreas") };
 
         const readParam: {
             siteId: string;
@@ -420,7 +420,7 @@ export default class ReportHeatmap extends Vue {
     }
 
     async initSelectItemDeviceGroup() {
-        let tempDeviceGroupSelectItem = {};
+        let tempDeviceGroupSelectItem = { all: this._("w_AllDeviceGroups") };
         this.deviceGroupSelectItem = {};
 
         let readParam: {
@@ -462,7 +462,7 @@ export default class ReportHeatmap extends Vue {
     }
 
     async initSelectItemDevice() {
-        let tempDeviceSelectItem = {};
+        let tempDeviceSelectItem = { all: this._("w_AllDevices") };
         this.deviceSelectItem = {};
 
         const readParam: {
@@ -1139,6 +1139,17 @@ export default class ReportHeatmap extends Vue {
                 }
             }
 
+            if (
+                this.checkDateTheSameDay(
+                    this.filterData.startDate,
+                    this.filterData.endDate
+                )
+            ) {
+                this.receiveHour(this.slider.value);
+            } else {
+                this.receiveDayArrayIndex(this.dayArrayDataIndex);
+            }
+
             // 清除device篩選
             if (
                 this.inputFormData.areaId &&
@@ -1184,6 +1195,17 @@ export default class ReportHeatmap extends Vue {
                 }
             }
 
+            if (
+                this.checkDateTheSameDay(
+                    this.filterData.startDate,
+                    this.filterData.endDate
+                )
+            ) {
+                this.receiveHour(this.slider.value);
+            } else {
+                this.receiveDayArrayIndex(this.dayArrayDataIndex);
+            }
+
             // 清除device篩選
             if (
                 this.inputFormData.areaId &&
@@ -1207,7 +1229,6 @@ export default class ReportHeatmap extends Vue {
                 return false;
             }
         }
-        console.log('this.deviceSummaryFilter ~ ', this.deviceSummaryFilter)
     }
 
     receiveType(type) {
