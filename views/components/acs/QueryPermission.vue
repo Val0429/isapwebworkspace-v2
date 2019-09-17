@@ -47,6 +47,9 @@
                 aria-controls="my-table"
                 />
             </iv-card>
+            <div class="float-right">                
+                <b-button class="btn-filter" size="lg" :disabled="isBusy" @click="manualSync()">{{_("w_Manual_Sync")}}</b-button>
+            </div>
         </div>
         <div v-show="viewPage">
             <iv-card :label="_('w_Member')">
@@ -97,6 +100,7 @@
                 </template>
             </iv-card>
         </div>
+        
     </div>
 </template>
 
@@ -140,6 +144,16 @@ export default class QueryPermission extends Vue {
     viewToPage(){
         console.log("viewToPage");     
         this.viewPage=false;
+        
+    }
+    async manualSync(){
+        try{
+            this.isBusy=true;
+            await this.$server.C("/acs/ccuredata" as any,{});
+            (this.$refs.permTable as any).refresh();
+        }finally{
+            this.isBusy=false;
+        }
         
     }
     myProvider (ctx) {
