@@ -85,9 +85,7 @@
                     <template slot="index" slot-scope="data">
                         {{ data.index + (doorPage-1)*perPage + 1 }}
                     </template>
-                    <template slot="type" slot-scope="data">
-                        {{ _(data.item.type=="doorGroup"? "w_DoorGroup" : "w_Door") }}
-                    </template>
+                    
                 </b-table>
            <b-pagination 
             v-model="doorPage"
@@ -210,12 +208,12 @@ export default class QueryPermission extends Vue {
                 label: this._('w_Number')
             },
             {
-                key: "doorname",
-                label: this._('w_Door')
+                key: "groupname",
+                label: this._('w_DoorGroup')
             },
             {
-                key: "type",
-                label: this._('w_DeviceType')
+                key: "doorname",
+                label: this._('w_Door')
             }
         ];
         this.memberFields = [   
