@@ -1,11 +1,11 @@
 interface IHeatMapPosition {
     x: number;
     y: number;
-    value: number;
+    value: string;
 }
 
 interface IHeatMapData {
-    max: number;
+    max: string;
     data: IHeatMapPosition[];
 }
 

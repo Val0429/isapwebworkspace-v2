@@ -4,33 +4,31 @@
             class="card-content"
             v-show="heatMapPosition.length > 0"
         >
-            <div class="form-group col-md-12 center">
-                <div
-                    class="canvas-div"
-                    style="position:absolute;"
-                    ref="heatmap"
-                >
-                    <canvas
-                        class="canvas-snapshot"
-                        ref="snapshot"
-                        width="600"
-                        height="400"
-                    ></canvas>
-                    <div
-                        class="legend-area"
-                        v-if="heatMapPosition.length > 0"
-                    >
-                        <h5>{{legendTitle}}</h5>
-                        <span class="left">{{min}}</span>
-                        <span class="right">{{max}}</span>
-                        <img
-                            id="gradient"
-                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAAKCAYAAABCHPt+AAAAnklEQVRYR+2WQQqDQBAES5wB/f8/Y05RcMWwSu6JIT0Dm4WlH1DUdHew7/z6WYFhhnGRpnlhAEaQpi/ADbh/np0MiBhGhW+2ymFU+DZfg1EhaoB4jCFuMYYcQKZrXwPEVvm5Og0pcYakBvI35G1jNIZ4jCHexxjSpz9ZFUjAynLbpOvqteaODkm9sloz5JF+ZTVmSAWSu9Qb65AvgDwBQoLgVDlWfAQAAAAASUVORK5CYII="
-                            style="width:100%"
-                        >
-                    </div>
-                </div>
+            <div
+                class="canvas-div"
+                ref="heatmap"
+            >
+                <canvas
+                    class="canvas-snapshot"
+                    ref="snapshot"
+                    width="1600"
+                    height="800"
+                ></canvas>
             </div>
+            <div
+                class="legend-area"
+                v-if="heatMapPosition.length > 0"
+            >
+                <h5>{{legendTitle}}</h5>
+                <span class="left">{{min}}</span>
+                <span class="right">{{max}}</span>
+                <img
+                    id="gradient"
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAAKCAYAAABCHPt+AAAAnklEQVRYR+2WQQqDQBAES5wB/f8/Y05RcMWwSu6JIT0Dm4WlH1DUdHew7/z6WYFhhnGRpnlhAEaQpi/ADbh/np0MiBhGhW+2ymFU+DZfg1EhaoB4jCFuMYYcQKZrXwPEVvm5Og0pcYakBvI35G1jNIZ4jCHexxjSpz9ZFUjAynLbpOvqteaODkm9sloz5JF+ZTVmSAWSu9Qb65AvgDwBQoLgVDlWfAQAAAAASUVORK5CYII="
+                    style="width:100%"
+                >
+            </div>
+
             <div
                 class="center"
                 v-if="heatMapPosition.length > 0"
@@ -47,6 +45,8 @@
         <div
             v-show="heatMapPosition.length === 0"
             class="center canvas-div border border-dark fa-2x"
+            width="1600"
+            height="800"
         >
             N/A
         </div>
@@ -116,7 +116,7 @@ export class CameraHeatmap extends Vue {
     initHeatmap() {
         let me = this;
         let heatmapData: IHeatMapData = {
-            max: 0,
+            max: "0",
             data: []
         };
 
@@ -132,18 +132,31 @@ export class CameraHeatmap extends Vue {
         });
 
         heatmapData.data = me.heatMapPosition.map(function(item, index, array) {
-            heatmapData.max = Math.max(heatmapData.max, item.value);
+            heatmapData.max = Math.max(
+                parseInt(heatmapData.max),
+                parseInt(item.value)
+            ).toString();
             return {
-                x: Math.round(item.x * me.width_r),
-                y: Math.round(item.y * me.height_r),
-                value: item.value
+                x: item.x,
+                y: item.y,
+                value: item.value.toString()
             };
         });
 
-        this.max = heatmapData.max;
+        this.max = parseInt(heatmapData.max);
         this.min = 0;
         me.heatmapCanvs.setData(heatmapData);
         this.changeAlpha(5);
+
+        var elements = document.getElementsByClassName("canvas-div");
+
+        console.log("rrrr", me.width_r, me.height_r);
+        for (let element of elements) {
+            (element as any).style.transform =
+                "scale(" + me.height_r + "," + me.width_r + ")";
+            (element as any).style.width = me.mapImage.width + "px";
+            (element as any).style.height = me.mapImage.height + "px";
+        }
     }
 
     changeAlpha(value: number) {
@@ -160,11 +173,17 @@ export class CameraHeatmap extends Vue {
         me.image = new Image();
         me.image.src = me.mapImage.src;
         me.image.onload = () => {
-            me.width_r = 600 / me.mapImage.width;
-            me.height_r = 400 / me.mapImage.height;
-            me.cx.drawImage(me.image, 0, 0, 600, 400);
+            me.width_r = 1600 / me.mapImage.width;
+            me.height_r = 800 / me.mapImage.height;
+            me.cx.drawImage(me.image, 0, 0, 1600, 800);
             me.initHeatmap();
         };
+
+        var elements2 = document.getElementsByClassName("canvas-snapshot");
+        for (let element of elements2) {
+            (element as any).style.width = me.mapImage.width + "px";
+            (element as any).style.height = me.mapImage.height + "px";
+        }
     }
 }
 export default CameraHeatmap;
@@ -175,21 +194,21 @@ Vue.component("camera-heatmap", CameraHeatmap);
 
 <style lang="scss" scoped>
 .canvas-div {
-    width: 600px;
-    height: 400px;
+    width: 1600px;
+    height: 800px;
 }
 
 .canvas-snapshot {
     position: relative;
     opacity: 1;
-    width: 600px;
-    height: 400px;
+    width: 1600px;
+    height: 800px;
 }
 
 .legend-area {
     position: absolute;
     bottom: 2px;
-    right: -170px;
+    right: 300px;
     padding: 10px;
     background: white;
     outline: 2px solid black;
