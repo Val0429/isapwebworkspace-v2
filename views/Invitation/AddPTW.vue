@@ -148,16 +148,6 @@ export class AddPTW extends Vue {
             workCategoryId: data.workCategoryId
         };
 
-        // email正則
-        //  const emailRule = /^([^@]+)@([\da-z\.-]+)\.([a-z\.]{2,6})([^\.])$/;
-        // // const emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
-        //
-        //  if (!emailRule.test(data.email)) {
-        //      Dialog.error(this._("w_Invitation_EmailError"));
-        //      this.inputFormData.email = '';
-        //      return false;
-        //  }
-
         Loading.show();
         await this.$server
             .C("/flow1/crms", doSubmitParam)

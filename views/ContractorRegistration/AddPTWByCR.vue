@@ -107,8 +107,8 @@
                                 v-for="file in  inputFormData.attachments"
                                 class="step5Div"
                             >
-                               
-                               <span
+
+                                <span
                                     class="close"
                                     @click="deleteStep5File(file.base64)"
                                 ></span>
@@ -119,8 +119,9 @@
                                     class="step5Pdf"
                                     :src="imageBase64.pdfEmpty"
                                 />
-                                <div v-if="file.url == undefined && fileType(file) == 'pdf'"
-                                >{{file.name}}</div>
+                                <div v-if="file.url == undefined && fileType(file) == 'pdf'">
+                                    {{file.name}}
+                                </div>
 
                                 <!-- image upload -->
                                 <img
@@ -133,7 +134,9 @@
                                     target="_blank"
                                     :href="file.base64"
                                     :download="file.name"
-                                >{{file.name}}</a>
+                                >
+                                    {{file.name}}
+                                </a>
 
                                 <!-- pdf download -->
                                 <img
@@ -144,22 +147,26 @@
                                 <a
                                     v-if="file.url && fileType(file) == 'pdf'"
                                     target="_blank"
-                                    :href="file.url"
+                                    :href="replaceFileUrl(file.url)"
                                     :download="file.name"
-                                >{{file.name}}</a>
+                                >
+                                    {{file.name}}
+                                </a>
 
                                 <!-- image download -->
                                 <img
                                     v-if="file.url && fileType(file) == 'image'"
                                     class="step5Imgs"
-                                    :src="file.base64"
+                                    :src="file.url"
                                 />
                                 <a
                                     v-if="file.url && fileType(file) == 'image'"
                                     target="_blank"
-                                    :href="file.url"
+                                    :href="replaceFileUrl(file.url)"
                                     :download="file.name"
-                                >{{file.name}}</a>
+                                >
+                                    {{file.name}}
+                                </a>
 
                             </div>
 
@@ -383,23 +390,34 @@ export class AddPTWByCR extends Vue {
 
     mounted() {}
 
-     fileType(file): string {
-        let result = '';
-        if (file.type.indexOf('pdf') >= 0) {
-            result = 'pdf';
-        } else if (file.type.indexOf('image') >= 0) {
-            result = 'image';
-        } else if (file.type.indexOf('jpeg') >= 0) {
-            result = 'image';
-        } else if (file.type.indexOf('jpg') >= 0) {
-            result = 'image';
-        } else if (file.type.indexOf('png') >= 0) {
-            result = 'image';
+    replaceFileUrl(data: string): string {
+        let pathIndex = data.indexOf("parse/files");
+        let uri = data.substr(pathIndex);
+        let endChar = this.publicHosting.substr(this.publicHosting.length - 1);
+        if (endChar != "/") {
+            this.publicHosting += "/";
+        }
+        return this.publicHosting + uri;
+    }
+
+    fileType(file): string {
+        let result = "";
+        if (file.type.indexOf("pdf") >= 0) {
+            result = "pdf";
+        } else if (file.type.indexOf("image") >= 0) {
+            result = "image";
+        } else if (file.type.indexOf("jpeg") >= 0) {
+            result = "image";
+        } else if (file.type.indexOf("jpg") >= 0) {
+            result = "image";
+        } else if (file.type.indexOf("png") >= 0) {
+            result = "image";
         }
         return result;
     }
 
     async initPublicIP() {
+        this.publicHosting = ServerConfig.url;
         axios
             .get(ServerConfig.url + "flow1/crms/hosting")
             .then(response => {
@@ -1139,7 +1157,7 @@ Vue.component("add-ptw-by-cr", AddPTWByCR);
 .step5Imgs {
     width: 100%;
 }
-.step5Pdf{
+.step5Pdf {
     width: 70%;
     margin-left: 15%;
     margin-right: 15%;
