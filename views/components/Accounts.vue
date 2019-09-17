@@ -458,7 +458,6 @@ export default class SetupsAccount extends Vue {
                 }
             }
         }
-        console.log("!!!! rfg retgh etyh ", this.inputFormData);
     }
 
     selectedItem(datas: any) {
