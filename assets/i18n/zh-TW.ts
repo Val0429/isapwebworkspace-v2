@@ -251,6 +251,7 @@ export default class LangObject {
     w_Company_UnitNumber = '單位號碼';
     w_Company_ContactPerson = '聯絡人';
     w_Company_ContactNumber = '聯絡號碼';
+    w_Company_Building = 'Building';
     w_Company_Floor = '樓層';
 
     w_Company_ErrorContactNumberNotNumber = 'Please check contact only digits';
@@ -277,9 +278,18 @@ export default class LangObject {
     w_Person_Card_Number = '卡號';
     w_Person_NRIC = 'NRIC';
     w_Person_Position = '職務';
+    w_Person_createdAt = 'createdAt';
+    w_Person_createdUser = 'creator';
+    w_Person_updateAt = 'updateAt';
+    w_Person_updateUser = 'updater';
     w_Person_ErrorCompanyUndefined = 'permissionCompanyId is undefined';
     w_Person_ErrorMediaType = 'Image or Suntec Rewards must choose one';
     w_Person_ErrorNricRegex = 'NRIC only English and number, must 4 digits';
+    w_Person_AddSuccess = 'Person add success';
+    w_Person_ADDFailed = 'Person add failed, please try again';
+    w_Person_EditSuccess = 'Person edit success';
+    w_Person_EditFailed = 'Person edit failed, please try again';
+    w_Person_DeleteConfirm = 'Are you sure to delete selected Person(s)?';
 
     ////////////////// Blacklist List //////////////////
     w_Blacklist_Blacklist = '黑名單列表';

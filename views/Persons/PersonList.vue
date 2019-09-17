@@ -16,10 +16,10 @@
                         :disabled="selectedDetail.length !== 1"
                         @click="pageToView"
                     />
-                    <iv-toolbox-edit
+                    <!-- <iv-toolbox-edit
                         :disabled="selectedDetail.length !== 1"
                         @click="pageToEdit()"
-                    />
+                    /> -->
                     <iv-toolbox-delete
                         :disabled="selectedDetail.length === 0"
                         @click="doDelete"
@@ -44,9 +44,9 @@
                         />
                     </template>
 
-                    <template #permissionFloorIds="{$attrs, $listeners}">
+                    <template #floors="{$attrs, $listeners}">
                         <ul>
-                            <li v-for="floor in $attrs.row.permissionFloors">
+                            <li v-for="floor in $attrs.row.floors">
                                 {{floor.name}}
                             </li>
                         </ul>
@@ -55,7 +55,7 @@
                     <template #Actions="{$attrs, $listeners}">
                         <iv-toolbox-more :disabled="selectedDetail.length !== 1">
                             <iv-toolbox-view @click="pageToView" />
-                            <iv-toolbox-edit @click="pageToEdit()" />
+                            <!-- <iv-toolbox-edit @click="pageToEdit()" /> -->
                             <iv-toolbox-delete @click="doDelete" />
                         </iv-toolbox-more>
                     </template>
@@ -193,8 +193,8 @@ export default class SetupsFloor extends Vue {
         companiesText: "",
         floorsText: "",
         name: "",
-        permissionCompanyId: "",
-        permissionFloorIds: [],
+        companyId: "",
+        floorIds: [],
         imageBase64: "",
         nric: "",
         realRoles: [],
@@ -261,8 +261,8 @@ export default class SetupsFloor extends Vue {
             companiesText: "",
             floorsText: "",
             name: "",
-            permissionCompanyId: "",
-            permissionFloorIds: [],
+            companyId: "",
+            floorIds: [],
             imageBase64: "",
             nric: "",
             realRoles: [],
@@ -284,7 +284,7 @@ export default class SetupsFloor extends Vue {
     async getInputData() {
         for (const param of this.selectedDetail) {
             let floors = [];
-            for (let tempFloor of param.permissionFloors) {
+            for (let tempFloor of param.floors) {
                 floors.push(tempFloor.objectId);
             }
             this.newImgSrc = param.imageBase64;
@@ -298,8 +298,8 @@ export default class SetupsFloor extends Vue {
                     ? this._("wb_Yes")
                     : this._("wb_No"),
                 nric: param.nric,
-                permissionCompanyId: param.permissionCompany.objectId,
-                permissionFloors: floors,
+                companyId: param.company.objectId,
+                floorIds: floors,
                 phone: param.phone,
                 position: param.position,
                 remark: param.remark,
@@ -336,7 +336,7 @@ export default class SetupsFloor extends Vue {
                 }
             });
         }
-        if (data.key == "permissionCompanyId") {
+        if (data.key == "companyId") {
             this.initSelectItemFloorWithCompany(data.value);
         }
         if (data.key == "agreeTc") {
@@ -490,8 +490,8 @@ export default class SetupsFloor extends Vue {
             datas: [
                 {
                     isUseSuntecReward: data.isUseSuntecReward,
-                    permissionFloorIds: data.permissionFloors,
-                    permissionCompanyId: data.permissionCompanyId,
+                    floorIds: data.floors,
+                    companyId: data.companyId,
                     name: data.name,
                     email: data.email,
                     nric: data.nric,
@@ -504,14 +504,14 @@ export default class SetupsFloor extends Vue {
             ]
         };
 
-        if (param.datas[0].permissionCompanyId == undefined) {
+        if (param.datas[0].companyId == undefined) {
             if (this.$user.user.company && this.$user.user.company.objectId) {
-                param.datas[0].permissionCompanyId = this.$user.user.company.objectId;
+                param.datas[0].companyId = this.$user.user.company.objectId;
             }
         }
 
-        if (param.datas[0].permissionCompanyId == undefined) {
-            Dialog.error(this._('w_Person_ErrorCompanyUndefined'));
+        if (param.datas[0].companyId == undefined) {
+            Dialog.error(this._("w_Person_ErrorCompanyUndefined"));
             return false;
         }
 
@@ -524,7 +524,7 @@ export default class SetupsFloor extends Vue {
             param.datas[0]["imageBase64"] == undefined &&
             !param.datas[0].isUseSuntecReward
         ) {
-            Dialog.error(this._('w_Person_ErrorMediaType'));
+            Dialog.error(this._("w_Person_ErrorMediaType"));
             return false;
         }
 
@@ -533,7 +533,7 @@ export default class SetupsFloor extends Vue {
             param.datas[0].nric != "" &&
             !RegexServices.nric(param.datas[0].nric)
         ) {
-            Dialog.error(this._('w_Person_ErrorNricRegex'));
+            Dialog.error(this._("w_Person_ErrorNricRegex"));
             return false;
         }
 
@@ -605,7 +605,7 @@ export default class SetupsFloor extends Vue {
 
     async doDelete() {
         Dialog.confirm(
-            this._("w_Buildings_DeleteConfirm"),
+            this._("w_Person_DeleteConfirm"),
             this._("w_DeleteConfirm"),
             () => {
                 for (const deleteParam of this.selectedDetail) {
@@ -664,7 +664,7 @@ export default class SetupsFloor extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Person_Floor")}
                  */
-                permissionFloorIds: any;
+                floors: any;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Enable_Permission")}
@@ -675,6 +675,26 @@ export default class SetupsFloor extends Vue {
                  * @uiLabel - ${this._("w_Person_Disable_Permission")}
                  */
                 endDate: Date;
+
+                /**
+                 * @uiLabel - ${this._("w_Person_createdAt")}
+                 */
+                createdAt: Date;
+
+                /**
+                 * @uiLabel - ${this._("w_Person_createdUser")}
+                 */
+                createdUser: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Person_updateAt")}
+                 */
+                updateAt: Date;
+
+                /**
+                 * @uiLabel - ${this._("w_Person_updateUser")}
+                 */
+                updateUser: string;
 
                 Actions: any;
             }
@@ -698,14 +718,14 @@ export default class SetupsFloor extends Vue {
                  * @uiType - iv-form-label
                  * @uiHidden - ${!this.inputFormData.useCompany}
                  */
-                permissionCompanyId: any;
+                companyId: any;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Floor")}
                  * @uiType - iv-form-label
                  * @uiHidden - ${!this.inputFormData.useFloor}
                  */
-                permissionFloorIds: string;
+                floorIds: string;
 
                 /**
                  * @uiLabel - ${this._("w_Person_Email")}
@@ -792,18 +812,12 @@ export default class SetupsFloor extends Vue {
                          : true
                  }
                  */
-                permissionCompanyId: ${toEnumInterface(
-                    this.selectItem.company,
-                    false
-                )};
+                companyId: ${toEnumInterface(this.selectItem.company, false)};
 
                 /**
                  * @uiLabel - ${this._("w_Person_Floor")}
                  */
-                permissionFloors: ${toEnumInterface(
-                    this.selectItem.floor,
-                    true
-                )};
+                floors: ${toEnumInterface(this.selectItem.floor, true)};
 
                 /**
                  * @uiLabel - ${this._("w_Person_Email")}
