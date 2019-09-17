@@ -110,21 +110,55 @@
                                 v-for="file in  inputFormData.attachments"
                                 class="step5Div"
                             >
+
+                                <!-- pdf upload -->
                                 <img
-                                    v-if="file.type.indexOf('pdf') >= 0"
-                                    class="step5Imgs"
+                                    v-if="file.url == undefined && fileType(file) == 'pdf'"
+                                    class="step5Pdf"
                                     :src="imageBase64.pdfEmpty"
-                                >
+                                />
+                                <div v-if="file.url == undefined && fileType(file) == 'pdf'"
+                                >{{file.name}}</div>
+
+                                <!-- image upload -->
                                 <img
-                                    v-else
+                                    v-if="file.url == undefined && fileType(file) == 'image'"
                                     class="step5Imgs"
                                     :src="file.base64"
-                                >
+                                />
                                 <a
+                                    v-if="file.url == undefined && fileType(file) == 'image'"
+                                    target="_blank"
                                     :href="file.base64"
                                     :download="file.name"
-                                    target="_blank"
                                 >{{file.name}}</a>
+
+                                <!-- pdf download -->
+                                <img
+                                    v-if="file.url && fileType(file) == 'pdf'"
+                                    class="step5Pdf"
+                                    :src="imageBase64.pdfEmpty"
+                                />
+                                <a
+                                    v-if="file.url && fileType(file) == 'pdf'"
+                                    target="_blank"
+                                    :href="file.url"
+                                    :download="file.name"
+                                >{{file.name}}</a>
+
+                                <!-- image download -->
+                                <img
+                                    v-if="file.url && fileType(file) == 'image'"
+                                    class="step5Imgs"
+                                    :src="file.base64"
+                                />
+                                <a
+                                    v-if="file.url && fileType(file) == 'image'"
+                                    target="_blank"
+                                    :href="file.url"
+                                    :download="file.name"
+                                >{{file.name}}</a>
+
                             </div>
 
                         </template>
@@ -211,6 +245,9 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+import axios from "axios";
+import ServerConfig from "@/services/ServerConfig";
+
 import ViewStep1 from "@/components/ContractorRegistration/ViewStep1.vue";
 import ViewStep2 from "@/components/ContractorRegistration/ViewStep2.vue";
 import ViewStep3 from "@/components/ContractorRegistration/ViewStep3.vue";
@@ -280,6 +317,7 @@ export class StatusApproveNotExpireDate extends Vue {
     }
 
     imageBase64 = ImageBase64;
+    publicHosting: string = "";
 
     inputFormData: any = {
         // step1
@@ -352,10 +390,41 @@ export class StatusApproveNotExpireDate extends Vue {
         accessGroups: []
     };
 
-    created() {}
+    async created() {
+        await this.initPublicIP();
+    }
 
     mounted() {
         this.initInputFormData();
+    }
+
+     fileType(file): string {
+        let result = '';
+        if (file.type.indexOf('pdf') >= 0) {
+            result = 'pdf';
+        } else if (file.type.indexOf('image') >= 0) {
+            result = 'image';
+        } else if (file.type.indexOf('jpeg') >= 0) {
+            result = 'image';
+        } else if (file.type.indexOf('jpg') >= 0) {
+            result = 'image';
+        } else if (file.type.indexOf('png') >= 0) {
+            result = 'image';
+        }
+        return result;
+    }
+
+    async initPublicIP() {
+        axios
+            .get(ServerConfig.url + "flow1/crms/hosting")
+            .then(response => {
+                this.publicHosting = response.data
+                    ? response.data
+                    : ServerConfig.url;
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
     }
 
     initInputFormData() {
@@ -478,7 +547,8 @@ export class StatusApproveNotExpireDate extends Vue {
                     let tempAttachment = {
                         name: attachment.name,
                         type: attachment.type,
-                        base64: base64
+                        base64: base64,
+                        url: attachment.url
                     };
                     item.attachments.push(tempAttachment);
                 }
@@ -945,6 +1015,11 @@ Vue.component(
 <style lang="scss" scoped>
 .step5Imgs {
     width: 100%;
+}
+.step5Pdf{
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
 }
 .step5Div {
     width: 20%;

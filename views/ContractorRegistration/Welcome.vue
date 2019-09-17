@@ -8,9 +8,12 @@
                 src="../../assets/images/hand.png"
             >
         </div>
-        <h4 class="text-center title-margin"> {{_("w_Navigation_ContractorManagementSystem")}}</h4>
+        <h4 class="text-center title-margin"> 
+            {{_("w_Navigation_ContractorManagementSystem")}}
+        </h4>
         <div class="text-center buttonDiv">
-            <button @click="createWork()"> {{_("w_Navigation_CreateWorkOrderRequest")}}
+            <button @click="createWork()"> 
+                {{_("w_Navigation_CreateWorkOrderRequest")}}
             </button>
         </div>
 

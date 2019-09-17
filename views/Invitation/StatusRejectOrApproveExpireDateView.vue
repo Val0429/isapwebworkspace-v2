@@ -109,21 +109,55 @@
                                 v-for="file in  inputFormData.attachments"
                                 class="step5Div"
                             >
+
+                                <!-- pdf upload -->
                                 <img
-                                    v-if="file.type.indexOf('pdf') >= 0"
-                                    class="step5Imgs"
+                                    v-if="file.url == undefined && fileType(file) == 'pdf'"
+                                    class="step5Pdf"
                                     :src="imageBase64.pdfEmpty"
-                                >
+                                />
+                                <div v-if="file.url == undefined && fileType(file) == 'pdf'"
+                                >{{file.name}}</div>
+
+                                <!-- image upload -->
                                 <img
-                                    v-else
+                                    v-if="file.url == undefined && fileType(file) == 'image'"
                                     class="step5Imgs"
                                     :src="file.base64"
-                                >
+                                />
                                 <a
+                                    v-if="file.url == undefined && fileType(file) == 'image'"
+                                    target="_blank"
                                     :href="file.base64"
                                     :download="file.name"
-                                    target="_blank"
                                 >{{file.name}}</a>
+
+                                <!-- pdf download -->
+                                <img
+                                    v-if="file.url && fileType(file) == 'pdf'"
+                                    class="step5Pdf"
+                                    :src="imageBase64.pdfEmpty"
+                                />
+                                <a
+                                    v-if="file.url && fileType(file) == 'pdf'"
+                                    target="_blank"
+                                    :href="file.url"
+                                    :download="file.name"
+                                >{{file.name}}</a>
+
+                                <!-- image download -->
+                                <img
+                                    v-if="file.url && fileType(file) == 'image'"
+                                    class="step5Imgs"
+                                    :src="file.base64"
+                                />
+                                <a
+                                    v-if="file.url && fileType(file) == 'image'"
+                                    target="_blank"
+                                    :href="file.url"
+                                    :download="file.name"
+                                >{{file.name}}</a>
+
                             </div>
 
                         </template>
@@ -210,6 +244,9 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+import axios from "axios";
+import ServerConfig from "@/services/ServerConfig";
+
 import ViewStep1 from "@/components/ContractorRegistration/ViewStep1.vue";
 import ViewStep2 from "@/components/ContractorRegistration/ViewStep2.vue";
 import ViewStep3 from "@/components/ContractorRegistration/ViewStep3.vue";
@@ -276,6 +313,7 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
     }
 
     imageBase64 = ImageBase64;
+    publicHosting: string = "";
 
     inputFormData: any = {
         // step1
@@ -348,10 +386,41 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
         accessGroups: []
     };
 
-    created() {}
+    async created() {
+        await this.initPublicIP();
+    }
 
     mounted() {
         this.initInputFormData();
+    }
+
+     fileType(file): string {
+        let result = '';
+        if (file.type.indexOf('pdf') >= 0) {
+            result = 'pdf';
+        } else if (file.type.indexOf('image') >= 0) {
+            result = 'image';
+        } else if (file.type.indexOf('jpeg') >= 0) {
+            result = 'image';
+        } else if (file.type.indexOf('jpg') >= 0) {
+            result = 'image';
+        } else if (file.type.indexOf('png') >= 0) {
+            result = 'image';
+        }
+        return result;
+    }
+
+    async initPublicIP() {
+        axios
+            .get(ServerConfig.url + "flow1/crms/hosting")
+            .then(response => {
+                this.publicHosting = response.data
+                    ? response.data
+                    : ServerConfig.url;
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
     }
 
     initInputFormData() {
@@ -472,7 +541,8 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
                     let tempAttachment = {
                         name: attachment.name,
                         type: attachment.type,
-                        base64: base64
+                        base64: base64,
+                        url: attachment.url
                     };
                     item.attachments.push(tempAttachment);
                 }
@@ -559,7 +629,6 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
             checklistRemark7: this.inputFormData.checklistRemark7,
 
             // step5
-            // TODO: 問 Min  attachments?: Parse.File[];
             attachments: this.inputFormData.attachments,
 
             // step6
@@ -588,13 +657,6 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
 
     stepTo2() {
         let stepRef: any = this.$refs.step;
-
-        // TODO: 全部step OK
-        // if (!this.inputFormData.pdpaAccepted) {
-        //     Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
-        //     stepRef.currentStep = 0;
-        //     return false;
-        // }
     }
 
     IStep1() {
@@ -634,23 +696,6 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
 
     stepTo3() {
         let stepRef: any = this.$refs.step;
-
-        // TODO: wait下拉選單 和 全部step OK
-        // if (
-        //     !this.inputFormData.ptwId ||
-        //     !this.inputFormData.tenant ||
-        //     !this.inputFormData.workCategory ||
-        //     !this.inputFormData.applicantName ||
-        //     !this.inputFormData.companyName ||
-        //     !this.inputFormData.companyAddress ||
-        //     !this.inputFormData.companyEmail ||
-        //     !this.inputFormData.companyContactPhone ||
-        //     !this.inputFormData.companyFax
-        // ) {
-        //     Dialog.error(this._("w_ViewPTW_Step_ErrorTip"));
-        //     stepRef.currentStep = 1;
-        //     return false;
-        // }
     }
 
     IStep2() {
@@ -688,23 +733,6 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
 
     stepTo4() {
         let stepRef: any = this.$refs.step;
-
-        // TODO: 全部step OK
-        // if (
-        //     !this.inputFormData.workPremisesUnit ||
-        //     !this.inputFormData.workLocation ||
-        //     !this.inputFormData.workDescription ||
-        //     !this.inputFormData.workStartDate ||
-        //     !this.inputFormData.workStartTime ||
-        //     !this.inputFormData.workEndDate ||
-        //     !this.inputFormData.workEndTime ||
-        //     !this.inputFormData.workContact ||
-        //     !this.inputFormData.workContactPhone
-        // ) {
-        //     Dialog.error(this._("w_ViewPTW_Step_ErrorTip"));
-        //     stepRef.currentStep = 2;
-        //     return false;
-        // }
     }
 
     IStep3() {
@@ -742,23 +770,6 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
 
     stepTo5() {
         let stepRef: any = this.$refs.step;
-
-        // TODO: 全部step OK
-        // if (
-        //     !this.inputFormData.checklist1 ||
-        //     !this.inputFormData.checklist2 ||
-        //     !this.inputFormData.checklist3 ||
-        //     !this.inputFormData.checklist4 ||
-        //     !this.inputFormData.checklist5 ||
-        //     !this.inputFormData.checklist6 ||
-        //     !this.inputFormData.checklist7 ||
-        //     !this.inputFormData.checklist8 ||
-        //     !this.inputFormData.checklist9
-        // ) {
-        //     Dialog.error(this._("w_ViewPTW_Step_ErrorTipYes"));
-        //     stepRef.currentStep = 3;
-        //     return false;
-        // }
     }
 
     IStep4() {
@@ -804,13 +815,6 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
 
     stepTo6() {
         let stepRef: any = this.$refs.step;
-
-        // TODO: 全部step OK
-        // if (!this.inputFormData.attachments) {
-        //     Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
-        //     stepRef.currentStep = 4;
-        //     return false;
-        // }
     }
 
     IStep5() {
@@ -831,13 +835,6 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
 
     stepTo7() {
         let stepRef: any = this.$refs.step;
-
-        // TODO: 全部step OK
-        // if (!this.inputFormData.termsAccepted) {
-        //     Dialog.error(this._("w_ViewPTW_Step1_ErrorTip"));
-        //     stepRef.currentStep = 5;
-        //     return false;
-        // }
     }
 
     IStep6() {
@@ -858,13 +855,6 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
 
     stepTo8() {
         let stepRef: any = this.$refs.step;
-
-        // TODO: 全部step OK
-        // if (this.inputFormData.persons === 0) {
-        //     Dialog.error(this._("w_ViewPTW_Step_ErrorTipPerson"));
-        //     stepRef.currentStep = 6;
-        //     return false;
-        // }
     }
 
     IStep7() {
@@ -892,36 +882,6 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
         this.$emit("view-done");
     }
 
-    async doSubmitApi() {
-        // TODO: wait api
-        const datas: any = [];
-
-        const doSubmitParam = {
-            datas
-        };
-
-        // Loading.show();
-        // await this.$server
-        //     .U("/", doSubmitParam)
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(
-        //             this,
-        //             response,
-        //             (response: any) => {
-        //                 Dialog.success(this._("w_Dialog_SuccessTitle"));
-        //             },
-        //             this._("w_Dialog_ErrorTitle")
-        //         );
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(
-        //             this,
-        //             e,
-        //             this._("w_Dialog_ErrorTitle")
-        //         );
-        //     });
-    }
-
     IStep8() {
         return `
             interface {
@@ -942,6 +902,11 @@ Vue.component(
 <style lang="scss" scoped>
 .step5Imgs {
     width: 100%;
+}
+.step5Pdf{
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
 }
 .step5Div {
     width: 20%;

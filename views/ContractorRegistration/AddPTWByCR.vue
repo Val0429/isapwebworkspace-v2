@@ -107,25 +107,60 @@
                                 v-for="file in  inputFormData.attachments"
                                 class="step5Div"
                             >
-                                <span
+                               
+                               <span
                                     class="close"
                                     @click="deleteStep5File(file.base64)"
                                 ></span>
+
+                                <!-- pdf upload -->
                                 <img
-                                    v-if="file.type.indexOf('pdf') >= 0"
-                                    class="step5Imgs"
+                                    v-if="file.url == undefined && fileType(file) == 'pdf'"
+                                    class="step5Pdf"
                                     :src="imageBase64.pdfEmpty"
-                                >
+                                />
+                                <div v-if="file.url == undefined && fileType(file) == 'pdf'"
+                                >{{file.name}}</div>
+
+                                <!-- image upload -->
                                 <img
-                                    v-else
+                                    v-if="file.url == undefined && fileType(file) == 'image'"
                                     class="step5Imgs"
                                     :src="file.base64"
-                                >
+                                />
                                 <a
+                                    v-if="file.url == undefined && fileType(file) == 'image'"
+                                    target="_blank"
                                     :href="file.base64"
                                     :download="file.name"
-                                    target="_blank"
                                 >{{file.name}}</a>
+
+                                <!-- pdf download -->
+                                <img
+                                    v-if="file.url && fileType(file) == 'pdf'"
+                                    class="step5Pdf"
+                                    :src="imageBase64.pdfEmpty"
+                                />
+                                <a
+                                    v-if="file.url && fileType(file) == 'pdf'"
+                                    target="_blank"
+                                    :href="file.url"
+                                    :download="file.name"
+                                >{{file.name}}</a>
+
+                                <!-- image download -->
+                                <img
+                                    v-if="file.url && fileType(file) == 'image'"
+                                    class="step5Imgs"
+                                    :src="file.base64"
+                                />
+                                <a
+                                    v-if="file.url && fileType(file) == 'image'"
+                                    target="_blank"
+                                    :href="file.url"
+                                    :download="file.name"
+                                >{{file.name}}</a>
+
                             </div>
 
                         </template>
@@ -204,6 +239,9 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
+import axios from "axios";
+import ServerConfig from "@/services/ServerConfig";
+
 import Step1 from "@/components/ContractorRegistration/Step1.vue";
 import Step2 from "@/components/ContractorRegistration/Step2.vue";
 import Step3 from "@/components/ContractorRegistration/Step3.vue";
@@ -240,12 +278,6 @@ import RegistrationService from "@/components/ContractorRegistration/Registratio
     }
 })
 export class AddPTWByCR extends Vue {
-    // @Prop({
-    //     type: Object, // Boolean, Number, String, Array, Object
-    //     default: () => {}
-    // })
-    // selectedDetail: string;
-
     transition: ITransition = {
         type: Transition.type,
         prevStep: 1,
@@ -255,6 +287,7 @@ export class AddPTWByCR extends Vue {
     errorText = "";
 
     imageBase64 = ImageBase64;
+    publicHosting: string = "";
 
     // step 相關
     isMounted: boolean = false;
@@ -341,6 +374,7 @@ export class AddPTWByCR extends Vue {
     };
 
     async created() {
+        await this.initPublicIP();
         await this.initTenant();
         if (this.selectedDetail.length) {
             this.inputFormData = this.selectedDetail as any;
@@ -348,6 +382,35 @@ export class AddPTWByCR extends Vue {
     }
 
     mounted() {}
+
+     fileType(file): string {
+        let result = '';
+        if (file.type.indexOf('pdf') >= 0) {
+            result = 'pdf';
+        } else if (file.type.indexOf('image') >= 0) {
+            result = 'image';
+        } else if (file.type.indexOf('jpeg') >= 0) {
+            result = 'image';
+        } else if (file.type.indexOf('jpg') >= 0) {
+            result = 'image';
+        } else if (file.type.indexOf('png') >= 0) {
+            result = 'image';
+        }
+        return result;
+    }
+
+    async initPublicIP() {
+        axios
+            .get(ServerConfig.url + "flow1/crms/hosting")
+            .then(response => {
+                this.publicHosting = response.data
+                    ? response.data
+                    : ServerConfig.url;
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+    }
 
     async initTenant() {
         if (this.$route.query.id !== undefined) {
@@ -479,7 +542,8 @@ export class AddPTWByCR extends Vue {
                                 let tempAttachment = {
                                     name: attachment.name,
                                     type: attachment.type,
-                                    base64: base64
+                                    base64: base64,
+                                    url: attachment.url
                                 };
                                 item.attachments.push(tempAttachment);
                             }
@@ -581,7 +645,8 @@ export class AddPTWByCR extends Vue {
                                 let tempAttachment = {
                                     name: attachment.name,
                                     type: attachment.type,
-                                    base64: base64
+                                    base64: base64,
+                                    url: attachment.url
                                 };
                                 item.attachments.push(tempAttachment);
                             }
@@ -1073,6 +1138,11 @@ Vue.component("add-ptw-by-cr", AddPTWByCR);
 <style lang="scss" scoped>
 .step5Imgs {
     width: 100%;
+}
+.step5Pdf{
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
 }
 .step5Div {
     width: 20%;

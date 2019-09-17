@@ -59,7 +59,7 @@ interface IStep4 {
 }
 
 interface IStep5 {
-    attachments: string[];
+    attachments: any[];
 }
 
 interface IStep6 {

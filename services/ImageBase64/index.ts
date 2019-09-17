@@ -8,7 +8,7 @@ export class ImageBase64 {
             var reader = new FileReader();
             reader.onloadend = function() {
                 callback(vue, reader.result);
-            }
+            };
             reader.readAsDataURL(xhr.response);
         };
         xhr.open('GET', url);

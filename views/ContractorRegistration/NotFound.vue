@@ -9,7 +9,8 @@
                 src="../../assets/images/not found.png"
             >
         </div>
-        <h4 class="text-center title-margin">{{_("w_Navigation_TheInvitationNumberDoesNotExistOrIsNoLongerOpen")}}
+        <h4 class="text-center title-margin">
+            {{_("w_Navigation_TheInvitationNumberDoesNotExistOrIsNoLongerOpen")}}
         </h4>
 
     </div>
