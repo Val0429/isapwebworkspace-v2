@@ -247,7 +247,8 @@ export default class ReportHeatmap extends Vue {
 
     mapImage: IMapImage = {
         name: "HeatMap",
-        src:    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
+        src:
+            "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
         width: 600,
         height: 400
     };
@@ -574,7 +575,6 @@ export default class ReportHeatmap extends Vue {
             data: tempDataArray,
             range: tempRangeArray
         };
-
     }
 
     initDayArray() {
@@ -705,19 +705,19 @@ export default class ReportHeatmap extends Vue {
         );
         const fromApiDate = Datetime.DateTime2String(new Date(apiDate), "H");
 
-
-        return selectedDate === fromApiDate
-
+        return selectedDate === fromApiDate;
     }
 
     async firstSortOutChartData(datas: any) {
-
         if (datas[0] !== undefined) {
             this.inputFormData.areaId = datas[0].area.objectId;
             this.inputFormData.deviceId = datas[0].device.objectId;
             if (datas[0].deviceGroups.length > 0) {
                 this.inputFormData.groupId = datas[0].deviceGroups[0].objectId;
-                this.slider.value = parseInt(Datetime.DateTime2String(new Date(datas[0].date), "H"), 10)
+                this.slider.value = parseInt(
+                    Datetime.DateTime2String(new Date(datas[0].date), "H"),
+                    10
+                );
             } else {
                 this.inputFormData.groupId = "all";
             }
@@ -743,28 +743,17 @@ export default class ReportHeatmap extends Vue {
             datas[0].scores != undefined &&
             datas[0].scores.length > 0
         ) {
-            let heatmaps = datas[0].scores.map((value, index, array) => {
-                return value.map((value1, index1, array1) => {
-                    return {
-                        x: index1 * gridUnit + gridUnit / 2,
-                        y: index * gridUnit + gridUnit / 2,
-                        value: value1 === 0 ? value1 + 100 : (value1 + 100) * valueZoom
-                    };
-                });
-            });
-            heatmap = [].concat(...heatmaps);
+            heatmap = this.sortOutHeatMapData(datas[0].scores, gridUnit, valueZoom);
         }
-        this.mapImage.src = datas[0];
-
-
-        this.mapImage.src = datas[0] ? ServerConfig.url + datas[0].imageSrc : ImageBase64.pngEmpty;
+        this.mapImage.src = datas[0]
+            ? ServerConfig.url + datas[0].imageSrc
+            : ImageBase64.pngEmpty;
         this.mapImage.height = datas[0].height;
         this.mapImage.width = datas[0].width;
         this.heatMapPosition = heatmap;
     }
 
     sortOutChartDataOneDay(datas: any) {
-
         let heatmap: IHeatMapPosition[] = [];
         this.heatMapPosition = [];
         this.mapImage.src = "";
@@ -774,19 +763,7 @@ export default class ReportHeatmap extends Vue {
 
         for (const summary of datas) {
             if (this.checkDateTheSameHour(this.hour, summary.date)) {
-                if (summary.scores.length > 0) {
-                    let heatmaps = summary.scores.map((value, index, array) => {
-                        return value.map((value1, index1, array1) => {
-                            return {
-                                x: index1 * gridUnit + gridUnit / 2,
-                                y: index * gridUnit + gridUnit / 2,
-                                value: value1 === 0 ? value1 + 100 : (value1 + 100) * valueZoom
-                            };
-                        });
-                    });
-
-                    heatmap = [].concat(...heatmaps);
-                }
+                heatmap = this.sortOutHeatMapData(summary.scores, gridUnit, valueZoom);
                 this.mapImage.src = ServerConfig.url + summary.imageSrc;
                 this.mapImage.height = summary.height;
                 this.mapImage.width = summary.width;
@@ -811,18 +788,7 @@ export default class ReportHeatmap extends Vue {
                     new Date(summary.date)
                 )
             ) {
-                if (summary.scores.length > 0) {
-                    let heatmaps = summary.scores.map((value, index, array) => {
-                        return value.map((value1, index1, array1) => {
-                            return {
-                                x: index1 * gridUnit + gridUnit / 2,
-                                y: index * gridUnit + gridUnit / 2,
-                                value: value1 === 0 ? value1 + 100 : (value1 + 100) * valueZoom
-                            };
-                        });
-                    });
-                    heatmap = [].concat(...heatmaps);
-                }
+                heatmap = this.sortOutHeatMapData(summary.scores, gridUnit, valueZoom);
                 this.mapImage.src = ServerConfig.url + summary.imageSrc;
                 this.mapImage.height = summary.height;
                 this.mapImage.width = summary.width;
@@ -830,6 +796,22 @@ export default class ReportHeatmap extends Vue {
         }
 
         this.heatMapPosition = heatmap;
+    }
+
+    sortOutHeatMapData(summary: any, gridUnit: number, valueZoom: number) {
+        let heatmap = [];
+        if (summary.length > 0) {
+            let heatmaps = summary.map((value, index, array) => {
+                return value.map((value1, index1, array1) => {
+                    return {
+                        x: index1 * gridUnit + gridUnit / 2,
+                        y: index * gridUnit + gridUnit / 2,
+                        value: value1 === 0 ? value1 : (value1 * valueZoom) + 100
+                    };
+                });
+            });
+            return heatmap = [].concat(...heatmaps);
+        }
     }
 
     sortDeviceSummaryFilterData() {
