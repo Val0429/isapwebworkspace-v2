@@ -113,60 +113,53 @@
                                     @click="deleteStep5File(file.base64)"
                                 ></span>
 
-                                <!-- pdf upload -->
+                                 <!-- upload pdf -->
                                 <img
                                     v-if="file.url == undefined && fileType(file) == 'pdf'"
                                     class="step5Pdf"
                                     :src="imageBase64.pdfEmpty"
                                 />
-                                <div v-if="file.url == undefined && fileType(file) == 'pdf'">
-                                    {{file.name}}
-                                </div>
 
-                                <!-- image upload -->
+                                <!-- upload image -->
                                 <img
                                     v-if="file.url == undefined && fileType(file) == 'image'"
                                     class="step5Imgs"
                                     :src="file.base64"
                                 />
-                                <a
-                                    v-if="file.url == undefined && fileType(file) == 'image'"
-                                    target="_blank"
-                                    :href="file.base64"
-                                    :download="file.name"
+
+                                <!-- upload name -->
+                                <div
+                                    v-if="file.url == undefined"
+                                    class="step5-file-name"
                                 >
                                     {{file.name}}
-                                </a>
+                                </div>
 
-                                <!-- pdf download -->
+                                <!-- download pdf -->
                                 <img
-                                    v-if="file.url && fileType(file) == 'pdf'"
+                                    v-if="file.url&&fileType(file)=='pdf'"
                                     class="step5Pdf"
                                     :src="imageBase64.pdfEmpty"
                                 />
-                                <a
-                                    v-if="file.url && fileType(file) == 'pdf'"
-                                    target="_blank"
-                                    :href="replaceFileUrl(file.url)"
-                                    :download="file.name"
-                                >
-                                    {{file.name}}
-                                </a>
 
-                                <!-- image download -->
+                                <!-- download image -->
                                 <img
                                     v-if="file.url && fileType(file) == 'image'"
                                     class="step5Imgs"
                                     :src="file.url"
                                 />
-                                <a
-                                    v-if="file.url && fileType(file) == 'image'"
-                                    target="_blank"
-                                    :href="replaceFileUrl(file.url)"
-                                    :download="file.name"
-                                >
-                                    {{file.name}}
-                                </a>
+
+                                <!-- download link -->
+                                <div class="step5-file-name">
+                                    <a
+                                        v-if="file.url"
+                                        target="_blank"
+                                        :href="replaceFileUrl(file.url)"
+                                        :download="file.name"
+                                    >
+                                        {{ file.name }}
+                                    </a>
+                                </div>
 
                             </div>
 
@@ -1161,6 +1154,9 @@ Vue.component("add-ptw-by-cr", AddPTWByCR);
     width: 70%;
     margin-left: 15%;
     margin-right: 15%;
+}
+.step5-file-name {
+    text-align: center;
 }
 .step5Div {
     width: 20%;
