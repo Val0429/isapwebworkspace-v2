@@ -748,7 +748,7 @@ export default class ReportHeatmap extends Vue {
                     return {
                         x: index1 * gridUnit + gridUnit / 2,
                         y: index * gridUnit + gridUnit / 2,
-                        value: value1 * valueZoom
+                        value: value1 === 0 ? value1 + 100 : (value1 + 100) * valueZoom
                     };
                 });
             });
@@ -780,7 +780,7 @@ export default class ReportHeatmap extends Vue {
                             return {
                                 x: index1 * gridUnit + gridUnit / 2,
                                 y: index * gridUnit + gridUnit / 2,
-                                value: value1 * valueZoom
+                                value: value1 === 0 ? value1 + 100 : (value1 + 100) * valueZoom
                             };
                         });
                     });
@@ -817,7 +817,7 @@ export default class ReportHeatmap extends Vue {
                             return {
                                 x: index1 * gridUnit + gridUnit / 2,
                                 y: index * gridUnit + gridUnit / 2,
-                                value: value1 * valueZoom
+                                value: value1 === 0 ? value1 + 100 : (value1 + 100) * valueZoom
                             };
                         });
                     });

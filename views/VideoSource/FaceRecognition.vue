@@ -471,7 +471,6 @@ export default class FaceRecognition extends Vue {
                     return ResponseFilter.catchError(this, e);
                 });
         } else if (this.addStep === EAddStep.frsManager) {
-            // TODO:
             // await this.$server
             //     .R("/partner/frs-manager")
             //     .then((response: any) => {
@@ -1155,7 +1154,7 @@ export default class FaceRecognition extends Vue {
                         model: EAddStep.frs,
                         name: data.name,
                         areaId: data.areaId,
-                        demoServerId: data.demoServerId,
+                        // demoServerId: data.demoServerId,
                         groupIds:
                             data.groupIds !== undefined ? data.groupIds : [],
                         config: configFRSServerObject
@@ -1198,7 +1197,7 @@ export default class FaceRecognition extends Vue {
                         model: EAddStep.frs,
                         name: data.name,
                         areaId: data.areaId,
-                        demoServerId: data.demoServerId,
+                        // demoServerId: data.demoServerId,
                         groupIds:
                             data.groupIds !== undefined ? data.groupIds : [],
                         config: configFRSServerObject
@@ -1261,7 +1260,7 @@ export default class FaceRecognition extends Vue {
                         model: EAddStep.frsManager,
                         name: data.name,
                         areaId: data.areaId,
-                        demoServerId: data.demoServerId,
+                        // demoServerId: data.demoServerId,
                         groupIds:
                             data.groupIds !== undefined ? data.groupIds : [],
                         config: configFRSManagerObject
@@ -1306,7 +1305,7 @@ export default class FaceRecognition extends Vue {
                         model: EAddStep.frsManager,
                         name: data.name,
                         areaId: data.areaId,
-                        demoServerId: data.demoServerId,
+                        // demoServerId: data.demoServerId,
                         groupIds:
                             data.groupIds !== undefined ? data.groupIds : [],
                         config: configFRSManagerObject
@@ -1520,6 +1519,7 @@ export default class FaceRecognition extends Vue {
                 /**
                  * @uiLabel - ${this._("w_VSDemographic_demoServerId")}
                  * @uiPlaceHolder - ${this._("w_VSDemographic_demoServerId")}
+                 * @uiHidden - true
                  */
                 demoServerId: ${toEnumInterface(
                     this.demographicIdSelectItem as any,
@@ -1619,6 +1619,7 @@ export default class FaceRecognition extends Vue {
                 /*
                  * @uiLabel - ${this._("w_VSDemographic_demoServerId")}
                  * @uiType - iv-form-label
+                 * @uiHidden - true
                  */
                 demoServerIdView?: string;
 

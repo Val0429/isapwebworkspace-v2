@@ -151,7 +151,7 @@ $({ path: '/dashboards/map', name: "_('w_DashboardMap_Map')", icon: 'fa-code' })
 $({ path: '/reports', name: "_('w_Navigation_Reports')", icon: 'fa-code', redirect: '/reports/report_template' })();
 $({ path: '/reports/traffic', name: "_('w_Navigation_Report_Traffic')", icon: 'fa-check' })(ReportTraffic);
 $({ path: '/reports/dwell_time', name: "_('w_Navigation_Report_DwellTime')", icon: 'fa-check' })(ReportDwellTime);
-$({ path: '/reports/demographic', name: "_('w_Navigation_Report_Demographic')", icon: 'fa-check' })(ReportDemographic);
+// $({ path: '/reports/demographic', name: "_('w_Navigation_Report_Demographic')", icon: 'fa-check' })(ReportDemographic);
 $({ path: '/reports/heatmap', name: "_('w_Navigation_Report_Heatmap')", icon: 'fa-check' })(ReportHeatmap);
 $({ path: '/reports/occupancy', name: "_('w_Navigation_Report_Occupancy')", icon: 'fa-check' })(ReportOccupancy);
 $({ path: '/reports/vip_black_list', name: "_('w_Navigation_Report_VIPBlackList')", icon: 'fa-code' })(ReportVIPTracking);
@@ -162,7 +162,7 @@ $({ path: '/reports/report_template', name: "_('w_Navigation_Report_ReportTempla
 //  Tool
 $({ path: '/tools', name: "_('w_Navigation_Tools')", icon: 'fa-code', redirect: '/tools/toolTraffic' })();
 $({ path: '/tools/tool_traffic', name: "_('w_Navigation_Tools_Traffic')", icon: 'fa-check' })(ToolTraffic);
-$({ path: '/tools/tool_demographic', name: "_('w_Navigation_Tools_Demographic')", icon: 'fa-check' })(ToolDemographic);
+// $({ path: '/tools/tool_demographic', name: "_('w_Navigation_Tools_Demographic')", icon: 'fa-check' })(ToolDemographic);
 $({ path: '/tools/tool_repeatVisitor', name: "_('w_Navigation_Tools_RepeatVisitor')", icon: 'fa-check' })(ToolRepeatVisitor);
 $({ path: '/tools/tool_occupancy', name: "_('w_Navigation_Tools_Occupancy')", icon: 'fa-code' })(ToolOccupancy);
 $({ path: '/tools/tool_dwellTime', name: "_('w_Navigation_Tools_DwellTime')", icon: 'fa-code' })(ToolDwellTime);
@@ -183,13 +183,13 @@ $({ path: '/server', name: "_('w_Navigation_Server')", icon: 'fa-code', redirect
 $({ path: '/server/cms_server', name: "_('w_Navigation_Server_CMSServer')", icon: 'fa-check' })(CMSServer);
 $({ path: '/server/frs_manager_server', name: "_('w_Navigation_Server_FRSManagerServer')", icon: 'fa-code' })(FRSManager);
 $({ path: '/server/frs_server', name: "_('w_Navigation_Server_FRSServer')", icon: 'fa-check' })(FRSServer);
-$({ path: '/server/demographic_server', name: "_('w_Navigation_Server_DemographicServer')", icon: 'fa-check' })(DemographicServer);
+// $({ path: '/server/demographic_server', name: "_('w_Navigation_Server_DemographicServer')", icon: 'fa-check' })(DemographicServer);
 $({ path: '/server/hd_server', name: "_('w_Navigation_Server_HDServer')", icon: 'fa-check' })(HumanDetectionServer);
 
 // Video Source (c)
 $({ path: '/video_sources', name: "_('w_Navigation_VideoSources')", icon: 'fa-code', redirect: '/login' })();
 $({ path: '/video_sources/people_counting', name: "_('w_Navigation_VideoSources_PeopleCounting')", icon: 'fa-code' })(PeopleCounting);
-$({ path: '/video_sources/demographic', name: "_('w_Navigation_VideoSources_Demographic')", icon: 'fa-check' })(Demographic);
+// $({ path: '/video_sources/demographic', name: "_('w_Navigation_VideoSources_Demographic')", icon: 'fa-check' })(Demographic);
 $({ path: '/video_sources/dwell_time', name: "_('w_Navigation_VideoSources_DwellTime')", icon: 'fa-check' })(DwellTime);
 $({ path: '/video_sources/human_detection', name: "_('w_Navigation_VideoSources_HumanDetection')", icon: 'fa-check' })(HumanDetection);
 $({ path: '/video_sources/heatmap', name: "_('w_Navigation_VideoSources_Heatmap')", icon: 'fa-check' })(Heatmap);
