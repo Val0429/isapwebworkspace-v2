@@ -99,10 +99,7 @@ export class Step2AddUse extends Vue {
 
     created() {}
 
-    mounted() {
-        // this.initTenantSelectItem();
-        // this.initWorkCategorySelectItem();
-    }
+    mounted() {}
 
     @Watch("selectedDetail", { deep: true })
     private ptwIdChanged(newVal, oldVal) {
@@ -113,57 +110,12 @@ export class Step2AddUse extends Vue {
         this.inputFormData.ptwId = this.selectedDetail.ptwId;
         this.inputFormData.workCategoryId = this.selectedDetail.workCategory;
         this.inputFormData.tenant = this.selectedDetail.tenant;
-        // if (this.selectedDetail && this.selectedDetail.company && this.selectedDetail.company.objectId) {
-        //     this.inputFormData.tenant = this.selectedDetail.company.objectId;
-        // }
         this.inputFormData.applicantName = this.selectedDetail.applicantName;
         this.inputFormData.contractorCompanyName = this.selectedDetail.contractorCompanyName;
         this.inputFormData.contractorCompanyAddress = this.selectedDetail.contractorCompanyAddress;
         this.inputFormData.contractorCompanyEmail = this.selectedDetail.contractorCompanyEmail;
         this.inputFormData.contractorCompanyContactPhone = this.selectedDetail.contractorCompanyContactPhone;
         this.inputFormData.contractorCompanyFax = this.selectedDetail.contractorCompanyFax;
-    }
-
-    async initTenantSelectItem() {
-        this.tenantSelectItem = {};
-        let tempTenantSelectItem = {};
-        let param: any = { paging: { all: true } };
-
-        await this.$server
-            .R("/flow1/companies", param)
-            .then((response: any) => {
-                ResponseFilter.successCheck(this, response, (response: any) => {
-                    for (const returnValue of response.results) {
-                        tempTenantSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                    }
-                    this.tenantSelectItem = tempTenantSelectItem;
-                });
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
-    }
-
-    async initWorkCategorySelectItem() {
-        this.workCategorySelectItem = {};
-        let tempWorkCategorySelectItem = {};
-        let param: any = { paging: { all: true } };
-
-        await this.$server
-            .R("/flow1/purposes", param)
-            .then((response: any) => {
-                ResponseFilter.successCheck(this, response, (response: any) => {
-                    for (const returnValue of response.results) {
-                        tempWorkCategorySelectItem[returnValue.objectId] =
-                            returnValue.name;
-                    }
-                    this.workCategorySelectItem = tempWorkCategorySelectItem;
-                });
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
     }
 
     updateInputFormData(data) {
@@ -214,6 +166,7 @@ export class Step2AddUse extends Vue {
     }
 
     IAddForm() {
+        console.log("!!!! IAddForm");
         return `
             interface {
 

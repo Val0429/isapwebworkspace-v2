@@ -113,7 +113,7 @@
                                     @click="deleteStep5File(file.base64)"
                                 ></span>
 
-                                 <!-- upload pdf -->
+                                <!-- upload pdf -->
                                 <img
                                     v-if="file.url == undefined && fileType(file) == 'pdf'"
                                     class="step5Pdf"
@@ -376,9 +376,6 @@ export class AddPTWByCR extends Vue {
     async created() {
         await this.initPublicIP();
         await this.initTenant();
-        if (this.selectedDetail.length) {
-            this.inputFormData = this.selectedDetail as any;
-        }
     }
 
     mounted() {}
@@ -1121,6 +1118,8 @@ export class AddPTWByCR extends Vue {
         for (let attachment of this.inputFormData.attachments) {
             updateParam.attachments.push(attachment.base64);
         }
+
+        console.log("!!!! updateParam", updateParam);
 
         await this.$server
             .U("/flow1/crms/tenant", updateParam)
