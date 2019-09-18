@@ -2,7 +2,7 @@
     <div>
     <p><iv-language-button /></p>
 
-        <iv-tab ref="tab" @mounted="doMount" :active="1">
+        <iv-tab ref="tab" @mounted="doMount" :active="2">
             <template #1>
                 <iv-form
                     ref="form"
