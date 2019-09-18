@@ -23,7 +23,7 @@
                     />
                     <iv-toolbox-edit
                         v-show="canEdit"
-                        :disabled="isSelected.length !== 1"
+                        :disabled="isSelected.length !== 1 || pageStep == ePageStep.edit  || pageStep == ePageStep.add"
                         @click="pageToEdit()"
                     />
                     <iv-toolbox-delete
@@ -51,7 +51,7 @@
                             :disabled="isSelected.length !== 1"
                         >
                             <iv-toolbox-view @click="pageToView" />
-                            <iv-toolbox-edit v-show="canEdit" @click="pageToEdit()" />
+                            <iv-toolbox-edit v-show="canEdit"  :disabled="pageStep == ePageStep.edit  || pageStep == ePageStep.add" @click="pageToEdit()" />
                             <iv-toolbox-delete v-show="canDelete" @click="doDelete" />
                         </iv-toolbox-more>
                     </template>
@@ -518,8 +518,9 @@ export default class PermissionTable extends Vue {
 
     async pageToAdd() {
         this.clearInputFormData();
-        await this.initSelectItem();
         this.pageStep = EPageStep.add;
+        await this.initSelectItem();
+        
     }
 
     async pageToEdit() {
@@ -527,10 +528,11 @@ export default class PermissionTable extends Vue {
         if (this.isSelected[0] == undefined) {
             return false;
         }
+        this.pageStep = EPageStep.edit;
         await this.initSelectItem();
         this.selectedDetail = this.isSelected[0];
         this.initInputFormData();
-        this.pageStep = EPageStep.edit;
+        
     }
 
     async pageToView() {
