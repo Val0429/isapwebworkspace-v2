@@ -158,6 +158,7 @@ export default class SetupsAccount extends Vue {
         email: "",
         phone: "",
         remark: "",
+        position: "",
         rolesText: "",
         companiesText: "",
         floorsText: "",
@@ -399,6 +400,7 @@ export default class SetupsAccount extends Vue {
             email: "",
             phone: "",
             remark: "",
+            position: "",
             rolesText: "",
             companiesText: "",
             floorsText: "",
@@ -424,6 +426,7 @@ export default class SetupsAccount extends Vue {
                 email: param.email,
                 phone: param.phone,
                 remark: "",
+                position: "",
                 rolesText: this.formRoleText(param),
                 companiesText: this.formCompanyText(param),
                 floorsText: this.formFloorText(param),
@@ -442,6 +445,9 @@ export default class SetupsAccount extends Vue {
             }
             if (param.remark != undefined) {
                 this.inputFormData.remark = param.remark;
+            }
+            if (param.position != undefined) {
+                this.inputFormData.position = param.position;
             }
             if (param.role == EUserRole.TenantAdministrator) {
                 this.inputFormData.useCompany = true;
@@ -600,6 +606,9 @@ export default class SetupsAccount extends Vue {
         if (this.inputFormData.remark != "") {
             datas.datas[0]["remark"] = this.inputFormData.remark;
         }
+        if (this.inputFormData.position != "") {
+            datas.datas[0]["position"] = this.inputFormData.position;
+        }
         if (this.inputFormData.objectId != "") {
             datas.datas[0]["objectId"] = this.inputFormData.objectId;
         }
@@ -725,7 +734,7 @@ export default class SetupsAccount extends Vue {
                  * @uiLabel - ${this._("w_Account_UserTitles")}
                  * @uiType - iv-form-label
                  */
-                titles?: string;
+                position?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Account_Phone")}
@@ -812,7 +821,7 @@ export default class SetupsAccount extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Account_UserTitles")}
                  */
-                titles?: string;
+                position?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Account_Phone")}
