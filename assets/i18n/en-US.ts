@@ -328,7 +328,7 @@ export default class LangObject {
     w_Navigation_Report_RepeatVisitor = 'Repeat Visitor';
     w_Navigation_Report_VIPBlackList = 'VIP & Black List';
     w_Navigation_Report_Campaign = 'Campaign';
-    w_Navigation_Report_HeatmapLegend = 'Heatmap Legend';
+    w_Navigation_Report_HeatmapLegend = 'Heatmap Scale';
     w_Navigation_Report_AlphaRange = 'Alpha Range';
 
     //Tools
