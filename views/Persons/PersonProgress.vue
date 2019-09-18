@@ -1,0 +1,850 @@
+<template>
+    <div class="animated fadeIn">
+
+        <iv-card :label="_('w_Person_CardTitle')">
+
+            <iv-step-progress
+                ref="step"
+                @mounted="doMounted"
+            >
+
+                <template #1-title>{{ _('w_Person_Step2') }}</template>
+                <template #1>
+                    <b-button
+                        class="col-md-12"
+                        @click="downloadExample"
+                    >{{ _('w_Person_Download') }}</b-button>
+                </template>
+
+                <template #2-title>{{ _('w_Person_Step3') }}</template>
+                <template #2>
+                    <b-form-file
+                        v-model="file"
+                        v-on:input="uploadFile"
+                    />
+                </template>
+
+                <template #3-title>{{ _('w_Person_Step4') }}</template>
+                <template #3>
+                    <div>
+                        <table class="table table-bordered table-hover datatable dataTable no-footer records-table">
+                            <thead>
+                                <th>{{ _('w_Person_Name') }}</th>
+                                <th>{{ _('w_Person_Titles') }}</th>
+                                <th>{{ _('w_Person_Phone') }}</th>
+                                <th>{{ _('w_Person_Company') }}</th>
+                                <th>{{ _('w_Person_Floor') }}</th>
+                                <th>{{ _('w_Person_Email') }}</th>
+                                <th>{{ _('w_Person_Remark') }}</th>
+                                <th>{{ _('w_Person_NRIC') }}</th>
+                                <th>{{ _('w_Person_Enable_Permission') }}</th>
+                                <th>{{ _('w_Person_Disable_Permission') }}</th>
+                                <th>{{ _('w_Person_Agree_Tc') }}</th>
+                                <th>{{ _('w_Person_Agree_App') }}</th>
+                                <th>{{ _('w_Person_Image') }}</th>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(value, index) in recordFileContent">
+                                    <td v-html="value.name ? value.name : errorMessageInTable()"></td>
+                                    <td v-html="value.position ? value.position : errorMessageInTable()"></td>
+                                    <td v-html="value.phone ? value.phone : errorMessageInTable()"></td>
+                                    <td v-html="value.company ? value.company : errorMessageInTable()"></td>
+                                    <td v-html="value.floor ? value.floor : errorMessageInTable()"></td>
+                                    <td v-html="value.email ? value.email : errorMessageInTable()"></td>
+                                    <td v-html="value.remark ? value.remark : errorMessageInTable()"></td>
+                                    <td v-html="value.nric ? value.nric : errorMessageInTable()"></td>
+                                    <td v-html="value.startDateText ? value.startDateText : errorMessageInTable()"></td>
+                                    <td v-html="value.endDateText ? value.endDateText : errorMessageInTable()"></td>
+                                    <td v-html="value.agreeTc ? value.agreeTc.toString() : errorMessageInTable()"></td>
+                                    <td v-html="value.isUseSuntecReward ? value.isUseSuntecReward.toString() : errorMessageInTable()"></td>
+                                    <td>
+                                        <template v-if="value.isUseSuntecReward == 'false'">
+                                            <iv-form-file @input="getImg($event, index)" />
+                                            <img
+                                                :src="value.imageBase64"
+                                                style="max-height: 100px; max-width: 100px;"
+                                            />
+                                        </template>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+
+                <template #4-title>{{ _('w_Person_Step5') }}</template>
+                <template #4>
+                    <div>
+                        <table class="table table-bordered table-hover datatable dataTable no-footer records-table">
+                            <thead>
+                                <th>{{ _('w_Person_StoreId') }}</th>
+                                <th>{{ _('w_Person_Time') }}</th>
+                                <th>{{ _('w_Person_Transaction') }}</th>
+                                <th>{{ _('w_Person_Revenue') }}</th>
+                                <th>{{ _('w_Person_ApiMessage') }}</th>
+                            </thead>
+                            <tbody>
+                                <tr v-for="value in recordFileContent">
+                                    <td v-html="value.storeId"></td>
+                                    <td v-html="value.datetimeText"></td>
+                                    <td v-html="value.transaction"></td>
+                                    <td v-html="value.revenue"></td>
+                                    <td v-html="value.apiMessage"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+
+            </iv-step-progress>
+
+            <template
+                #footer
+                v-if="transitionStep > 0"
+            >
+                <b-button
+                    v-if="transitionStep > 1 && transitionStep < 4"
+                    variant="dark"
+                    size="lg"
+                    @click="pageToPrev"
+                >{{ _('w_PreviousPage') }}
+                </b-button>
+                <b-button
+                    v-if="transitionStep == 1"
+                    variant="dark"
+                    size="lg"
+                    @click="pageTo2"
+                >{{ _('w_NextPage') }}
+                </b-button>
+                <b-button
+                    v-if="transitionStep == 3"
+                    variant="dark"
+                    size="lg"
+                    :disabled="recordFileError"
+                    @click="sendRecordFile"
+                >{{ _('w_Submit') }}
+                </b-button>
+                <b-button
+                    v-if="transitionStep == 4"
+                    variant="dark"
+                    size="lg"
+                    @click="pageTo1"
+                >{{ _('w_Back') }}
+                </b-button>
+
+            </template>
+
+        </iv-card>
+
+    </div>
+</template>
+
+<script lang="ts">
+import { Vue, Component, Watch } from "vue-property-decorator";
+
+// Service
+import ResponseFilter from "@/services/ResponseFilter";
+import Dialog from "@/services/Dialog";
+import Datetime from "@/services/Datetime";
+import Utility from "@/services/Utility";
+import Loading from "@/services/Loading";
+import ImageBase64 from "@/services/ImageBase64";
+import RoleService from "@/services/Role/RoleService";
+
+// Export
+import toExcel from "@/services/Excel/json2excel";
+import excel2json from "@/services/Excel/excel2json";
+
+interface IExcelTitle {
+    name: string;
+    position: string;
+    phone: string;
+    company: string;
+    floor: string;
+    email: string;
+    agreeTc: string;
+    isUseSuntecReward: string;
+    remark: string;
+    startDate: string;
+    endDate: string;
+    nric: string;
+}
+
+interface IRecordFile {
+    apiMessage: string;
+
+    name: string;
+    position?: string;
+    phone?: string;
+    company: string;
+    floor: string;
+    email: string;
+    remark?: string;
+    nric?: string;
+
+    startDateText: string;
+    endDateText?: string;
+    agreeTc: string;
+    isUseSuntecReward?: string;
+
+    startDate?: Date;
+    endDate?: Date;
+
+    imageBase64?: any;
+
+    transaction?: number; // ERecordType.sotre
+    productId?: string; // ERecordType.product
+    count?: number; // ERecordType.product
+    datetimeText?: string; // maybe no text
+    datetime?: Date; // maybe time error
+}
+
+interface IBusinessOperationSalesRecord {
+    customId: string;
+    date: string;
+    transaction: number;
+    imageBase64: any;
+}
+
+@Component({
+    components: {}
+})
+export default class PersonProgress extends Vue {
+    transitionStep: number = 1;
+    stepRef: any = this.$refs.step;
+    file: any | null = null;
+    recordFileError: boolean = false;
+    recordFileContent: IRecordFile[] = [];
+
+    newImg = new Image();
+    newImgSrc = [ImageBase64.pngEmpty];
+
+    errorMessageFromServer = {
+        noSite: "site not found"
+    };
+
+    excelTitleName: IExcelTitle = {
+        name: "Name",
+        position: "Position",
+        phone: "Phone",
+        company: "Company",
+        floor: "Floor",
+        email: "Email",
+        agreeTc: "agreeTc",
+        isUseSuntecReward: "isUseSuntecReward",
+        remark: "Remark",
+        startDate: "StartDate",
+        endDate: "EndDate",
+        nric: "NRIC"
+    };
+
+    isMounted: boolean = false;
+
+    @Watch("recordFileContent", { immediate: true, deep: true })
+    onRecordFileContentChanged(val: string, oldVal: string) {
+        if (val.length > 0) {
+            for (let i = 0; i < val.length; i++) {
+                // for imageBase64
+                let isUseSuntecReward = val[i]
+                    ? val[i]["isUseSuntecReward"]
+                    : "";
+                let imageBase64 = val[i]
+                    ? val[i]["imageBase64"]
+                    : ImageBase64.pngEmpty;
+                if (
+                    (isUseSuntecReward == "false" &&
+                        imageBase64 !== ImageBase64.pngEmpty) ||
+                    isUseSuntecReward == "true"
+                ) {
+                    this.recordFileError = false;
+                } else {
+                    this.recordFileError = true;
+                }
+                // for TenantAdmin
+                if (
+                    this.$user.user.roles[0].name ===
+                    RoleService.haveTenantAdministrator
+                ) {
+                    let company = val[i] ? val[i]["company"] : "";
+                    if (company == this.$user.user.company.name) {
+                        this.recordFileError = false;
+                    } else {
+                        this.recordFileError = true;
+                    }
+                }
+            }
+        }
+    }
+
+    doMounted() {
+        this.isMounted = true;
+    }
+
+    created() {}
+
+    mounted() {
+        this.stepRef = this.$refs.step;
+    }
+
+    pageToPrev() {
+        if (this.transitionStep >= 5) {
+            this.pageTo4();
+        } else if (this.transitionStep == 4) {
+            this.pageTo3();
+        } else if (this.transitionStep == 3) {
+            this.pageTo2();
+        } else {
+            this.pageTo1();
+        }
+    }
+
+    pageTo1() {
+        this.file = null;
+        this.recordFileContent = [];
+        this.transitionStep = 1;
+        this.recordFileError = false;
+        this.stepToTransitionStep();
+    }
+
+    pageTo2() {
+        this.transitionStep = 2;
+        this.recordFileContent = [];
+        this.recordFileError = false;
+        this.file = null;
+        this.stepToTransitionStep();
+    }
+
+    pageTo3() {
+        this.transitionStep = 3;
+        this.stepToTransitionStep();
+    }
+
+    pageTo4() {
+        this.transitionStep = 4;
+        this.stepToTransitionStep();
+    }
+
+    pageTo5() {
+        this.transitionStep = 5;
+        this.stepToTransitionStep();
+    }
+
+    stepToTransitionStep() {
+        this.stepRef.currentStep = this.transitionStep;
+    }
+
+    downloadExample() {
+        this.downloadExampleStore();
+    }
+
+    downloadExampleStore() {
+        let excelData: IRecordFile[] = [];
+        let rowCount = Math.floor(Math.random() * 50) + 1;
+        let now = new Date();
+        if (!RoleService.haveTenantAdministrator) {
+            excelData.push(
+                {
+                    apiMessage: "",
+                    name: "John",
+                    position: "Manager",
+                    phone: "",
+                    company: "Super market",
+                    floor: "1F",
+                    email: "john@super-markert.com",
+                    agreeTc: "true",
+                    isUseSuntecReward: "false",
+                    remark: "",
+
+                    startDateText:
+                        (now.getFullYear() + 1).toString() +
+                        "/" +
+                        (Math.floor(Math.random() * 11) + 1).toString() +
+                        "/" +
+                        (Math.floor(Math.random() * 27) + 1).toString(),
+
+                    endDateText:
+                        (now.getFullYear() + 1).toString() +
+                        "/" +
+                        (Math.floor(Math.random() * 11) + 1).toString() +
+                        "/" +
+                        (Math.floor(Math.random() * 27) + 1).toString(),
+
+                    nric: ""
+                },
+                {
+                    apiMessage: "",
+                    name: "May",
+                    position: "",
+                    phone: "",
+                    company: "MRT",
+                    floor: "1F",
+                    email: "may@mrt.com",
+                    agreeTc: "true",
+                    isUseSuntecReward: "true",
+                    remark: "",
+
+                    startDateText:
+                        (now.getFullYear() + 1).toString() +
+                        "/" +
+                        (Math.floor(Math.random() * 11) + 1).toString() +
+                        "/" +
+                        (Math.floor(Math.random() * 27) + 1).toString(),
+
+                    endDateText:
+                        (now.getFullYear() + 1).toString() +
+                        "/" +
+                        (Math.floor(Math.random() * 11) + 1).toString() +
+                        "/" +
+                        (Math.floor(Math.random() * 27) + 1).toString(),
+
+                    nric: ""
+                }
+            );
+        } else {
+            excelData.push({
+                apiMessage: "",
+                name: "May",
+                position: "",
+                phone: "",
+                company: this.$user.user.company.name,
+                floor: "1F",
+                email: "may@mrt.com",
+                agreeTc: "true",
+                isUseSuntecReward: "true",
+                remark: "",
+
+                startDateText:
+                    (now.getFullYear() + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 11) + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 27) + 1).toString(),
+
+                endDateText:
+                    (now.getFullYear() + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 11) + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 27) + 1).toString(),
+
+                nric: ""
+            });
+        }
+        const th = [
+            this.excelTitleName.name,
+            this.excelTitleName.position,
+            this.excelTitleName.company,
+            this.excelTitleName.floor,
+            this.excelTitleName.email,
+            this.excelTitleName.agreeTc,
+            this.excelTitleName.isUseSuntecReward,
+            this.excelTitleName.remark,
+            this.excelTitleName.startDate,
+            this.excelTitleName.endDate,
+            this.excelTitleName.nric
+        ];
+        const filterVal = [
+            "name",
+            "position",
+            "company",
+            "floor",
+            "email",
+            "agreeTc",
+            "isUseSuntecReward",
+            "remark",
+            "startDateText",
+            "endDateText",
+            "nric"
+        ];
+        const data = excelData.map(v => filterVal.map(k => v[k]));
+        const [fileName, fileType, sheetName] = [
+            "ImportPersonTemplate",
+            "xlsx",
+            "Person"
+        ];
+        toExcel({ th, data, fileName, fileType, sheetName });
+    }
+
+    uploadFile(file: any) {
+        this.recordFileContent = [];
+
+        // 檢查 file 是否存在
+        if (file == null) {
+            return false;
+        }
+
+        // 判斷檔案類型
+        const extensions = file.name.split(".")[1];
+        const extension = ["xlsx"].some(item => item === extensions);
+        if (
+            !extension ||
+            !file.type ||
+            file.type !=
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        ) {
+            Dialog.error(this._("w_Person_ErrorFileType"));
+            return false;
+        }
+
+        excel2json(file)
+            .then((data: any) => {
+                for (let sheetRow of data) {
+                    for (let row of sheetRow.sheet) {
+                        let recordFile: IRecordFile = {
+                            apiMessage: "",
+                            name: "",
+                            position: "",
+                            phone: "",
+                            company: "",
+                            floor: "",
+                            email: "",
+                            remark: "",
+                            nric: "",
+
+                            startDateText: "",
+                            endDateText: "",
+                            agreeTc: "",
+                            isUseSuntecReward: "",
+
+                            imageBase64: ImageBase64.pngEmpty
+                        };
+
+                        // get value
+                        if (row[this.excelTitleName.name] != undefined) {
+                            recordFile.name = row[this.excelTitleName.name]
+                                .toString()
+                                .trim();
+                        }
+                        if (row[this.excelTitleName.position] != undefined) {
+                            recordFile.position = row[
+                                this.excelTitleName.position
+                            ]
+                                .toString()
+                                .trim();
+                        }
+
+                        if (row[this.excelTitleName.phone] != undefined) {
+                            recordFile.phone = row[this.excelTitleName.phone]
+                                .toString()
+                                .trim();
+                        }
+                        if (row[this.excelTitleName.company] != undefined) {
+                            recordFile.company = row[
+                                this.excelTitleName.company
+                            ]
+                                .toString()
+                                .trim();
+                        }
+                        if (row[this.excelTitleName.floor] != undefined) {
+                            recordFile.floor = row[this.excelTitleName.floor]
+                                .toString()
+                                .trim();
+                        }
+                        if (row[this.excelTitleName.email] != undefined) {
+                            recordFile.email = row[this.excelTitleName.email]
+                                .toString()
+                                .trim();
+                        }
+
+                        if (row[this.excelTitleName.remark] != undefined) {
+                            recordFile.remark = row[this.excelTitleName.remark]
+                                .toString()
+                                .trim();
+                        }
+                        if (row[this.excelTitleName.startDate] != undefined) {
+                            recordFile.startDateText = row[
+                                this.excelTitleName.startDate
+                            ]
+                                .toString()
+                                .trim();
+                        }
+                        if (row[this.excelTitleName.nric] != undefined) {
+                            recordFile.nric = row[this.excelTitleName.nric]
+                                .toString()
+                                .trim();
+                        }
+                        if (row[this.excelTitleName.agreeTc] != undefined) {
+                            recordFile.agreeTc = row[
+                                this.excelTitleName.agreeTc
+                            ]
+                                .toString()
+                                .trim();
+                        }
+                        if (
+                            row[this.excelTitleName.isUseSuntecReward] !=
+                            undefined
+                        ) {
+                            recordFile.isUseSuntecReward = row[
+                                this.excelTitleName.isUseSuntecReward
+                            ]
+                                .toString()
+                                .trim();
+                        }
+                        // if (
+                        //     row[this.excelTitleName.revenue] != undefined &&
+                        //     !isNaN(parseFloat(row[this.excelTitleName.revenue]))
+                        // ) {
+                        //     recordFile.revenue = parseFloat(
+                        //         row[this.excelTitleName.revenue]
+                        //             .toString()
+                        //             .trim()
+                        //     );
+                        // }
+                        // if (
+                        //     row[this.excelTitleName.transaction] != undefined &&
+                        //     !isNaN(
+                        //         parseFloat(row[this.excelTitleName.transaction])
+                        //     )
+                        // ) {
+                        //     recordFile.transaction = parseFloat(
+                        //         row[this.excelTitleName.transaction]
+                        //             .toString()
+                        //             .trim()
+                        //     );
+                        // }
+
+                        // if (
+                        //     row[this.excelTitleName.count] != undefined &&
+                        //     !isNaN(parseFloat(row[this.excelTitleName.count]))
+                        // ) {
+                        //     recordFile.count = parseFloat(
+                        //         row[this.excelTitleName.count].toString().trim()
+                        //     );
+                        // }
+
+                        // 判斷時間格式
+                        let resolveDate = true;
+                        let DateArray = recordFile.startDateText
+                            .toString()
+                            .split("/");
+
+                        try {
+                            if (DateArray.length > 0 && DateArray.length < 3) {
+                                let tempDate: Date = new Date(
+                                    (parseInt(DateArray[0]) - (25567 + 2)) *
+                                        86400 *
+                                        1000
+                                );
+                                // reset datetime text
+                                if (isNaN(tempDate.getTime())) {
+                                    this.recordFileError = true;
+                                }
+                                if (!isNaN(tempDate.getTime())) {
+                                    recordFile.startDate = tempDate;
+                                    recordFile.startDateText = Datetime.DateTime2String(
+                                        recordFile.datetime,
+                                        Datetime.FormatCheckDateTime
+                                    );
+                                }
+                            } else if (DateArray.length >= 3) {
+                                let resolveDateDetail = true;
+                                let tempYear = Utility.PadLeft(
+                                    DateArray[0],
+                                    "0",
+                                    2
+                                );
+                                let tempMonth = Utility.PadLeft(
+                                    DateArray[1],
+                                    "0",
+                                    2
+                                );
+                                let tempDate = Utility.PadLeft(
+                                    DateArray[2],
+                                    "0",
+                                    2
+                                );
+
+                                if (isNaN(parseInt(tempYear))) {
+                                    this.recordFileError = true;
+                                    resolveDateDetail = false;
+                                }
+                                if (isNaN(parseInt(tempMonth))) {
+                                    this.recordFileError = true;
+                                    resolveDateDetail = false;
+                                }
+                                if (isNaN(parseInt(tempDate))) {
+                                    this.recordFileError = true;
+                                    resolveDateDetail = false;
+                                }
+
+                                if (resolveDateDetail) {
+                                    // get Date()
+                                    let tempDatetimeString: string = `${tempYear}-${tempMonth}-${tempDate}`;
+
+                                    // get Date relay string
+                                    recordFile.datetime = Datetime.String2DateTime(
+                                        tempDatetimeString,
+                                        Datetime.FormatCheckDateTime
+                                    );
+                                }
+                            } else {
+                                this.recordFileError = true;
+                                resolveDate = false;
+                            }
+
+                            // reset datetime text
+                            if (!isNaN(recordFile.datetime.getTime())) {
+                                recordFile.datetimeText = Datetime.DateTime2String(
+                                    recordFile.datetime,
+                                    Datetime.FormatCheckDateTime
+                                );
+                            }
+                        } catch (e) {
+                            this.recordFileError = true;
+                            console.log("Date error, e: ", e);
+                        }
+
+                        // check disable submit button
+                        if (!this.recordFileError) {
+                            if (
+                                recordFile.isUseSuntecReward == "" ||
+                                recordFile.isUseSuntecReward == "false"
+                            ) {
+                                this.recordFileError = true;
+                            } else {
+                                this.recordFileError = false;
+                            }
+                        }
+                        this.recordFileContent.push(recordFile);
+                    }
+                }
+                this.pageTo3();
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(
+                    this,
+                    e,
+                    this._("w_Person_ErrorFileResolve")
+                );
+            });
+    }
+
+    getImg(e, index) {
+        ImageBase64.fileToBase64(e, (base64 = "") => {
+            if (base64 != "") {
+                this.newImg = new Image();
+                this.newImg.src = base64;
+                this.newImg.onload = () => {
+                    this.recordFileContent[index]["imageBase64"] = base64;
+                    return;
+                };
+            } else {
+                Dialog.error(this._("w_Region_ErrorFileToLarge"));
+            }
+        });
+    }
+
+    async sendRecordFile() {
+        let param: {
+            datas: IBusinessOperationSalesRecord[];
+        } = {
+            datas: []
+        };
+
+        for (let content of this.recordFileContent) {
+            let tempItem: IBusinessOperationSalesRecord = {
+                customId: content.name,
+                date: content.datetime.toISOString(),
+                transaction: content.transaction,
+                imageBase64: ""
+            };
+            param.datas.push(tempItem);
+        }
+        Loading.show();
+        // await this.$server
+        //     .C("/report/sales-record", param)
+        //     .then((response: any) => {
+        //         ResponseFilter.successCheck(
+        //             this,
+        //             response,
+        //             this.sendSuccess,
+        //             "",
+        //             false
+        //         );
+        //     })
+        //     .catch((e: any) => {
+        //         return ResponseFilter.catchError(this, e);
+        //     });
+    }
+
+    sendSuccess(response: any) {
+        if (typeof response == "object" && response.length > 0) {
+            for (let i in response) {
+                let iNumber = parseInt(i);
+                let tempLoopValue = response[iNumber];
+                if (this.recordFileContent[iNumber] == undefined) {
+                    continue;
+                }
+                if (tempLoopValue.statusCode == 200) {
+                    this.recordFileContent[
+                        iNumber
+                    ].apiMessage = `<span style='color:green;'>${this._(
+                        "w_Person_ApiSuccess"
+                    )}</span>`;
+                } else if (tempLoopValue.statusCode == 400) {
+                    if (
+                        tempLoopValue.message ==
+                        this.errorMessageFromServer.noSite
+                    ) {
+                        this.recordFileContent[
+                            iNumber
+                        ].apiMessage = `<span style='color:red;'>${this._(
+                            "w_Person_ErrorNoSite"
+                        )}</span>`;
+                    } else {
+                        this.recordFileContent[
+                            iNumber
+                        ].apiMessage = `<span style='color:red;'>${this._(
+                            "w_Person_ErrorServerError"
+                        )}</span>`;
+                    }
+                } else if (tempLoopValue.statusCode == 401) {
+                    this.recordFileContent[
+                        iNumber
+                    ].apiMessage = `<span style='color:red;'>${this._(
+                        "w_Person_ErrorNoPremission"
+                    )}</span>`;
+                } else {
+                    this.recordFileContent[
+                        iNumber
+                    ].apiMessage = `<span style='color:red;'>${this._(
+                        "w_Person_ErrorServerError"
+                    )}</span>`;
+                }
+            }
+            this.pageTo4();
+        } else {
+            this.sendError();
+        }
+    }
+
+    sendError() {
+        for (let i in this.recordFileContent) {
+            this.recordFileContent[parseInt(i)].apiMessage = this._(
+                "w_Person_ErrorServerError"
+            );
+        }
+        this.pageTo4();
+    }
+
+    errorMessageInTable() {
+        return `<span style='color:#f00;'>${this._(
+            "w_Person_ErrorNoData"
+        )}</span>`;
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.records-table thead,
+.records-table tbody td:last-child {
+    text-align: center;
+}
+.error-message {
+    color: #f00 !important;
+}
+.records-table tbody tr td .error-message {
+    color: #f00 !important;
+}
+</style>
+

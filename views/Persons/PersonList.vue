@@ -3,6 +3,7 @@
         <iv-auto-transition
             :step="transition.step"
             :type="transition.type"
+            v-if="!showProgress"
         >
             <!-- List -->
             <iv-card
@@ -26,6 +27,7 @@
                     />
                     <iv-toolbox-divider />
                     <iv-toolbox-add @click="pageToAdd()" />
+                    <ivc-toolbox-sync-excel @click="pageToProgress()" />
 
                 </template>
 
@@ -145,6 +147,8 @@
 
         </iv-auto-transition>
 
+        <!-- Progress -->
+        <person-progress v-else />
     </div>
 </template>
 
@@ -152,6 +156,7 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 import { Ws } from "@/services/WebSocket/Ws";
+import personProgress from "@/views/Persons/PersonProgress.vue";
 
 // Custom
 import { EUserRole } from "@/services/Role";
@@ -171,7 +176,7 @@ import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
 
 @Component({
-    components: {}
+    components: { personProgress }
 })
 export default class SetupsFloor extends Vue {
     transition: ITransition = {
@@ -220,6 +225,8 @@ export default class SetupsFloor extends Vue {
 
     companies = [];
 
+    showProgress: boolean = false;
+
     async created() {}
 
     mounted() {}
@@ -251,6 +258,9 @@ export default class SetupsFloor extends Vue {
         this.getInputData();
     }
 
+    pageToProgress() {
+        this.showProgress = true;
+    }
     clearInputData() {
         this.newImgSrc = ImageBase64.pngEmpty;
         this.inputFormData = {

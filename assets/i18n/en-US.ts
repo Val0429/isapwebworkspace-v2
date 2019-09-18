@@ -126,6 +126,7 @@ export default class LangObject {
     // Toolbox
     w_ExportPDF = 'Export PDF';
     w_SyncVms = 'Sync to VMS';
+    w_SyncExcel = 'Batch Addition';
 
     ////////////////// Navagation //////////////////
     m_Navigation_MyProfile = 'My Profile';
@@ -179,8 +180,9 @@ export default class LangObject {
     w_Account_Email = 'Email';
     w_Account_Phone = 'Phone';
     w_Account_Roles = 'Roles';
-    w_Account_FloorName = 'Floor';
     w_Account_CompanyName = 'Company';
+    w_Account_FloorName = 'Floor';
+    w_Account_DoorName = 'Door';
     w_Account_Remark = 'Remark';
     w_Account_AccountList = 'Account List';
     w_Account_ViewUser = 'Preview Account';
@@ -190,6 +192,11 @@ export default class LangObject {
     w_Account_ConfirmPassword = 'Confirm Password';
     w_Account_EditPassword = 'Edit Password';
     w_Account_VisitorCannotLogin = "Visitor can't login";
+    w_Account_AddSuccess = 'Account add success';
+    w_Account_ADDFailed = 'Account add failed, please try again';
+    w_Account_EditSuccess = 'Account edit success';
+    w_Account_EditFailed = 'Account edit failed, please try again';
+    w_Account_DeleteConfirm = 'Are you sure to delete selected Account(s)?';
 
     ////////////////// Building  //////////////////
     w_Buildings_Building = 'Building';
@@ -291,6 +298,30 @@ export default class LangObject {
     w_Person_EditFailed = 'Person edit failed, please try again';
     w_Person_DeleteConfirm = 'Are you sure to delete selected Person(s)?';
 
+    ////////////////// Person Progress //////////////////
+    w_Person_CardTitle = 'Import Excel (.xlsx)';
+    w_Person_Step1 = 'Choose Record type';
+    w_Person_Step2 = 'Download .xlsx example';
+    w_Person_Step3 = 'Upload .xlsx file';
+    w_Person_Step4 = 'Confirm upload information';
+    w_Person_Step5 = 'Upload result';
+    w_Person_RecordTypeStore = 'Store';
+    w_Person_RecordTypeProduct = 'Product';
+    w_Person_Download = 'Download';
+    w_Person_Date = 'Date';
+    w_Person_Hour = 'Hour';
+    w_Person_Amount = 'Amount';
+    w_Person_ProductId = 'Product ID';
+    w_Person_Count = 'Count';
+    w_Person_ApiSuccess = 'Success';
+
+    w_Person_ErrorFileType = 'Please upload xlsx';
+    w_Person_ErrorFileResolve = 'File content can not be Resolve';
+    w_Person_ErrorNoData = 'no data';
+    w_Person_ErrorServerError = 'Server Connect Error';
+    w_Person_ErrorNoSite = 'Store not find';
+    w_Person_ErrorNoPremission = 'No Premission';
+
     ////////////////// Blacklist List //////////////////
     w_Blacklist_Blacklist = 'Blacklist';
     w_Blacklist_ViewBlack = 'View Blacklist';
@@ -390,6 +421,15 @@ export default class LangObject {
     w_Vms_Port = 'Port';
     w_Vms_Acctount = 'Account';
     w_Vms_Password = 'Password';
+    w_Vms_AddVms = 'Add VMS Tablet';
+    w_Vms_EditVms = 'Edit VMS Tablet';
+    w_Vms_DelVms = 'Delete VMS Tablet';
+    w_Vms_ViewVms = 'Preview VMS Tablet';
+    w_Vms_AddSuccess = 'VMS Add Success';
+    w_Vms_AddFailed = 'VMS Add Failed';
+    w_Vms_EditSuccess = 'VMS Edit Success';
+    w_Vms_EditFailed = 'VMS Edit Failed';
+    w_Vms_DeleteConfirm = 'Are you sure to delete selected VMS(s)?';
 
     ////////////////// FRS Setting //////////////////
     w_FrsServer_Enable = 'FRS Enable';
