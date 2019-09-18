@@ -3,7 +3,7 @@
     <iv-toolbox-element-base
         v-bind="$attrs"
         :title="_('w_SyncVms')"
-        icon="fa fa-sync isap-toolbox-icon"
+        icon="fa fa-cloud"
         v-show="visible"
         :variant="variant"
         :size="size"

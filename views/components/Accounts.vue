@@ -161,6 +161,7 @@ export default class SetupsAccount extends Vue {
         rolesText: "",
         companiesText: "",
         floorsText: "",
+        doorText: "",
         role: "",
         name: "",
         company: "",
@@ -219,7 +220,7 @@ export default class SetupsAccount extends Vue {
 
     async doDelete() {
         await Dialog.confirm(
-            this._("w_Delete_ConfirmContent"),
+            this._("w_Account_DeleteConfirm"),
             this._("w_Delete_ConfirmLabel"),
             () => {
                 Loading.show();
@@ -401,6 +402,7 @@ export default class SetupsAccount extends Vue {
             rolesText: "",
             companiesText: "",
             floorsText: "",
+            doorText: "",
             company: "",
             floors: [],
             realRoles: [],
@@ -425,6 +427,7 @@ export default class SetupsAccount extends Vue {
                 rolesText: this.formRoleText(param),
                 companiesText: this.formCompanyText(param),
                 floorsText: this.formFloorText(param),
+                doorText: this.formDoorText(param),
                 company: "",
                 floors: [],
                 realRoles: [],
@@ -515,6 +518,19 @@ export default class SetupsAccount extends Vue {
     }
 
     formFloorText(datas: any): string {
+        let result: string = "";
+        if (datas != undefined && datas.floors != undefined) {
+            for (let loopData of datas.floors) {
+                result += `${loopData.name}, `;
+            }
+            if (datas.floors.length > 0) {
+                result = result.substr(0, result.length - 2);
+            }
+        }
+        return result;
+    }
+
+    formDoorText(datas: any): string {
         let result: string = "";
         if (datas != undefined && datas.floors != undefined) {
             for (let loopData of datas.floors) {
@@ -692,6 +708,12 @@ export default class SetupsAccount extends Vue {
                 * @uiType - iv-form-label
                 */
                 floorsText: string;
+
+                /*
+                * @uiLabel - ${this._("w_Account_DoorName")}
+                * @uiType - iv-form-label
+                */
+                doorText: string;
 
                 /**
                  * @uiLabel - ${this._("w_Account_UserName")}

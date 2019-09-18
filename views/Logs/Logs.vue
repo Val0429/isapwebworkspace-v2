@@ -25,13 +25,13 @@
                         :server="{path: '/location/company'}"
                     >
 
-                        <template #action="{$attrs}">
+                        <!-- <template #action="{$attrs}">
                             {{ resolveAction($attrs.row.action) }}
                         </template>
 
                         <template #entity="{$attrs}">
                             {{ resolveEntity($attrs.row) }}
-                        </template>
+                        </template> -->
 
                     </iv-table>
                 </iv-card>
@@ -57,33 +57,33 @@ import { ITransition } from "@/services/Transition";
 import Dialog from "@/services/Dialog";
 import Datetime from "@/services/Datetime";
 
-enum ELogActionType {
-    EventLogin = "1",
-    EventLogout = "2",
-    EventConfigChanged = "101",
-    EventUserAdd = "202",
-    EventUserEdit = "203",
-    EventUserRemove = "204",
-    EventKioskAdd = "212",
-    EventKioskEdit = "213",
-    EventKioskRemove = "214",
-    EventLicenseAdd = "300",
-    EventFlow2InvitationComplete = "3100",
-    EventFlow2PreRegistrationComplete = "3101",
-    EventFlow2StrictTryCheckIn = "3110",
-    EventFlow2StrictConfirmPhoneNumber = "3111",
-    EventFlow2StrictScanIDCard = "3112",
-    EventFlow2StrictCompareFace = "3113",
-    EventFlow2StrictCompleteCheckIn = "3114",
-    EventFlow2RegistrationComplete = "3115",
-    EventFlow2TryCheckIn = "3116",
-    EventFlow2FaceVerifyResult = "3117",
-    EventFlow2DoneCheckIn = "3118",
-    EventFlow2CompanyAdd = "4022",
-    EventFlow2CompanyEdit = "4023",
-    EventFlow2CompanyRemove = "4024",
-    EventFlow2Concierge = "4030"
-}
+// enum ELogActionType {
+//     EventLogin = "1",
+//     EventLogout = "2",
+//     EventConfigChanged = "101",
+//     EventUserAdd = "202",
+//     EventUserEdit = "203",
+//     EventUserRemove = "204",
+//     EventKioskAdd = "212",
+//     EventKioskEdit = "213",
+//     EventKioskRemove = "214",
+//     EventLicenseAdd = "300",
+//     EventFlow2InvitationComplete = "3100",
+//     EventFlow2PreRegistrationComplete = "3101",
+//     EventFlow2StrictTryCheckIn = "3110",
+//     EventFlow2StrictConfirmPhoneNumber = "3111",
+//     EventFlow2StrictScanIDCard = "3112",
+//     EventFlow2StrictCompareFace = "3113",
+//     EventFlow2StrictCompleteCheckIn = "3114",
+//     EventFlow2RegistrationComplete = "3115",
+//     EventFlow2TryCheckIn = "3116",
+//     EventFlow2FaceVerifyResult = "3117",
+//     EventFlow2DoneCheckIn = "3118",
+//     EventFlow2CompanyAdd = "4022",
+//     EventFlow2CompanyEdit = "4023",
+//     EventFlow2CompanyRemove = "4024",
+//     EventFlow2Concierge = "4030"
+// }
 
 @Component({
     components: {

@@ -13,17 +13,17 @@
                 :label=" _('w_Company_List') "
             >
                 <template #toolbox>
-                    <!-- <iv-toolbox-sync-to-vms @click="syncToVms" /> -->
+                    <!-- <ivc-toolbox-sync-to-vms @click="syncToVms" /> -->
                     <iv-toolbox-view
-                        :disabled="isSelected.length !== 1"
+                        :disabled="selectedDetail.length !== 1"
                         @click="pageToView"
                     />
                     <iv-toolbox-edit
-                        :disabled="isSelected.length !== 1"
+                        :disabled="selectedDetail.length !== 1"
                         @click="pageToEdit()"
                     />
                     <iv-toolbox-delete
-                        :disabled="isSelected.length === 0"
+                        :disabled="selectedDetail.length === 0"
                         @click="doDelete"
                     />
                     <iv-toolbox-divider />
@@ -49,7 +49,7 @@
 
                     <template #Actions="{$attrs, $listeners}">
 
-                        <iv-toolbox-more :disabled="isSelected.length !== 1">
+                        <iv-toolbox-more :disabled="selectedDetail.length !== 1">
                             <iv-toolbox-view @click="pageToView" />
                             <iv-toolbox-edit @click="pageToEdit()" />
                             <iv-toolbox-delete @click="doDelete" />
@@ -196,7 +196,6 @@ export default class SetupsCompany extends Vue {
         step: 1
     };
 
-    isSelected: any = [];
     tableMultiple: boolean = true;
 
     selectedDetail: any = [];
@@ -208,86 +207,26 @@ export default class SetupsCompany extends Vue {
         unitNumber: "",
         contactNumber: "",
         contactNumbers: [],
+        buildingIds: "",
         floorIds: [],
-
         floorView: "",
         contactNumberView: ""
     };
 
     // select
-    floorsSelectItem: any = {};
-    floorsDetailItem: any = {};
+    selectItem: {
+        building: any;
+        floor: any;
+    } = {
+        building: {},
+        floor: {}
+    };
+
+    companies = [];
 
     created() {}
 
-    mounted() {
-        this.initSelectItemFloor();
-    }
-
-    async initSelectItemFloor() {
-        this.floorsSelectItem = {};
-        let tempFloorSelectItem = {};
-        let param: any = { paging: { all: true } };
-
-        await this.$server
-            .R("/location/floor", param)
-            .then((response: any) => {
-                ResponseFilter.successCheck(this, response, (response: any) => {
-                    for (const returnValue of response.results) {
-                        tempFloorSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                    }
-                    this.floorsSelectItem = tempFloorSelectItem;
-                    this.floorsDetailItem = response.results;
-                });
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
-    }
-
-    clearInputData() {
-        this.inputFormData = {
-            objectId: "",
-            name: "",
-            contactPerson: "",
-            unitNumber: "",
-            contactNumber: "",
-            contactNumbers: [],
-            floorIds: [],
-
-            floorView: "",
-            contactNumberView: ""
-        };
-    }
-
-    selectedItem(data) {
-        this.isSelected = data;
-        this.selectedDetail = [];
-        this.selectedDetail = data;
-    }
-
-    getInputData() {
-        this.clearInputData();
-        for (const param of this.selectedDetail) {
-            this.inputFormData = {
-                objectId: param.objectId,
-                name: param.name,
-                contactPerson: param.contactPerson,
-                unitNumber: param.unitNumber,
-                contactNumbers: param.contactNumber,
-                floorIds: param.floors,
-
-                floorView: this.ViewFloorString(param.floors),
-                contactNumberView: this.ViewPhoneString(param.contactNumber)
-            };
-        }
-    }
-
-    updateInputFormData(data) {
-        this.inputFormData[data.key] = data.value;
-    }
-
+    mounted() {}
     pageToList() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
@@ -300,24 +239,142 @@ export default class SetupsCompany extends Vue {
         this.getInputData();
     }
 
-    pageToAdd() {
+    async pageToAdd() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
         this.clearInputData();
+        await this.initSelectItem();
     }
 
-    pageToEdit() {
+    async pageToEdit() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 3;
+        this.clearInputData();
+        await this.initSelectItem();
         this.getInputData();
 
-        this.inputFormData.floorIds
-            ? (this.inputFormData.floorIds = JSON.parse(
-                  JSON.stringify(
-                      this.inputFormData.floorIds.map(item => item.objectId)
-                  )
-              ))
-            : "";
+        // this.inputFormData.floorIds
+        //     ? (this.inputFormData.floorIds = JSON.parse(
+        //           JSON.stringify(
+        //               this.inputFormData.floorIds.map(item => item.objectId)
+        //           )
+        //       ))
+        //     : "";
+    }
+
+    clearInputData() {
+        this.inputFormData = {
+            objectId: "",
+            name: "",
+            contactPerson: "",
+            unitNumber: "",
+            contactNumber: "",
+            contactNumbers: [],
+            buildingIds: "",
+            floorIds: [],
+            floorView: "",
+            contactNumberView: ""
+        };
+    }
+
+    selectedItem(data) {
+        this.selectedDetail = data;
+    }
+
+    getInputData() {
+        this.clearInputData();
+        for (const param of this.selectedDetail) {
+            this.inputFormData = {
+                objectId: param.objectId,
+                name: param.name,
+                contactPerson: param.contactPerson,
+                unitNumber: param.unitNumber,
+                contactNumbers: param.contactNumber,
+                buildingIds: param.buildingIds,
+                floorIds: param.floors,
+                floorView: this.ViewFloorString(param.floors),
+                contactNumberView: this.ViewPhoneString(param.contactNumber)
+            };
+        }
+    }
+
+    updateInputFormData(data) {
+        if (data.key === "building") {
+            this.initSelectItemFloorWithBuilding(data.value);
+        }
+        this.inputFormData[data.key] = data.value;
+    }
+
+    async initSelectItem() {
+        this.selectItem.building = {};
+        this.selectItem.floor = {};
+        this.initSelectItemBuildingWithAPI();
+    }
+
+    async initSelectItemBuildingWithAPI() {
+        let param: any = { paging: { all: true } };
+        param = RegexServices.trim(param);
+        await this.$server
+            .R("/location/building", param)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
+                        this.companies = JSON.parse(
+                            JSON.stringify(response.results)
+                        );
+                        for (let ret of response.results) {
+                            if (
+                                ret.objectId != undefined &&
+                                ret.name != undefined
+                            ) {
+                                this.$set(
+                                    this.selectItem.building,
+                                    ret.objectId,
+                                    ret.name
+                                );
+                            }
+                        }
+                    }
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+    }
+
+    async initSelectItemFloorWithBuilding(buildingId: string) {
+        this.selectItem.floor = {};
+        let param: any = { paging: { all: true }, buildingId: buildingId };
+        param = RegexServices.trim(param);
+        await this.$server
+            .R("/location/floor", param)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
+                        for (let ret of response.results) {
+                            if (
+                                ret.objectId != undefined &&
+                                ret.name != undefined
+                            ) {
+                                this.$set(
+                                    this.selectItem.floor,
+                                    ret.objectId,
+                                    ret.name
+                                );
+                            }
+                        }
+                    }
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     syncToVms() {}
@@ -350,13 +407,17 @@ export default class SetupsCompany extends Vue {
     }
 
     async saveAddOrEdit(data) {
+        console.log("data", data);
         let param: any = {
             datas: [
                 {
                     name: data.name,
                     contactPerson: data.contactPerson,
                     unitNumber: data.unitNumber,
-                    contactNumber: data.contactNumbers,
+                    contactNumber:
+                        data.contactNumbers.length > 0
+                            ? data.contactNumbers
+                            : Dialog.error(this._("w_Company_ADDFailed")),
                     floorIds: data.floorIds
                 }
             ]
@@ -580,21 +641,17 @@ export default class SetupsCompany extends Vue {
     IModifyForm() {
         return `
             interface {
-
-
                 /**
                  * @uiLabel - ${this._("w_Company_Name")}
                  * @uiPlaceHolder - ${this._("w_Company_Name")}
                  */
                 name: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Company_UnitNumber")}
                  * @uiPlaceHolder - ${this._("w_Company_UnitNumber")}
                  */
                 unitNumber: string;
-
 
                 /**
                  * @uiLabel - ${this._("w_Company_ContactPerson")}
@@ -603,21 +660,26 @@ export default class SetupsCompany extends Vue {
                  */
                 contactPerson: string;
 
-
                 /**
                  * @uiLabel - ${this._("w_Company_ContactNumber")}
                  */
                 contactNumber?: any;
 
+                /**
+                 * @uiLabel - ${this._("w_Company_Building")}
+                 */
+                building: ${toEnumInterface(
+                    this.selectItem.building as any,
+                    false
+                )};
 
                 /**
                  * @uiLabel - ${this._("w_Company_Floor")}
                  */
                 floorIds: ${toEnumInterface(
-                    this.floorsSelectItem as any,
+                    this.selectItem.floor as any,
                     true
                 )};
-
             }
         `;
     }

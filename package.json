@@ -8,9 +8,11 @@
         "create-project": "git checkout --orphan"
     },
     "dependencies": {
+        "file-saver": "^2.0.2",
         "jspdf": "^1.5.3",
+        "jssha": "^2.3.1",
         "vue-html2canvas": "0.0.4",
         "vue-loading-overlay": "^3.2.0",
-        "jssha": "^2.3.1"
+        "xlsx": "^0.15.1"
     }
 }

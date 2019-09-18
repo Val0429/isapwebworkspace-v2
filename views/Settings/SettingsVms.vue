@@ -182,7 +182,7 @@ export default class SetingVms extends Vue {
 
     async doDelete() {
         await Dialog.confirm(
-            this._("w_Delete_ConfirmContent"),
+            this._("w_Vms_DeleteConfirm"),
             this._("w_Delete_ConfirmLabel"),
             () => {
                 Loading.show();

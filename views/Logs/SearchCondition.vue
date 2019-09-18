@@ -123,6 +123,20 @@ export class SearchCondition extends Vue {
                  * @uiColumnGroup - row2
                  */
                 eventType?: enum {
+                    ServiceStop = "",
+                    ServiceStart = "",
+                    FrsConnected = "",
+                    FrsDisconnected = "",
+                    LoginSuccess = "",
+                    LoginFail = "",
+                    UserCreate = "",
+                    UserDelete = "",
+                    UserUpdate = "",
+                    DeviceAdd = "",
+                    DeviceEdit = "",
+                    DeviceRemove = "",
+                    GenerateReportData = ""
+
                     Login = "1",
                     Logout = "2",
                     ConfigChanged = "101",
