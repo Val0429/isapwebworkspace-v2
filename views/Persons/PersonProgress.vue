@@ -853,8 +853,7 @@ export default class PersonProgress extends Vue {
             let content = this.recordFileContent[i];
             if (content.image && content.image != "" && (RegexServices.jpg(content.image) || RegexServices.png(content.image))) {
                 for (let file of files) {
-                    console.log(file);
-                    if (file.name && file.name == content.image) {
+                    if (file.name && file.name == content.image && file && file.type && file.type.indexOf('image') >= 0)  {
                         ImageBase64.fileToBase64(file, (base64: string) => {
                             this.recordFileContent[i].imageBase64 = base64;
                         });
