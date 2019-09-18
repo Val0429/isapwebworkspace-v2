@@ -406,7 +406,7 @@ export default class PersonProgress extends Vue {
                 name: "May",
                 position: "",
                 phone: "",
-                company: this.$user.user.company.name,
+                company: "",
                 floor: "1F",
                 email: "may@mrt.com",
                 agreeTc: "true",

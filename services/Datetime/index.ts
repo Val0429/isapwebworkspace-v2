@@ -1,11 +1,15 @@
 import Utility from '../Utility';
 
 enum DatetimeFormat {
-    'default' = 'YYYY-MM-DD HH:mm:ss',
-}
-
-enum DateFormat {
-    'default' = 'YYYY-MM-DD',
+    'default' = 'YYYY/MM/DD HH:mm:ss',
+    date = 'YYYY/MM/DD',
+    time = 'HH:mm:ss',
+    newDateTime = 'YYYY/MM/DD HH:mm:ss',
+    newDate = 'YYYY/MM/DD',
+    newTime = 'HH:mm:ss',
+    checkDateTime = 'YYYY/MM/DD HH:mm:ss',
+    checkDate = 'YYYY-MM-DD',
+    checkTime = 'HH:mm:ss',
 }
 class Datetime {
     private _formats: string[] = ['dddd', 'ddd', 'DD', 'D', 'hh', 'h', 'HH', 'H', 'mm', 'm', 'MMMM', 'MMM', 'MM', 'M', 'ss', 's', 'A', 'a', 'YYYY', 'YY', 'ZZ', 'Z'];
@@ -17,6 +21,42 @@ class Datetime {
 
     get oneDayTimestamp() {
         return this._oneDayTimestamp;
+    }
+
+    get FormatDateTime(): string {
+        return DatetimeFormat.default;
+    }
+
+    get FormatDate(): string {
+        return DatetimeFormat.date;
+    }
+
+    get FormatTime(): string {
+        return DatetimeFormat.time;
+    }
+
+    get FormatNewDateTime(): string {
+        return DatetimeFormat.newDateTime;
+    }
+
+    get FormatNewDate(): string {
+        return DatetimeFormat.newDate;
+    }
+
+    get FormatNewTime(): string {
+        return DatetimeFormat.newTime;
+    }
+
+    get FormatCheckDateTime(): string {
+        return DatetimeFormat.checkDateTime;
+    }
+
+    get FormatCheckDate(): string {
+        return DatetimeFormat.checkDate;
+    }
+
+    get FormatCheckTime(): string {
+        return DatetimeFormat.checkTime;
     }
 
     /**
@@ -257,42 +297,42 @@ class Datetime {
     }
 
     // 獲得Q1開始日期
-    Q1StartDate(date: Date): Date {
+    Q1Start(date: Date): Date {
         return this.DateStart(new Date(date.getFullYear(), 0, 1));
     }
 
     // 獲得Q1結束日期
-    Q1EndDate(date: Date): Date {
+    Q1End(date: Date): Date {
         return this.DateEnd(new Date(date.getFullYear(), 2, 31));
     }
 
     // 獲得Q2開始日期
-    Q2StartDate(date: Date): Date {
+    Q2Start(date: Date): Date {
         return this.DateStart(new Date(date.getFullYear(), 3, 1));
     }
 
     // 獲得Q2結束日期
-    Q2EndDate(date: Date): Date {
+    Q2End(date: Date): Date {
         return this.DateEnd(new Date(date.getFullYear(), 5, 30));
     }
 
     // 獲得Q3開始日期
-    Q3StartDate(date: Date): Date {
+    Q3Start(date: Date): Date {
         return this.DateStart(new Date(date.getFullYear(), 6, 1));
     }
 
     //獲得Q3結束日期
-    Q3EndDate(date: Date): Date {
+    Q3End(date: Date): Date {
         return this.DateEnd(new Date(date.getFullYear(), 8, 30));
     }
 
     // 獲得Q4開始日期
-    Q4StartDate(date: Date): Date {
+    Q4Start(date: Date): Date {
         return this.DateStart(new Date(date.getFullYear(), 9, 1));
     }
 
     // 獲得Q4結束日期
-    Q4EndDate(date: Date): Date {
+    Q4End(date: Date): Date {
         return this.DateEnd(new Date(date.getFullYear(), 11, 31));
     }
 
@@ -313,12 +353,12 @@ class Datetime {
     }
 
     //獲得上月開始日期
-    LastMonthStartDate(date: Date): Date {
+    LastMonthStart(date: Date): Date {
         return this.DateStart(new Date(date.getFullYear(), date.getMonth() - 1, 1));
     }
 
     // 獲得上月結束日期
-    LastMonthEndDate(date: Date): Date {
+    LastMonthEnd(date: Date): Date {
         return this.MonthEnd(new Date(date.getFullYear(), date.getMonth() - 1));
     }
 
@@ -329,7 +369,7 @@ class Datetime {
 
     // 獲得上月的天數
     LastMonthCount(date: Date): number {
-        return this.LastMonthEndDate(date).getDate();
+        return this.LastMonthEnd(date).getDate();
     }
 
     // Week
@@ -418,7 +458,7 @@ class Datetime {
         return date;
     }
 
-    // 以今天為基準，計算往前、往後的幾天
+    // 計算往前、往後的幾天
     DatePlus(date: Date, addDayCount: number): Date {
         let newDate = new Date(date.getTime());
         date.setDate(date.getDate() + addDayCount);
@@ -467,6 +507,11 @@ class Datetime {
     // 檢查日期的開始和結束時間是否為同一天
     CheckSameDate(startDate: string, endDate: string): boolean {
         return Date.parse(endDate) === Date.parse(startDate);
+    }
+
+    // Excel Date to JS Date
+    excelDateToDate(excelDate: number): Date {
+        return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
     }
 }
 
