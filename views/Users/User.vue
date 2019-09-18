@@ -267,7 +267,7 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 
 // Vue
-import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
+import RegionTreeSelect from "@/components/RegionTree/RegionTreeSelect.vue";
 
 // API Interface
 import { IUserAddData, IUserEditData } from "@/config/default/api/interfaces";
@@ -290,6 +290,7 @@ import ResponseFilter from "@/services/ResponseFilter";
 import Dialog from "@/services/Dialog";
 import Loading from "@/services/Loading";
 import Encrypt from "@/services/Encrypt";
+import RegexService from "@/services/RegexServices";
 
 interface inputFormData extends IUserAddData, IUserEditData {
     siteIdsText?: string;
@@ -654,27 +655,38 @@ export default class User extends Vue {
     }
 
     async saveAdd(data) {
-        const datas: IUserAddData[] = [
-            {
-                username: data.username,
-                role: data.role,
-                name: data.name,
-                email: data.email,
-                phone: data.phone,
-                password: Encrypt.sha256Timestamp(),
-                employeeId: data.employeeId,
-                siteIds: data.siteIds !== undefined ? data.siteIds : [],
-                groupIds: data.groupIds !== undefined ? data.groupIds : []
-            }
-        ];
 
-        const addParam = {
-            datas
+        const param: {
+            datas: IUserAddData[]
+        } = {
+            datas:[
+                {
+                    username: data.username,
+                    role: data.role,
+                    name: data.name,
+                    email: data.email,
+                    phone: data.phone,
+                    password: Encrypt.sha256Timestamp(),
+                    employeeId: data.employeeId,
+                    siteIds: data.siteIds !== undefined ? data.siteIds : [],
+                    groupIds: data.groupIds !== undefined ? data.groupIds : []
+                }
+            ]
         };
+
+        if (RegexService.email(param.datas[0].email)) {
+            Dialog.error("w_Error_Email");
+            return false;
+        }
+
+        if (RegexService.phone(param.datas[0].phone)) {
+            Dialog.error("w_Error_Phone");
+            return false;
+        }
 
         Loading.show();
         await this.$server
-            .C("/user/user", addParam)
+            .C("/user/user", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(
                     this,

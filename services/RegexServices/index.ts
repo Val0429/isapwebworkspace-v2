@@ -4,6 +4,7 @@ export class RegexService {
     regexItem: any = {
         number: /^[\d]*$/,
         email: /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/i,
+        phone: /^\+{1}[0-9]+$/,
         url: /(ws|ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
     };
 
@@ -52,6 +53,10 @@ export class RegexService {
 
     number(data: string): boolean {
         return this.regexItem.number.test(data);
+    }
+
+    phone(data: string): boolean {
+        return this.regexItem.phone.test(data);
     }
 
     replaceNumber(data: string): string {

@@ -74,7 +74,8 @@ export default class LangObject {
     w_ExportCSV = 'Export CSV';
     w_CopyToTemplate = 'Copy To Report Template';
     w_ErrorResponseUndefined = "Can't get server response";
-
+    w_Error_Phone = 'Please check Phone Format. Should be +xxxxxxxxxx';
+    w_Error_Email = 'Please check Email Format';
     // date
     w_Week_0 = 'Sunday';
     w_Week_1 = 'Monday';
