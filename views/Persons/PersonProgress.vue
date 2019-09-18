@@ -731,19 +731,31 @@ export default class PersonProgress extends Vue {
         for (let i = 0; i <= data.length; i++) {
             // check
             if (
+                data[i].phone &&
+                data[i].phone != "" &&
+                !RegexServices.phoneNumber(data[i].phone)
+            ) {
+                this.errorMessageInTable("phone", i);
+                this.recordFileError = true;
+                // return false;
+            }
+            if (
+                data[i].email &&
+                data[i].email != "" &&
+                !RegexServices.email(data[i].email)
+            ) {
+                this.errorMessageInTable("email", i);
+                this.recordFileError = true;
+                // return false;
+            }
+            if (
                 data[i].nric &&
                 data[i].nric != "" &&
                 !RegexServices.nric(data[i].nric)
             ) {
+                this.errorMessageInTable("nric", i);
                 this.recordFileError = true;
-                return false;
-            }
-
-            if (!RegexServices.email(data[i].email)) {
-                console.log(data[i].email);
-                this.errorMessageInTable("email", i);
-                this.recordFileError = true;
-                return false;
+                // return false;
             }
 
             // // for image/app
@@ -759,7 +771,7 @@ export default class PersonProgress extends Vue {
             //     this.recordFileError = false;
             // } else {
             //     this.recordFileError = true;
-            //     // return;
+            //     return false;
             // }
             // // for phone check
             // let phone = data[i] ? data[i]["phone"] : "";
@@ -900,6 +912,7 @@ export default class PersonProgress extends Vue {
     }
 
     errorMessageInTable(data, index) {
+        console.log(data);
         this.recordFileContent[index][
             data
         ] = `<span style='color:#f00;'>${this._("w_Person_ErrorData")}</span>`;
