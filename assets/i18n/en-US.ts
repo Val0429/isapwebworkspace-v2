@@ -300,9 +300,9 @@ export default class LangObject {
 
     ////////////////// Person Progress //////////////////
     w_Person_CardTitle = 'Import Excel (.xlsx)';
-    w_Person_Step1 = 'Choose Record type';
-    w_Person_Step2 = 'Download .xlsx example';
-    w_Person_Step3 = 'Upload .xlsx file';
+    w_Person_Step1 = 'Download .xlsx example';
+    w_Person_Step2 = 'Upload .xlsx file';
+    w_Person_Step3 = 'Choose image directory';
     w_Person_Step4 = 'Confirm upload information';
     w_Person_Step5 = 'Upload result';
     w_Person_RecordTypeStore = 'Store';

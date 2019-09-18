@@ -7,6 +7,8 @@ export class RegexService {
         email: /^([^@]+)@([\da-z\.-]+)\.([a-z\.]{2,6})([^\.])$/,
         url: /(ws|ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
         nric: /^[0-9a-zA-Z]{4}$/,
+        jpg: /^[\w,\s-]+\.[Jj][Pp][Ee]?[Gg]$/,
+        png: /^[\w,\s-]+\.[Pp][Nn][Gg]$/,
     };
 
     replaceItem: any = {
@@ -62,6 +64,14 @@ export class RegexService {
 
     nric(data: string): boolean {
         return this.regexItem.nric.test(data);
+    }
+
+    jpg(data: string): boolean {
+        return this.regexItem.jpg.test(data);
+    }
+
+    png(data: string): boolean {
+        return this.regexItem.png.test(data);
     }
 
     replaceNumber(data: string): string {
