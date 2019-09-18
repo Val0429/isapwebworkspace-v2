@@ -317,6 +317,7 @@ export default class LangObject {
 
     w_Person_ErrorFileType = 'Please upload xlsx';
     w_Person_ErrorFileResolve = 'File content can not be Resolve';
+    w_Person_ErrorData = 'Error';
     w_Person_ErrorNoData = 'no data';
     w_Person_ErrorServerError = 'Server Connect Error';
     w_Person_ErrorNoSite = 'Store not find';

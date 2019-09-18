@@ -110,12 +110,12 @@
                     url="/reports"
                 /> -->
 
-                <iv-permission :allow="['SystemAdministrator', 'Administrator']">
+                <!-- <iv-permission :allow="['SystemAdministrator', 'Administrator']">
                     <SidebarNavItem
                         :label="_('m_Navigation_Logs')"
                         url="/logs"
                     />
-                </iv-permission>
+                </iv-permission> -->
 
             </SidebarNav>
 

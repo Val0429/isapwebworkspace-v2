@@ -27,7 +27,7 @@
                     />
                     <iv-toolbox-divider />
                     <iv-toolbox-add @click="pageToAdd()" />
-                    <ivc-toolbox-sync-excel @click="pageToProgress()" />
+                    <!-- <ivc-toolbox-sync-excel @click="pageToProgress()" /> -->
 
                 </template>
 
