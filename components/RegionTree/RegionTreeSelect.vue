@@ -57,15 +57,7 @@ import {
     IRegionTreeTag,
     IRegionItem,
     RegionTreeItem
-} from "./models";
-
-enum EPageStep {
-    none,
-    list,
-    editRoot,
-    editRegion,
-    bindingSite
-}
+} from "./";
 
 @Component({
     components: {

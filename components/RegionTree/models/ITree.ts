@@ -49,6 +49,7 @@ interface IRegionItem {
     status: ITreeStatus;
     sites: string[];
     tags: IRegionTreeTag[];
+    tagIds: string[];
     children: IRegionItem[];
 }
 

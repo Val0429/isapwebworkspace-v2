@@ -7,10 +7,14 @@
 import { Config } from '@/../config/default/serverConfig';
 
 var config: Config = {
-    ip: "localhost",
-    port: 6060,
+    ip: '172.16.10.21',
+    port: 6066,
     ssl: false,
 
-    serverFrameworkVersionGreaterThan: "1.06.00"
-}
+    prodPort: 6060,
+
+    serverFrameworkVersionGreaterThan: '1.06.00',
+
+    hideDefaultServerErrorModal: false,
+};
 export default config;

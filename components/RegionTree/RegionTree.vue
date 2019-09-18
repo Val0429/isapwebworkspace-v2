@@ -5,6 +5,7 @@
         :data="data"
         :visible="data.status.showCard"
     >
+
         <!-- Pass on all named slots -->
         <slot
             v-for="slot in Object.keys($slots)"
@@ -140,7 +141,6 @@ import {
     Prop,
     Model,
     Emit,
-    Watch,
     Provide,
     Inject
 } from "vue-property-decorator";
@@ -152,7 +152,7 @@ import {
 } from "@/../core/server/parser/meta-parser";
 import { IServerTree } from "@/../components/interfaces";
 import { Tree, ITreeUnit } from "@/../components/trees/tree/tree.vue.ts";
-import { ERegionType } from "./models";
+import { ERegionType } from "./";
 import IconBase64 from "./models/IconBase64";
 
 @Component({

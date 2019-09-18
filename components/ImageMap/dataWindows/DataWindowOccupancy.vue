@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
-import { EDragType, ImageMapItem, DataWindowOccupancyItem } from "../models";
+import { EDragType, ImageMapItem, DataWindowOccupancyItem } from "../";
 
 @Component({
     components: {}

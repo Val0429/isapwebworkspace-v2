@@ -12,10 +12,13 @@
                 aria-hidden="true"
             ></i>
             {{ deviceGroup.name}}
-            <iv-toolbox-edit
+
+            <!-- bar2.0 此功能移至其他頁面新刪修 -->
+            <!-- <iv-toolbox-edit
                 class="float-right"
                 @click="clickEdit"
-            />
+            /> -->
+
         </div>
     </div>
 
@@ -23,7 +26,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
-import { EDragType, DeviceGroupItem, EVideoSource } from "../models";
+import { EDragType, DeviceGroupItem, EVideoSource } from "../";
 
 @Component({
     components: {}

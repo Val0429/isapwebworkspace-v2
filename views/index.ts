@@ -1,5 +1,8 @@
 import { RegisterRouter as $ } from '@/../core';
 
+// Home
+$({ path: '/', name: 'Home', redirect: '/components' })();
+
 // components
 import Components from './components/index.vue';
 import Forms from './components/Forms.vue';
@@ -14,18 +17,6 @@ import Transition from './components/Transition.vue';
 import Modal from './components/Modal.vue';
 import Utilities from './components/Utilities.vue';
 import Test from './components/Utilities.vue';
-
-// Demo
-import DemoRegionTreeSelect from './Demos/DemoRegionTreeSelect.vue';
-import DemoImageMap from './Demos/DemoImageMap.vue';
-import DemoROI from './Demos/DemoROI.vue';
-import DemoDialog from './Demos/DemoDialog.vue';
-import DemoSortSelect from './Demos/DemoSortSelect.vue';
-
-///////////////////////////////////////////////////////////////////
-
-// Home
-$({ path: '/', name: 'Home', redirect: '/components' })();
 
 // components
 $({ path: '/components', name: 'Components', icon: 'isap-icon-add' })(Components);
@@ -43,9 +34,23 @@ $({ path: '/components/utilities', name: 'Utilities', icon: 'fa-twitter' })(Util
 $({ path: '/menu-style/1', name: '選單特殊1', icon: 'fa-twitter', permission: '/test' })(Test);
 
 // Demo
-$({ path: '/demos', name: 'Demo', icon: 'fa-check', redirect: '/demos/region-tree-select' })();
-$({ path: '/demos/region-tree-select', name: 'Region Tree Select', icon: 'fa-check', permission: false })(DemoRegionTreeSelect);
-$({ path: '/demos/image-map', name: 'Image Map', icon: 'fa-check', permission: false })(DemoImageMap);
-$({ path: '/demos/roi', name: 'ROI', icon: 'fa-check', permission: false })(DemoROI);
-$({ path: '/demos/dialog', name: 'Dialog', icon: 'fa-check', permission: false })(DemoDialog);
-$({ path: '/demos/sort_select', name: 'Sort Select', icon: 'fa-check', permission: false })(DemoSortSelect);
+import DemoDialog from './Demos/DemoDialog.vue';
+import DemoFilterConditionComponent from './Demos/DemoFilterConditionComponent.vue';
+import DemoImageMap from './Demos/DemoImageMap.vue';
+import DemoLoading from './Demos/DemoLoading.vue';
+import DemoRegionTreeSelect from './Demos/DemoRegionTreeSelect.vue';
+import DemoROI from './Demos/DemoROI.vue';
+import DemoSortSelect from './Demos/DemoSortSelect.vue';
+import DemoEncrypt from './Demos/DemoEncrypt.vue';
+import DemoDatetimeServices from './Demos/DemoDatetimeServices.vue';
+
+$({ path: '/demos', name: 'Demo', redirect: '/demos/region-tree-select' })();
+$({ path: '/demos/dialog', name: 'Dialog', permission: false })(DemoDialog);
+$({ path: '/demos/report_filter_condition_component', name: 'Filter Condition Component' })(DemoFilterConditionComponent);
+$({ path: '/demos/image-map', name: 'ImageMap', permission: false })(DemoImageMap);
+$({ path: '/demos/loading', name: 'Loading', permission: false })(DemoLoading);
+$({ path: '/demos/region-tree-select', name: 'Region Tree Select', permission: false })(DemoRegionTreeSelect);
+$({ path: '/demos/roi', name: 'ROI', permission: false })(DemoROI);
+$({ path: '/demos/sort_select', name: 'Sort Select', permission: false })(DemoSortSelect);
+$({ path: '/demos/encrypt', name: 'SHA', permission: false })(DemoEncrypt);
+$({ path: '/demos/datetime', name: 'SHA', permission: false })(DemoDatetimeServices);

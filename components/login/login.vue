@@ -28,7 +28,7 @@
                                             type="text"
                                             class="form-control"
                                             v-model="username"
-                                            :placeholder="_('wb_Username')"
+                                            :placeholder="_('w_Username')"
                                         >
                                     </div>
 
@@ -43,9 +43,20 @@
                                             type="password"
                                             class="form-control"
                                             v-model="password"
-                                            :placeholder="_('wb_Password')"
+                                            :placeholder="_('w_Password')"
                                         >
 
+                                    </div>
+
+                                    <div class="input-group mb-4">
+                                        <b-form-checkbox
+                                            v-model="remeberMe"
+                                            name="checkbox-1"
+                                            :value="eRemeberMe.rememberMe"
+                                            :unchecked-value="eRemeberMe.noRemeberMe"
+                                        >
+                                            {{ _('w_Login_RememberMe') }}
+                                        </b-form-checkbox>
                                     </div>
 
                                     <!-- language -->
@@ -61,7 +72,7 @@
                                                 variant="primary"
                                                 class="px-4"
                                                 @click="Login()"
-                                            >{{ _("wb_Login") }}</b-button>
+                                            >{{ _("w_Login_Login") }}</b-button>
                                         </b-col>
 
                                         <b-col

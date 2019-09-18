@@ -76,7 +76,7 @@ import {
     ImageMapItem,
     ImageBoxItem,
     DeviceNormalCameraItem
-} from "../models";
+} from "../";
 
 @Component({
     components: {}
