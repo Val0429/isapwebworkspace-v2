@@ -8,7 +8,7 @@
                 @mounted="doMounted"
             >
 
-                <template #1-title>{{ _('w_Person_Step2') }}</template>
+                <template #1-title>{{ _('w_Person_Step1') }}</template>
                 <template #1>
                     <b-button
                         class="col-md-12"
@@ -16,7 +16,7 @@
                     >{{ _('w_Person_Download') }}</b-button>
                 </template>
 
-                <template #2-title>{{ _('w_Person_Step3') }}</template>
+                <template #2-title>{{ _('w_Person_Step2') }}</template>
                 <template #2>
                     <b-form-file
                         v-model="file"
@@ -24,8 +24,17 @@
                     />
                 </template>
 
-                <template #3-title>{{ _('w_Person_Step4') }}</template>
+                <template #3-title>{{ _('w_Person_Step3') }}</template>
                 <template #3>
+                    <b-form-file
+                        :multiple="true"
+                        :directory="true"
+                        v-on:input='chooseDirectory'
+                    />
+                </template>
+
+                <template #4-title>{{ _('w_Person_Step4') }}</template>
+                <template #4>
                     <div>
                         <table class="table table-bordered table-hover datatable dataTable no-footer records-table">
                             <thead>
@@ -58,13 +67,11 @@
                                     <td v-html="value.agreeTc ? value.agreeTc.toString() : errorMessageInTable()"></td>
                                     <td v-html="value.isUseSuntecReward ? value.isUseSuntecReward.toString() : errorMessageInTable()"></td>
                                     <td>
-                                        <template v-if="value.isUseSuntecReward == 'false'">
-                                            <iv-form-file @input="getImg($event, index)" />
-                                            <img
-                                                :src="value.imageBase64"
-                                                style="max-height: 100px; max-width: 100px;"
-                                            />
-                                        </template>
+                                        <img
+                                            :src="value.imageBase64 ? value.imageBase64 : imageBase64.pngEmpty"
+                                            style="max-height: 100px; max-width: 100px;"
+                                        />
+                                        <div v-if="value.imageFileName != '' && value.imageBase64 == undefined">{{ 'Not find image' }}</div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -72,8 +79,8 @@
                     </div>
                 </template>
 
-                <template #4-title>{{ _('w_Person_Step5') }}</template>
-                <template #4>
+                <template #5-title>{{ _('w_Person_Step5') }}</template>
+                <template #5>
                     <div>
                         <table class="table table-bordered table-hover datatable dataTable no-footer records-table">
                             <thead>
@@ -103,7 +110,7 @@
                 v-if="transitionStep > 0"
             >
                 <b-button
-                    v-if="transitionStep > 1 && transitionStep < 4"
+                    v-if="transitionStep > 1 && transitionStep < 5"
                     variant="dark"
                     size="lg"
                     @click="pageToPrev"
@@ -117,7 +124,7 @@
                 >{{ _('w_NextPage') }}
                 </b-button>
                 <b-button
-                    v-if="transitionStep == 3"
+                    v-if="transitionStep == 4"
                     variant="dark"
                     size="lg"
                     :disabled="recordFileError"
@@ -125,7 +132,7 @@
                 >{{ _('w_Submit') }}
                 </b-button>
                 <b-button
-                    v-if="transitionStep == 4"
+                    v-if="transitionStep == 5"
                     variant="dark"
                     size="lg"
                     @click="pageTo1"
@@ -150,6 +157,7 @@ import Utility from "@/services/Utility";
 import Loading from "@/services/Loading";
 import ImageBase64 from "@/services/ImageBase64";
 import RoleService from "@/services/Role/RoleService";
+import RegexServices from "@/services/RegexServices";
 
 // Export
 import toExcel from "@/services/Excel/json2excel";
@@ -190,7 +198,8 @@ interface IRecordFile {
     startDate?: Date;
     endDate?: Date;
 
-    imageBase64?: any;
+    imageFileName: string;
+    imageBase64?: string;
 
     transaction?: number; // ERecordType.sotre
     productId?: string; // ERecordType.product
@@ -218,6 +227,8 @@ export default class PersonProgress extends Vue {
 
     newImg = new Image();
     newImgSrc = [ImageBase64.pngEmpty];
+
+    imageBase64 = ImageBase64;
 
     errorMessageFromServer = {
         noSite: "site not found"
@@ -354,6 +365,7 @@ export default class PersonProgress extends Vue {
                     agreeTc: "true",
                     isUseSuntecReward: "false",
                     remark: "",
+                    imageFileName: "8986d96118a65bf5ba8098109929be66_file.jpeg",
 
                     startDateText:
                         (now.getFullYear() + 1).toString() +
@@ -382,6 +394,7 @@ export default class PersonProgress extends Vue {
                     agreeTc: "true",
                     isUseSuntecReward: "true",
                     remark: "",
+                    imageFileName: "7ff796296acd73e889d6472bc035fe57_file.jpeg",
 
                     startDateText:
                         (now.getFullYear() + 1).toString() +
@@ -412,22 +425,125 @@ export default class PersonProgress extends Vue {
                 agreeTc: "true",
                 isUseSuntecReward: "true",
                 remark: "",
-
                 startDateText:
                     (now.getFullYear() + 1).toString() +
                     "/" +
                     (Math.floor(Math.random() * 11) + 1).toString() +
                     "/" +
                     (Math.floor(Math.random() * 27) + 1).toString(),
-
                 endDateText:
                     (now.getFullYear() + 1).toString() +
                     "/" +
                     (Math.floor(Math.random() * 11) + 1).toString() +
                     "/" +
                     (Math.floor(Math.random() * 27) + 1).toString(),
+                nric: "",
+                imageFileName: "",
+            });
+            excelData.push({
+                apiMessage: "",
+                name: "May",
+                position: "",
+                phone: "",
+                company: "",
+                floor: "1F",
+                email: "may@mrt.com",
+                agreeTc: "true",
+                isUseSuntecReward: "true",
+                remark: "",
+                startDateText:
+                    (now.getFullYear() + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 11) + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 27) + 1).toString(),
+                endDateText:
+                    (now.getFullYear() + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 11) + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 27) + 1).toString(),
+                nric: "",
+                imageFileName: "",
+            });
+            excelData.push({
+                apiMessage: "",
+                name: "May",
+                position: "",
+                phone: "",
+                company: "",
+                floor: "1F",
+                email: "may@mrt.com",
+                agreeTc: "true",
+                isUseSuntecReward: "true",
+                remark: "",
+                startDateText:
+                    (now.getFullYear() + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 11) + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 27) + 1).toString(),
+                endDateText:
+                    (now.getFullYear() + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 11) + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 27) + 1).toString(),
+                nric: "",
+                imageFileName: "",
+            });
+            excelData.push({
+                apiMessage: "",
+                name: "May",
+                position: "",
+                phone: "",
+                company: "",
+                floor: "1F",
+                email: "may@mrt.com",
+                agreeTc: "true",
+                isUseSuntecReward: "true",
+                remark: "",
+                startDateText:
+                    (now.getFullYear() + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 11) + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 27) + 1).toString(),
+                endDateText:
+                    (now.getFullYear() + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 11) + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 27) + 1).toString(),
+                nric: "",
+                imageFileName: "",
+            });
 
-                nric: ""
+            excelData.push({
+                apiMessage: "",
+                name: "May",
+                position: "",
+                phone: "",
+                company: "",
+                floor: "1F",
+                email: "may@mrt.com",
+                agreeTc: "true",
+                isUseSuntecReward: "true",
+                remark: "",
+                startDateText:
+                    (now.getFullYear() + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 11) + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 27) + 1).toString(),
+                endDateText:
+                    (now.getFullYear() + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 11) + 1).toString() +
+                    "/" +
+                    (Math.floor(Math.random() * 27) + 1).toString(),
+                nric: "",
+                imageFileName: "",
             });
         }
         const th = [
@@ -488,6 +604,9 @@ export default class PersonProgress extends Vue {
 
         excel2json(file)
             .then((data: any) => {
+                // TODO: Morris, append test image name
+                let count = 0;
+                // TODO: Morris, append test image name
                 for (let sheetRow of data) {
                     for (let row of sheetRow.sheet) {
                         let recordFile: IRecordFile = {
@@ -506,7 +625,7 @@ export default class PersonProgress extends Vue {
                             agreeTc: "",
                             isUseSuntecReward: "",
 
-                            imageBase64: ImageBase64.pngEmpty
+                            imageFileName: ""
                         };
 
                         // get value
@@ -705,6 +824,13 @@ export default class PersonProgress extends Vue {
                                 this.recordFileError = false;
                             }
                         }
+
+                        // TODO: Morris, append test image name
+                        let imageArray = ["8986d96118a65bf5ba8098109929be66_file.jpeg", "", "c4f7e7ea91ec7bcb6074ca667c85b40a_file.pdf", "Select.png", "190626-10718-5-6SXvG.jpg"];
+                        recordFile.imageFileName = imageArray[count] ? imageArray[count] : "";
+                        count++;
+                        // TODO: Morris, append test image name
+
                         this.recordFileContent.push(recordFile);
                     }
                 }
@@ -719,19 +845,22 @@ export default class PersonProgress extends Vue {
             });
     }
 
-    getImg(e, index) {
-        ImageBase64.fileToBase64(e, (base64 = "") => {
-            if (base64 != "") {
-                this.newImg = new Image();
-                this.newImg.src = base64;
-                this.newImg.onload = () => {
-                    this.recordFileContent[index]["imageBase64"] = base64;
-                    return;
-                };
-            } else {
-                Dialog.error(this._("w_Region_ErrorFileToLarge"));
+    chooseDirectory(files: File[]) {
+        for (let i in this.recordFileContent) {
+            let content = this.recordFileContent[i];
+            if (content.imageFileName && content.imageFileName != "" && (RegexServices.jpg(content.imageFileName) || RegexServices.png(content.imageFileName))) {
+                for (let file of files) {
+                    console.log(file);
+                    if (file.name && file.name == content.imageFileName) {
+                        ImageBase64.fileToBase64(file, (base64: string) => {
+                            this.recordFileContent[i].imageBase64 = base64;
+                        });
+                        break;
+                    }
+                }
             }
-        });
+        }
+        setTimeout(this.pageTo4, 300);
     }
 
     async sendRecordFile() {
