@@ -687,9 +687,10 @@ export default class Member extends Vue {
   }
 
   async pageToEdit() {
+    this.pageStep = EPageStep.edit;
     await this.getInputData();
     await this.initPremission();
-    this.pageStep = EPageStep.edit;
+    
   }
 
   async pageToView() {
