@@ -77,6 +77,9 @@ export default class Login extends Vue {
                     case EUserRole.SystemAdministrator:
                         setTimeout(() => this.$router.push(`/accounts`), 100);
                         break;
+                    case EUserRole.VMS:
+                        setTimeout(() => this.$router.push(`/my_profile`), 100);
+                        break;
                     case EUserRole.Administrator:
                         setTimeout(() => this.$router.push(`/accounts`), 100);
                         break;

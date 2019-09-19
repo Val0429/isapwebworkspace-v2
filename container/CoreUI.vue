@@ -40,20 +40,22 @@
                     />
                 </iv-permission>
 
-                <SidebarNavItem
-                    :label="_('m_Navigation_Persons')"
-                    url="/persons"
-                >
+                <iv-permission :deny="['VMS']">
                     <SidebarNavItem
-                        :label="_('m_Navigation_Persons_PersonList')"
-                        url="/persons/personlist"
-                    />
+                        :label="_('m_Navigation_Persons')"
+                        url="/persons"
+                    >
+                        <SidebarNavItem
+                            :label="_('m_Navigation_Persons_PersonList')"
+                            url="/persons/personlist"
+                        />
 
-                    <SidebarNavItem
-                        :label="_('m_Navigation_Persons_BlackList')"
-                        url="/persons/blacklist"
-                    />
-                </SidebarNavItem>
+                        <SidebarNavItem
+                            :label="_('m_Navigation_Persons_BlackList')"
+                            url="/persons/blacklist"
+                        />
+                    </SidebarNavItem>
+                </iv-permission>
 
                 <iv-permission :allow="['SystemAdministrator', 'Administrator']">
                     <!-- <SidebarNavItem

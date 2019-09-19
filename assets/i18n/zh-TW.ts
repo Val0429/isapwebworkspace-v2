@@ -114,6 +114,7 @@ export default class LangObject {
 
     // Role
     w_Role_SystemAdministrator = '系統管理員';
+    w_Role_VMS = 'VMS';
     w_Role_Administrator = '管理員';
     w_Role_TenantAdministrator = '承租管理員';
     w_Role_TenantUser = '承租用戶';

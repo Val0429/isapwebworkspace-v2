@@ -295,12 +295,14 @@ export default class SetupsAccount extends Vue {
 
     initSelectItemRole() {
         let settingRole = {
+            VMS: false,
             Administrator: false,
             TenantAdministrator: false
         };
         // check role can setting
         if (RoleService.haveSystemAdministrator(this)) {
             settingRole.Administrator = true;
+            settingRole.VMS = true;
         }
 
         if (
@@ -311,6 +313,9 @@ export default class SetupsAccount extends Vue {
         }
 
         // set setting
+        if (settingRole.VMS) {
+            this.selectItem.role[EUserRole.VMS] = this._("w_Role_VMS");
+        }
         if (settingRole.Administrator) {
             this.selectItem.role[EUserRole.Administrator] = this._(
                 "w_Role_Administrator"
