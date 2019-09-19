@@ -30,6 +30,8 @@ export default class LangObject {
     w_Leave = 'Leave';
     w_Check = 'Check';
     w_URL = 'URL';
+    w_NextPage = 'Next';
+    w_PreviousPage = 'Prev';
 
     w_CurrentPassword = 'Current Password';
     w_CurrentPasswordConfirm = 'Current PasswordConfirm';
@@ -300,9 +302,9 @@ export default class LangObject {
 
     ////////////////// Person Progress //////////////////
     w_Person_CardTitle = 'Import Excel (.xlsx)';
-    w_Person_Step1 = 'Choose Record type';
-    w_Person_Step2 = 'Download .xlsx example';
-    w_Person_Step3 = 'Upload .xlsx file';
+    w_Person_Step1 = 'Download .xlsx example';
+    w_Person_Step2 = 'Upload .xlsx file';
+    w_Person_Step3 = 'Choose image directory';
     w_Person_Step4 = 'Confirm upload information';
     w_Person_Step5 = 'Upload result';
     w_Person_RecordTypeStore = 'Store';
@@ -318,9 +320,9 @@ export default class LangObject {
     w_Person_ErrorFileType = 'Please upload xlsx';
     w_Person_ErrorFileResolve = 'File content can not be Resolve';
     w_Person_ErrorData = 'Error';
-    w_Person_ErrorNoData = 'no data';
+    w_Person_ErrorNoData = 'No data';
     w_Person_ErrorServerError = 'Server Connect Error';
-    w_Person_ErrorNoSite = 'Store not find';
+    w_Person_ErrorNoImage = 'Image not find';
     w_Person_ErrorNoPremission = 'No Premission';
 
     ////////////////// Blacklist List //////////////////
