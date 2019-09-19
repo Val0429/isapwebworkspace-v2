@@ -1,8 +1,8 @@
 import { Config } from '@/../config/default/serverConfig';
 
 var config: Config = {
-    ip: "172.16.10.10",
-    port: 6060,
+    ip: "localhost",
+    port: 6070,
 
     serverFrameworkVersionGreaterThan: "1.06.00",
 

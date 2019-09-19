@@ -3,6 +3,12 @@
     <div key="main">
         <b-button @click="logout">Logout</b-button>
 
+        <iv-toolbox-custom :label="_('wb_Add')" icon="fa-address-book">
+            <iv-toolbox-custom :label="_('wb_Add')" icon="isap-icon-delete" />
+        </iv-toolbox-custom>
+        <iv-toolbox-edit />
+        <iv-toolbox-delete />
+
         <ul>
             <li>server requirement
                 <ul>
