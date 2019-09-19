@@ -40,7 +40,7 @@
                 >
 
                     <template #actions$>
-                        <iv-toolbox-more>
+                        <iv-toolbox-more :disabled="selectedDetail.length !== 1">
                             <iv-toolbox-view @click="pageToView" />
                             <iv-toolbox-edit @click="pageToEdit()" />
                             <iv-toolbox-delete @click="doDelete" />

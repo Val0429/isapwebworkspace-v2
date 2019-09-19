@@ -17,10 +17,6 @@
                         :disabled="selectedDetail.length !== 1"
                         @click="pageToView"
                     />
-                    <!-- <iv-toolbox-edit
-                        :disabled="selectedDetail.length !== 1"
-                        @click="pageToEdit()"
-                    /> -->
                     <iv-toolbox-delete
                         :disabled="selectedDetail.length === 0"
                         @click="doDelete"
@@ -55,9 +51,8 @@
                     </template>
 
                     <template #actions$>
-                        <iv-toolbox-more>
+                        <iv-toolbox-more :disabled="selectedDetail.length !== 1">
                             <iv-toolbox-view @click="pageToView" />
-                            <!-- <iv-toolbox-edit @click="pageToEdit()" /> -->
                             <iv-toolbox-delete @click="doDelete" />
                         </iv-toolbox-more>
                     </template>

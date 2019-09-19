@@ -34,15 +34,11 @@
                     :server="{ path: '/client/vms' }"
                     @selected="selectedItem($event)"
                 >
-                    <template #Actions="{$attrs, $listeners}">
-                        <iv-toolbox-more
-                            size="sm"
-                            :disabled="selectedDetail.length !== 1"
-                        >
+                    <template #actions$>
+                        <iv-toolbox-more :disabled="selectedDetail.length !== 1">
                             <iv-toolbox-view @click="pageToView" />
                             <iv-toolbox-edit @click="pageToEdit" />
                             <iv-toolbox-delete @click="doDelete" />
-
                         </iv-toolbox-more>
                     </template>
 

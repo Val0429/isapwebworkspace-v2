@@ -44,7 +44,7 @@
                     </template>
 
                     <template #actions$>
-                        <iv-toolbox-more>
+                        <iv-toolbox-more :disabled="selectedDetail.length !== 1">
                             <iv-toolbox-view @click="pageToView" />
                             <iv-toolbox-edit @click="pageToEdit()" />
                             <iv-toolbox-delete @click="doDelete" />
@@ -425,9 +425,6 @@ export default class HikVision extends Vue {
                  * @uiLabel - ${this._("w_Frs_Setting_Account")}
                  */
                 account: string;
-
-
-                Actions: any
 
             }
         `;
