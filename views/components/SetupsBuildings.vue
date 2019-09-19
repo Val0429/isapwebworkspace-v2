@@ -15,15 +15,15 @@
                 <template #toolbox>
 
                     <iv-toolbox-view
-                        :disabled="isSelected.length !== 1"
+                        :disabled="selectedDetail.length !== 1"
                         @click="pageToView"
                     />
                     <iv-toolbox-edit
-                        :disabled="isSelected.length !== 1"
+                        :disabled="selectedDetail.length !== 1"
                         @click="pageToEdit()"
                     />
                     <iv-toolbox-delete
-                        :disabled="isSelected.length === 0"
+                        :disabled="selectedDetail.length === 0"
                         @click="doDelete"
                     />
                     <iv-toolbox-divider />
@@ -39,9 +39,8 @@
                     @selected="selectedItem($event)"
                 >
 
-                    <template #Actions="{$attrs, $listeners}">
-
-                        <iv-toolbox-more :disabled="isSelected.length !== 1">
+                    <template #actions$>
+                        <iv-toolbox-more>
                             <iv-toolbox-view @click="pageToView" />
                             <iv-toolbox-edit @click="pageToEdit()" />
                             <iv-toolbox-delete @click="doDelete" />
@@ -142,7 +141,6 @@ export default class SetupsFloor extends Vue {
         step: 1
     };
 
-    isSelected: any = [];
     tableMultiple: boolean = true;
 
     selectedDetail: any = [];
@@ -165,8 +163,6 @@ export default class SetupsFloor extends Vue {
     }
 
     selectedItem(data) {
-        this.isSelected = data;
-        this.selectedDetail = [];
         this.selectedDetail = data;
     }
 
@@ -401,8 +397,6 @@ export default class SetupsFloor extends Vue {
                  * @uiLabel - ${this._("w_Buildings_BuildingName")}
                  */
                 name: string;
-
-                Actions: any
             }
         `;
     }

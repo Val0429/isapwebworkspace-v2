@@ -234,7 +234,9 @@ export default class LangObject {
     w_Door_List = 'Door List';
     w_Door_BuildingName = 'Building Name';
     w_Door_FloorName = 'Floor Name';
+    w_Door_CompanyName = 'Company Name';
     w_Door_EndpointName = 'Endpoint Name';
+    w_Door_Range = 'Range';
     w_Door_IsPublic = 'Public';
     w_Door_View = 'View Door';
     w_Door_Add = 'Add Door';

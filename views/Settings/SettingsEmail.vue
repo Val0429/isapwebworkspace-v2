@@ -39,9 +39,8 @@
                     @selected="selectedItem($event)"
                 >
 
-                    <template #Actions="{$attrs, $listeners}">
-
-                        <iv-toolbox-more :disabled="selectedDetail.length !== 1">
+                    <template #actions$>
+                        <iv-toolbox-more>
                             <iv-toolbox-view @click="pageToView" />
                             <iv-toolbox-edit @click="pageToEdit()" />
                             <iv-toolbox-delete @click="doDelete" />
@@ -375,8 +374,6 @@ export default class SettingsEmail extends Vue {
                  * @uiLabel - ${this._("w_Account_Remark")}
                  */
                 remark: string;
-
-                Actions: any
             }
         `;
     }

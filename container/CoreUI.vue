@@ -30,10 +30,10 @@
                         :label="_('m_Navigation_Floor')"
                         url="/floor"
                     />
-                    <!-- <SidebarNavItem
+                    <SidebarNavItem
                         :label="_('m_Navigation_Door')"
                         url="/door"
-                    /> -->
+                    />
                     <SidebarNavItem
                         :label="_('m_Navigation_Company')"
                         url="/company"

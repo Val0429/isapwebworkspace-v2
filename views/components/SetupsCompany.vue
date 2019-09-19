@@ -47,9 +47,8 @@
                         <div v-html="tablePhoneString($attrs.value)"></div>
                     </template>
 
-                    <template #Actions="{$attrs, $listeners}">
-
-                        <iv-toolbox-more :disabled="selectedDetail.length !== 1">
+                    <template #actions$>
+                        <iv-toolbox-more>
                             <iv-toolbox-view @click="pageToView" />
                             <iv-toolbox-edit @click="pageToEdit()" />
                             <iv-toolbox-delete @click="doDelete" />
@@ -252,14 +251,6 @@ export default class SetupsCompany extends Vue {
         this.clearInputData();
         await this.initSelectItem();
         this.getInputData();
-
-        // this.inputFormData.floorIds
-        //     ? (this.inputFormData.floorIds = JSON.parse(
-        //           JSON.stringify(
-        //               this.inputFormData.floorIds.map(item => item.objectId)
-        //           )
-        //       ))
-        //     : "";
     }
 
     clearInputData() {
@@ -407,7 +398,6 @@ export default class SetupsCompany extends Vue {
     }
 
     async saveAddOrEdit(data) {
-        console.log("data", data);
         let param: any = {
             datas: [
                 {
@@ -589,8 +579,6 @@ export default class SetupsCompany extends Vue {
                  * @uiLabel - ${this._("w_Company_ContactNumber")}
                  */
                 contactNumber: string;
-
-                Actions: any
 
             }
         `;

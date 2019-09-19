@@ -13,6 +13,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/location/building': [any, any, false];
         '/location/floor': [any, any, false];
         '/location/company': [any, any, false];
+        '/location/door': [any, any, false];
 
         ////// Person //////
         '/person/staff': [any, any, false];
@@ -57,6 +58,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/location/building': [any, any, false];
         '/location/floor': [any, any, false];
         '/location/company': [any, any, false];
+        '/location/door': [any, any, false];
 
         ////// Person //////
         '/person/staff': [any, any, false];
@@ -94,6 +96,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/location/building': [any, any, false];
         '/location/floor': [any, any, false];
         '/location/company': [any, any, false];
+        '/location/door': [any, any, false];
 
         ////// Person //////
         '/person/staff': [any, any, false];
@@ -130,6 +133,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/location/building': [any, any, false];
         '/location/floor': [any, any, false];
         '/location/company': [any, any, false];
+        '/location/door': [any, any, false];
 
         ////// Person //////
         '/person/staff': [any, any, false];

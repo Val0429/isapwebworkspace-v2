@@ -54,8 +54,8 @@
                         </ul>
                     </template>
 
-                    <template #Actions="{$attrs, $listeners}">
-                        <iv-toolbox-more :disabled="selectedDetail.length !== 1">
+                    <template #actions$>
+                        <iv-toolbox-more>
                             <iv-toolbox-view @click="pageToView" />
                             <!-- <iv-toolbox-edit @click="pageToEdit()" /> -->
                             <iv-toolbox-delete @click="doDelete" />
@@ -705,8 +705,6 @@ export default class SetupsFloor extends Vue {
                  * @uiLabel - ${this._("w_Person_updateUser")}
                  */
                 updateUser: string;
-
-                Actions: any;
             }
         `;
     }

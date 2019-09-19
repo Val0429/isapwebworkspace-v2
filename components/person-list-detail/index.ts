@@ -1,1 +1,0 @@
-export * from './person-list-detail.vue';

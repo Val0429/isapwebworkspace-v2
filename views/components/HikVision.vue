@@ -43,9 +43,8 @@
                         {{ $attrs.value && $attrs.value.name ? $attrs.value.name : '' }}
                     </template>
 
-                    <template #Actions="{$attrs, $listeners}">
-
-                        <iv-toolbox-more :disabled="selectedDetail.length !== 1">
+                    <template #actions$>
+                        <iv-toolbox-more>
                             <iv-toolbox-view @click="pageToView" />
                             <iv-toolbox-edit @click="pageToEdit()" />
                             <iv-toolbox-delete @click="doDelete" />
