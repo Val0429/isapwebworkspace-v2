@@ -608,9 +608,6 @@ export default class PersonProgress extends Vue {
 
         excel2json(file)
             .then((data: any) => {
-                // TODO: Morris, append test image name
-                let count = 0;
-                // TODO: Morris, append test image name
                 for (let sheetRow of data) {
                     for (let row of sheetRow.sheet) {
                         let recordFile: IRecordFile = {
@@ -828,12 +825,6 @@ export default class PersonProgress extends Vue {
                         //     }
                         // }
 
-                        // TODO: Morris, append test image name
-                        let imageArray = ["8986d96118a65bf5ba8098109929be66_file.jpeg", "", "c4f7e7ea91ec7bcb6074ca667c85b40a_file.pdf", "Select.png", "190626-10718-5-6SXvG.jpg"];
-                        recordFile.image = imageArray[count] ? imageArray[count] : "";
-                        count++;
-                        // TODO: Morris, append test image name
-
                         this.recordFileContent.push(recordFile);
                     }
                 }
@@ -853,8 +844,7 @@ export default class PersonProgress extends Vue {
             let content = this.recordFileContent[i];
             if (content.image && content.image != "" && (RegexServices.jpg(content.image) || RegexServices.png(content.image))) {
                 for (let file of files) {
-                    console.log(file);
-                    if (file.name && file.name == content.image) {
+                    if (file.name && file.name == content.image && file && file.type && file.type.indexOf('image') >= 0)  {
                         ImageBase64.fileToBase64(file, (base64: string) => {
                             this.recordFileContent[i].imageBase64 = base64;
                         });
