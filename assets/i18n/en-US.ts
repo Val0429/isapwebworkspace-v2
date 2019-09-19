@@ -140,7 +140,9 @@ export default class LangObject {
     m_Navigation_Company = 'Company Management';
     m_Navigation_Persons = 'Person Management';
     m_Navigation_Persons_PersonList = 'Person List';
-    m_Navigation_Persons_BlackList = 'Black List';
+    m_Navigation_Persons_BlackList = 'Person Blacklist';
+    m_Navigation_Persons_VisitorList = 'Visitor List';
+    m_Navigation_Persons_VisitorBlackList = 'Visitor Blacklist';
     m_Navigation_HikVision = 'HikVision FR Tablet';
     m_Navigation_Server = 'Server';
     m_Navigation_ISAPFrs = 'iSAP FR Server';
@@ -328,7 +330,7 @@ export default class LangObject {
     w_Person_ErrorNoImage = 'Image not find';
     w_Person_ErrorNoPremission = 'No Premission';
 
-    ////////////////// Blacklist List //////////////////
+    ////////////////// PersonBlacklist List //////////////////
     w_Blacklist_Blacklist = 'Blacklist';
     w_Blacklist_ViewBlack = 'View Blacklist';
     w_Blacklist_AddBlack = 'Add Blacklist';
@@ -341,6 +343,13 @@ export default class LangObject {
     w_Blacklist_Reason = 'Reason';
     w_Blacklist_ErrorMediaType = 'Image or NRIC must choose one';
     w_Blacklist_ErrorNricRegex = 'NRIC only English and number, must 4 digits';
+
+    ////////////////// Visitor List //////////////////
+    w_Visitor_PersonList = 'Visitor List';
+    w_Visitor_Organization = 'Organization';
+
+    ////////////////// VisitorBlacklist List //////////////////
+    w_Visitor_Blacklist_Blacklist = 'Visitor Blacklist';
 
     ////////////////// Isap FRS //////////////////
     w_Frs_FrList = 'iSAP FR Server List';

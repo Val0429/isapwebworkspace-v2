@@ -52,7 +52,16 @@
 
                         <SidebarNavItem
                             :label="_('m_Navigation_Persons_BlackList')"
-                            url="/persons/blacklist"
+                            url="/persons/personblacklist"
+                        />
+                        <SidebarNavItem
+                            :label="_('m_Navigation_Persons_VisitorList')"
+                            url="/persons/visitorlist"
+                        />
+
+                        <SidebarNavItem
+                            :label="_('m_Navigation_Persons_VisitorBlackList')"
+                            url="/persons/visitorblacklist"
                         />
                     </SidebarNavItem>
                 </iv-permission>

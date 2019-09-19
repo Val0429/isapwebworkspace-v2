@@ -18,6 +18,8 @@ interface RestfulRequest extends ApisRequestBase {
         ////// Person //////
         '/person/staff': [any, any, false];
         '/person/staff-blacklist': [any, any, false];
+        '/person/visitor': [any, any, false];
+        '/person/visitor-blacklist': [any, any, false];
 
         ////// Frs //////
         '/client/frs': [any, any, false];

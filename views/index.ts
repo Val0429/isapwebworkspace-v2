@@ -15,7 +15,9 @@ import SetupsFloor from './components/SetupsFloor.vue';
 import SetupsDoor from './components/SetupsDoor.vue';
 import SetupsCompany from './components/SetupsCompany.vue';
 import PersonsPersonList from './Persons/PersonList.vue';
-import PersonsBlackList from './Persons/BlackList.vue';
+import PersonsPersonBlackList from './Persons/PersonBlackList.vue';
+import PersonsVisitorList from './Persons/VisitorList.vue';
+import PersonsVisitorBlackList from './Persons/VisitorBlackList.vue';
 import IsapFrs from './components/IsapFrs.vue';
 import HikVision from './components/HikVision.vue';
 import SettingsSuntec from './Settings/SettingsSuntec.vue';
@@ -38,7 +40,9 @@ $({ path: '/company', name: "_('m_Navigation_Company')", icon: 'fa-industry', pe
 
 $({ path: '/persons', name: "_('m_Navigation_Persons')", icon: 'fa-users', permission: true, redirect: '/persons/personlist' })();
 $({ path: '/persons/personlist', name: "_('m_Navigation_Persons_PersonList')", icon: 'fa-user', permission: true })(PersonsPersonList);
-$({ path: '/persons/blacklist', name: "_('m_Navigation_Persons_BlackList')", icon: 'fa-ban', permission: true })(PersonsBlackList);
+$({ path: '/persons/personblacklist', name: "_('m_Navigation_Persons_BlackList')", icon: 'fa-ban', permission: true })(PersonsPersonBlackList);
+$({ path: '/persons/visitorlist', name: "_('m_Navigation_Persons_VisitorList')", icon: 'fa-user', permission: true })(PersonsVisitorList);
+$({ path: '/persons/visitorblacklist', name: "_('m_Navigation_Persons_VisitorBlackList')", icon: 'fa-ban', permission: true })(PersonsVisitorBlackList);
 
 $({ path: '/client', name: "_('m_Navigation_Server')", permission: true, redirect: '/client/frs' })();
 $({ path: '/client/frs', name: "_('m_Navigation_Frs')", icon: 'fa-server', permission: true })(IsapFrs);

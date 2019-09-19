@@ -140,7 +140,9 @@ export default class LangObject {
     m_Navigation_Company = '公司管理';
     m_Navigation_Persons = '人員管理';
     m_Navigation_Persons_PersonList = '人員列表';
-    m_Navigation_Persons_BlackList = '黑名單列表';
+    m_Navigation_Persons_BlackList = '人員黑名單列表';
+    m_Navigation_Persons_VisitorList = 'Visitor List';
+    m_Navigation_Persons_VisitorBlackList = 'Visitor Blacklist';
     m_Navigation_Server = 'Server';
     m_Navigation_ISAPFrs = 'iSAP FR Server';
     m_Navigation_Frs = 'FRS';
@@ -328,7 +330,7 @@ export default class LangObject {
     w_Person_ErrorNoImage = 'Image not find';
     w_Person_ErrorNoPremission = 'No Premission';
 
-    ////////////////// Blacklist List //////////////////
+    ////////////////// Person Blacklist List //////////////////
     w_Blacklist_Blacklist = '黑名單列表';
     w_Blacklist_ViewBlack = '黑名單預覽';
     w_Blacklist_AddBlack = '增加黑名單';
@@ -341,6 +343,13 @@ export default class LangObject {
     w_Blacklist_Reason = '原因';
     w_Blacklist_ErrorMediaType = 'Image or NRIC must choose one';
     w_Blacklist_ErrorNricRegex = 'NRIC only English and number, must 4 digits';
+
+    ////////////////// Visitor List //////////////////
+    w_Visitor_PersonList = 'Visitor List';
+    w_Visitor_Organization = 'Organization';
+
+    ////////////////// VisitorBlacklist List //////////////////
+    w_Visitor_Blacklist_Blacklist = 'Visitor Blacklist';
 
     ////////////////// Isap FRS //////////////////
     w_Frs_FrList = 'iSAP FR Server 列表';
