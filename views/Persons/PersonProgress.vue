@@ -67,12 +67,19 @@
                                     <td v-html="value.agreeTc ? value.agreeTc.toString() : errorMessageInTable()"></td>
                                     <td v-html="value.isUseSuntecReward ? value.isUseSuntecReward.toString() : false"></td>
                                     <td>
-                                 <img
-                                            :src="value.imageBase64 ? value.imageBase64 : imageBase64.pngEmpty"
-                                            style="max-height: 100px; max-width: 100px;"
-                                        />
-                                        <div v-if="value.image != '' && value.imageBase64 == undefined">{{ 'Not find image' }}</div>
-
+                                        <template v-if="value.isUseSuntecReward == 'true' && value.image !== ''">
+                                            <img
+                                                v-if="value.imageBase64 !== ''"
+                                                :src="value.imageBase64"
+                                                style="max-height: 100px; max-width: 100px;"
+                                            />
+                                            <div v-else>
+                                                {{ _("w_Person_ErrorNoImage") }}
+                                            </div>
+                                        </template>
+                                        <template v-else>
+                                            <div v-html="value.imageBase64"></div>
+                                        </template>
                                     </td>
                                 </tr>
                             </tbody>
@@ -323,7 +330,7 @@ export default class PersonProgress extends Vue {
         let rowCount = Math.floor(Math.random() * 50) + 1;
         let now = new Date();
         // for (let i = 0; i < 2; i++) {
-        if (this.$user.user !== RoleService.haveTenantAdministrator) {
+        if (!RoleService.haveTenantAdministrator(this)) {
             excelData.push(
                 {
                     // apiMessage: "",
@@ -412,137 +419,62 @@ export default class PersonProgress extends Vue {
             );
             // }
         } else {
-            excelData.push({
-                apiMessage: "",
-                name: "May",
-                position: "",
-                phone: "",
-                company: this.$user.user.company.name,
-                floor: "1F",
-                email: "may@mrt.com",
-                agreeTc: "true",
-                isUseSuntecReward: "true",
-                remark: "",
-                startDateText:
-                    (now.getFullYear() + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 11) + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 27) + 1).toString(),
-                endDateText:
-                    (now.getFullYear() + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 11) + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 27) + 1).toString(),
-                nric: "",
-                image: "",
-            });
-            excelData.push({
-                apiMessage: "",
-                name: "May",
-                position: "",
-                phone: "",
-                company: "",
-                floor: "1F",
-                email: "may@mrt.com",
-                agreeTc: "true",
-                isUseSuntecReward: "true",
-                remark: "",
-                startDateText:
-                    (now.getFullYear() + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 11) + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 27) + 1).toString(),
-                endDateText:
-                    (now.getFullYear() + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 11) + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 27) + 1).toString(),
-                nric: "",
-                image: "",
-            });
-            excelData.push({
-                apiMessage: "",
-                name: "May",
-                position: "",
-                phone: "",
-                company: "",
-                floor: "1F",
-                email: "may@mrt.com",
-                agreeTc: "true",
-                isUseSuntecReward: "true",
-                remark: "",
-                startDateText:
-                    (now.getFullYear() + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 11) + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 27) + 1).toString(),
-                endDateText:
-                    (now.getFullYear() + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 11) + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 27) + 1).toString(),
-                nric: "",
-                image: "",
-            });
-            excelData.push({
-                apiMessage: "",
-                name: "May",
-                position: "",
-                phone: "",
-                company: "",
-                floor: "1F",
-                email: "may@mrt.com",
-                agreeTc: "true",
-                isUseSuntecReward: "true",
-                remark: "",
-                startDateText:
-                    (now.getFullYear() + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 11) + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 27) + 1).toString(),
-                endDateText:
-                    (now.getFullYear() + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 11) + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 27) + 1).toString(),
-                nric: "",
-                image: "",
-            });
-
-            excelData.push({
-                apiMessage: "",
-                name: "May",
-                position: "",
-                phone: "",
-                company: "",
-                floor: "1F",
-                email: "may@mrt.com",
-                agreeTc: "true",
-                isUseSuntecReward: "true",
-                remark: "",
-                startDateText:
-                    (now.getFullYear() + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 11) + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 27) + 1).toString(),
-                endDateText:
-                    (now.getFullYear() + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 11) + 1).toString() +
-                    "/" +
-                    (Math.floor(Math.random() * 27) + 1).toString(),
-                nric: "",
-                image: "",
-            });
+            let domain = this.$user.user.company.name;
+            domain = domain.replace(/\s/g, "");
+            excelData.push(
+                {
+                    apiMessage: "",
+                    name: "May",
+                    position: "",
+                    phone: "",
+                    company: this.$user.user.company.name,
+                    floor: "1F",
+                    email: `may@${this.$user.user.company.name}.com`,
+                    agreeTc: "true",
+                    isUseSuntecReward: "true",
+                    remark: "",
+                    startDateText:
+                        (now.getFullYear() + 1).toString() +
+                        "/" +
+                        (Math.floor(Math.random() * 11) + 1).toString() +
+                        "/" +
+                        (Math.floor(Math.random() * 27) + 1).toString(),
+                    endDateText:
+                        (now.getFullYear() + 1).toString() +
+                        "/" +
+                        (Math.floor(Math.random() * 11) + 1).toString() +
+                        "/" +
+                        (Math.floor(Math.random() * 27) + 1).toString(),
+                    nric: "",
+                    image: "7ff796296acd73e889d6472bc035fe57_file.jpeg"
+                },
+                {
+                    apiMessage: "",
+                    name: "Paul",
+                    position: "",
+                    phone: "",
+                    company: this.$user.user.company.name,
+                    floor: "1F",
+                    email: `paul@${domain}.com`,
+                    agreeTc: "true",
+                    isUseSuntecReward: "false",
+                    remark: "",
+                    startDateText:
+                        (now.getFullYear() + 1).toString() +
+                        "/" +
+                        (Math.floor(Math.random() * 11) + 1).toString() +
+                        "/" +
+                        (Math.floor(Math.random() * 27) + 1).toString(),
+                    endDateText:
+                        (now.getFullYear() + 1).toString() +
+                        "/" +
+                        (Math.floor(Math.random() * 11) + 1).toString() +
+                        "/" +
+                        (Math.floor(Math.random() * 27) + 1).toString(),
+                    nric: "",
+                    image: ""
+                }
+            );
         }
         const th = [
             this.excelTitleName.name,
@@ -608,6 +540,10 @@ export default class PersonProgress extends Vue {
 
         excel2json(file)
             .then((data: any) => {
+                // TODO: Morris, append test image name
+                let count = 0;
+                let imageArray = [];
+                // TODO: Morris, append test image name
                 for (let sheetRow of data) {
                     for (let row of sheetRow.sheet) {
                         let recordFile: IRecordFile = {
@@ -621,6 +557,7 @@ export default class PersonProgress extends Vue {
                             remark: "",
                             nric: "",
                             image: "",
+                            imageBase64: "",
 
                             startDateText: "",
                             endDateText: "",
@@ -629,11 +566,20 @@ export default class PersonProgress extends Vue {
                         };
 
                         // get value
+                        if (row[this.excelTitleName.image] != undefined) {
+                            imageArray.push(row[this.excelTitleName.image]);
+                            recordFile.image = imageArray[count]
+                                ? imageArray[count]
+                                : "";
+                            count++;
+                        }
+
                         if (row[this.excelTitleName.name] != undefined) {
                             recordFile.name = row[this.excelTitleName.name]
                                 .toString()
                                 .trim();
                         }
+
                         if (row[this.excelTitleName.position] != undefined) {
                             recordFile.position = row[
                                 this.excelTitleName.position
@@ -842,9 +788,20 @@ export default class PersonProgress extends Vue {
     chooseDirectory(files: File[]) {
         for (let i in this.recordFileContent) {
             let content = this.recordFileContent[i];
-            if (content.image && content.image != "" && (RegexServices.jpg(content.image) || RegexServices.png(content.image))) {
+            if (
+                content.image &&
+                content.image != "" &&
+                (RegexServices.jpg(content.image) ||
+                    RegexServices.png(content.image))
+            ) {
                 for (let file of files) {
-                    if (file.name && file.name == content.image && file && file.type && file.type.indexOf('image') >= 0)  {
+                    if (
+                        file.name &&
+                        file.name == content.image &&
+                        file &&
+                        file.type &&
+                        file.type.indexOf("image") >= 0
+                    ) {
                         ImageBase64.fileToBase64(file, (base64: string) => {
                             this.recordFileContent[i].imageBase64 = base64;
                         });
@@ -857,8 +814,21 @@ export default class PersonProgress extends Vue {
     }
 
     recordFileContentChanged(data: any[]) {
-        for (let i = 0; i <= data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
             // check
+
+            // for image/app
+            if (
+                data[i].isUseSuntecReward &&
+                data[i].isUseSuntecReward == "false" &&
+                ((data[i].imageBase64 &&
+                    data[i].imageBase64 == ImageBase64.pngEmpty) ||
+                    data[i].imageBase64 == "")
+            ) {
+                this.errorMessageInTable("imageBase64", i);
+                this.recordFileError = true;
+            }
+
             if (
                 data[i].phone &&
                 data[i].phone != "" &&
@@ -866,7 +836,6 @@ export default class PersonProgress extends Vue {
             ) {
                 this.errorMessageInTable("phone", i);
                 this.recordFileError = true;
-                // return false;
             }
             if (
                 data[i].email &&
@@ -875,7 +844,6 @@ export default class PersonProgress extends Vue {
             ) {
                 this.errorMessageInTable("email", i);
                 this.recordFileError = true;
-                // return false;
             }
             if (
                 data[i].nric &&
@@ -884,24 +852,18 @@ export default class PersonProgress extends Vue {
             ) {
                 this.errorMessageInTable("nric", i);
                 this.recordFileError = true;
-                // return false;
+            }
+            // for haveTenantAdministrator
+            if (RoleService.haveTenantAdministrator(this)) {
+                let company = data[i] ? data[i]["company"] : "";
+                if (company == this.$user.user.company.name) {
+                    this.recordFileError = false;
+                } else {
+                    this.errorMessageInTable("company", i);
+                    this.recordFileError = true;
+                }
             }
 
-            // // for image/app
-            // let isUseSuntecReward = data[i] ? data[i]["isUseSuntecReward"] : "";
-            // let imageBase64 = data[i]
-            //     ? data[i]["imageBase64"]
-            //     : ImageBase64.pngEmpty;
-            // if (
-            //     (isUseSuntecReward == "false" &&
-            //         imageBase64 !== ImageBase64.pngEmpty) ||
-            //     isUseSuntecReward == "true"
-            // ) {
-            //     this.recordFileError = false;
-            // } else {
-            //     this.recordFileError = true;
-            //     return false;
-            // }
             // // for phone check
             // let phone = data[i] ? data[i]["phone"] : "";
             // if (RegexServices.phoneNumber(phone)) {
@@ -917,18 +879,6 @@ export default class PersonProgress extends Vue {
             //     this.recordFileError = true;
             //     return;
             // }
-            // for TenantAdmin
-            if (
-                this.$user.user.roles[0].name ===
-                RoleService.haveTenantAdministrator
-            ) {
-                let company = data[i] ? data[i]["company"] : "";
-                if (company == this.$user.user.company.name) {
-                    this.recordFileError = false;
-                } else {
-                    this.recordFileError = true;
-                }
-            }
         }
     }
 
@@ -987,7 +937,7 @@ export default class PersonProgress extends Vue {
                         this.recordFileContent[
                             iNumber
                         ].apiMessage = `<span style='color:red;'>${this._(
-                            "w_Person_ErrorNoSite"
+                            "w_Person_ErrorNoImage"
                         )}</span>`;
                     } else {
                         this.recordFileContent[
@@ -1026,11 +976,22 @@ export default class PersonProgress extends Vue {
     }
 
     errorMessageInTable(data, index) {
-        console.log(data);
+        // if (data == "company") {
+        //     for (let i = 0; i < this.recordFileContent.length; i++) {
+        //         let objKey = Object.keys(this.recordFileContent[i]);
+        //         console.log(objKey);
+        //         // for (let j = 0; j < objKey.length; j++) {
+        //         //     console.log(this.recordFileContent[i]);
+        //         //     // this.recordFileContent[j] = "";
+        //         // }
+        //     }
+        //     return;
+        // } else {
         this.recordFileContent[index][
             data
         ] = `<span style='color:#f00;'>${this._("w_Person_ErrorData")}</span>`;
     }
+    // }
 }
 </script>
 
