@@ -13,7 +13,7 @@
                 :label=" _('w_Company_List') "
             >
                 <template #toolbox>
-                    <!-- <ivc-toolbox-sync-to-vms @click="syncToVms" /> -->
+                    <!-- <iv-toolbox-sync-to-vms @click="syncToVms" /> -->
                     <iv-toolbox-view
                         :disabled="selectedDetail.length !== 1"
                         @click="pageToView"
@@ -206,51 +206,42 @@ export default class SetupsCompany extends Vue {
         unitNumber: "",
         contactNumber: "",
         contactNumbers: [],
-        buildingIds: "",
         floorIds: [],
+
         floorView: "",
         contactNumberView: ""
     };
 
     // select
-    selectItem: {
-        building: any;
-        floor: any;
-    } = {
-        building: {},
-        floor: {}
-    };
-
-    companies = [];
+    floorsSelectItem: any = {};
+    floorsDetailItem: any = {};
 
     created() {}
 
-    mounted() {}
-    pageToList() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 1;
-        (this.$refs.listTable as any).reload();
+    mounted() {
+        this.initSelectItemFloor();
     }
 
-    pageToView() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 2;
-        this.getInputData();
-    }
+    async initSelectItemFloor() {
+        this.floorsSelectItem = {};
+        let tempFloorSelectItem = {};
+        let param: any = { paging: { all: true } };
 
-    async pageToAdd() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-        this.clearInputData();
-        await this.initSelectItem();
-    }
-
-    async pageToEdit() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-        this.clearInputData();
-        await this.initSelectItem();
-        this.getInputData();
+        await this.$server
+            .R("/location/floor", param)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    for (const returnValue of response.results) {
+                        tempFloorSelectItem[returnValue.objectId] =
+                            returnValue.name;
+                    }
+                    this.floorsSelectItem = tempFloorSelectItem;
+                    this.floorsDetailItem = response.results;
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     clearInputData() {
@@ -261,8 +252,8 @@ export default class SetupsCompany extends Vue {
             unitNumber: "",
             contactNumber: "",
             contactNumbers: [],
-            buildingIds: "",
             floorIds: [],
+
             floorView: "",
             contactNumberView: ""
         };
@@ -281,8 +272,8 @@ export default class SetupsCompany extends Vue {
                 contactPerson: param.contactPerson,
                 unitNumber: param.unitNumber,
                 contactNumbers: param.contactNumber,
-                buildingIds: param.buildingIds,
                 floorIds: param.floors,
+
                 floorView: this.ViewFloorString(param.floors),
                 contactNumberView: this.ViewPhoneString(param.contactNumber)
             };
@@ -290,82 +281,39 @@ export default class SetupsCompany extends Vue {
     }
 
     updateInputFormData(data) {
-        if (data.key === "building") {
-            this.initSelectItemFloorWithBuilding(data.value);
-        }
         this.inputFormData[data.key] = data.value;
     }
 
-    async initSelectItem() {
-        this.selectItem.building = {};
-        this.selectItem.floor = {};
-        this.initSelectItemBuildingWithAPI();
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        (this.$refs.listTable as any).reload();
     }
 
-    async initSelectItemBuildingWithAPI() {
-        let param: any = { paging: { all: true } };
-        param = RegexServices.trim(param);
-        await this.$server
-            .R("/location/building", param)
-            .then((response: any) => {
-                ResponseFilter.successCheck(this, response, (response: any) => {
-                    if (
-                        response.results != undefined &&
-                        response.results.length > 0
-                    ) {
-                        this.companies = JSON.parse(
-                            JSON.stringify(response.results)
-                        );
-                        for (let ret of response.results) {
-                            if (
-                                ret.objectId != undefined &&
-                                ret.name != undefined
-                            ) {
-                                this.$set(
-                                    this.selectItem.building,
-                                    ret.objectId,
-                                    ret.name
-                                );
-                            }
-                        }
-                    }
-                });
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.getInputData();
     }
 
-    async initSelectItemFloorWithBuilding(buildingId: string) {
-        this.selectItem.floor = {};
-        let param: any = { paging: { all: true }, buildingId: buildingId };
-        param = RegexServices.trim(param);
-        await this.$server
-            .R("/location/floor", param)
-            .then((response: any) => {
-                ResponseFilter.successCheck(this, response, (response: any) => {
-                    if (
-                        response.results != undefined &&
-                        response.results.length > 0
-                    ) {
-                        for (let ret of response.results) {
-                            if (
-                                ret.objectId != undefined &&
-                                ret.name != undefined
-                            ) {
-                                this.$set(
-                                    this.selectItem.floor,
-                                    ret.objectId,
-                                    ret.name
-                                );
-                            }
-                        }
-                    }
-                });
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
+    pageToAdd() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.clearInputData();
+    }
+
+    pageToEdit() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 3;
+        this.getInputData();
+
+        this.inputFormData.floorIds
+            ? (this.inputFormData.floorIds = JSON.parse(
+                  JSON.stringify(
+                      this.inputFormData.floorIds.map(item => item.objectId)
+                  )
+              ))
+            : "";
     }
 
     syncToVms() {}
@@ -404,10 +352,7 @@ export default class SetupsCompany extends Vue {
                     name: data.name,
                     contactPerson: data.contactPerson,
                     unitNumber: data.unitNumber,
-                    contactNumber:
-                        data.contactNumbers.length > 0
-                            ? data.contactNumbers
-                            : Dialog.error(this._("w_Company_ADDFailed")),
+                    contactNumber: data.contactNumbers,
                     floorIds: data.floorIds
                 }
             ]
@@ -548,7 +493,6 @@ export default class SetupsCompany extends Vue {
     ITableList() {
         return `
             interface {
-
                 /**
                  * @uiLabel - ${this._("w_No")}
                  * @uiType - iv-cell-auto-index
@@ -579,7 +523,6 @@ export default class SetupsCompany extends Vue {
                  * @uiLabel - ${this._("w_Company_ContactNumber")}
                  */
                 contactNumber: string;
-
             }
         `;
     }
@@ -587,41 +530,35 @@ export default class SetupsCompany extends Vue {
     IViewForm() {
         return `
             interface {
+                /**
+                 * @uiLabel - ${this._("w_Company_Name")}
+                 * @uiType - iv-form-label
+                 */
+                name: string;
 
-            /**
-             * @uiLabel - ${this._("w_Company_Name")}
-             * @uiType - iv-form-label
-             */
-            name: string;
+                /**
+                 * @uiLabel - ${this._("w_Company_UnitNumber")}
+                 * @uiType - iv-form-label
+                 */
+                unitNumber: string;
 
+                /**
+                 * @uiLabel - ${this._("w_Company_ContactPerson")}
+                 * @uiType - iv-form-label
+                 */
+                contactPerson: string;
 
-            /**
-             * @uiLabel - ${this._("w_Company_UnitNumber")}
-             * @uiType - iv-form-label
-             */
-            unitNumber: string;
+                /**
+                 * @uiLabel - ${this._("w_Company_ContactNumber")}
+                 * @uiType - iv-form-label
+                 */
+                contactNumberView: string;
 
-
-            /**
-             * @uiLabel - ${this._("w_Company_ContactPerson")}
-             * @uiType - iv-form-label
-             */
-            contactPerson: string;
-
-
-            /**
-             * @uiLabel - ${this._("w_Company_ContactNumber")}
-             * @uiType - iv-form-label
-             */
-            contactNumberView: string;
-
-
-            /**
-             * @uiLabel - ${this._("w_Company_Floor")}
-             * @uiType - iv-form-label
-             */
-            floorView: string;
-
+                /**
+                 * @uiLabel - ${this._("w_Company_Floor")}
+                 * @uiType - iv-form-label
+                 */
+                floorView: string;
             }
         `;
     }
@@ -629,6 +566,7 @@ export default class SetupsCompany extends Vue {
     IModifyForm() {
         return `
             interface {
+
                 /**
                  * @uiLabel - ${this._("w_Company_Name")}
                  * @uiPlaceHolder - ${this._("w_Company_Name")}
@@ -640,6 +578,7 @@ export default class SetupsCompany extends Vue {
                  * @uiPlaceHolder - ${this._("w_Company_UnitNumber")}
                  */
                 unitNumber: string;
+
 
                 /**
                  * @uiLabel - ${this._("w_Company_ContactPerson")}
@@ -654,20 +593,13 @@ export default class SetupsCompany extends Vue {
                 contactNumber?: any;
 
                 /**
-                 * @uiLabel - ${this._("w_Company_Building")}
-                 */
-                building: ${toEnumInterface(
-                    this.selectItem.building as any,
-                    false
-                )};
-
-                /**
                  * @uiLabel - ${this._("w_Company_Floor")}
                  */
                 floorIds: ${toEnumInterface(
-                    this.selectItem.floor as any,
+                    this.floorsSelectItem as any,
                     true
                 )};
+
             }
         `;
     }
