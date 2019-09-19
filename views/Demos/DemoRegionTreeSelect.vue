@@ -43,7 +43,7 @@
 import { Vue, Component } from "vue-property-decorator";
 
 // Vue
-import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
+import  RegionTreeSelect from "@/components/RegionTree/RegionTreeSelect.vue";
 
 // Transition
 import Transition from "@/services/Transition";

@@ -701,7 +701,7 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
 
 // Vue
-import { RegionTreeSelect } from "@/components/RegionTree/RegionTreeSelect.vue";
+import  RegionTreeSelect from "@/components/RegionTree/RegionTreeSelect.vue";
 
 // API Interface
 import {
