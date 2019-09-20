@@ -96,17 +96,18 @@
                     >
                         <template #step5>
                             <step5
+                                :selectedDetail="selectedDetail"
                                 class="col-md-12"
                                 :permission="true"
-                                :selectedDetail="selectedDetail"
                                 @step5="receiveStep5Data"
                                 @putStep5File="putStep5File"
                             ></step5>
                             <div
                                 v-if="inputFormData.attachments"
-                                v-for="file in  inputFormData.attachments"
+                                v-for="file in inputFormData.attachments"
                                 class="step5Div"
                             >
+
 
                                 <span
                                     class="close"
@@ -146,7 +147,7 @@
                                 <img
                                     v-if="file.url && fileType(file) == 'image'"
                                     class="step5Imgs"
-                                    :src="file.url"
+                                    :src="file.base64"
                                 />
 
                                 <!-- download link -->
@@ -381,13 +382,13 @@ export class AddPTWByCR extends Vue {
     mounted() {}
 
     replaceFileUrl(data: string): string {
+        let server: any = this.$server;
+        let serverPort = server.config.port;
         let pathIndex = data.indexOf("parse/files");
         let uri = data.substr(pathIndex);
-        let endChar = this.publicHosting.substr(this.publicHosting.length - 1);
-        if (endChar != "/") {
-            this.publicHosting += "/";
-        }
-        return this.publicHosting + uri;
+        let hostArray = this.publicHosting.split(":");
+        let url = `${hostArray[0]}:${hostArray[1]}:${serverPort}/${uri}`;
+        return url;
     }
 
     fileType(file): string {
@@ -545,7 +546,7 @@ export class AddPTWByCR extends Vue {
                     for (let attachment of response.attachments) {
                         ImageBase64.urlToBase64(
                             this.selectedDetail,
-                            attachment.url,
+                            this.replaceFileUrl(attachment.url),
                             (item: any, base64: any) => {
                                 let tempAttachment = {
                                     name: attachment.name,
@@ -648,7 +649,7 @@ export class AddPTWByCR extends Vue {
                     for (let attachment of response.attachments) {
                         ImageBase64.urlToBase64(
                             this.inputFormData,
-                            attachment.url,
+                            this.replaceFileUrl(attachment.url),
                             (item: any, base64: any) => {
                                 let tempAttachment = {
                                     name: attachment.name,
