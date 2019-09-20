@@ -19,9 +19,19 @@
         >
         </filter-condition>
 
-        <iv-card
-            :visible="visible"
-        > <template #toolbox>
+        <!-- Ben -->
+        <anlysis-dashboard
+            ref="analysisDashboard"
+            :startDate="startDate"
+            :endDate="endDate"
+            :type="dTimeMode"
+            :siteIds="pSiteIds"
+            :tagIds="tags"
+            :pageType="dPageType"
+        >
+        </anlysis-dashboard>
+
+        <iv-card :visible="visible"> <template #toolbox>
                 <!-- Ben -->
                 <iv-toolbox-export-excel
                     size="lg"
@@ -46,17 +56,6 @@
                     @click="pageToReportTemplate()"
                 />
             </template>
-            <!-- Ben -->
-            <anlysis-dashboard
-                ref="analysisDashboard"
-                :startDate="startDate"
-                :endDate="endDate"
-                :type="dTimeMode"
-                :siteIds="pSiteIds"
-                :tagIds="tags"
-                :pageType="dPageType"
-            >
-            </anlysis-dashboard>
 
             <!-- Tina -->
             <analysis-filter-traffic
@@ -2166,15 +2165,15 @@ export default class ReportTraffic extends Vue {
 </script>
 
 <style lang="scss" scoped>
-    .title {
-        margin: 1rem 1rem 1.5rem;
-    }
+.title {
+    margin: 1rem 1rem 1.5rem;
+}
 
-    .subTitle {
-        margin-top:  1.7rem;
-        margin-left: 1rem;
-        font-weight: bold;
-    }
+.subTitle {
+    margin-top: 1.7rem;
+    margin-left: 1rem;
+    font-weight: bold;
+}
 </style>
 
 

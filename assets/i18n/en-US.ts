@@ -1031,6 +1031,8 @@ export default class LangObject {
     w_Title_One_EventName = ' Selected event : ';
 
     // Report Dashboard
+    w_ReportDashboard_Male = 'Male';
+    w_ReportDashboard_Female = 'Female';
     w_ReportDashboard_Refresh = 'Refresh';
     w_ReportDashboard_Traffic = 'TRAFFIC';
     w_ReportDashboard_AverageOccupancy = 'AVERAGE OCCUPANCY';
@@ -1072,6 +1074,8 @@ export default class LangObject {
     w_DwellTime_Type = 'Type';
 
     //Vip&Blacklist
+    w_VIPAndBlackList_VIP = 'VIP';
+    w_VIPAndBlackList_Stranger = 'Stranger';
     w_VIPAndBlackList_Name = 'Name';
     w_VIPAndBlackList_Location = 'Location';
     w_VIPAndBlackList_VisitTime = 'VisitTime';
