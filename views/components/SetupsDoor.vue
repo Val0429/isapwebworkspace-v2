@@ -206,7 +206,6 @@ export default class SetupsFloor extends Vue {
 
     async getInputData() {
         this.clearInputData();
-        console.log(this.selectedDetail);
         for (const param of this.selectedDetail) {
             this.inputFormData = {
                 objectId: param.objectId,

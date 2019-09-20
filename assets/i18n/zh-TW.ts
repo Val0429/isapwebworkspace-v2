@@ -365,6 +365,11 @@ export default class LangObject {
     w_Frs_Position = '設備所在';
     w_Frs_Status = 'FRS 狀態';
     w_Frs_Endpoint = 'Endpoints';
+    w_Frs_AddSuccess = 'FRS Add Success';
+    w_Frs_AddFailed = 'FRS Add Failed';
+    w_Frs_EditSuccess = 'FRS Edit Success';
+    w_Frs_EditFailed = 'FRS Edit Failed';
+    w_Frs_DeleteConfirm = 'Are you sure to delete selected FRS(s)?';
 
     ////////////////// HikVision FR Tablet //////////////////
     w_Hik_FrList = 'FR Tablet List';
