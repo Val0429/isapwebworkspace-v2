@@ -408,10 +408,7 @@ export class AddPTWByCR extends Vue {
     async initPublicIP() {
         let productMode = process.env.NODE_ENV;
         let server: any = this.$server;
-        let url =
-            productMode == "production"
-                ? `${location.protocol}//${server.config.ip}:${server.config.prodPort}/`
-                : `${location.protocol}//${server.config.ip}:${server.config.port}/`;
+        let url = `${location.protocol}//${server.config.ip}:${server.config.port}/`;
         this.publicHosting = url;
         axios
             .get(url + "flow1/crms/hosting")
@@ -422,6 +419,7 @@ export class AddPTWByCR extends Vue {
                 console.log(error);
             });
     }
+
 
     async initTenant() {
         if (this.$route.query.id !== undefined) {
