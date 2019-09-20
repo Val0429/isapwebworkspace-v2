@@ -64,10 +64,10 @@
                             :label="_('w_Navigation_Report_DwellTime')"
                             url="/reports/dwell_time"
                         />
-<!--                        <SidebarNavItem-->
-<!--                            :label="_('w_Navigation_Report_Demographic')"-->
-<!--                            url="/reports/demographic"-->
-<!--                        />-->
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Report_Demographic')"
+                            url="/reports/demographic"
+                        />
                         <SidebarNavItem
                             :label="_('w_Navigation_Report_Heatmap')"
                             url="/reports/heatmap"
@@ -142,10 +142,10 @@
                             :label="_('w_Navigation_Server_FRSManagerServer')"
                             url="/server/frs_manager_server"
                         />
-<!--                        <SidebarNavItem-->
-<!--                            :label="_('w_Navigation_Server_DemographicServer')"-->
-<!--                            url="/server/demographic_server"-->
-<!--                        />-->
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Server_DemographicServer')"
+                            url="/server/demographic_server"
+                        />
                         <SidebarNavItem
                             :label="_('w_Navigation_Server_HDServer')"
                             url="/server/hd_server"
@@ -162,10 +162,10 @@
                             :label="_('w_Navigation_VideoSources_PeopleCounting')"
                             url="/video_sources/people_counting"
                         />
-<!--                        <SidebarNavItem-->
-<!--                            :label="_('w_Navigation_VideoSources_Demographic')"-->
-<!--                            url="/video_sources/demographic"-->
-<!--                        />-->
+                        <SidebarNavItem
+                            :label="_('w_Navigation_VideoSources_Demographic')"
+                            url="/video_sources/demographic"
+                        />
                         <SidebarNavItem
                             :label="_('w_Navigation_VideoSources_DwellTime')"
                             url="/video_sources/dwell_time"
@@ -277,10 +277,10 @@
                             :label="_('w_Navigation_Tools_Traffic')"
                             url="/tools/tool_traffic"
                         />
-<!--                        <SidebarNavItem-->
-<!--                            :label="_('w_Navigation_Tools_Demographic')"-->
-<!--                            url="/tools/tool_demographic"-->
-<!--                        />-->
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Tools_Demographic')"
+                            url="/tools/tool_demographic"
+                        />
                         <SidebarNavItem
                             :label="_('w_Navigation_Tools_RepeatVisitor')"
                             url="/tools/tool_repeatVisitor"
