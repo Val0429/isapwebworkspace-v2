@@ -251,7 +251,6 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import axios from "axios";
-import ServerConfig from "@/services/ServerConfig";
 
 import ViewStep1 from "@/components/ContractorRegistration/ViewStep1.vue";
 import ViewStep2 from "@/components/ContractorRegistration/ViewStep2.vue";
@@ -427,13 +426,14 @@ export class StatusRejectOrApproveExpireDateView extends Vue {
     }
 
     async initPublicIP() {
-        this.publicHosting = ServerConfig.url;
+        let productMode = process.env.NODE_ENV;
+        let server: any = this.$server;
+        let url = `${location.protocol}//${server.config.ip}:${server.config.port}/`;
+        this.publicHosting = url;
         axios
-            .get(ServerConfig.url + "flow1/crms/hosting")
+            .get(url + "flow1/crms/hosting")
             .then(response => {
-                this.publicHosting = response.data
-                    ? response.data
-                    : ServerConfig.url;
+                this.publicHosting = response.data ? response.data : url;
             })
             .catch(function(error) {
                 console.log(error);
