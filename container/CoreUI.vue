@@ -49,11 +49,13 @@
 
                     </SidebarNavItem>
 
-                    <iv-permission :allow="['Administrator']">
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Blacklist')"
-                            url="/blacklist"
-                        />
+                    <iv-permission url="/flow2">
+                        <iv-permission :allow="['Administrator']">
+                            <SidebarNavItem
+                                :label="_('w_Navigation_Blacklist')"
+                                url="/blacklist"
+                            />
+                        </iv-permission>
                     </iv-permission>
 
                     <SidebarNavItem

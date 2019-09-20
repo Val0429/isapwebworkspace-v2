@@ -122,18 +122,6 @@
                     @update:*="updateModifyForm"
                     @submit="saveModifyForm($event)"
                 >
-
-                    <template #purpose="{ $attrs, $listeners }">
-
-                        <iv-form-selection
-                            v-on="$listeners"
-                            v-bind="$attrs"
-                            :options="selectItem.purposes"
-                            :multiple="false"
-                        >
-                        </iv-form-selection>
-                    </template>
-
                 </iv-form>
 
                 <template #footer-before>
@@ -374,10 +362,8 @@ export default class TenantsInvitation extends Vue {
         endString: ""
     };
 
-    selectItem: {
-        purposes: any;
-    } = {
-        purposes: []
+    selectItem = {
+        purposes: {}
     };
 
     isMounted: boolean = false;
@@ -483,11 +469,8 @@ export default class TenantsInvitation extends Vue {
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
                     for (const returnValue of response.results) {
-                        let item = {
-                            id: returnValue.objectId,
-                            text: returnValue.name
-                        };
-                        this.selectItem.purposes.push(item);
+                        this.selectItem.purposes[returnValue.objectId] =
+                            returnValue.name;
                     }
                 });
             })
@@ -727,11 +710,16 @@ export default class TenantsInvitation extends Vue {
                                     .toString()
                                     .trim();
 
-                                for (let purposes of this.selectItem.purposes) {
-                                    if (purposes.text == tempPurposeName) {
-                                        progressFile.purposeId = purposes.id;
-                                        progressFile.purposeName =
-                                            purposes.text;
+                                let purposeIdList = Object.keys(
+                                    this.selectItem.purposes
+                                );
+                                for (let purposeId of purposeIdList) {
+                                    if (
+                                        tempPurposeName ==
+                                        this.selectItem.purposes[purposeId]
+                                    ) {
+                                        progressFile.purposeId = purposeId;
+                                        progressFile.purposeName = tempPurposeName;
                                         break;
                                     }
                                 }
@@ -1216,10 +1204,7 @@ export default class TenantsInvitation extends Vue {
                  * @uiLabel - ${this._("w_Tenants_Purpose")}
                  * @uiType - iv-form-selection
                  */
-                purpose: ${toEnumInterface(
-                    this.selectItem.purposes as any,
-                    false
-                )};
+                purpose: ${toEnumInterface(this.selectItem.purposes as any)};
             }
         `;
     }
