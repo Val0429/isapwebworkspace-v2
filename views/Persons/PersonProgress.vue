@@ -43,6 +43,7 @@
                                 <th>{{ _('w_Person_Phone') }}</th>
                                 <th>{{ _('w_Person_Company') }}</th>
                                 <th>{{ _('w_Person_Floor') }}</th>
+                                <th>{{ _('w_Person_Door') }}</th>
                                 <th>{{ _('w_Person_Email') }}</th>
                                 <th>{{ _('w_Person_Remark') }}</th>
                                 <th>{{ _('w_Person_NRIC') }}</th>
@@ -59,6 +60,7 @@
                                     <td v-html="value.phone ? value.phone : '-'"></td>
                                     <td v-html="value.company ? value.company : errorMessageInTable()"></td>
                                     <td v-html="value.floor ? value.floor : errorMessageInTable()"></td>
+                                    <td v-html="value.door ? value.door : errorMessageInTable()"></td>
                                     <td v-html="value.email ? value.email : errorMessageInTable()"></td>
                                     <td v-html="value.remark ? value.remark : '-'"></td>
                                     <td v-html="value.nric ? value.nric : '-'"></td>
@@ -67,7 +69,7 @@
                                     <td v-html="value.agreeTc ? value.agreeTc.toString() : errorMessageInTable()"></td>
                                     <td v-html="value.isUseSuntecReward ? value.isUseSuntecReward.toString() : false"></td>
                                     <td>
-                                        <template v-if="value.isUseSuntecReward == 'true' && value.image !== ''">
+                                        <template v-if="value.isUseSuntecReward !== '' && value.image !== ''">
                                             <img
                                                 v-if="value.imageBase64 !== ''"
                                                 :src="value.imageBase64"
@@ -177,6 +179,7 @@ interface IExcelTitle {
     phone: string;
     company: string;
     floor: string;
+    door: string;
     email: string;
     agreeTc: string;
     isUseSuntecReward: string;
@@ -195,10 +198,16 @@ interface IRecordFile {
     phone?: string;
     company: string;
     floor: string;
+    door: string;
     email: string;
     remark?: string;
     nric?: string;
     image: string;
+    companyId?: string;
+    floorIds?: string[];
+    doorIds?: string[];
+    floorText?: string;
+    doorText?: string;
 
     startDateText: string;
     endDateText?: string;
@@ -213,15 +222,26 @@ interface IRecordFile {
     transaction?: number; // ERecordType.sotre
     productId?: string; // ERecordType.product
     count?: number; // ERecordType.product
-    datetimeText?: string; // maybe no text
+    startDatetimeText?: string; // maybe no text
+    endDatetimeText?: string; // maybe no text
+    hourText?: string;
     datetime?: Date; // maybe time error
 }
 
-interface IBusinessOperationSalesRecord {
-    customId: string;
-    date: string;
-    transaction: number;
-    imageBase64: any;
+interface ICompanyStaffRecord {
+    name: string;
+    email: string;
+    startDate: Date;
+    companyId: string;
+    floorIds: string[];
+    doorIds: string[];
+    imageBase64?: string;
+    position?: string;
+    phone?: string;
+    isUseSuntecReward?: boolean;
+    remark?: string;
+    endDate?: Date;
+    nric?: string;
 }
 
 @Component({
@@ -234,10 +254,22 @@ export default class PersonProgress extends Vue {
     recordFileError: boolean = false;
     recordFileContent: IRecordFile[] = [];
 
-    newImg = new Image();
-    newImgSrc = [ImageBase64.pngEmpty];
+    // imageBase64 = ImageBase64;
 
-    imageBase64 = ImageBase64;
+    companies = [];
+    doors = [];
+
+    selectItem: {
+        role: any;
+        company: any;
+        floor: any;
+        door: any;
+    } = {
+        role: {},
+        company: {},
+        floor: {},
+        door: {}
+    };
 
     errorMessageFromServer = {
         noSite: "site not found"
@@ -249,6 +281,7 @@ export default class PersonProgress extends Vue {
         phone: "Phone",
         company: "Company",
         floor: "Floor",
+        door: "Door",
         email: "Email",
         agreeTc: "agreeTc",
         isUseSuntecReward: "isUseSuntecReward",
@@ -261,12 +294,12 @@ export default class PersonProgress extends Vue {
 
     isMounted: boolean = false;
 
-    @Watch("recordFileContent", { immediate: true, deep: true })
-    onRecordFileContentChanged(val: any[], oldVal: any[]) {
-        if (val.length > 0) {
-            this.recordFileContentChanged(val);
-        }
-    }
+    // @Watch("recordFileContent", { immediate: true, deep: true })
+    // onRecordFileContentChanged(val: any[], oldVal: any[]) {
+    //     if (val.length > 0) {
+    //         this.recordFileContentChanged(val);
+    //     }
+    // }
 
     doMounted() {
         this.isMounted = true;
@@ -276,6 +309,10 @@ export default class PersonProgress extends Vue {
 
     mounted() {
         this.stepRef = this.$refs.step;
+        this.initSelectItemDoorWithAPI();
+        if (!RoleService.haveTenantAdministrator(this)) {
+            this.initSelectItemCompanyWithAPI();
+        }
     }
 
     pageToPrev() {
@@ -325,46 +362,104 @@ export default class PersonProgress extends Vue {
         this.stepRef.currentStep = this.transitionStep;
     }
 
+    async initSelectItemCompanyWithAPI() {
+        let param: any = { paging: { all: true } };
+        param = RegexServices.trim(param);
+        await this.$server
+            .R("/location/company", param)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
+                        this.companies = JSON.parse(
+                            JSON.stringify(response.results)
+                        );
+                        // for (let ret of response.results) {
+                        //     if (
+                        //         ret.objectId != undefined &&
+                        //         ret.name != undefined
+                        //     ) {
+                        //         this.$set(
+                        //             this.selectItem.company,
+                        //             ret.objectId,
+                        //             ret.name
+                        //         );
+                        //     }
+                        // }
+                    }
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+    }
+
+    async initSelectItemDoorWithAPI() {
+        let param: any = { paging: { all: true } };
+        param = RegexServices.trim(param);
+        await this.$server
+            .R("/location/door", param)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
+                        this.doors = JSON.parse(
+                            JSON.stringify(response.results)
+                        );
+                        // for (let ret of response.results) {
+                        //     if (
+                        //         ret.objectId != undefined &&
+                        //         ret.name != undefined
+                        //     ) {
+                        //         this.$set(
+                        //             this.selectItem.company,
+                        //             ret.objectId,
+                        //             ret.name
+                        //         );
+                        //     }
+                        // }
+                    }
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+    }
+
+    async initSelectItemFloorWithCompany(companyId: string) {
+        this.selectItem.floor = {};
+        for (let company of this.companies) {
+            if (companyId == company.objectId) {
+                for (let floor of company.floors) {
+                    this.$set(
+                        this.selectItem.floor,
+                        floor.objectId,
+                        floor.name
+                    );
+                }
+                break;
+            }
+        }
+    }
+
     downloadExampleStore() {
         let excelData: IRecordFile[] = [];
         let rowCount = Math.floor(Math.random() * 50) + 1;
         let now = new Date();
-        // for (let i = 0; i < 2; i++) {
         if (!RoleService.haveTenantAdministrator(this)) {
             excelData.push(
                 {
-                    // apiMessage: "",
-                    // name: "",
-                    // position: "",
-                    // phone: Math.floor(Math.random() * 100000000).toString(),
-                    // company: x.charAt(Math.floor(Math.random() * 50)),
-                    // floor: x.charAt(Math.floor(Math.random() * 50)),
-                    // email: x.charAt(Math.floor(Math.random() * 50)),
-                    // agreeTcText: (Math.random() >= 0.5).toString(),
-                    // isUseSuntecRewardText: (Math.random() >= 0.5).toString(),
-                    // remark: x.charAt(Math.floor(Math.random() * 50)),
-
-                    // startDateText:
-                    //     (now.getFullYear() + 1).toString() +
-                    //     "/" +
-                    //     (Math.floor(Math.random() * 11) + 1).toString() +
-                    //     "/" +
-                    //     (Math.floor(Math.random() * 27) + 1).toString(),
-
-                    // endDateText:
-                    //     (now.getFullYear() + 1).toString() +
-                    //     "/" +
-                    //     (Math.floor(Math.random() * 11) + 1).toString() +
-                    //     "/" +
-                    //     (Math.floor(Math.random() * 27) + 1).toString(),
-
-                    // nric: x.charAt(Math.floor(Math.random() * 50))
                     apiMessage: "",
                     name: "John",
                     position: "Manager",
                     phone: "",
                     company: "Super market",
                     floor: "1F",
+                    door: "lobby",
                     email: "john@super-markert.com",
                     agreeTc: "true",
                     isUseSuntecReward: "false",
@@ -394,6 +489,7 @@ export default class PersonProgress extends Vue {
                     phone: "88-9999",
                     company: "MRT",
                     floor: "1F",
+                    door: "lobby, emergency exit",
                     email: "may@+mrt.com",
                     agreeTc: "true",
                     isUseSuntecReward: "true",
@@ -417,7 +513,6 @@ export default class PersonProgress extends Vue {
                     nric: ""
                 }
             );
-            // }
         } else {
             let domain = this.$user.user.company.name;
             domain = domain.replace(/\s/g, "");
@@ -429,6 +524,7 @@ export default class PersonProgress extends Vue {
                     phone: "",
                     company: this.$user.user.company.name,
                     floor: "1F",
+                    door: "lobby, emergency exit",
                     email: `may@${this.$user.user.company.name}.com`,
                     agreeTc: "true",
                     isUseSuntecReward: "true",
@@ -455,6 +551,7 @@ export default class PersonProgress extends Vue {
                     phone: "",
                     company: this.$user.user.company.name,
                     floor: "1F",
+                    door: "lobby, emergency exit",
                     email: `paul@${domain}.com`,
                     agreeTc: "true",
                     isUseSuntecReward: "false",
@@ -482,6 +579,7 @@ export default class PersonProgress extends Vue {
             this.excelTitleName.phone,
             this.excelTitleName.company,
             this.excelTitleName.floor,
+            this.excelTitleName.door,
             this.excelTitleName.email,
             this.excelTitleName.agreeTc,
             this.excelTitleName.isUseSuntecReward,
@@ -497,6 +595,7 @@ export default class PersonProgress extends Vue {
             "phone",
             "company",
             "floor",
+            "door",
             "email",
             "agreeTc",
             "isUseSuntecReward",
@@ -513,8 +612,6 @@ export default class PersonProgress extends Vue {
             "Person"
         ];
         toExcel({ th, data, fileName, fileType, sheetName });
-
-        // console.log(excelData);
     }
 
     uploadFile(file: any) {
@@ -540,10 +637,8 @@ export default class PersonProgress extends Vue {
 
         excel2json(file)
             .then((data: any) => {
-                // TODO: Morris, append test image name
                 let count = 0;
                 let imageArray = [];
-                // TODO: Morris, append test image name
                 for (let sheetRow of data) {
                     for (let row of sheetRow.sheet) {
                         let recordFile: IRecordFile = {
@@ -553,11 +648,15 @@ export default class PersonProgress extends Vue {
                             phone: "",
                             company: "",
                             floor: "",
+                            door: "",
                             email: "",
                             remark: "",
                             nric: "",
                             image: "",
-                            imageBase64: "",
+                            // imageBase64: "",
+                            companyId: "",
+                            floorIds: [],
+                            doorIds: [],
 
                             startDateText: "",
                             endDateText: "",
@@ -605,6 +704,11 @@ export default class PersonProgress extends Vue {
                                 .toString()
                                 .trim();
                         }
+                        if (row[this.excelTitleName.door] != undefined) {
+                            recordFile.door = row[this.excelTitleName.door]
+                                .toString()
+                                .trim();
+                        }
                         if (row[this.excelTitleName.email] != undefined) {
                             recordFile.email = row[this.excelTitleName.email]
                                 .toString()
@@ -619,6 +723,13 @@ export default class PersonProgress extends Vue {
                         if (row[this.excelTitleName.startDate] != undefined) {
                             recordFile.startDateText = row[
                                 this.excelTitleName.startDate
+                            ]
+                                .toString()
+                                .trim();
+                        }
+                        if (row[this.excelTitleName.endDate] != undefined) {
+                            recordFile.endDateText = row[
+                                this.excelTitleName.endDate
                             ]
                                 .toString()
                                 .trim();
@@ -645,48 +756,24 @@ export default class PersonProgress extends Vue {
                                 .toString()
                                 .trim();
                         }
-                        // if (
-                        //     row[this.excelTitleName.revenue] != undefined &&
-                        //     !isNaN(parseFloat(row[this.excelTitleName.revenue]))
-                        // ) {
-                        //     recordFile.revenue = parseFloat(
-                        //         row[this.excelTitleName.revenue]
-                        //             .toString()
-                        //             .trim()
-                        //     );
-                        // }
-                        // if (
-                        //     row[this.excelTitleName.transaction] != undefined &&
-                        //     !isNaN(
-                        //         parseFloat(row[this.excelTitleName.transaction])
-                        //     )
-                        // ) {
-                        //     recordFile.transaction = parseFloat(
-                        //         row[this.excelTitleName.transaction]
-                        //             .toString()
-                        //             .trim()
-                        //     );
-                        // }
-
-                        // if (
-                        //     row[this.excelTitleName.count] != undefined &&
-                        //     !isNaN(parseFloat(row[this.excelTitleName.count]))
-                        // ) {
-                        //     recordFile.count = parseFloat(
-                        //         row[this.excelTitleName.count].toString().trim()
-                        //     );
-                        // }
 
                         // 判斷時間格式
                         let resolveDate = true;
-                        let DateArray = recordFile.startDateText
+                        let startDateArray = recordFile.startDateText
                             .toString()
                             .split("/");
+                        let endDateArray = recordFile.endDateText
+                            ? recordFile.endDateText.toString().split("/")
+                            : "";
 
                         try {
-                            if (DateArray.length > 0 && DateArray.length < 3) {
+                            if (
+                                startDateArray.length > 0 &&
+                                startDateArray.length < 3
+                            ) {
                                 let tempDate: Date = new Date(
-                                    (parseInt(DateArray[0]) - (25567 + 2)) *
+                                    (parseInt(startDateArray[0]) -
+                                        (25567 + 2)) *
                                         86400 *
                                         1000
                                 );
@@ -696,25 +783,25 @@ export default class PersonProgress extends Vue {
                                 }
                                 if (!isNaN(tempDate.getTime())) {
                                     recordFile.startDate = tempDate;
-                                    recordFile.startDateText = Datetime.DateTime2String(
-                                        recordFile.datetime,
-                                        Datetime.FormatCheckDateTime
+                                    recordFile.startDatetimeText = Datetime.DateTime2String(
+                                        recordFile.startDate,
+                                        Datetime.FormatCheckDate
                                     );
                                 }
-                            } else if (DateArray.length >= 3) {
+                            } else if (startDateArray.length >= 3) {
                                 let resolveDateDetail = true;
                                 let tempYear = Utility.PadLeft(
-                                    DateArray[0],
+                                    startDateArray[0],
                                     "0",
                                     2
                                 );
                                 let tempMonth = Utility.PadLeft(
-                                    DateArray[1],
+                                    startDateArray[1],
                                     "0",
                                     2
                                 );
                                 let tempDate = Utility.PadLeft(
-                                    DateArray[2],
+                                    startDateArray[2],
                                     "0",
                                     2
                                 );
@@ -731,15 +818,13 @@ export default class PersonProgress extends Vue {
                                     this.recordFileError = true;
                                     resolveDateDetail = false;
                                 }
-
                                 if (resolveDateDetail) {
                                     // get Date()
                                     let tempDatetimeString: string = `${tempYear}-${tempMonth}-${tempDate}`;
-
                                     // get Date relay string
-                                    recordFile.datetime = Datetime.String2DateTime(
+                                    recordFile.startDate = Datetime.String2DateTime(
                                         tempDatetimeString,
-                                        Datetime.FormatCheckDateTime
+                                        Datetime.FormatCheckDate
                                     );
                                 }
                             } else {
@@ -748,15 +833,94 @@ export default class PersonProgress extends Vue {
                             }
 
                             // reset datetime text
-                            if (!isNaN(recordFile.datetime.getTime())) {
-                                recordFile.datetimeText = Datetime.DateTime2String(
-                                    recordFile.datetime,
-                                    Datetime.FormatCheckDateTime
+                            if (!isNaN(recordFile.startDate.getTime())) {
+                                recordFile.startDatetimeText = Datetime.DateTime2String(
+                                    recordFile.startDate,
+                                    Datetime.FormatCheckDate
                                 );
                             }
                         } catch (e) {
                             this.recordFileError = true;
                             console.log("Date error, e: ", e);
+                        }
+                        if (endDateArray && endDateArray.length > 0) {
+                            try {
+                                if (
+                                    endDateArray.length > 0 &&
+                                    endDateArray.length < 3
+                                ) {
+                                    let tempDate: Date = new Date(
+                                        (parseInt(endDateArray[0]) -
+                                            (25567 + 2)) *
+                                            86400 *
+                                            1000
+                                    );
+                                    // reset datetime text
+                                    if (isNaN(tempDate.getTime())) {
+                                        this.recordFileError = true;
+                                    }
+                                    if (!isNaN(tempDate.getTime())) {
+                                        recordFile.endDate = tempDate;
+                                        recordFile.endDatetimeText = Datetime.DateTime2String(
+                                            recordFile.endDate,
+                                            Datetime.FormatCheckDate
+                                        );
+                                    }
+                                } else if (endDateArray.length >= 3) {
+                                    let resolveDateDetail = true;
+                                    let tempYear = Utility.PadLeft(
+                                        endDateArray[0],
+                                        "0",
+                                        2
+                                    );
+                                    let tempMonth = Utility.PadLeft(
+                                        endDateArray[1],
+                                        "0",
+                                        2
+                                    );
+                                    let tempDate = Utility.PadLeft(
+                                        endDateArray[2],
+                                        "0",
+                                        2
+                                    );
+
+                                    if (isNaN(parseInt(tempYear))) {
+                                        this.recordFileError = true;
+                                        resolveDateDetail = false;
+                                    }
+                                    if (isNaN(parseInt(tempMonth))) {
+                                        this.recordFileError = true;
+                                        resolveDateDetail = false;
+                                    }
+                                    if (isNaN(parseInt(tempDate))) {
+                                        this.recordFileError = true;
+                                        resolveDateDetail = false;
+                                    }
+                                    if (resolveDateDetail) {
+                                        // get Date()
+                                        let tempDatetimeString: string = `${tempYear}-${tempMonth}-${tempDate}`;
+                                        // get Date relay string
+                                        recordFile.endDate = Datetime.String2DateTime(
+                                            tempDatetimeString,
+                                            Datetime.FormatCheckDate
+                                        );
+                                    }
+                                } else {
+                                    this.recordFileError = true;
+                                    resolveDate = false;
+                                }
+
+                                // reset datetime text
+                                if (!isNaN(recordFile.endDate.getTime())) {
+                                    recordFile.endDatetimeText = Datetime.DateTime2String(
+                                        recordFile.endDate,
+                                        Datetime.FormatCheckDate
+                                    );
+                                }
+                            } catch (e) {
+                                this.recordFileError = true;
+                                console.log("Date error, e: ", e);
+                            }
                         }
 
                         // check disable submit button
@@ -774,6 +938,7 @@ export default class PersonProgress extends Vue {
                         this.recordFileContent.push(recordFile);
                     }
                 }
+                this.recordFileContentChanged(this.recordFileContent);
                 this.pageTo3();
             })
             .catch((e: any) => {
@@ -786,6 +951,7 @@ export default class PersonProgress extends Vue {
     }
 
     chooseDirectory(files: File[]) {
+        let isImageSame = false;
         for (let i in this.recordFileContent) {
             let content = this.recordFileContent[i];
             if (
@@ -805,19 +971,23 @@ export default class PersonProgress extends Vue {
                         ImageBase64.fileToBase64(file, (base64: string) => {
                             this.recordFileContent[i].imageBase64 = base64;
                         });
+                        isImageSame = true;
                         break;
                     }
                 }
+            }
+            if (!isImageSame) {
+                // content.image = "";
+                this.errorMessageInTable("imageBase64", i);
             }
         }
         setTimeout(this.pageTo4, 300);
     }
 
-    recordFileContentChanged(data: any[]) {
+    async recordFileContentChanged(data: any[]) {
+        console.log(data);
         for (let i = 0; i < data.length; i++) {
             // check
-
-            // for image/app
             if (
                 data[i].isUseSuntecReward &&
                 data[i].isUseSuntecReward == "false" &&
@@ -825,6 +995,7 @@ export default class PersonProgress extends Vue {
                     data[i].imageBase64 == ImageBase64.pngEmpty) ||
                     data[i].imageBase64 == "")
             ) {
+                console.log("image", data[i]);
                 this.errorMessageInTable("imageBase64", i);
                 this.recordFileError = true;
             }
@@ -858,61 +1029,132 @@ export default class PersonProgress extends Vue {
                 let company = data[i] ? data[i]["company"] : "";
                 if (company == this.$user.user.company.name) {
                     this.recordFileError = false;
+                    data[i].companyId = this.$user.user.company.objectId;
                 } else {
+                    this.recordFileError = true;
+                    this.errorMessageInTable("company", i);
+                    return;
+                }
+            } else {
+                let isCompanySame = false;
+                let isFloorSame = false;
+                let isDoorSame = false;
+                for (let j = 0; j < this.companies.length; j++) {
+                    if (this.companies[j].name === data[i].company) {
+                        isCompanySame = true;
+                        this.recordFileError = false;
+                        data[i].companyId = this.companies[j].objectId;
+                        await this.initSelectItemFloorWithCompany(
+                            this.companies[j].objectId
+                        );
+                    }
+                }
+                if (!isCompanySame) {
                     this.errorMessageInTable("company", i);
                     this.recordFileError = true;
                 }
+                for (let k in this.selectItem.floor) {
+                    if (this.selectItem.floor[k] == data[i].floor) {
+                        isFloorSame = true;
+                        this.recordFileError = false;
+                        data[i].floorIds.push(k);
+                    }
+                }
+                if (!isFloorSame) {
+                    this.errorMessageInTable("floor", i);
+                    this.recordFileError = true;
+                }
+                let doorAry: string[] = [];
+                let door = data[i].door.replace(/\s/gi, "");
+                if (door.includes(",")) {
+                    doorAry = door.split(",");
+                } else {
+                    doorAry.push(door);
+                }
+                for (let l = 0; l < doorAry.length; l++) {
+                    for (let m = 0; m < this.doors.length; m++) {
+                        if (
+                            this.doors[m].name.replace(/\s/gi, "") ===
+                            doorAry[l]
+                        ) {
+                            isDoorSame = true;
+                            this.recordFileError = false;
+                            data[i].doorIds.push(this.doors[m].objectId);
+                        }
+                    }
+                }
+                if (!isDoorSame) {
+                    this.errorMessageInTable("door", i);
+                    this.recordFileError = true;
+                }
             }
-
-            // // for phone check
-            // let phone = data[i] ? data[i]["phone"] : "";
-            // if (RegexServices.phoneNumber(phone)) {
-            //     this.recordFileError = true;
-            //     return;
-            // }
-            // // for email check
-            // let email = data[i] ? data[i]["email"] : "";
-            // console.log(data[i]["email"]);
-            // console.log(i);
-            // if (RegexServices.email(email)) {
-            //     this.errorMessageInTable("email");
-            //     this.recordFileError = true;
-            //     return;
-            // }
         }
     }
 
     async sendRecordFile() {
         let param: {
-            datas: IBusinessOperationSalesRecord[];
+            datas: ICompanyStaffRecord[];
         } = {
             datas: []
         };
 
         for (let content of this.recordFileContent) {
-            let tempItem: IBusinessOperationSalesRecord = {
-                customId: content.name,
-                date: content.datetime.toISOString(),
-                transaction: content.transaction,
-                imageBase64: ""
+            let tempItem: ICompanyStaffRecord = {
+                name: content.name,
+                email: content.email,
+                startDate: content.startDate,
+                companyId: content.companyId,
+                floorIds: content.floorIds,
+                doorIds: content.doorIds
             };
+
+            if (content.imageBase64 != undefined || content.imageBase64 != "") {
+                tempItem["imageBase64"] = content.imageBase64;
+            }
+
+            if (content.position != undefined || content.position != "") {
+                tempItem["position"] = content.position;
+            }
+
+            if (content.phone != undefined || content.phone != "") {
+                tempItem["phone"] = content.phone;
+            }
+
+            if (
+                content.isUseSuntecReward != undefined ||
+                content.isUseSuntecReward != ""
+            ) {
+                tempItem["isUseSuntecReward"] =
+                    content.isUseSuntecReward === "true";
+            }
+
+            if (content.remark != undefined || content.remark != "") {
+                tempItem["remark"] = content.remark;
+            }
+
+            if (content.endDate != undefined) {
+                tempItem["endDate"] = content.endDate;
+            }
+
+            if (content.nric != undefined || content.nric != "") {
+                tempItem["nric"] = content.nric;
+            }
+
             param.datas.push(tempItem);
         }
+        param = RegexServices.trim(param);
         Loading.show();
-        // await this.$server
-        //     .C("/report/sales-record", param)
-        //     .then((response: any) => {
-        //         ResponseFilter.successCheck(
-        //             this,
-        //             response,
-        //             this.sendSuccess,
-        //             "",
-        //             false
-        //         );
-        //     })
-        //     .catch((e: any) => {
-        //         return ResponseFilter.catchError(this, e);
-        //     });
+        await this.$server
+            .C("/person/staff", param)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    Dialog.success(this._("w_Dialog_SuccessTitle"));
+                    this.$emit("excelToList");
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     sendSuccess(response: any) {
@@ -976,22 +1218,10 @@ export default class PersonProgress extends Vue {
     }
 
     errorMessageInTable(data, index) {
-        // if (data == "company") {
-        //     for (let i = 0; i < this.recordFileContent.length; i++) {
-        //         let objKey = Object.keys(this.recordFileContent[i]);
-        //         console.log(objKey);
-        //         // for (let j = 0; j < objKey.length; j++) {
-        //         //     console.log(this.recordFileContent[i]);
-        //         //     // this.recordFileContent[j] = "";
-        //         // }
-        //     }
-        //     return;
-        // } else {
         this.recordFileContent[index][
             data
         ] = `<span style='color:#f00;'>${this._("w_Person_ErrorData")}</span>`;
     }
-    // }
 }
 </script>
 
