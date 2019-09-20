@@ -111,6 +111,7 @@
                             >
 
                                 <span
+                                    :hidden="true"
                                     class="close"
                                     @click="deleteStep5File(file.base64)"
                                 ></span>

@@ -25,6 +25,7 @@
                     v-bind="$attrs"
                     v-on="$listeners"
                     multiple
+                    :disabled="permission"
                     accept=".jpeg, .jpg, .png, .pdf"
                     value="file"
                 ></iv-form-file>
