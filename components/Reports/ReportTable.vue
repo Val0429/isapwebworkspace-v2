@@ -1,5 +1,5 @@
 <template>
-    <div class="animated fadeIn overflow">
+    <iv-scrollbar>
         <h2 v-if="reportTableData._body && reportTableData._body.length > 0">{{reportTableTitle.headTitle}}</h2>
         <table
             ref="reportTable"
@@ -176,7 +176,7 @@
                 </tr>
             </tfoot>
         </table>
-    </div>
+    </iv-scrollbar>
 </template>
 
 <script lang="ts">
