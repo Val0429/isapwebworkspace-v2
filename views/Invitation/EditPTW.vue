@@ -162,7 +162,7 @@
                                         {{ file.name }}
                                     </a>
                                 </div>
-                                
+
                             </div>
 
                         </template>
@@ -255,7 +255,6 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import axios from "axios";
-import ServerConfig from "@/services/ServerConfig";
 
 import Step1 from "@/components/ContractorRegistration/Step1.vue";
 import Step2 from "@/components/ContractorRegistration/Step2.vue";
@@ -434,13 +433,17 @@ export class EditPTW extends Vue {
     }
 
     async initPublicIP() {
-        this.publicHosting = ServerConfig.url;
+        let productMode = process.env.NODE_ENV;
+        let server: any = this.$server;
+        let url =
+            productMode == "production"
+                ? `${location.protocol}//${server.config.ip}:${server.config.prodPort}/`
+                : `${location.protocol}//${server.config.ip}:${server.config.port}/`;
+        this.publicHosting = url;
         axios
-            .get(ServerConfig.url + "flow1/crms/hosting")
+            .get(url + "flow1/crms/hosting")
             .then(response => {
-                this.publicHosting = response.data
-                    ? response.data
-                    : ServerConfig.url;
+                this.publicHosting = response.data ? response.data : url;
             })
             .catch(function(error) {
                 console.log(error);

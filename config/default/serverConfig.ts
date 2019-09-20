@@ -8,7 +8,7 @@ import { Config } from '@/../config/default/serverConfig';
 
 var config: Config = {
     // Min server
-    ip: '172.16.10.175',
+    ip: '172.16.10.21',
 
     // QA Tina server
     // ip: '172.16.10.175',
