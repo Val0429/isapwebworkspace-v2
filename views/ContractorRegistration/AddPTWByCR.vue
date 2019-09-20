@@ -98,7 +98,7 @@
                             <step5
                                 :selectedDetail="selectedDetail"
                                 class="col-md-12"
-                                :permission="true"
+                                :permission="false"
                                 @step5="receiveStep5Data"
                                 @putStep5File="putStep5File"
                             ></step5>
@@ -107,7 +107,6 @@
                                 v-for="file in inputFormData.attachments"
                                 class="step5Div"
                             >
-
 
                                 <span
                                     class="close"
@@ -420,7 +419,6 @@ export class AddPTWByCR extends Vue {
                 console.log(error);
             });
     }
-
 
     async initTenant() {
         if (this.$route.query.id !== undefined) {

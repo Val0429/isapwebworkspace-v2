@@ -110,7 +110,6 @@
                                 class="step5Div"
                             >
 
-
                                 <span
                                     class="close"
                                     @click="deleteStep5File(file.base64)"
