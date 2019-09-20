@@ -248,6 +248,7 @@ export default class LangObject {
     w_Door_EditSuccess = 'Door edit success';
     w_Door_EditFailed = 'Door edit failed, please try again';
     w_Door_DeleteConfirm = 'Are you sure to delete selected Door(s)?';
+    w_Door_ErrorMediaType = 'Range or Company must choose one';
 
     ////////////////// Company //////////////////
     w_Company_List = 'Company List';

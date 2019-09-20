@@ -151,11 +151,14 @@ export default class SetupsFloor extends Vue {
         companyId: "",
         range: "",
         floors: [],
-        companies: [],
         ranges: [],
         floorText: "",
         companyText: "",
-        buildingId: ""
+        buildingId: "",
+        endpoints: [],
+        endpoint: {},
+        endpointId: "",
+        endpointText: ""
     };
 
     // select
@@ -163,14 +166,17 @@ export default class SetupsFloor extends Vue {
         company: any;
         floor: any;
         range: any;
+        hikEndpoint: any;
     } = {
         company: {},
         floor: {},
-        range: ""
+        range: "",
+        hikEndpoint: {}
     };
 
     floors: string[] = [];
     companies: string[] = [];
+    endpoints: string[] = [];
     ranges = { building: "building", floor: "floor" };
 
     async created() {}
@@ -185,9 +191,12 @@ export default class SetupsFloor extends Vue {
             companyId: "",
             range: "",
             floors: [],
-            companies: [],
             floorText: "",
-            companyText: ""
+            companyText: "",
+            endpoints: [],
+            endpoint: {},
+            endpointId: "",
+            endpointText: ""
         };
     }
 
@@ -197,6 +206,7 @@ export default class SetupsFloor extends Vue {
 
     async getInputData() {
         this.clearInputData();
+        console.log(this.selectedDetail);
         for (const param of this.selectedDetail) {
             this.inputFormData = {
                 objectId: param.objectId,
@@ -206,9 +216,17 @@ export default class SetupsFloor extends Vue {
                 floors: param.floor ? param.floor.objectId : [],
                 floorText: param.floor ? param.floor.name : "",
                 companyId: param.company ? param.company.objectId : "",
-                companies: param.company ? param.company.objectId : [],
-                companyText: param.company ? param.company.name : ""
+                companyText: param.company ? param.company.name : "",
+                endpoints: param.endpoint ? param.endpoint.client.objectId : [],
+                endpoint: param.endpoint ? param.endpoint : {},
+                endpointText: param.endpoint ? param.endpoint.model : ""
             };
+
+            this.$set(
+                this.selectItem.hikEndpoint,
+                param.endpoint.client.objectId,
+                param.endpoint.client.name
+            );
             if (param.objectId !== "") {
                 this.initSelectItemCompanyWithAPI(param.floor.objectId);
             }
@@ -244,30 +262,61 @@ export default class SetupsFloor extends Vue {
     }
 
     updateInputFormData(data) {
+        if (data.key === "endpoints") {
+            let model = data.key;
+            model = model.split(".");
+            this.inputFormData.endpoint = {
+                model: "hikvision",
+                clientId: data.value
+            };
+            this.inputFormData.endpointText = data.value;
+        }
         if (data.key === "floors") {
             this.initSelectItemCompanyWithAPI(data.value);
-            if (
-                this.inputFormData.range == "" ||
-                this.inputFormData.companies.length < 1
-            ) {
-                this.inputFormData.check = undefined;
-                return;
-            }
         }
-        if (data.key === "range" || data.key === "companies") {
-            if (data.value == "" || data.value.length < 1) {
-                this.inputFormData.check = undefined;
-                return;
-            }
-        }
-        this.inputFormData.check = true;
         this.inputFormData[data.key] = data.value;
     }
 
     async initSelectItem() {
         this.selectItem.company = {};
         this.selectItem.floor = {};
+        this.selectItem.hikEndpoint = {};
+        this.initSelectItemHikWithAPI();
         this.initSelectItemFloorWithAPI();
+    }
+
+    async initSelectItemHikWithAPI() {
+        let param: any = { paging: { all: true } };
+        param = RegexServices.trim(param);
+        await this.$server
+            .R("/client/hikvision", param)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
+                        this.endpoints = JSON.parse(
+                            JSON.stringify(response.results)
+                        );
+                        for (let ret of response.results) {
+                            if (
+                                ret.objectId != undefined &&
+                                ret.name != undefined
+                            ) {
+                                this.$set(
+                                    this.selectItem.hikEndpoint,
+                                    ret.objectId,
+                                    ret.name
+                                );
+                            }
+                        }
+                    }
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
     }
 
     async initSelectItemFloorWithAPI() {
@@ -343,20 +392,27 @@ export default class SetupsFloor extends Vue {
         let param: any = {
             datas: [
                 {
-                    name: data.name
+                    name: data.name,
+                    floorId: data.floors,
+                    endpoint: data.endpoint
                 }
             ]
         };
-        if (data.companies != "") {
-            param.datas[0].companyId = data.companies;
+        if (data.companyId != undefined) {
+            param.datas[0].companyId = data.companyId;
         }
 
-        if (data.floors != "") {
-            param.datas[0].floorId = data.floors;
-        }
-
-        if (data.range != "") {
+        if (data.range != undefined) {
             param.datas[0].range = data.range;
+        }
+
+        // check
+        if (
+            param.datas[0].companyId == undefined &&
+            (param.datas[0].range == "" || param.datas[0].range == undefined)
+        ) {
+            Dialog.error(this._("w_Door_ErrorMediaType"));
+            return false;
         }
 
         // add
@@ -486,6 +542,15 @@ export default class SetupsFloor extends Vue {
                      */
                     name: string;
                 };
+
+                endpoint: interface {
+                    client: interface {
+                        /**
+                         * @uiLabel - ${this._("w_Door_EndpointName")}
+                         */
+                        name: string;
+                    };
+                };
             }
         `;
     }
@@ -516,6 +581,16 @@ export default class SetupsFloor extends Vue {
                  * @uiType - iv-form-label
                  */
                 companyText: string;
+
+                endpoint: interface {
+                    client: interface {
+                        /**
+                         * @uiLabel - ${this._("w_Door_EndpointName")}
+                         * @uiType - iv-form-label
+                         */
+                        name: string;
+                    };
+                };
             }
         `;
     }
@@ -541,9 +616,15 @@ export default class SetupsFloor extends Vue {
                 /**
                  * @uiLabel - ${this._("w_Door_CompanyName")}
                  */
-                companies?: ${toEnumInterface(this.selectItem.company, false)};
+                companyId?: ${toEnumInterface(this.selectItem.company, false)};
 
-                check: any;
+                /**
+                 * @uiLabel - ${this._("w_Door_EndpointName")}
+                 */
+                endpoints: ${toEnumInterface(
+                    this.selectItem.hikEndpoint,
+                    false
+                )};
             }
         `;
     }

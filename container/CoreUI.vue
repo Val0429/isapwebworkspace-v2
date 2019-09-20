@@ -67,10 +67,10 @@
                 </iv-permission>
 
                 <iv-permission :allow="['SystemAdministrator', 'Administrator']">
-                    <!-- <SidebarNavItem
+                    <SidebarNavItem
                         :label="_('m_Navigation_ISAPFrs')"
                         url="/client/frs"
-                    /> -->
+                    />
 
                     <SidebarNavItem
                         :label="_('m_Navigation_HikVision')"
