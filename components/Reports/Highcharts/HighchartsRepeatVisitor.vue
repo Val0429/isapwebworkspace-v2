@@ -329,6 +329,7 @@ export class HighchartsRepeatVisitor extends Vue {
 
         // bar
         this.chartOptions.bar = {
+            credits: { enabled: false },
             chart: { type: "column", zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -354,6 +355,7 @@ export class HighchartsRepeatVisitor extends Vue {
 
         // pie
         this.chartOptions.pie = {
+            credits: { enabled: false },
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -734,6 +736,7 @@ export class HighchartsRepeatVisitor extends Vue {
 
         // detail bar
         this.chartOptions.detailBar = {
+            credits: { enabled: false },
             chart: {
                 type: "bar",
                 zoomType: "x"
@@ -765,6 +768,7 @@ export class HighchartsRepeatVisitor extends Vue {
 
         // detail pie
         this.chartOptions.detailPie = {
+            credits: { enabled: false },
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -803,6 +807,7 @@ export class HighchartsRepeatVisitor extends Vue {
 
         // percentageOnce
         this.chartOptions.percentageOnce = {
+            credits: { enabled: false },
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -841,6 +846,7 @@ export class HighchartsRepeatVisitor extends Vue {
 
         // percentageRepeat
         this.chartOptions.percentageRepeat = {
+            credits: { enabled: false },
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },

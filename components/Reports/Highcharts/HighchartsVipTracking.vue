@@ -319,6 +319,7 @@ export class HighchartsVipTracking extends Vue {
         }
 
         this.chartOptions.siteXDay1 = {
+            credits: { enabled: false },
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -456,6 +457,7 @@ export class HighchartsVipTracking extends Vue {
         }
 
         this.chartOptions.siteXDayX = {
+            credits: { enabled: false },
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },

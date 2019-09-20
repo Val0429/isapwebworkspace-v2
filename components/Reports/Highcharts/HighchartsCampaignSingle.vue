@@ -177,6 +177,7 @@ export class HighchartsCampaignSingle extends Vue {
         }
 
         this.chartOptions.campaignSingle = {
+            credits: { enabled: false },
             chart: {
                 type: "area",
                 zoomType: "x"

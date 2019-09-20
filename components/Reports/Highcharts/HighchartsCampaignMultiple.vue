@@ -115,6 +115,7 @@ export class HighchartsCampaignMultiple extends Vue {
         }
 
         this.chartOptions.campaignMultiple = {
+            credits: { enabled: false },
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },

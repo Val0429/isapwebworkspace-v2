@@ -343,6 +343,7 @@ export class HighchartsTraffic extends Vue {
 
                 // set chart options
                 this.chartOptions.site1Day1 = {
+                    credits: { enabled: false },
                     chart: { zoomType: "x" },
                     exporting: { enabled: false },
                     title: { text: null },
@@ -397,6 +398,7 @@ export class HighchartsTraffic extends Vue {
             default:
                 // set chart options
                 this.chartOptions.site1Day1 = {
+                    credits: { enabled: false },
                     chart: { zoomType: "x" },
                     exporting: { enabled: false },
                     title: { text: null },
@@ -825,6 +827,7 @@ export class HighchartsTraffic extends Vue {
 
         // set chart options
         this.chartOptions.site1DayX = {
+            credits: { enabled: false },
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -1045,6 +1048,7 @@ export class HighchartsTraffic extends Vue {
 
         // set chart options
         this.chartOptions.siteXDay1 = {
+            credits: { enabled: false },
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -1486,6 +1490,7 @@ export class HighchartsTraffic extends Vue {
         }
 
         this.chartOptions.siteXDayX = {
+            credits: { enabled: false },
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },

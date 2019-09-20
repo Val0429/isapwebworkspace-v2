@@ -285,6 +285,7 @@ export class HighchartsOccupancy extends Vue {
 
         // set chart options
         this.chartOptions.site1Day1 = {
+            credits: { enabled: false },
             chart: { type: "column", zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -571,6 +572,7 @@ export class HighchartsOccupancy extends Vue {
 
         // set chart options
         this.chartOptions.site1DayX = {
+            credits: { enabled: false },
             chart: { type: "column", zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -673,6 +675,7 @@ export class HighchartsOccupancy extends Vue {
 
         // set chart options
         this.chartOptions.siteXDay1 = {
+            credits: { enabled: false },
             chart: { type: "column", zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
@@ -1042,6 +1045,7 @@ export class HighchartsOccupancy extends Vue {
         }
 
         this.chartOptions.siteXDayX = {
+            credits: { enabled: false },
             chart: { zoomType: "x" },
             exporting: { enabled: false },
             title: { text: null },
