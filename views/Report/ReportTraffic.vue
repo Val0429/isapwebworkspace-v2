@@ -13,6 +13,18 @@
         >
         </filter-condition>
 
+        <!-- Ben -->
+        <anlysis-dashboard
+            ref="analysisDashboard"
+            :startDate="startDate"
+            :endDate="endDate"
+            :type="dTimeMode"
+            :siteIds="pSiteIds"
+            :tagIds="tags"
+            :pageType="dPageType"
+        >
+        </anlysis-dashboard>
+
         <iv-card
             :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
             :visible="visible"
@@ -41,17 +53,6 @@
                     @click="pageToReportTemplate()"
                 />
             </template>
-            <!-- Ben -->
-            <anlysis-dashboard
-                ref="analysisDashboard"
-                :startDate="startDate"
-                :endDate="endDate"
-                :type="dTimeMode"
-                :siteIds="pSiteIds"
-                :tagIds="tags"
-                :pageType="dPageType"
-            >
-            </anlysis-dashboard>
 
             <!-- Tina -->
             <analysis-filter-traffic
@@ -2161,6 +2162,7 @@ export default class ReportTraffic extends Vue {
 
 
 <style lang="scss" scoped>
+
 </style>
 
 
