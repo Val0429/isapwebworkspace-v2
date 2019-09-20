@@ -1,37 +1,57 @@
 <template>
     <div class="chart">
-        <h2 v-if="mountAnyChart()">{{ _('w_ReportTraffic_TrafficChart') }}</h2>
+<!--        <h2 v-if="mountAnyChart()">{{ _('w_ReportTraffic_TrafficChart') }}</h2>-->
         <b-form-group>
             <b-row>
                 <b-col>
 
-                    <!-- site1Day1 -->
-                    <highcharts
-                        ref="chartSite1Day1"
+                    <iv-card
                         v-if="mountChart.site1Day1"
-                        :options="chartOptions.site1Day1"
-                    ></highcharts>
+                        :label="_('w_ReportTraffic_TrafficChart')"
+                    >
+                        <!-- site1Day1 -->
+                        <highcharts
+                            ref="chartSite1Day1"
+                            v-if="mountChart.site1Day1"
+                            :options="chartOptions.site1Day1"
+                        ></highcharts>
+                    </iv-card>
 
-                    <!-- site1DayX -->
-                    <highcharts
-                        ref="chartSite1DayX"
+                    <iv-card
                         v-if="mountChart.site1DayX"
-                        :options="chartOptions.site1DayX"
-                    ></highcharts>
+                        :label="_('w_ReportTraffic_TrafficChart')"
+                    >
+                        <!-- site1DayX -->
+                        <highcharts
+                            ref="chartSite1DayX"
+                            v-if="mountChart.site1DayX"
+                            :options="chartOptions.site1DayX"
+                        ></highcharts>
+                    </iv-card>
 
-                    <!-- siteXDay1 -->
-                    <highcharts
-                        ref="chartSiteXDay1"
+                    <iv-card
                         v-if="mountChart.siteXDay1"
-                        :options="chartOptions.siteXDay1"
-                    ></highcharts>
+                        :label="_('w_ReportTraffic_TrafficChart')"
+                    >
+                        <!-- siteXDay1 -->
+                        <highcharts
+                            ref="chartSiteXDay1"
+                            v-if="mountChart.siteXDay1"
+                            :options="chartOptions.siteXDay1"
+                        ></highcharts>
+                    </iv-card>
 
-                    <!-- siteXDayX -->
-                    <highcharts
-                        ref="chartSiteXDayX"
+                    <iv-card
                         v-if="mountChart.siteXDayX"
-                        :options="chartOptions.siteXDayX"
-                    ></highcharts>
+                        :label="_('w_ReportTraffic_TrafficChart')"
+                    >
+                        <!-- siteXDayX -->
+                        <highcharts
+                            ref="chartSiteXDayX"
+                            v-if="mountChart.siteXDayX"
+                            :options="chartOptions.siteXDayX"
+                        ></highcharts>
+                    </iv-card>
 
                 </b-col>
             </b-row>

@@ -1,6 +1,11 @@
 <template>
     <div class="animated fadeIn">
 
+        <b-row>
+            <h1 class="title">{{ _('w_Navigation_Report_RepeatVisitor') }}</h1>
+            <h5 class="subTitle">{{ filterData.siteIds.length !== 0 ? analysisTitle() : '' }}</h5>
+        </b-row>
+
         <!-- Tina -->
         <filter-condition
             :sitesSelectItem="sitesSelectItem"
@@ -588,7 +593,8 @@ export default class ReportRepeatVisitor extends Vue {
     }
 
     analysisTitle(): string {
-        let title = "Analysis - ";
+        // let title = "Analysis - ";
+        let title = "";
 
         if (this.filterData.siteIds.length === 1) {
             for (const site of this.sitesSelectItem) {
@@ -1247,6 +1253,15 @@ export default class ReportRepeatVisitor extends Vue {
 
 
 <style lang="scss" scoped>
+    .title {
+        margin: 1rem 1rem 1.5rem;
+    }
+
+    .subTitle {
+        margin-top:  1.7rem;
+        margin-left: 1rem;
+        font-weight: bold;
+    }
 </style>
 
 

@@ -1,6 +1,11 @@
 <template>
     <div class="animated fadeIn">
 
+        <b-row>
+            <h1 class="title">{{ _('w_Navigation_Report_VIPBlackList') }}</h1>
+            <h5 class="subTitle">{{ filterData.tagIds.length !== 0 ? analysisTitle() : '' }}</h5>
+        </b-row>
+
         <filter-condition-vip-and-blacklist
             :label="_('w_ReportFilterConditionComponent_')"
             :tagSelectItem="tagSelectItem"
@@ -15,7 +20,6 @@
 
         <iv-card
             :visible="visible"
-            :label="filterData.tagIds.length !== 0 ? analysisTitle() : '' "
         >
             <template #toolbox>
                 <!-- Ben -->
@@ -302,7 +306,8 @@ export default class ReportVIPTracking extends Vue {
     }
 
     analysisTitle(): string {
-        let title = "Analysis - ";
+        // let title = "Analysis - ";
+        let title = "";
 
         if (this.filterData.tagIds.length === 1) {
             for (const tagId of this.tagSelectItem) {
@@ -471,8 +476,16 @@ export default class ReportVIPTracking extends Vue {
 }
 </script>
 
-
 <style lang="scss" scoped>
+    .title {
+        margin: 1rem 1rem 1.5rem;
+    }
+
+    .subTitle {
+        margin-top:  1.7rem;
+        margin-left: 1rem;
+        font-weight: bold;
+    }
 </style>
 
 

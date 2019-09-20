@@ -1,5 +1,11 @@
 <template>
     <div>
+
+        <b-row>
+            <h1 class="title">{{ _('w_Navigation_RuleAndActions_Traffic') }}</h1>
+            <h5 class="subTitle">{{ filterData.siteIds.length !== 0 ? analysisTitle() : '' }}</h5>
+        </b-row>
+
         <!-- Tina -->
         <filter-condition
             :sitesSelectItem="sitesSelectItem"
@@ -14,7 +20,6 @@
         </filter-condition>
 
         <iv-card
-            :label="filterData.siteIds.length !== 0 ? analysisTitle() : '' "
             :visible="visible"
         > <template #toolbox>
                 <!-- Ben -->
@@ -1423,7 +1428,8 @@ export default class ReportTraffic extends Vue {
     }
 
     analysisTitle(): string {
-        let title = "Analysis - ";
+        // let title = "Analysis - ";
+        let title = "";
 
         if (this.filterData.siteIds.length === 1) {
             for (const site of this.sitesSelectItem) {
@@ -2159,10 +2165,17 @@ export default class ReportTraffic extends Vue {
 }
 </script>
 
-
 <style lang="scss" scoped>
-</style>
+    .title {
+        margin: 1rem 1rem 1.5rem;
+    }
 
+    .subTitle {
+        margin-top:  1.7rem;
+        margin-left: 1rem;
+        font-weight: bold;
+    }
+</style>
 
 
 

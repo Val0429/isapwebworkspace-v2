@@ -1,23 +1,33 @@
 <template>
     <div class="chart">
-        <h2 v-if="mountAnyChart()">{{ _('w_ReportVipTrackin_VipTrackingChart') }}</h2>
+<!--        <h2 v-if="mountAnyChart()">{{ _('w_ReportVipTrackin_VipTrackingChart') }}</h2>-->
         <b-form-group>
             <b-row>
                 <b-col>
 
-                    <!-- siteXDay1 -->
-                    <highcharts
-                        ref="chartSiteXDay1"
+                    <iv-card
                         v-if="mountChart.siteXDay1"
-                        :options="chartOptions.siteXDay1"
-                    ></highcharts>
+                        :label="_('w_ReportVipTrackin_VipTrackingChart') "
+                    >
+                        <!-- siteXDay1 -->
+                        <highcharts
+                            ref="chartSiteXDay1"
+                            v-if="mountChart.siteXDay1"
+                            :options="chartOptions.siteXDay1"
+                        ></highcharts>
+                    </iv-card>
 
-                    <!-- siteXDayX -->
-                    <highcharts
-                        ref="chartSiteXDayX"
+                    <iv-card
                         v-if="mountChart.siteXDayX"
-                        :options="chartOptions.siteXDayX"
-                    ></highcharts>
+                        :label="_('w_ReportVipTrackin_VipTrackingChart') "
+                    >
+                        <!-- siteXDayX -->
+                        <highcharts
+                            ref="chartSiteXDayX"
+                            v-if="mountChart.siteXDayX"
+                            :options="chartOptions.siteXDayX"
+                        ></highcharts>
+                    </iv-card>
 
                 </b-col>
             </b-row>

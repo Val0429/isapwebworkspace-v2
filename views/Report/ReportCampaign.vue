@@ -1,6 +1,11 @@
 <template>
     <div class="animated fadeIn">
 
+        <b-row>
+            <h1 class="title">{{ _('w_Navigation_Report_Campaign') }}</h1>
+            <h5 class="subTitle">{{ filterData.campaignIds ? analysisTitle() : '' }}</h5>
+        </b-row>
+
         <!-- Tina -->
         <filter-condition-campaign
             :yearSelectItem="yearSelectItem"
@@ -11,7 +16,6 @@
 
         <iv-card
             :visible="visible"
-            :label="filterData.campaignIds ? analysisTitle() : '' "
         >
 
             <template #toolbox>
@@ -379,7 +383,8 @@ export default class ReportCampaign extends Vue {
     }
 
     analysisTitle(): string {
-        let title = "Analysis - ";
+        // let title = "Analysis - ";
+        let title = "";
 
         title += `${this._("w_Title_FiscalYear")} ${this.filterData.year}.`;
 
@@ -526,8 +531,16 @@ export default class ReportCampaign extends Vue {
 }
 </script>
 
-
 <style lang="scss" scoped>
+    .title {
+        margin: 1rem 1rem 1.5rem;
+    }
+
+    .subTitle {
+        margin-top:  1.7rem;
+        margin-left: 1rem;
+        font-weight: bold;
+    }
 </style>
 
 

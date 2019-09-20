@@ -1,82 +1,101 @@
 <template>
     <div class="chart">
-        <h2 v-if="mountAnyChart()">{{ _('w_ReportRepeatVisitor_RepeatVisitorChart') }}</h2>
+<!--        <h2 v-if="mountAnyChart()">{{ _('w_ReportRepeatVisitor_RepeatVisitorChart') }}</h2>-->
         <b-form-group>
-            <b-row>
+            <iv-card
+                v-if="mountChart.bar"
+                :label="_('w_ReportRepeatVisitor_RepeatVisitorChart') + ' All Count'"
+            >
+                <b-row>
 
-                <b-col cols="6">
-                    <b-form-radio-group
-                        v-model="selection.chartType"
-                        class="h-10 click_button col-md-2"
-                        buttons
-                        button-variant="outline-success"
-                        name="radio-btn-outline"
-                        style="margin-bottom: 10px;"
-                        :options="selectItem.chartType"
-                        @input="changeChartType"
-                    ></b-form-radio-group>
-                    <div v-show="selection.chartType == 'bar'">
-                        <highcharts
-                            ref="chart"
-                            v-if="mountChart.bar"
-                            :options="chartOptions.bar"
-                        ></highcharts>
-                    </div>
-                    <div v-show="selection.chartType == 'pie'">
-                        <highcharts
-                            ref="chart"
-                            v-if="mountChart.pie"
-                            :options="chartOptions.pie"
-                        ></highcharts>
-                    </div>
-                </b-col>
+                    <b-col cols="6">
 
-                <b-col cols="6">
-                    <iv-form-selection
-                        class='col-md-12'
-                        :value="selection.repeatCount"
-                        :options="selectItem.repeatCount"
-                        @input="changeRepeatCount"
-                    ></iv-form-selection>
-
-                    <b-row>
-                        <b-col cols="6">
+                        <b-form-radio-group
+                            v-model="selection.chartType"
+                            class="h-10 click_button col-md-2"
+                            buttons
+                            button-variant="outline-success"
+                            name="radio-btn-outline"
+                            style="margin-bottom: 10px;"
+                            :options="selectItem.chartType"
+                            @input="changeChartType"
+                        ></b-form-radio-group>
+                        <div v-show="selection.chartType == 'bar'">
                             <highcharts
                                 ref="chart"
-                                v-if="mountChart.detailBar"
-                                :options="chartOptions.detailBar"
+                                v-if="mountChart.bar"
+                                :options="chartOptions.bar"
                             ></highcharts>
-                        </b-col>
-
-                        <b-col cols="6">
+                        </div>
+                        <div v-show="selection.chartType == 'pie'">
                             <highcharts
                                 ref="chart"
-                                v-if="mountChart.detailPie"
-                                :options="chartOptions.detailPie"
+                                v-if="mountChart.pie"
+                                :options="chartOptions.pie"
                             ></highcharts>
-                        </b-col>
-                    </b-row>
-                </b-col>
+                        </div>
+                    </b-col>
 
-            </b-row>
+                    <b-col cols="6">
+                        <iv-form-selection
+                            class='col-md-12'
+                            :value="selection.repeatCount"
+                            :options="selectItem.repeatCount"
+                            @input="changeRepeatCount"
+                        ></iv-form-selection>
+
+                        <b-row>
+                            <b-col cols="6">
+                                <highcharts
+                                    ref="chart"
+                                    v-if="mountChart.detailBar"
+                                    :options="chartOptions.detailBar"
+                                ></highcharts>
+                            </b-col>
+
+                            <b-col cols="6">
+                                <highcharts
+                                    ref="chart"
+                                    v-if="mountChart.detailPie"
+                                    :options="chartOptions.detailPie"
+                                ></highcharts>
+                            </b-col>
+                        </b-row>
+                    </b-col>
+
+                </b-row>
+            </iv-card>
 
             <b-row>
-                <b-col cols="6">
-                    <highcharts
-                        ref="chart"
+                <div class="col-md-6">
+                    <iv-card
                         v-if="mountChart.percentageOnce"
-                        :options="chartOptions.percentageOnce"
-                    ></highcharts>
-                </b-col>
+                        :label="_('w_ReportRepeatVisitor_RepeatVisitorChart') + ' 1 Count VS 2 Plus Count'"
+                    >
+                        <highcharts
+                            ref="chart"
+                            v-if="mountChart.percentageOnce"
+                            :options="chartOptions.percentageOnce"
+                        ></highcharts>
+                    </iv-card>
+                </div>
 
-                <b-col cols="6">
-                    <highcharts
-                        ref="chart"
+                <div class="col-md-6">
+                    <iv-card
                         v-if="mountChart.percentageRepeat"
-                        :options="chartOptions.percentageRepeat"
-                    ></highcharts>
-                </b-col>
+                        :label="_('w_ReportRepeatVisitor_RepeatVisitorChart') + ' 2 Count VS 2 Plus Count'"
+                    >
+                        <highcharts
+                            ref="chart"
+                            v-if="mountChart.percentageRepeat"
+                            :options="chartOptions.percentageRepeat"
+                        ></highcharts>
+                    </iv-card>
+                </div>
             </b-row>
+
+
+
 
         </b-form-group>
     </div>
@@ -754,7 +773,6 @@ export class HighchartsRepeatVisitor extends Vue {
                     align: "high"
                 }
             },
-            credits: { enabled: false },
             tooltip: {
                 enabled: true,
                 formatter: function() {

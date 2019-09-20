@@ -1,7 +1,7 @@
 import {EAgeRange} from "@/components/Reports";
 <template>
     <div class="chart">
-        <h2 v-if="mountAnyChart()">{{ _('w_ReportDemographic_DemographicChart') }}</h2>
+<!--        <h2 v-if="mountAnyChart()">{{ _('w_ReportDemographic_DemographicChart') }}</h2>-->
         <b-form-group>
             <b-row>
                 <b-col cols="12">
@@ -13,85 +13,90 @@ import {EAgeRange} from "@/components/Reports";
                 </b-col>
             </b-row>
 
-            <b-row>
-                <b-col cols='12'>
-                    <b-form-group :label="_('w_ReportDemographic_LabelGender')"></b-form-group>
-                    <b-form-radio-group
-                        v-if="chartMode == eChartMode.siteXDayX"
-                        v-model="selection.gender"
-                        class="select-gender mb-4"
-                        buttons
-                        button-variant="outline-success"
-                        name="radio-btn-outline"
-                        :options="selectItem.gender"
-                        @change="changeGender"
-                    ></b-form-radio-group>
+            <iv-card :label="_('w_ReportDemographic_LabelGender')">
+                <b-row>
+                    <b-col cols='12'>
+<!--                        <b-form-group :label="_('w_ReportDemographic_LabelGender')"></b-form-group>-->
+                        <b-form-radio-group
+                            v-if="chartMode == eChartMode.siteXDayX"
+                            v-model="selection.gender"
+                            class="select-gender mb-4"
+                            buttons
+                            button-variant="outline-success"
+                            name="radio-btn-outline"
+                            :options="selectItem.gender"
+                            @change="changeGender"
+                        ></b-form-radio-group>
 
-                    <!-- site1Day1 -->
-                    <highcharts
-                        ref="chartSite1Day1"
-                        v-if="mountChart.site1Day1"
-                        :options="chartOptions.site1Day1"
-                    ></highcharts>
+                        <!-- site1Day1 -->
+                        <highcharts
+                            ref="chartSite1Day1"
+                            v-if="mountChart.site1Day1"
+                            :options="chartOptions.site1Day1"
+                        ></highcharts>
 
-                    <!-- site1DayX -->
-                    <highcharts
-                        ref="chartSite1DayX"
-                        v-if="mountChart.site1DayX"
-                        :options="chartOptions.site1DayX"
-                    ></highcharts>
+                        <!-- site1DayX -->
+                        <highcharts
+                            ref="chartSite1DayX"
+                            v-if="mountChart.site1DayX"
+                            :options="chartOptions.site1DayX"
+                        ></highcharts>
 
-                    <!-- siteXDay1 -->
-                    <highcharts
-                        ref="chartSiteXDay1"
-                        v-if="mountChart.siteXDay1"
-                        :options="chartOptions.siteXDay1"
-                    ></highcharts>
+                        <!-- siteXDay1 -->
+                        <highcharts
+                            ref="chartSiteXDay1"
+                            v-if="mountChart.siteXDay1"
+                            :options="chartOptions.siteXDay1"
+                        ></highcharts>
 
-                    <!-- siteXDayX -->
-                    <highcharts
-                        ref="chartSiteXDayX"
-                        v-if="mountChart.siteXDayX"
-                        :options="chartOptions.siteXDayX"
-                    ></highcharts>
+                        <!-- siteXDayX -->
+                        <highcharts
+                            ref="chartSiteXDayX"
+                            v-if="mountChart.siteXDayX"
+                            :options="chartOptions.siteXDayX"
+                        ></highcharts>
 
-                </b-col>
-            </b-row>
+                    </b-col>
+                </b-row>
+            </iv-card>
 
-            <b-row>
-                <b-col cols="12">
-                    <b-form-group :label="_('w_ReportDemographic_LabelAge')"></b-form-group>
-                </b-col>
-
-                <b-col cols="6">
-                    <highcharts
-                        ref="chartAge"
-                        v-if="mountChart.ageRange"
-                        :options="chartOptions.ageRange"
-                    ></highcharts>
-                </b-col>
-                <b-col cols="6">
-                    <b-row>
-                        <b-col cols="12">
-                            <iv-form-selection
-                                class='col-md-12'
-                                :value="selection.ageRange"
-                                :options="selectItem.ageRange"
-                                @input="changeAge"
-                            ></iv-form-selection>
-                        </b-col>
-                    </b-row>
-                    <b-row>
-                        <b-col cols="12">
+            <iv-card :label="_('w_ReportDemographic_LabelAge')">
+                <b-row>
+<!--                    <b-col cols="12">-->
+<!--                        <b-form-group :label="_('w_ReportDemographic_LabelAge')"></b-form-group>-->
+<!--                    </b-col>-->
+                        <b-col cols="6" class="age">
                             <highcharts
-                                ref="chartGender"
-                                v-if="mountChart.dwellTime"
-                                :options="chartOptions.dwellTimePie"
+                                ref="chartAge"
+                                v-if="mountChart.ageRange"
+                                :options="chartOptions.ageRange"
                             ></highcharts>
                         </b-col>
-                    </b-row>
-                </b-col>
-            </b-row>
+
+                    <b-col cols="6">
+                        <b-row>
+                            <b-col cols="12">
+                                <iv-form-selection
+                                    class='col-md-12'
+                                    :value="selection.ageRange"
+                                    :options="selectItem.ageRange"
+                                    @input="changeAge"
+                                ></iv-form-selection>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col cols="12">
+                                <highcharts
+                                    ref="chartGender"
+                                    v-if="mountChart.dwellTime"
+                                    :options="chartOptions.dwellTimePie"
+                                ></highcharts>
+                            </b-col>
+                        </b-row>
+                    </b-col>
+                </b-row>
+            </iv-card>
+
         </b-form-group>
     </div>
 </template>
@@ -1854,5 +1859,8 @@ Vue.component("highcharts-demographic", HighchartsDemographic);
 .select-gender {
     height: 36px;
 }
+    .age {
+        margin-top: 3.5rem;
+    }
 </style>
 

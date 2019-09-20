@@ -1,12 +1,18 @@
 <template>
     <div class="chart">
-        <h2 v-if="mountAnyChart()">{{ _('w_ReportCampaign_CampaignChart') }}</h2>
+<!--        <h2 v-if="mountAnyChart()">{{ _('w_ReportCampaign_CampaignChart') }}</h2>-->
         <b-form-group>
-            <highcharts
-                ref="chartMultiple"
+
+            <iv-card
                 v-if="mountChart.campaignSingle"
-                :options="chartOptions.campaignSingle"
-            ></highcharts>
+                :label="_('w_ReportCampaign_Single')"
+            >
+                <highcharts
+                    ref="chartMultiple"
+                    v-if="mountChart.campaignSingle"
+                    :options="chartOptions.campaignSingle"
+                ></highcharts>
+            </iv-card>
         </b-form-group>
     </div>
 </template>
