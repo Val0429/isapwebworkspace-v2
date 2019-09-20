@@ -109,6 +109,8 @@ export default class LangObject {
     w_Navigation_Reports_Dashboard = 'Dashboard';
     w_Navigation_Reports_Investigation = 'Investigation';
 
+    w_Navigation_Blacklist = 'Blacklist';
+
     w_Navigation_Setups = 'Setup';
     w_Navigation_Setups_Buildings = 'Building Management';
     w_Navigation_Setups_Floor = 'Floor Management';
@@ -117,6 +119,7 @@ export default class LangObject {
     w_Navigation_Setups_Kiosk = 'Kiosk Management';
     w_Navigation_Setups_License = 'License';
     w_Navigation_Setups_FRS = 'FRS Setting';
+    w_Navigation_Setups_FRS_Manager = 'FRS Manager';
     w_Navigation_Setups_Email = 'Email Setting';
     w_Navigation_Setups_SMS = 'SMS Setting';
     w_Navigation_Setups_SMSOnline = 'Online SMS Provider (SG only)';
@@ -159,6 +162,17 @@ export default class LangObject {
     w_Investigation_EventStrictCompleteCheckIn = 'Complete Check-In';
     w_Investigation_EventStrictConfirmPhoneNumber = 'Confirm Phone Number';
     w_Investigation_EventStrictTryCheckIn = 'Try Check-In';
+
+    w_Investigation_BlacklistTitle = 'Add Blacklist';
+
+    ////////////////// Blacklist //////////////////
+    w_Blacklist_List = 'Blacklist';
+    w_Blacklist_NickName = 'Nick name';
+    w_Blacklist_UserName = 'User name';
+    w_Blacklist_Nric = 'NRIC';
+    w_Blacklist_Image = 'Image';
+    w_Blacklist_Remark = 'Remark';
+    w_Blacklist_AddSuccess = 'Add blacklist success';
 
     ////////////////// User //////////////////
     w_User_UserName = 'User Name';
@@ -232,6 +246,14 @@ export default class LangObject {
     w_FRSSetting_Success = 'FRS Setting has been updated';
     w_FRSSetting_Fail = 'FRS Setting failed';
     w_FRSReading_Fail = 'FRS Reading failed';
+
+    ////////////////// FRS Manager Setting //////////////////
+    w_FRSManagerSetting = 'FRS Manager Setting';
+    w_FRSManagerSetting_IPAddress = 'IP Address';
+    w_FRSManagerSetting_HTTPPort = 'HTTP Port';
+    w_FRSManagerSetting_Success = 'FRS Manager Setting has been updated';
+    w_FRSManagerSetting_Fail = 'FRS Manager Setting failed';
+    w_FRSManagerSetting_ReadingFail = 'FRS Manager Reading failed';
 
     ////////////////// Mail Setting //////////////////
     w_MailServer_Enable = 'Enable';

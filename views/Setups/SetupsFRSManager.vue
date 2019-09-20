@@ -3,7 +3,7 @@
 
         <iv-auto-card
             :visible="true"
-            :label="_('w_FRSSetting')"
+            :label="_('w_FRSManagerSetting')"
         >
 
             <iv-form
@@ -32,7 +32,7 @@ import Loading from "@/services/Loading";
 @Component({
     components: {}
 })
-export default class SetupsFRS extends Vue {
+export default class SetupsFRSManager extends Vue {
     transition: ITransition = {
         type: Transition.type,
         prevStep: 1,
@@ -47,28 +47,28 @@ export default class SetupsFRS extends Vue {
     };
 
     created() {
-        this.readFRS();
+        this.readFRSManager();
     }
 
     mounted() {}
 
-    async readFRS() {
+    async readFRSManager() {
         await this.$server
             .R("/config")
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    this.inputFormData.account = response.frs.account;
-                    this.inputFormData.password = response.frs.password;
-                    this.inputFormData.ip = response.frs.ip;
-                    this.inputFormData.port = response.frs.port;
+                    if (!response.frsmanager) {
+                        Dialog.error(this._("w_FRSManagerSetting_ReadingFail"));
+                        return false;
+                    }
+                    this.inputFormData.account = response.frsmanager.account;
+                    this.inputFormData.password = response.frsmanager.password;
+                    this.inputFormData.ip = response.frsmanager.ip;
+                    this.inputFormData.port = response.frsmanager.port;
                 });
             })
             .catch((e: any) => {
-                return ResponseFilter.catchError(
-                    this,
-                    e,
-                    this._("w_FRSReading_Fail")
-                );
+                return ResponseFilter.catchError(this, e);
             });
     }
 
@@ -83,7 +83,7 @@ export default class SetupsFRS extends Vue {
 
         const param: {
             data: {
-                frs: {
+                frsmanager: {
                     account: string;
                     password: string;
                     ip: string;
@@ -92,7 +92,7 @@ export default class SetupsFRS extends Vue {
             };
         } = {
             data: {
-                frs: {
+                frsmanager: {
                     account: data.account,
                     password: data.password,
                     ip: data.ip,
@@ -106,14 +106,14 @@ export default class SetupsFRS extends Vue {
             .C("/config", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
-                    Dialog.success(this._("w_FRSSetting_Success"));
+                    Dialog.success(this._("w_FRSManagerSetting_Success"));
                 });
             })
             .catch((e: any) => {
                 return ResponseFilter.catchError(
                     this,
                     e,
-                    this._("w_FRSSetting_Fail")
+                    this._("w_FRSManagerSetting_Fail")
                 );
             });
     }
@@ -123,15 +123,15 @@ export default class SetupsFRS extends Vue {
              interface  {
 
                 /**
-                 * @uiLabel - ${this._("w_FRSSetting_IPAddress")}
-                 * @uiPlaceHolder - ${this._("w_FRSSetting_IPAddress")}
+                 * @uiLabel - ${this._("w_FRSManagerSetting_IPAddress")}
+                 * @uiPlaceHolder - ${this._("w_FRSManagerSetting_IPAddress")}
                  * @uiType - iv-form-ip
                  */
                 ip: string;
 
                 /**
-                 * @uiLabel - ${this._("w_FRSSetting_HTTPPort")}
-                 * @uiPlaceHolder - ${this._("w_FRSSetting_HTTPPort")}
+                 * @uiLabel - ${this._("w_FRSManagerSetting_HTTPPort")}
+                 * @uiPlaceHolder - ${this._("w_FRSManagerSetting_HTTPPort")}
                  * @uiAttrs - { max: 65535, min: 1}
                  */
                 port: number;

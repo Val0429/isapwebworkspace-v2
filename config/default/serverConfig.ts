@@ -8,29 +8,20 @@ import { Config } from '@/../config/default/serverConfig';
 import FlowService from '@/services/FlowService';
 
 var config: Config = {
-    ip: 'localhost',
+    // Min
+    // ip: '172.16.10.21',
+
+    // Val
+    ip: '172.16.10.122',
+
+    // QA Tina
+    // ip: '172.16.10.175',
+
     port: 6060,
     ssl: false,
     prodPort: 6060,
     serverFrameworkVersionGreaterThan: '1.06.00',
     hideDefaultServerErrorModal: true,
 };
-
-switch (FlowService.flow) {
-    case '/flow1':
-        config.ip = '172.16.10.122';
-        config.port = 6060;
-        break;
-
-    case '/flow2':
-        // Val
-        config.ip = '172.16.10.122';
-
-        // QA Tina
-        // config.ip = '172.16.10.51';
-
-        config.port = 6060;
-        break;
-}
 
 export default config;

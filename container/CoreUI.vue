@@ -49,6 +49,13 @@
 
                     </SidebarNavItem>
 
+                    <iv-permission :allow="['Administrator']">
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Blacklist')"
+                            url="/blacklist"
+                        />
+                    </iv-permission>
+
                     <SidebarNavItem
                         :label="_('w_Navigation_Setups')"
                         url="/setups"
@@ -90,10 +97,19 @@
                             url="/setups/license"
                         />
 
-                        <SidebarNavItem
-                            :label="_('w_Navigation_Setups_FRS')"
-                            url="/setups/frs"
-                        />
+                        <iv-permission url="/flow1">
+                            <SidebarNavItem
+                                :label="_('w_Navigation_Setups_FRS')"
+                                url="/setups/frs"
+                            />
+                        </iv-permission>
+
+                        <iv-permission url="/flow2">
+                            <SidebarNavItem
+                                :label="_('w_Navigation_Setups_FRS_Manager')"
+                                url="/setups/frs_manager"
+                            />
+                        </iv-permission>
 
                         <SidebarNavItem
                             :label="_('w_Navigation_Setups_Email')"
@@ -144,10 +160,22 @@
 
                 <iv-permission url="/flow2">
                     <iv-permission :allow="['TenantAdministrator', 'TenantUser']">
+
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Reports_Investigation')"
+                            url="/reports/investigation"
+                        />
+
                         <SidebarNavItem
                             :label="_('w_Navigation_Tenants_Invitation')"
                             url="/tenants/invitation"
                         />
+
+                        <SidebarNavItem
+                            :label="_('w_Navigation_Blacklist')"
+                            url="/blacklist"
+                        />
+
                     </iv-permission>
                 </iv-permission>
 

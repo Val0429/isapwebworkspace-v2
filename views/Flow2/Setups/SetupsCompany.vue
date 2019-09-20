@@ -15,19 +15,9 @@
                 <template #toolbox>
 
                     <iv-toolbox-view
-                        :disabled="isSelected.length !== 1"
+                        :disabled="selectedDetail.length !== 1"
                         @click="pageToView"
                     />
-                    <iv-toolbox-edit
-                        :disabled="isSelected.length !== 1"
-                        @click="pageToEdit()"
-                    />
-                    <iv-toolbox-delete
-                        :disabled="isSelected.length === 0"
-                        @click="doDelete"
-                    />
-                    <iv-toolbox-divider />
-                    <iv-toolbox-add @click="pageToAdd()" />
 
                 </template>
 
@@ -38,22 +28,12 @@
                     :server="{ path: '/flow2/companies' }"
                     @selected="selectedItem($event)"
                 >
-
                     <template #floor="{$attrs}">
                         <div v-html="tableFloorString($attrs.value)"></div>
                     </template>
 
                     <template #contactNumber="{$attrs}">
                         <div v-html="tablePhoneString($attrs.value)"></div>
-                    </template>
-
-                    <template #Actions="{$attrs, $listeners}">
-
-                        <iv-toolbox-more :disabled="isSelected.length !== 1">
-                            <iv-toolbox-view @click="pageToView" />
-                            <iv-toolbox-edit @click="pageToEdit()" />
-                            <iv-toolbox-delete @click="doDelete" />
-                        </iv-toolbox-more>
                     </template>
 
                 </iv-table>
@@ -88,87 +68,6 @@
 
             </iv-card>
 
-            <!--From (Add and Edit)-->
-            <iv-auto-card
-                key="transition_3"
-                v-show="transition.step === 3"
-                :visible="true"
-                :label="inputFormData.objectId == '' ? _('w_Company_Add') :  _('w_Company_Edit')"
-            >
-                <template #toolbox>
-
-                    <iv-toolbox-back @click="pageToList()" />
-
-                </template>
-
-                <iv-form
-                    :interface="IModifyForm()"
-                    :value="inputFormData"
-                    @update:*="updateInputFormData"
-                    @submit="saveAddOrEdit($event)"
-                >
-                    <template #contactNumber="{$attrs, $listeners}">
-
-                        <div class="col-md-12 mb-2">* {{ _('w_Company_ContactNumber') }}</div>
-
-                        <iv-form-string
-                            class="col-md-11"
-                            v-model="inputFormData.contactNumber"
-                            :placeholder="_('w_Company_ContactNumber')"
-                        ></iv-form-string>
-
-                        <div class="col-md-1">
-                            <b-button
-                                class="mb-2 col-md-12"
-                                variant="success"
-                                @click="addContactNumber()"
-                            >
-                                <i class="fa fa-plus"></i>
-                            </b-button>
-                        </div>
-
-                        <b-row
-                            class="col-md-12"
-                            v-for="(value, index) in inputFormData.contactNumbers"
-                            :key="'contactNumbers__' + index"
-                        >
-                            <b-col class="col-md-11">
-                                <iv-form-string
-                                    class="col-md-12"
-                                    :value="contactNumbersText(index)"
-                                    :disabled="true"
-                                >
-                                </iv-form-string>
-                            </b-col>
-
-                            <div class="col-md-1">
-                                <b-button
-                                    class="mb-2 col-md-12"
-                                    variant="danger"
-                                    type="button"
-                                    @click="removeContactNumber(index)"
-                                >
-                                    <i class="fa fa-minus"></i>
-                                </b-button>
-                            </div>
-
-                        </b-row>
-
-                    </template>
-
-                </iv-form>
-
-                <template #footer-before>
-                    <b-button
-                        variant="dark"
-                        size="lg"
-                        @click="pageToList()"
-                    >{{ _('w_Back') }}
-                    </b-button>
-                </template>
-
-            </iv-auto-card>
-
         </iv-auto-transition>
 
     </div>
@@ -177,12 +76,6 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-
-// Service
-import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog";
-import Loading from "@/services/Loading";
-import RegexServices from "@/services/RegexServices";
 
 // Transition
 import Transition from "@/services/Transition";
@@ -198,9 +91,7 @@ export default class SetupsCompany extends Vue {
         step: 1
     };
 
-    isSelected: any = [];
     tableMultiple: boolean = true;
-
     selectedDetail: any = [];
 
     inputFormData: any = {
@@ -211,41 +102,26 @@ export default class SetupsCompany extends Vue {
         contactNumber: "",
         contactNumbers: [],
         floor: [],
-
         floorView: "",
         contactNumberView: ""
     };
 
-    // select
-    floorsSelectItem: any = {};
-    floorsDetailItem: any = {};
-
     created() {}
 
-    mounted() {
-        this.initSelectItemFloor();
+    mounted() {}
+
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        this.clearInputData();
+        (this.$refs.listTable as any).reload();
     }
 
-    async initSelectItemFloor() {
-        this.floorsSelectItem = {};
-        let tempFloorSelectItem = {};
-        let param: any = { paging: { all: true } };
-
-        await this.$server
-            .R("/flow2/floors", param)
-            .then((response: any) => {
-                ResponseFilter.successCheck(this, response, (response: any) => {
-                    for (const returnValue of response.results) {
-                        tempFloorSelectItem[returnValue.objectId] =
-                            returnValue.name;
-                    }
-                    this.floorsSelectItem = tempFloorSelectItem;
-                    this.floorsDetailItem = response.results;
-                });
-            })
-            .catch((e: any) => {
-                return ResponseFilter.catchError(this, e);
-            });
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.clearInputData();
+        this.getInputData();
     }
 
     clearInputData() {
@@ -264,13 +140,10 @@ export default class SetupsCompany extends Vue {
     }
 
     selectedItem(data) {
-        this.isSelected = data;
-        this.selectedDetail = [];
         this.selectedDetail = data;
     }
 
     getInputData() {
-        this.clearInputData();
         for (const param of this.selectedDetail) {
             this.inputFormData = {
                 objectId: param.objectId,
@@ -284,168 +157,6 @@ export default class SetupsCompany extends Vue {
                 contactNumberView: this.ViewPhoneString(param.contactNumber)
             };
         }
-    }
-
-    updateInputFormData(data) {
-        this.inputFormData[data.key] = data.value;
-    }
-
-    pageToList() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 1;
-        (this.$refs.listTable as any).reload();
-    }
-
-    pageToView() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 2;
-        this.getInputData();
-    }
-
-    pageToAdd() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-        this.clearInputData();
-    }
-
-    pageToEdit() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-        this.getInputData();
-
-        this.inputFormData.floor
-            ? (this.inputFormData.floor = JSON.parse(
-                  JSON.stringify(
-                      this.inputFormData.floor.map(item => item.objectId)
-                  )
-              ))
-            : "";
-    }
-
-    addContactNumber() {
-        console.log(this.inputFormData.contactNumber);
-
-        if (!this.inputFormData.contactNumber) {
-            return false;
-        }
-
-        if (!RegexServices.number(this.inputFormData.contactNumber)) {
-            Dialog.error(this._("w_Company_ErrorContactNumberNotNumber"));
-            return false;
-        }
-
-        const tempContactNumber = JSON.parse(
-            JSON.stringify(this.inputFormData.contactNumber)
-        );
-        this.inputFormData.contactNumbers.push(tempContactNumber);
-        this.inputFormData.contactNumber = "";
-    }
-
-    removeContactNumber(index: number) {
-        this.inputFormData.contactNumbers.splice(index, 1);
-    }
-
-    contactNumbersText(index: number): string {
-        let result: string = "";
-        result += this.inputFormData.contactNumbers[index];
-        return result;
-    }
-
-    async saveAddOrEdit(data) {
-        let param: any = {
-            name: data.name,
-            contactPerson: data.contactPerson,
-            unitNumber: data.unitNumber,
-            contactNumber: data.contactNumbers,
-            floor: data.floor
-        };
-
-        // add
-        if (!this.inputFormData.objectId) {
-            Loading.show();
-            param = RegexServices.trim(param);
-            await this.$server
-                .C("/flow2/companies", param)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(
-                        this,
-                        response,
-                        (response: any) => {
-                            Dialog.success(this._("w_Company_AddSuccess"));
-                            this.pageToList();
-                        },
-                        this._("w_Company_ADDFailed")
-                    );
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_Company_ADDFailed")
-                    );
-                });
-        } else {
-            param.objectId = data.objectId;
-
-            Loading.show();
-            param = RegexServices.trim(param);
-            await this.$server
-                .U("/flow2/companies", param)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(
-                        this,
-                        response,
-                        (response: any) => {
-                            Dialog.success(this._("w_Company_EditSuccess"));
-                            this.pageToList();
-                        },
-                        this._("w_Company_EditFailed")
-                    );
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_Company_EditFailed")
-                    );
-                });
-        }
-    }
-
-    async doDelete() {
-        Dialog.confirm(
-            this._("w_Company_DeleteConfirm"),
-            this._("w_DeleteConfirm"),
-            () => {
-                for (const deleteParam of this.selectedDetail) {
-                    let param: {
-                        objectId: string;
-                    } = {
-                        objectId: deleteParam.objectId
-                    };
-
-                    Loading.show();
-                    param = RegexServices.trim(param);
-                    this.$server
-                        .D("/flow2/companies", param)
-                        .then((response: any) => {
-                            ResponseFilter.successCheck(
-                                this,
-                                response,
-                                (response: any) => {
-                                    this.pageToList();
-                                },
-                                this._("w_DeleteFailed")
-                            );
-                        })
-                        .catch((e: any) => {
-                            return ResponseFilter.catchError(this, e);
-                        });
-
-                    Loading.hide();
-                }
-            }
-        );
     }
 
     tableFloorString(datas: any): string {
@@ -526,9 +237,6 @@ export default class SetupsCompany extends Vue {
                  * @uiLabel - ${this._("w_Company_ContactNumber")}
                  */
                 contactNumber: string;
-
-                Actions: any
-
             }
         `;
     }
@@ -537,83 +245,35 @@ export default class SetupsCompany extends Vue {
         return `
             interface {
 
-
-            /**
-             * @uiLabel - ${this._("w_Company_Name")}
-             * @uiType - iv-form-label
-             */
-            name: string;
-
-
-            /**
-             * @uiLabel - ${this._("w_Company_UnitNumber")}
-             * @uiType - iv-form-label
-             */
-            unitNumber: string;
-
-
-            /**
-             * @uiLabel - ${this._("w_Company_ContactPerson")}
-             * @uiType - iv-form-label
-             */
-            contactPerson: string;
-
-
-            /**
-             * @uiLabel - ${this._("w_Company_ContactNumber")}
-             * @uiType - iv-form-label
-             */
-            contactNumberView: string;
-
-
-            /**
-             * @uiLabel - ${this._("w_Company_Floor")}
-             * @uiType - iv-form-label
-             */
-            floorView: string;
-
-            }
-        `;
-    }
-
-    IModifyForm() {
-        return `
-            interface {
-
-
                 /**
                  * @uiLabel - ${this._("w_Company_Name")}
-                 * @uiPlaceHolder - ${this._("w_Company_Name")}
+                 * @uiType - iv-form-label
                  */
-                name: string;
-
+                name?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Company_UnitNumber")}
-                 * @uiPlaceHolder - ${this._("w_Company_UnitNumber")}
+                 * @uiType - iv-form-label
                  */
-                unitNumber: string;
-
+                unitNumber?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Company_ContactPerson")}
-                 * @uiPlaceHolder - ${this._("w_Company_ContactPerson")}
-                 *
+                 * @uiType - iv-form-label
                  */
-                contactPerson: string;
-
+                contactPerson?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Company_ContactNumber")}
+                 * @uiType - iv-form-label
                  */
-                contactNumber?: any;
-
+                contactNumberView?: string;
 
                 /**
                  * @uiLabel - ${this._("w_Company_Floor")}
+                 * @uiType - iv-form-label
                  */
-                floor: ${toEnumInterface(this.floorsSelectItem as any, true)};
-
+                floorView?: string;
             }
         `;
     }

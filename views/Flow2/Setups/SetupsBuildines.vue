@@ -15,19 +15,9 @@
                 <template #toolbox>
 
                     <iv-toolbox-view
-                        :disabled="isSelected.length !== 1"
+                        :disabled="selectedDetail.length !== 1"
                         @click="pageToView"
                     />
-                    <iv-toolbox-edit
-                        :disabled="isSelected.length !== 1"
-                        @click="pageToEdit()"
-                    />
-                    <iv-toolbox-delete
-                        :disabled="isSelected.length === 0"
-                        @click="doDelete"
-                    />
-                    <iv-toolbox-divider />
-                    <iv-toolbox-add @click="pageToAdd()" />
 
                 </template>
 
@@ -38,15 +28,6 @@
                     :server="{ path: '/flow2/buildings' }"
                     @selected="selectedItem($event)"
                 >
-
-                    <template #Actions="{$attrs, $listeners}">
-
-                        <iv-toolbox-more :disabled="isSelected.length !== 1">
-                            <iv-toolbox-view @click="pageToView" />
-                            <iv-toolbox-edit @click="pageToEdit()" />
-                            <iv-toolbox-delete @click="doDelete" />
-                        </iv-toolbox-more>
-                    </template>
 
                 </iv-table>
             </iv-card>
@@ -80,37 +61,6 @@
 
             </iv-card>
 
-            <!--From (Add and Edit)-->
-            <iv-auto-card
-                key="transition_3"
-                v-show="transition.step === 3"
-                :visible="true"
-                :label="inputFormData.objectId == '' ? _('w_Buildings_Add') :  _('w_Buildings_Edit')"
-            >
-                <template #toolbox>
-                    <iv-toolbox-back @click="pageToList()" />
-                </template>
-
-                <iv-form
-                    :interface="IModifyForm()"
-                    :value="inputFormData"
-                    @update:*="updateInputFormData"
-                    @submit="saveAddOrEdit($event)"
-                >
-
-                </iv-form>
-
-                <template #footer-before>
-                    <b-button
-                        variant="dark"
-                        size="lg"
-                        @click="pageToList()"
-                    >{{ _('w_Back') }}
-                    </b-button>
-                </template>
-
-            </iv-auto-card>
-
         </iv-auto-transition>
 
     </div>
@@ -119,18 +69,10 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { toEnumInterface } from "@/../core";
-import { Ws } from "@/services/WebSocket/Ws";
-
-// Service
-import ResponseFilter from "@/services/ResponseFilter";
-import Dialog from "@/services/Dialog";
-import Loading from "@/services/Loading";
-import RegexServices from "@/services/RegexServices";
 
 // Transition
 import Transition from "@/services/Transition";
 import { ITransition } from "@/services/Transition";
-import ServerConfig from "@/services/ServerConfig";
 
 @Component({
     components: {}
@@ -142,9 +84,7 @@ export default class SetupsFloor extends Vue {
         step: 1
     };
 
-    isSelected: any = [];
     tableMultiple: boolean = true;
-
     selectedDetail: any = [];
 
     inputFormData: any = {
@@ -153,9 +93,23 @@ export default class SetupsFloor extends Vue {
         floor: 0
     };
 
-    async created() {}
+    created() {}
 
     mounted() {}
+
+    pageToList() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        this.clearInputData();
+        (this.$refs.listTable as any).reload();
+    }
+
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.clearInputData();
+        this.getInputData();
+    }
 
     clearInputData() {
         this.inputFormData = {
@@ -165,14 +119,7 @@ export default class SetupsFloor extends Vue {
         };
     }
 
-    selectedItem(data) {
-        this.isSelected = data;
-        this.selectedDetail = [];
-        this.selectedDetail = data;
-    }
-
     getInputData() {
-        this.clearInputData();
         for (const param of this.selectedDetail) {
             this.inputFormData = {
                 objectId: param.objectId,
@@ -182,133 +129,8 @@ export default class SetupsFloor extends Vue {
         }
     }
 
-    updateInputFormData(data) {
-        this.inputFormData[data.key] = data.value;
-    }
-
-    pageToList() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 1;
-        (this.$refs.listTable as any).reload();
-    }
-
-    pageToView() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 2;
-        this.getInputData();
-    }
-
-    pageToAdd() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-        this.clearInputData();
-    }
-
-    pageToEdit() {
-        this.transition.prevStep = this.transition.step;
-        this.transition.step = 3;
-        this.getInputData();
-    }
-
-    async saveAddOrEdit(data) {
-        let param: any = {
-            name: data.name,
-            floor: data.floor
-        };
-
-        // add
-        if (!this.inputFormData.objectId) {
-            Loading.show();
-            param = RegexServices.trim(param);
-            await this.$server
-                .C("/flow2/buildings", param)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(
-                        this,
-                        response,
-                        (response: any) => {
-                            Dialog.success(this._("w_Buildings_AddSuccess"));
-                            this.pageToList();
-                        },
-                        this._("w_Buildings_ADDFailed")
-                    );
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_Buildings_ADDFailed")
-                    );
-                });
-        } else {
-            param.objectId = data.objectId;
-
-            Loading.show();
-            param = RegexServices.trim(param);
-            await this.$server
-                .U("/flow2/buildings", param)
-                .then((response: any) => {
-                    ResponseFilter.successCheck(
-                        this,
-                        response,
-                        (response: any) => {
-                            Dialog.success(this._("w_Buildings_EditSuccess"));
-                            this.pageToList();
-                        },
-                        this._("w_Buildings_EditFailed")
-                    );
-                })
-                .catch((e: any) => {
-                    return ResponseFilter.catchError(
-                        this,
-                        e,
-                        this._("w_Buildings_EditFailed")
-                    );
-                });
-        }
-    }
-
-    tableStatus(values: any) {
-        let result = "";
-        for (const value of values) {
-            value;
-        }
-    }
-
-    async doDelete() {
-        Dialog.confirm(
-            this._("w_Buildings_DeleteConfirm"),
-            this._("w_DeleteConfirm"),
-            () => {
-                for (const deleteParam of this.selectedDetail) {
-                    let param: {
-                        objectId: string;
-                    } = {
-                        objectId: deleteParam.objectId
-                    };
-
-                    Loading.show();
-                    param = RegexServices.trim(param);
-                    this.$server
-                        .D("/flow2/buildings", param)
-                        .then((response: any) => {
-                            ResponseFilter.successCheck(
-                                this,
-                                response,
-                                (response: any) => {
-                                    this.pageToList();
-                                },
-                                this._("w_DeleteFailed")
-                            );
-                        })
-                        .catch((e: any) => {
-                            return ResponseFilter.catchError(this, e);
-                        });
-
-                    Loading.hide();
-                }
-            }
-        );
+    selectedItem(data) {
+        this.selectedDetail = data;
     }
 
     ITableList() {
@@ -325,8 +147,6 @@ export default class SetupsFloor extends Vue {
                  * @uiLabel - ${this._("w_Buildings_BuildingName")}
                  */
                 name: string;
-
-                Actions: any
             }
         `;
     }
@@ -339,21 +159,7 @@ export default class SetupsFloor extends Vue {
                  * @uiLabel - ${this._("w_Buildings_BuildingName")}
                  * @uiType - iv-form-label
                  */
-                name: string;
-
-            }
-        `;
-    }
-
-    IModifyForm() {
-        return `
-            interface {
-
-                /**
-                 * @uiLabel - ${this._("w_Buildings_BuildingName")}
-                 * @uiPlaceHolder - ${this._("w_Buildings_BuildingName")}
-                 */
-                name: string;
+                name?: string;
 
             }
         `;

@@ -108,6 +108,8 @@ export default class LangObject implements LangObject {
     w_Navigation_Reports_Dashboard = '儀表板';
     w_Navigation_Reports_Investigation = '調查';
 
+    w_Navigation_Blacklist = '黑名單';
+
     w_Navigation_Setups = '設定';
     w_Navigation_Setups_Floor = '樓層管理';
     w_Navigation_Setups_Company = '公司管理';
@@ -115,6 +117,7 @@ export default class LangObject implements LangObject {
     w_Navigation_Setups_Kiosk = '設備管理';
     w_Navigation_Setups_License = '許可證';
     w_Navigation_Setups_FRS = 'FRS設定';
+    w_Navigation_Setups_FRS_Manager = 'FRS Manager設定';
     w_Navigation_Setups_Email = '信箱設定';
     w_Navigation_Setups_SMS = '簡訊設定';
     w_Navigation_Setups_SMSOnline = '線上簡訊提供者設定(新加坡)';
@@ -157,6 +160,17 @@ export default class LangObject implements LangObject {
     w_Investigation_EventStrictCompleteCheckIn = '報到完成';
     w_Investigation_EventStrictConfirmPhoneNumber = '確認電話號碼';
     w_Investigation_EventStrictTryCheckIn = '再次報到';
+
+    w_Investigation_BlacklistTitle = '加入黑名單';
+
+    ////////////////// Blacklist //////////////////
+    w_Blacklist_List = '黑名單列表';
+    w_Blacklist_NickName = '暱稱';
+    w_Blacklist_UserName = '姓名';
+    w_Blacklist_Nric = 'NRIC';
+    w_Blacklist_Image = '照片';
+    w_Blacklist_Remark = '原因';
+    w_Blacklist_AddSuccess = '新增黑名單成功';
 
     ////////////////// User //////////////////
     w_User_UserName = '使用者姓名';
@@ -230,6 +244,14 @@ export default class LangObject implements LangObject {
     w_FRSSetting_Success = 'FRS 設定成功';
     w_FRSSetting_Fail = 'FRS 設定失敗';
     w_FRSReading_Fail = 'FRS 讀取失敗';
+
+    ////////////////// FRS Manager Setting //////////////////
+    w_FRSManagerSetting = 'FRS Manager 設定';
+    w_FRSManagerSetting_IPAddress = 'IP地址';
+    w_FRSManagerSetting_HTTPPort = 'HTTP埠';
+    w_FRSManagerSetting_Success = 'FRS Manager 設定成功';
+    w_FRSManagerSetting_Fail = 'FRS Manager 設定失敗';
+    w_FRSManagerSetting_ReadingFail = 'FRS Manager 讀取失敗';
 
     ////////////////// Mail Setting //////////////////
     w_MailServer_Enable = '啟用';

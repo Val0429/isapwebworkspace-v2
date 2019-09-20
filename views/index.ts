@@ -29,6 +29,14 @@ switch (projectFlow) {
         break;
 }
 
+// Blacklist
+import Flow2Blacklist from './Flow2/Blacklist/Blacklist.vue';
+switch (projectFlow) {
+    case '/flow2':
+        $({ path: '/blacklist', name: "_('w_Navigation_Blacklist')", icon: 'fa-shield' })(Flow2Blacklist);
+        break;
+}
+
 // Reports
 
 // Reports Flow1
@@ -55,6 +63,7 @@ switch (projectFlow) {
 // Setups
 import SetupsEmail from './Setups/SetupsEmail.vue';
 import SetupsFRS from './Setups/SetupsFRS.vue';
+import SetupsFRSManager from './Setups/SetupsFRSManager.vue';
 import SetupsLicense from './Setups/SetupsLicense.vue';
 import SetupsSMS from './Setups/SetupsSMS.vue';
 import SetupsSMSOnline from './Setups/SetupsSMSOnline.vue';
@@ -79,6 +88,7 @@ import Flow2SetupsOther from './Flow2/Setups/SetupsOther.vue';
 $({ path: '/setups', name: "_('w_Navigation_Setups')", icon: 'fa-cog', redirect: `/setups/account${projectFlow}` })();
 $({ path: '/setups/license', name: "_('w_Navigation_Setups_License')", icon: 'fa-certificate' })(SetupsLicense);
 $({ path: '/setups/frs', name: "_('w_Navigation_Setups_FRS')", icon: 'fa-server' })(SetupsFRS);
+$({ path: '/setups/frs_manager', name: "_('w_Navigation_Setups_FRS_Manager')", icon: 'fa-server' })(SetupsFRSManager);
 $({ path: '/setups/email', name: "_('w_Navigation_Setups_Email')", icon: 'fa-inbox' })(SetupsEmail);
 $({ path: '/setups/sms', name: "_('w_Navigation_Setups_SMS')", icon: 'fa-envelope' })(SetupsSMS);
 $({ path: '/setups/sms_online', name: "_('w_Navigation_Setups_SMSOnline')", icon: 'fa-cloud' })(SetupsSMSOnline);
@@ -106,9 +116,17 @@ switch (projectFlow) {
 
 // Logs
 import Flow2Logs from './Flow2/Logs/Logs.vue';
-$({ path: '/logs', name: "_('w_Navigation_Logs')", icon: 'fa-clipboard' })(Flow2Logs);
+switch (projectFlow) {
+    case '/flow2':
+        $({ path: '/logs', name: "_('w_Navigation_Logs')", icon: 'fa-clipboard' })(Flow2Logs);
+        break;
+}
 
 // Tenants
 import Flow2TenantsInvitation from './Flow2/Tenants/TenantsInvitation.vue';
-$({ path: '/tenants', name: "_('w_Navigation_Tenants')", icon: 'fa-users', redirect: '/tenants/invitation' })();
-$({ path: '/tenants/invitation', name: "_('w_Navigation_Tenants_Invitation')", icon: 'fa-eye' })(Flow2TenantsInvitation);
+switch (projectFlow) {
+    case '/flow2':
+        $({ path: '/tenants', name: "_('w_Navigation_Tenants')", icon: 'fa-users', redirect: '/tenants/invitation' })();
+        $({ path: '/tenants/invitation', name: "_('w_Navigation_Tenants_Invitation')", icon: 'fa-envelope' })(Flow2TenantsInvitation);
+        break;
+}

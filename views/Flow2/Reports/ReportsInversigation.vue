@@ -61,6 +61,7 @@
                                 <th>{{ _('w_Company_Name') }}</th>
                                 <th>{{ _('w_Email') }}</th>
                                 <th>{{ _('w_Phone') }}</th>
+                                <th>{{ _('w_Actions') }}</th>
                             </thead>
                             <tbody>
                                 <tr v-for="(value, index) of tableDatas">
@@ -73,6 +74,16 @@
                                     <td>{{ value.companyName }}</td>
                                     <td>{{ value.email }}</td>
                                     <td>{{ value.phone }}</td>
+                                    <td>
+                                        <b-button
+                                            v-if="!value.isBlacklist"
+                                            variant="danger"
+                                            size="sm"
+                                            @click="pageToBlacklist(value)"
+                                        >
+                                            {{ 'Add Blacklist' }}
+                                        </b-button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -80,6 +91,31 @@
 
                 </iv-card>
 
+            </div>
+
+            <div
+                key="transition_2"
+                v-show="transition.step === 2"
+            >
+                <iv-auto-card :label="_('w_Investigation_BlacklistTitle')">
+                    <iv-form
+                        :interface="IBlacklistForm()"
+                        :value="inputBlacklistData"
+                        @submit="addBlacklist($event)"
+                    >
+
+                    </iv-form>
+
+                    <template #footer-before>
+                        <b-button
+                            variant="dark"
+                            size="lg"
+                            @click="pageToView"
+                        >{{ _('w_Back') }}
+                        </b-button>
+                    </template>
+
+                </iv-auto-card>
             </div>
 
         </iv-auto-transition>
@@ -112,6 +148,7 @@ Vue.use(VueHtml2Canvas);
 
 interface ITableItem {
     objectId: string;
+    visitorId: string;
     visitorName: string;
     purposeId: string;
     purposeName: string;
@@ -123,6 +160,7 @@ interface ITableItem {
     companyName: string;
     email: string;
     phone: string;
+    isBlacklist: boolean;
 }
 
 enum EWsType {
@@ -148,6 +186,12 @@ export default class ReportsInversigation extends Vue {
         endDate: new Date(),
         purpose: "",
         kiosk: ""
+    };
+
+    inputBlacklistData: any = {
+        visitorId: "",
+        nickName: "",
+        remark: ""
     };
 
     selectItem = {
@@ -189,6 +233,19 @@ export default class ReportsInversigation extends Vue {
 
     beforeDestroy() {
         this.ws.Close();
+    }
+
+    pageToView() {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 1;
+        this.clearBlacklistData();
+    }
+
+    pageToBlacklist(data: any) {
+        this.transition.prevStep = this.transition.step;
+        this.transition.step = 2;
+        this.clearBlacklistData();
+        this.inputBlacklistData.visitorId = data.visitorId;
     }
 
     initDate() {
@@ -316,6 +373,83 @@ export default class ReportsInversigation extends Vue {
         this.filterTableData();
     }
 
+    getDeveloperResponseResults(data: any) {
+        // data = [
+        //     {
+        //         objectId: "1",
+        //         entity: "123$sgfg",
+        //         createdAt: new Date().toISOString(),
+        //         data: {
+        //             purpose: {
+        //                 objectId: "64XtAV8rZh"
+        //             },
+        //             kiosk: {
+        //                 objectId: "kioskId"
+        //             },
+        //             visitor: {
+        //                 objectId: "visitorId1",
+        //                 name: "visitor name",
+        //                 email: "visitor email",
+        //                 phone: "342523452435",
+        //                 blacklisted: true
+        //             },
+        //             company: {
+        //                 objectId: "companyId",
+        //                 name: "company name"
+        //             }
+        //         }
+        //     },
+        //     {
+        //         objectId: "2",
+        //         entity: "123$sgfg",
+        //         createdAt: new Date().toISOString(),
+        //         data: {
+        //             purpose: {
+        //                 objectId: "64XtAV8rZh"
+        //             },
+        //             kiosk: {
+        //                 objectId: "kioskId"
+        //             },
+        //             visitor: {
+        //                 objectId: "visitorId2",
+        //                 name: "visitor name",
+        //                 email: "visitor email",
+        //                 phone: "342523452435",
+        //                 blacklisted: false
+        //             },
+        //             company: {
+        //                 objectId: "companyId",
+        //                 name: "company name"
+        //             }
+        //         }
+        //     },
+        //     {
+        //         objectId: "3",
+        //         entity: "123$sgfg",
+        //         createdAt: new Date().toISOString(),
+        //         data: {
+        //             purpose: {
+        //                 objectId: "64XtAV8rZh"
+        //             },
+        //             kiosk: {
+        //                 objectId: "kioskId"
+        //             },
+        //             visitor: {
+        //                 objectId: "visitorId3",
+        //                 name: "visitor name",
+        //                 email: "visitor email",
+        //                 phone: "342523452435"
+        //             },
+        //             company: {
+        //                 objectId: "companyId",
+        //                 name: "company name"
+        //             }
+        //         }
+        //     }
+        // ];
+        return data;
+    }
+
     async submitFilterForm() {
         this.ws.Close();
         this.tableDatas = [];
@@ -340,6 +474,10 @@ export default class ReportsInversigation extends Vue {
             .R("/flow2/investigation", param)
             .then((response: any) => {
                 ResponseFilter.successCheck(this, response, (response: any) => {
+                    // TODO: Developer data
+                    response.results = this.getDeveloperResponseResults(
+                        response.results
+                    );
                     for (let result of response.results) {
                         this.resolveInvestigationResponse(result);
                     }
@@ -356,24 +494,32 @@ export default class ReportsInversigation extends Vue {
             data.data && data.data.purpose && data.data.purpose.objectId
                 ? data.data.purpose.objectId
                 : "";
+        let purposeName = "";
+
         let kioskId =
             data.data && data.data.kiosk && data.data.kiosk.objectId
                 ? data.data.kiosk.objectId
                 : "";
-        let purposeName = "";
         let kioskName = "";
+
         let eventTextArray = data.entity.split("$");
         let eventText =
             eventTextArray.length > 0
                 ? this.resolveEventString(eventTextArray[0])
                 : "";
-        let visitorName =
-            data.data && data.data.visitor && data.data.visitor.name
-                ? data.data.visitor.name
-                : "";
+
         let companyName =
             data.data && data.data.company && data.data.company.name
                 ? data.data.company.name
+                : "";
+
+        let visitorId =
+            data.data && data.data.visitor && data.data.visitor.objectId
+                ? data.data.visitor.objectId
+                : "";
+        let visitorName =
+            data.data && data.data.visitor && data.data.visitor.name
+                ? data.data.visitor.name
                 : "";
         let email =
             data.data && data.data.visitor && data.data.visitor.email
@@ -383,6 +529,10 @@ export default class ReportsInversigation extends Vue {
             data.data && data.data.visitor && data.data.visitor.phone
                 ? data.data.visitor.phone
                 : "";
+        let isBlacklist =
+            data.data && data.data.visitor && data.data.visitor.blacklisted
+                ? true
+                : false;
 
         if (purposeId != "") {
             for (let selItem of this.selectItem.purposes) {
@@ -404,6 +554,7 @@ export default class ReportsInversigation extends Vue {
 
         let tempItem: ITableItem = {
             objectId: data.objectId,
+            visitorId: visitorId,
             visitorName: visitorName,
             purposeId: purposeId,
             purposeName: purposeName,
@@ -417,7 +568,8 @@ export default class ReportsInversigation extends Vue {
             eventDate: new Date(data.createdAt),
             companyName: companyName,
             email: email,
-            phone: phone
+            phone: phone,
+            isBlacklist: isBlacklist
         };
 
         let haveTableData = false;
@@ -436,6 +588,7 @@ export default class ReportsInversigation extends Vue {
                 this.tableDatas[i].companyName = tempItem.companyName;
                 this.tableDatas[i].email = tempItem.email;
                 this.tableDatas[i].phone = tempItem.phone;
+                this.tableDatas[i].isBlacklist = tempItem.isBlacklist;
             }
         }
         if (!haveTableData && this.checkFilterData(tempItem)) {
@@ -507,6 +660,46 @@ export default class ReportsInversigation extends Vue {
         return result;
     }
 
+    clearBlacklistData() {
+        this.inputBlacklistData = {
+            visitorId: "",
+            nickName: "",
+            remark: ""
+        };
+    }
+
+    resolveListWithBlacklist(visitorId: string) {
+        for (let i in this.tableDatas) {
+            let tableData = this.tableDatas[i];
+            if (tableData.visitorId == visitorId) {
+                this.tableDatas[i].isBlacklist = true;
+            }
+        }
+    }
+
+    async addBlacklist(data: any) {
+        let param = {
+            visitor: {
+                objectId: data.visitorId
+            },
+            nickname: data.nickName,
+            remark: data.remark
+        };
+
+        await this.$server
+            .C("/flow2/blacklist", param)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    Dialog.success(this._("w_Blacklist_AddSuccess"));
+                    this.resolveListWithBlacklist(data.visitorId);
+                    this.pageToView();
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+    }
+
     IFilterForm() {
         return `
             interface {
@@ -535,6 +728,23 @@ export default class ReportsInversigation extends Vue {
                  */
                 kiosk?: any;
 
+            }
+        `;
+    }
+
+    IBlacklistForm() {
+        return `
+            interface {
+
+                /**
+                 * @uiLabel - ${this._("w_Blacklist_NickName")}
+                 */
+                nickName: string;
+
+                /**
+                 * @uiLabel - ${this._("w_Blacklist_Remark")}
+                 */
+                remark: string;
             }
         `;
     }

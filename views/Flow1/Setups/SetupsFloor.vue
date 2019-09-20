@@ -190,6 +190,7 @@ export default class SetupsFloor extends Vue {
     pageToList() {
         this.transition.prevStep = this.transition.step;
         this.transition.step = 1;
+        this.clearInputData();
         (this.$refs.listTable as any).reload();
     }
 

@@ -39,6 +39,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/flow2/buildings': [any, any, false];
         '/flow2/floors': [any, any, false];
         '/flow2/companies': [any, any, false];
+        '/flow2/blacklist': [any, any, false];
     };
 
     Get: {
@@ -77,6 +78,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/flow2/buildings': [any, any, false];
         '/flow2/floors': [any, any, false];
         '/flow2/companies': [any, any, false];
+        '/flow2/blacklist': [any, any, false];
     };
 
     Put: {
@@ -119,6 +121,7 @@ interface RestfulRequest extends ApisRequestBase {
         '/flow2/buildings': [any, any, false];
         '/flow2/floors': [any, any, false];
         '/flow2/companies': [any, any, false];
+        '/flow2/blacklist': [any, any, false];
     };
 
     Ws: {};
