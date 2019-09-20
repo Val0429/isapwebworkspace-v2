@@ -173,7 +173,7 @@ import { ITransition } from "@/services/Transition";
 @Component({
     components: { personProgress }
 })
-export default class SetupsFloor extends Vue {
+export default class PersonList extends Vue {
     transition: ITransition = {
         type: Transition.type,
         prevStep: 1,
@@ -191,17 +191,21 @@ export default class SetupsFloor extends Vue {
         phone: "",
         remark: "",
         position: "",
-        companiesText: "",
-        floorsText: "",
         name: "",
-        companyId: "",
-        floorIds: [],
         imageBase64: "",
         nric: "",
         realRoles: [],
         card: "",
+        unitNumber: "",
+        companyId: "",
+        companiesText: "",
+        floorsText: "",
+        doorsText: "",
+        floorIds: [],
+        doorIds: [],
         useCompany: false,
         useFloor: false,
+        useDloor: false,
         agreeTc: false,
         isUseSuntecReward: false,
         isUseSuntecRewardString: "",
@@ -213,13 +217,16 @@ export default class SetupsFloor extends Vue {
         role: any;
         company: any;
         floor: any;
+        door: any;
     } = {
         role: {},
         company: {},
-        floor: {}
+        floor: {},
+        door: {}
     };
 
     companies = [];
+    doors = [];
 
     showProgress: boolean = false;
 
@@ -265,17 +272,21 @@ export default class SetupsFloor extends Vue {
             phone: "",
             remark: "",
             position: "",
-            companiesText: "",
-            floorsText: "",
             name: "",
-            companyId: "",
-            floorIds: [],
             imageBase64: "",
             nric: "",
             realRoles: [],
             card: "",
+            unitNumber: "",
+            companyId: "",
+            companiesText: "",
+            floorsText: "",
+            doorsText: "",
+            floorIds: [],
+            doorIds: [],
             useCompany: false,
             useFloor: false,
+            useDloor: false,
             agreeTc: false,
             isUseSuntecReward: false,
             isUseSuntecRewardString: "",
@@ -297,21 +308,30 @@ export default class SetupsFloor extends Vue {
             this.newImgSrc = param.imageBase64;
             this.inputFormData = {
                 objectId: param.objectId,
-                name: param.name,
                 email: param.email,
+                phone: param.phone,
+                remark: param.remark,
+                position: param.position,
+                name: param.name,
                 imageBase64: param.imageBase64,
+                nric: param.nric,
+                realRoles: [],
+                card: param.card,
+                unitNumber: param.unitNumber,
+                companyId: param.company.objectId,
+                companiesText: "",
+                floorsText: "",
+                doorsText: "",
+                floorIds: floors,
+                doorIds: [],
+                useCompany: false,
+                useFloor: false,
+                useDloor: false,
+                agreeTc: false,
                 isUseSuntecReward: param.isUseSuntecReward,
                 isUseSuntecRewardString: param.isUseSuntecReward
                     ? this._("wb_Yes")
                     : this._("wb_No"),
-                nric: param.nric,
-                companyId: param.company.objectId,
-                floorIds: floors,
-                phone: param.phone,
-                position: param.position,
-                remark: param.remark,
-                unitNumber: param.unitNumber,
-                card: param.card,
                 startDate: new Date(param.startDate),
                 endDate: new Date(param.endDate),
                 startDateString: Datetime.DateTime2String(
@@ -345,6 +365,10 @@ export default class SetupsFloor extends Vue {
         }
         if (data.key == "companyId") {
             this.initSelectItemFloorWithCompany(data.value);
+            this.initSelectItemUnitnumberWithCompany(data.value);
+        }
+        if (data.key == "floors") {
+            this.initSelectItemDoorWithFloor(data.value);
         }
         if (data.key == "agreeTc") {
             if (data.value) {
@@ -360,6 +384,7 @@ export default class SetupsFloor extends Vue {
         this.selectItem.role = {};
         this.selectItem.company = {};
         this.selectItem.floor = {};
+        this.selectItem.door = {};
 
         if (RoleService.haveSystemAdministrator(this)) {
             await this.initSelectItemRole();
@@ -461,6 +486,40 @@ export default class SetupsFloor extends Vue {
             });
     }
 
+    async selectItemDoorWithAPI(floorIds: string) {
+        let param: any = { paging: { all: true } };
+        param = RegexServices.trim(param);
+        await this.$server
+            .R("/location/door", param)
+            .then((response: any) => {
+                ResponseFilter.successCheck(this, response, (response: any) => {
+                    if (
+                        response.results != undefined &&
+                        response.results.length > 0
+                    ) {
+                        this.doors = JSON.parse(
+                            JSON.stringify(response.results)
+                        );
+                        for (let ret of response.results) {
+                            if (
+                                ret.objectId != undefined &&
+                                ret.name != undefined
+                            ) {
+                                this.$set(
+                                    this.selectItem.door,
+                                    ret.objectId,
+                                    ret.name
+                                );
+                            }
+                        }
+                    }
+                });
+            })
+            .catch((e: any) => {
+                return ResponseFilter.catchError(this, e);
+            });
+    }
+
     async initSelectItemCompanyWithStorage() {
         this.selectItem.company = {};
         this.selectItem.company[
@@ -472,6 +531,15 @@ export default class SetupsFloor extends Vue {
         for (let ret of this.$user.user.floors) {
             if (ret.objectId != undefined && ret.name != undefined) {
                 this.$set(this.selectItem.floor, ret.objectId, ret.name);
+            }
+        }
+    }
+
+    initSelectItemUnitnumberWithCompany(companyId: string) {
+        for (let company of this.companies) {
+            if (companyId == company.objectId) {
+                this.inputFormData.unitNumber = company.unitNumber;
+                break;
             }
         }
     }
@@ -492,12 +560,28 @@ export default class SetupsFloor extends Vue {
         }
     }
 
+    async initSelectItemDoorWithFloor(floorId: string) {
+        this.selectItem.door = {};
+        await this.selectItemDoorWithAPI(floorId);
+        // if (floorId == company.objectId) {
+        //     for (let door of company.door) {
+        //         this.$set(
+        //             this.selectItem.floor,
+        //             floor.objectId,
+        //             floor.name
+        //         );
+        //     }
+        //     break;
+        // }
+    }
+
     async saveAddOrEdit(data) {
         let param: any = {
             datas: [
                 {
                     isUseSuntecReward: data.isUseSuntecReward,
                     floorIds: data.floors,
+                    doorIds: data.doors,
                     companyId: data.companyId,
                     name: data.name,
                     email: data.email,
@@ -820,9 +904,20 @@ export default class SetupsFloor extends Vue {
                 companyId: ${toEnumInterface(this.selectItem.company, false)};
 
                 /**
+                 * @uiLabel - ${this._("w_Person_Unit")}
+                 * @uiType - iv-form-label
+                 */
+                unitNumber: string;
+
+                /**
                  * @uiLabel - ${this._("w_Person_Floor")}
                  */
                 floors: ${toEnumInterface(this.selectItem.floor, true)};
+
+                /**
+                 * @uiLabel - ${this._("w_Person_Door")}
+                 */
+                doors: ${toEnumInterface(this.selectItem.door, true)};
 
                 /**
                  * @uiLabel - ${this._("w_Person_Email")}
